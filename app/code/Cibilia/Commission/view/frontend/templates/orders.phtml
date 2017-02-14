@@ -1,0 +1,51 @@
+<?php $this->helper('Cibilia\Commission\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $_orders = $block->getCollection(); ?>
+<?php if ($_orders && count($_orders)): ?>
+    <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); ?>
+    <?php $arrCommissionStatus = array('1' => 'Pending','2' => 'Earned','3' => 'Locked'); ?>
+    <div class="table-wrapper orders-history allorders-history">
+        <table class="data table table-order-items history" id="locked-orders-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('All Orders List') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Order #') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Date') ?></th>
+                    <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Ship To') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Order Total') ?></th>
+                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Order Status') ?></th>
+                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Commission Status') ?></th>
+                    <th scope="col" class="col actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_orders as $_order): ?>
+                    <?php $objOrder = $objectManager->create('Magento\Sales\Model\Order')->load($_order->getData("order_id")); ?>
+                    <tr>
+                        <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $objOrder->getRealOrderId() ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($objOrder->getCreatedAt()) ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $objOrder->getShippingAddress() ? $block->escapeHtml($objOrder->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Total Order Amount')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($_order->getData("total_amount"),true,false); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Order Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $objOrder->getStatusLabel() ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Commission Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $arrCommissionStatus[$_order->getData("status")]; ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                            <a href="<?php /* @escapeNotVerified */ echo $block->getUrl('commission/index/order',array('cid' => $_order->getId(),'oid' => $objOrder->getId())); ?>" class="action view">
+                                <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no Orders.'); ?></span></div>
+<?php endif ?>
+<style type="text/css">
+    .table-wrapper.allorders-history{
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+</style>

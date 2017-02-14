@@ -1,0 +1,144 @@
+<?php $this->helper('Cibilia\Cibilians\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+       $customerSession = $objectManager->create('Magento\Customer\Model\Session');?>
+<?php $arrformData = $customerSession->getRefererFormData();?>
+<form class="form-address-edit" method="POST" action="<?php echo $this->getUrl('cibilians/advertisers/post'); ?>" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}'> 
+ <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('General Information') ?></span></legend><br>
+	       <?php /*<div class="field required">
+            <label class="label" for="udmember"><span><?php echo __('Referral Type') ?></span></label>
+            <div class="control">
+				<select id="udmember" name="udmember[membership]" title="<?php echo __('State/Province') ?>" class="validate-select">
+                    <option value=""><?php echo __('Please select a referral type') ?></option>
+                    <option value="1">Type 1</option>
+                    <option value="2">Type 2</option>
+                </select>
+            </div>
+        </div> */ ?>
+        <div class="field name required">
+            <label class="label" for="vendor_name"><span><?php echo __('Company Name') ?></span></label>
+            <div class="control">
+                <input name="vendor_name" id="vendor_name" title="<?php echo __('Company name') ?>" value="<?php echo @$arrformData['vendor_name']; ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field name">
+            <label class="label" for="vendor_fbpage"><span><?php echo __('Facebook Page') ?></span></label>
+            <div class="control">
+                <input name="vendor_fbpage" id="vendor_fbpage" title="<?php echo __('Facebook Page') ?>" value="<?php echo @$arrformData['vendor_fbpage']; ?>" class="input-text" type="text" data-validate="{required:false}"/>
+            </div>
+        </div>
+        
+        
+        <div class="field">
+            <label class="label" for="website"><span><?php echo __('Website') ?></span></label>
+            <div class="control">
+                <input name="website" id="website" type="text" value="<?php echo @$arrformData['website']; ?>" data-validate="{required:false}"/>
+            </div>
+        </div>
+        <?php 
+        
+        $arrVendorwork = $block->getVenodorwork();
+        $arrVendorcat = $block->getVendorcat(); 
+        ?>
+        <?php if(count($arrVendorwork) > 0){ ?>
+            <div class="field required">
+                <label for="vendor_work" class="label"><span><?php echo __('Are you referring ') ?></span></label>
+                <div class="control">
+                    <select data-validate="{required:false}" class="validate-select" title="<?php echo __('Are you referring a') ?>" name="vendor_work" id="vendor_work" aria-required="true">
+                        <?php foreach ($arrVendorwork as $key => $value) { ?>
+                            <option value="<?php echo $value['value']; ?>" <?php if(@$arrformData['vendor_work'] == $value['value']){echo "selected='selected'";} ?>><?php echo $value['label']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if(count($arrVendorcat) > 0){ ?>
+            <div class="field">
+                <label for="vendor_categories" class="label"><span><?php echo __('Choose the categories which the company you are referring.') ?></span></label>
+                <div class="control">
+                    <select style="height: 150px;background:none;" data-validate="{required:true}" class="validate-select multi-select" title="<?php echo __('Choose the categories which the company you are referring') ?>" name="vendor_categories[]" id="vendor_categories" aria-required="true" multiple="multiple">
+                        <?php $defaultCats = array();?>
+                        <?php if(count(@$arrformData['vendor_categories'])){
+                            foreach (@$arrformData['vendor_categories'] as $value) {
+                                $defaultCats[] = $value;
+                            }
+                        }?>
+                        <?php foreach ($arrVendorcat as $key => $value) { ?>
+                            <option value="<?php echo $value['value']; ?>" <?php if(in_array($value['value'],$defaultCats)) {echo "selected='selected'";} ?>><?php echo $value['label']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php } ?>
+        
+        <div class="field required">
+            <label for="vendor_about" class="label"><span><?php echo __('What do you know about this company ?') ?></span></label>
+            <div class="control">
+                <textarea style="height: 150px;background:none;" data-validate="{required:true}" class="textarea" title="<?php echo __('What do you know about this company ?') ?>"  name="vendor_about" id="vendor_about" aria-required="true"><?php echo @$arrformData['vendor_about']; ?></textarea>
+            </div>
+        </div>
+        <div class="field required">
+            <label for="vendor_letter" class="label"><span><?php echo __('Write a short motivation letter that will be sent along with your application form to the contact person you are about to contact with this form.') ?></span></label>
+            <div class="control">
+                <textarea  style="height: 150px;background:none;" data-validate="{required:true}" class="textarea" title="<?php echo __('Write a short motivation letter that will be sent along with your application form to the contact person you are about to contact with this form.') ?>"  name="vendor_letter" id="vendor_letter" aria-required="true"><?php echo @$arrformData['vendor_letter']; ?></textarea>
+            </div>
+        </div>
+        <div class="field required">
+            <label for="vendor_represent" class="label"><span><?php echo __('How would you present this company publicly ?') ?></span></label>
+            <div class="control">
+                <textarea  style="height: 150px;background:none;" data-validate="{required:true}" class="textarea" title="<?php echo __('How would you present this company publicly ?') ?>"  name="vendor_represent" id="vendor_represent" aria-required="true"><?php echo @$arrformData['vendor_represent']; ?></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Contact Information') ?></span></legend><br>
+        <div class="field required">
+            <label class="label" for="vendor_fname"><span><?php echo __('Contact Person First Name') ?></span></label>
+            <div class="control">
+                <input name="vendor_fname" id="vendor_fname" title="<?php echo __('Contact Person First Name') ?>" value="<?php echo @$arrformData['vendor_fname']; ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+         <div class="field required">
+            <label class="label" for="vendor_lname"><span><?php echo __('Contact Person Last Name') ?></span></label>
+            <div class="control">
+                <input name="vendor_lname" id="vendor_lname" title="<?php echo __('Contact Person Last Name') ?>" value="<?php echo @$arrformData['vendor_lname']; ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <?php /*<div class="field required">
+            <label class="label" for="telephone"><span><?php echo __('Mobile') ?></span></label>
+            <div class="control">
+                <input name="telephone" id="telephone" title="<?php echo __('Mobile') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div> */?>
+        <div class="field email required">
+            <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
+            <div class="control">
+                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo @$arrformData['email']; ?>" class="input-text" type="email" data-validate="{required:true}"/>
+                <input name="password" value="vendor123" class="input-text" type="hidden"/>
+                <input name="password_confirm" value="vendor123" class="input-text" type="hidden"/>
+                <input name="carrier_code" value="fedex" class="input-text" type="hidden"/>
+                <input name="udmember[membership]" value="1" class="input-text" type="hidden"/>
+                <input name="url_key" value="test" class="input-text" type="hidden"/>
+                <input name="street1" value="Your address" class="input-text" type="hidden"/>
+                <input name="city" value="City name" class="input-text" type="hidden"/>
+                <input name="zip" value="121212" class="input-text" type="hidden"/>
+                <input name="country_id" value="In" class="input-text" type="hidden"/>
+                <input name="telephone" value="1234567890" class="input-text" type="hidden"/>
+                <input name="referred_by" value="<?php echo $customerSession->getCustomer()->getId();?>" type="hidden"/>
+            </div>
+        </div>
+      
+        
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action save primary" title="<?php /* @escapeNotVerified */ echo __('Send') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('Send') ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Go back') ?></span></a>
+        </div>
+    </div>
+	
+</form>

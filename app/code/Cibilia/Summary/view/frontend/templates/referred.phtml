@@ -1,0 +1,62 @@
+<?php $this->helper('Cibilia\Commission\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $_products = $block->getCollection(); ?>
+<?php $arrRefrredProducts = $block->getCibilianCommissionCollection(); ?>
+<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); ?>
+<?php if ($_products && count($_products)): ?>
+    <div class="table-wrapper orders-history referred-history">
+        <table class="data table table-order-items history" id="referred-orders-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Referred Products') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Id #') ?></th>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Name') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Sku') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Earned') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Locked') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_products as $_product): ?>
+                    <?php $defaultEarned = 0; $defaultLocked = 0;?>
+                    <?php $_product = $objectManager->create('Magento\Catalog\Model\Product')->load($_product->getId()); ?>
+                    <tr>
+                        <td data-th="<?php echo $block->escapeHtml(__('Id #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_product->getId(); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Name')) ?>" class="col name"><?php /* @escapeNotVerified */ echo $_product->getName(); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Sku')) ?>" class="col sku"><?php /* @escapeNotVerified */ echo $_product->getSku(); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Price')) ?>" class="col price"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($_product->getFinalPrice(),true,false); ?></td>
+                        <?php if(array_key_exists($_product->getId(), $arrRefrredProducts)){ ?>
+                            <?php if($arrRefrredProducts[$_product->getId()]['earn'] != ''){ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Earned Commission')) ?>" class="col earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($arrRefrredProducts[$_product->getId()]['earn'],true,false); ?></td>
+                            <?php }else{ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Earned Commission')) ?>" class="col earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultEarned,true,false); ?></td>
+                            <?php } ?>
+                            <?php if($arrRefrredProducts[$_product->getId()]['lock'] != ''){ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Locked Commission')) ?>" class="col lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($arrRefrredProducts[$_product->getId()]['lock'],true,false); ?></td>
+                            <?php }else{ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Locked Commission')) ?>" class="col lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultLocked,true,false); ?></td>
+                            <?php } ?>
+                            
+                        <?php }else{ ?>
+                            <td data-th="<?php echo $block->escapeHtml(__('Earned Commission')) ?>" class="col earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultEarned,true,false); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Locked Commission')) ?>" class="col lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultLocked,true,false); ?></td>
+                        <?php } ?>
+                        <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col Status"><?php /* @escapeNotVerified */ echo $_product->getAttributeText('status'); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no Referred Products.'); ?></span></div>
+<?php endif ?>
+<style type="text/css">
+    .table-wrapper.referred-history{
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+</style>

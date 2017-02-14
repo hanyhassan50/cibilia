@@ -1,0 +1,40 @@
+<?php $this->helper('Cibilia\Commission\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $_orders = $block->getCollection(); ?>
+<?php if ($_orders && count($_orders)): ?>
+    <div class="table-wrapper orders-history locked-history">
+        <table class="data table table-order-items history" id="locked-orders-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Commision Locked List') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Id #') ?></th>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Order #') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Total Order Amount') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Total Commission') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Created At') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_orders as $_order): ?>
+                    <tr>
+                        <td data-th="<?php echo $block->escapeHtml(__('Id #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getData("commission_id"); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getData("order_id"); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Total Order Amount')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($_order->getData("total_amount"),true,false); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Total Commission')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($_order->getData("total_commission"),true,false); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Created At')) ?>" class="col date"><?php /* @escapeNotVerified */ echo date("M d, Y, h:i:s",strtotime($_order->getData("created_at")));?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no Commission Earned.'); ?></span></div>
+<?php endif ?>
+<style type="text/css">
+    .table-wrapper.locked-history{
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+</style>

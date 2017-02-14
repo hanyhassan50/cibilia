@@ -1,0 +1,76 @@
+<?php
+$filterManager = \Magento\Framework\App\ObjectManager::getInstance()->get('\Magento\Framework\Filter\FilterManager');
+?>
+<?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+<?php $_questions = $this->getQuestionsCollection(); ?>
+<div class="page-title title-buttons">
+    <button type="button" title="<?php echo __('Ask New Question') ?>" class="button" onclick="window.location='<?php echo $this->getNewUrl() ?>';"><span><span><?php echo __('Ask New Question') ?></span></span></button>
+</div>
+<?php if($_questions->getSize()): ?>
+<?php echo $this->getChildHtml('toolbar') ?>
+<div class="table-wrapper orders-history">
+<table class="data table table-order-items history" id="my-questions-table">
+    <col width="150" />
+    <col />
+    <col />
+    <col width="1" />
+    <thead>
+    <tr>
+        <th><?php echo __('Details') ?></th>
+        <th><?php echo __('Question Text') ?></th>
+        <th><?php echo __('Answer Text') ?></th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+        <?php $_odd = ''; ?>
+        <?php foreach ($_questions as $_question): ?>
+    <tr>
+        <td>
+            <h5><?php echo __('VENDOR') ?></h5>
+            <span class="nobr"><?php echo $_question->getVendorName() ?></span>
+            <h5><?php echo __('QUESTION DATE')?></h5>
+            <span class="nobr"><?php echo $this->formatDate($_question->getQuestionDate()) ?></span>
+            <?php if ($_question->canCustomerViewAnswer() && !$_question->isEmptyAnswerDate()): ?>
+            <h5><?php echo __('ANSWER DATE')?></h5>
+            <?php echo $this->formatDate($_question->getAnswerDate(), \IntlDateFormatter::SHORT, true); ?>
+            <?php endif ?>
+            <?php if ($_question->getShipmentId()): ?>
+            <h5><?php echo __('SHIPMENT')?></h5>
+            <a href="<?php echo $this->getShipmentUrl($_question)?>"><?php echo __('#%1 for order #%2', $_question->getShipmentIncrementId(), $_question->getOrderIncrementId())?></a>
+            <?php endif ?>
+            <?php if ($_question->getProductId()): ?>
+            <h5><?php echo __('PRODUCT')?></h5>
+            <a href="<?php echo $this->getProductUrl($_question)?>"><?php echo $_question->getProductName()?></a>
+            <?php endif ?>
+        </td>
+        <td>
+            <br />
+            <?php echo $filterManager->truncate($_question->getQuestionText(), 30) ?>
+        </td>
+        <td>
+            <br />
+            <?php if ($_question->canCustomerViewAnswer()): ?>
+            <?php echo $filterManager->truncate($_question->getAnswerText(), 30); ?>
+            <?php else: ?>
+            &nbsp;
+            <?php endif ?>
+        </td>
+        <td class="a-center">
+            <span class="nobr"><a href="<?php echo $this->getViewUrl($_question) ?>"><?php echo __('View') ?></a>
+            </span>
+        </td>
+    </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+</div>
+<script type="text/javascript">
+require(["jquery", "prototype"], function(jQuery) {
+decorateTable('my-questions-table');
+});
+</script>
+<?php echo $this->getChildHtml('toolbar') ?>
+<?php else: ?>
+<p><?php echo __('You have no questions.'); ?></p>
+<?php endif ?>

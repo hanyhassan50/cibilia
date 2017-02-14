@@ -1,0 +1,45 @@
+<?php $this->helper('Cibilia\Commission\Helper\Customer')->redirectIfNotLoggedIn();?>
+
+<?php $_orders = $block->getCollection(); ?>
+<?php if ($_orders && count($_orders)): ?>
+    <?php $arrWithdrawlTypes = array('1'=>'Bank Transfer','2'=>'Paypal'); ?>
+    <?php $arrWithdrawlStatus = array('1'=>'Paid','2'=>'Unpaid','3'=>'Cancled'); ?>
+    <div class="table-wrapper orders-history requested-history">
+        <table class="data table table-order-items history" id="redemption-requested-orders-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Requested Withdrawal List') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Id #') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Amount') ?></th>
+                    <th scope="col" class="col"><?php /* @escapeNotVerified */ echo __('Withdrawal Type') ?></th>
+                    <th scope="col" class="col"><?php /* @escapeNotVerified */ echo __('Paypal/Bank Details') ?></th>
+                    <th scope="col" class="col"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Created At') ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_orders as $_order): ?>
+                    <tr>
+                         <td data-th="<?php echo $block->escapeHtml(__('Id')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getData("redemption_id"); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Amount')) ?>" class="col shipping"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($_order->getData("amount"),true,false); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Withdrawal Type')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $arrWithdrawlTypes[$_order->getData("withdrawal_type")]; ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Paypal/Bank Details')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_order->getData("email_bank_details"); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $arrWithdrawlStatus[$_order->getData("status")]; ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Created At')) ?>" class="col total"><?php /* @escapeNotVerified */ echo date("M d, Y, h:i:s",strtotime($_order->getData("created_at")));?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no Requested Withdrawal.'); ?></span></div>
+<?php endif ?>
+<style type="text/css">
+    .table-wrapper.requested-history{
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+</style>
