@@ -1,0 +1,125 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_order = $block->getOrder() ?>
+<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); ?>
+<?php $customerSession = $objectManager->get('Magento\Customer\Model\Session'); ?>
+
+<?php   $arrVendors = array();
+        $arrVendorRegCollection = $objectManager->create('Unirgy\Dropship\Model\Vendor')->getCollection()->addFieldToFilter('status','V');
+        $arrVendorRegCollection->getSelect()->joinleft(
+            ['vendor_reg' => 'udropship_vendor_registration'],
+            'main_table.email = vendor_reg.email')->where("vendor_reg.referred_by = '".$customerSession->getCustomer()->getId()."'");;
+
+        if(count($arrVendorRegCollection) > 0){
+            foreach ($arrVendorRegCollection as $vendor) {
+                $arrVendors[] = $vendor->getId();
+            }
+        }
+?>
+<?php $_giftMessage; ?>
+<div class="table-wrapper order-items">
+    <table class="data table table-order-items" id="my-orders-table" summary="<?php /* @escapeNotVerified */ echo __('Items Ordered') ?>">
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></caption>
+        <thead>
+            <tr>
+                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
+                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+            </tr>
+        </thead>
+        <?php $_items = $_order->getItemsCollection(); ?>
+        <?php $_index = 0; ?>
+        <?php $_count = $_items->count(); ?>
+        <?php $_giftMessage = ''?>
+        <?php $vendorTotal = 0; ?>
+        <?php $vendorTaxTotal = 0; ?>
+        <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); ?>
+        <?php foreach ($_items as $_item): ?>
+            <?php if ($_item->getParentItem()) {
+    continue;
+} ?>
+<?php $ObjProduct = $objectManager->get('Magento\Catalog\Model\Product')->load($_item->getProductId());
+                
+                if(!in_array($ObjProduct->getUdropshipVendor(),$arrVendors)){
+                    continue;
+                } ?>
+            <tbody>
+                <?php echo $block->getItemHtml($_item) ?>
+                <?php $vendorTotal = $vendorTotal + $_item->getRowTotal(); ?>
+                <?php $vendorTaxTotal = $vendorTaxTotal + ($_item->getRowTotalInclTax() - $_item->getRowTotal()); ?>
+                <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $_item) && $_item->getGiftMessageId()): ?>
+                    <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
+                    <tr>
+                        <td class="col options" colspan="5">
+                            <a href="#"
+                               id="order-item-gift-message-link-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
+                               class="action show"
+                               aria-controls="order-item-gift-message-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
+                               data-item-id="<?php /* @escapeNotVerified */ echo $_item->getId() ?>">
+                                <?php /* @escapeNotVerified */ echo __('Gift Message') ?>
+                            </a>
+                            <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
+                            <div class="order-gift-message" id="order-item-gift-message-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
+                                <a href="#"
+                                   title="<?php /* @escapeNotVerified */ echo __('Close') ?>"
+                                   aria-controls="order-item-gift-message-<?php /* @escapeNotVerified */ echo $_item->getId()?>"
+                                   data-item-id="<?php /* @escapeNotVerified */ echo $_item->getId()?>"
+                                   class="action close">
+                                    <?php /* @escapeNotVerified */ echo __('Close') ?>
+                                </a>
+                                <dl class="item-options">
+                                    <dt class="item-sender"><strong class="label"><?php /* @escapeNotVerified */ echo __('From') ?></strong><?php echo $block->escapeHtml($_giftMessage->getSender()) ?></dt>
+                                    <dt class="item-recipient"><strong class="label"><?php /* @escapeNotVerified */ echo __('To') ?></strong><?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                                    <dd class="item-message"><?php /* @escapeNotVerified */ echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
+                                </dl>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif ?>
+            </tbody>
+        <?php endforeach; ?>
+        <?php /*<tfoot>
+            <?php echo $block->getChildHtml('order_totals') ?>
+        </tfoot> */?>
+        <tfoot class="order-totals">
+            <tr class="<?php /* @escapeNotVerified */ echo __('totals-tax')?>">
+                <th colspan="4" class="mark" scope="row"><?php /* @escapeNotVerified */ echo __('Tax')?></th>
+                <td class="amount">
+                    <span class="price"><?php /* @escapeNotVerified */ echo $objectManager->create('Magento\Framework\Pricing\Helper\Data')->currency($vendorTaxTotal,true,false); ?></span>
+                </td>
+            </tr>
+            <tr class="<?php /* @escapeNotVerified */ echo __('grand_total')?>">
+                <th colspan="4" class="mark" scope="row">
+                    <strong><?php echo __('Total Amount');?></strong>
+                </th>
+                <td class="amount">
+                    <strong><span class="price"><?php /* @escapeNotVerified */ echo $objectManager->create('Magento\Framework\Pricing\Helper\Data')->currency($vendorTotal+$vendorTaxTotal,true,false); ?></span></strong>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+<style type="text/css">
+.order-details-items.ordered .order-title {
+  display: block;
+}
+</style>
+<?php if ($_giftMessage): ?>
+<script type="text/x-magento-init">
+    {
+        "a.action.show, a.action.close": {
+            "giftMessage": {}
+        }
+    }
+</script>
+<?php endif; ?>

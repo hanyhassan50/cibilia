@@ -1,0 +1,270 @@
+<?php 
+    $this->helper('Cibilia\Summary\Helper\Customer')->redirectIfNotLoggedIn();
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
+    $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+    $objCibilian = $objectManager->create('Cibilia\Summary\Model\Summary')->load($customerSession->getCustomer()->getId(),'cibilian_id');
+    $objCustomer = $objectManager->create('Magento\Customer\Model\Customer')->load($customerSession->getCustomer()->getId());
+    $requestedAmount = 0;
+    $arrRequestedCollection = $objectManager->create('Cibilia\Redemption\Model\Redemption')->getCollection()->addFieldToFilter('cibilian_id',$objCibilian->getCibilianId())->addFieldToFilter('status',2);
+    foreach ($arrRequestedCollection as $withdraw) {
+       $requestedAmount = $requestedAmount + $withdraw->getAmount();
+    }
+    $finalAmount = $objCibilian->getPendingAmount() - $requestedAmount;
+?>
+<?php if($objCibilian->getPendingAmount() > 0){ ?>
+    <form class="form-address-edit" id="form-commission-withdraw" method="POST" action="<?php echo $this->getUrl('redemption/index/post'); ?>" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}' > 
+    <fieldset class="fieldset">
+        <div class="field name required">
+            <span><?php echo __('Total Available Commission: '); ?><span style="font-weight:bold;" class="price"><?php echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($finalAmount,true,false);?></span></span>
+            <input type="hidden" id="avail-amount" value="<?php echo $finalAmount;?>"/>
+        </div>
+        <div class="field name required">
+            <label class="label" for="amount"><span><?php echo __('Amount to Withdraw') ?></span></label>
+            <div class="control">
+                <input name="amount" id="amount" title="<?php echo __('Amount to Withdraw') ?>" value="" class="input-text" type="text" data-validate="{required:true,number:true}" />
+                <span style="display:none;" class="span-error withdraw-error"><?php echo __('You can not send withdrawl request for amount more than available Commission amount.') ?></span>
+                <span style="display:none;" class="span-error withdraw-amount-digit"><?php echo __('Please enter valid amount.') ?></span>
+            </div>
+        </div>
+        <?php $defaultPayment = 0; ?>
+        <?php if($objCustomer->getDefaultPayoutType()){ ?>
+            <?php 
+                if($objCustomer->getDefaultPayoutType() == 1 && $objCustomer->getPayoutBankDetails() != NULL){
+                    $defaultPayment = 1;
+                }
+                if($objCustomer->getDefaultPayoutType() == 2 && $objCustomer->getPayoutPaypalEmail() != NULL){
+                    $defaultPayment = 1;
+                } ?>
+        <?php } ?>
+            <?php if(!$defaultPayment){?>
+            <div id="tab2" class="tab-pane">
+            <div class="form-group">
+                <div class="col-md-2 left-label">
+                    <a class="radio-control paypalControl" id="paypalControl"></a>
+                </div>
+                <div class="col-md-9 main-bg">
+                    <div class="field name required">
+                            <label class="label" for="paypal_email"><span><?php echo __('Paypal') ?></span></label>
+                            <div class="control">
+                                 <input name="paypal_email" type="text" id="paypal_email" placeholder="<?php echo __('Paypal Email') ?>" title="<?php echo __('Paypal') ?>" value="" class="input-text" />
+                                <span style="display:none;" class="span-error paypal-required"><?php echo __('This is a required field.') ?></span>
+                                <span style="display:none;" class="span-error paypal-email"><?php echo __('Please enter a valid email address.') ?></span>
+                            </div>
+                       </div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="form-group">
+                <div class="divide-payment">
+                    <span>- Or -</span>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 left-label">
+                    <a class="radio-control bankControl active" id="bankControl"></a>
+                </div>
+                <div class="col-md-9 detail-block main-bg">
+                    <div class="field required">
+                          <label class="label" for="payout_bank_detail"><span><?php echo __('Bank Transfer') ?></span></label>
+                          <div class="control">
+                             <textarea name="payout_bank_detail" id="payout_bank_detail" title="<?php echo __('Bank Transfer') ?>" value="" placeholder="<?php echo __('Bank Details') ?>" class="textarea" ></textarea>
+                             <span style="display:none;" class="span-error bank-required"><?php echo __('This is a required field.') ?></span>
+                          </div>
+                       </div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <input type="hidden" name="withdrawal_type" id="withdrawal_type" value="1" />
+        </div>
+        <script type="text/javascript">
+            /*requirejs(['jquery'], function ($) {
+                jQuery(document).ready(function($) {
+
+                    jQuery('.paypalControl').click(function(event) {
+                        event.preventDefault();
+                        if (!jQuery(this).hasClass('active')) {
+                            jQuery(this).addClass('active')
+                        }
+                        jQuery('#withdrawal_type').val(2);
+                        jQuery('.bankControl').removeClass('active');
+                    });
+                    jQuery('.bankControl').click(function(event) {
+                        event.preventDefault();
+                        if (!jQuery(this).hasClass('active')) {
+                            jQuery(this).addClass('active')
+                        }
+                        jQuery('#withdrawal_type').val(1);
+                        jQuery('.paypalControl').removeClass('active');
+                    });
+                });
+            });*/
+        </script>
+        <?php } ?>
+        
+    </fieldset>
+    <div style="clear:both;" ></div>
+    <div class="actions-toolbar">
+        <input type="hidden" name="defaultpay" id="defaultpay" value="<?php echo $defaultPayment; ?>" />
+        <input type="hidden" name="cibilian_id" id="cibilian_id" value="<?php echo $objCustomer->getId(); ?>" />
+        <div class="primary">
+            <button type="submit" class="action save primary" title="<?php /* @escapeNotVerified */ echo __('Send') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('Send') ?></span>
+            </button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    requirejs(['jquery'], function ($) {
+        jQuery(document).ready(function($) {
+            <?php if(!$defaultPayment){ ?>
+
+                 jQuery('.paypalControl').click(function(event) {
+                        event.preventDefault();
+                        if (!jQuery(this).hasClass('active')) {
+                            jQuery(this).addClass('active')
+                        }
+                        jQuery('#withdrawal_type').val(2);
+                        jQuery('.bankControl').removeClass('active');
+                    });
+                    jQuery('.bankControl').click(function(event) {
+                        event.preventDefault();
+                        if (!jQuery(this).hasClass('active')) {
+                            jQuery(this).addClass('active')
+                        }
+                        jQuery('#withdrawal_type').val(1);
+                        jQuery('.paypalControl').removeClass('active');
+                    });
+
+            <?php } ?>
+            
+
+            jQuery( "#form-commission-withdraw" ).submit(function( event ) {
+            
+                jQuery('.withdraw-error').hide();
+                jQuery('.paypal-required').hide();
+                jQuery('.paypal-email').hide();
+                jQuery('.bank-required').hide();
+                jQuery('.withdraw-amount-digit').hide();
+                  
+
+                var withdrawlAmount = jQuery('#amount').val();
+                var availAmount =  parseInt(jQuery('#avail-amount').val());
+
+                if(allnumeric(withdrawlAmount)) {
+                    if(withdrawlAmount > availAmount){
+                        jQuery('.withdraw-error').show();
+                        return false;
+                    }
+                }
+                if(withdrawlAmount <= 0) {
+                    return false;
+                }
+
+                 <?php if(!$defaultPayment){ ?> 
+                
+                //var defaultPay = jQuery('#defaultpay').val();
+                //if(defaultPay){
+
+                  
+                    var payType = jQuery('#withdrawal_type').val();
+                    if(payType == '2'){
+                        if(jQuery('#paypal_email').val() == ''){
+                            jQuery('.paypal-required').show();
+                            return false;
+                        }
+                        if(!validateEmail(jQuery('#paypal_email').val())) {
+                            jQuery('.paypal-email').show();
+                            return false;
+                        }
+                    }
+                    if(payType == '1'){
+                        if(jQuery('#payout_bank_detail').val() == ''){
+                            jQuery('.bank-required').show();
+                            return false;
+                        }
+                    }
+
+                //}
+                <?php } ?>
+            });
+            function validateEmail(sEmail) {
+                var filter = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+                if (filter.test(sEmail)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function allnumeric(inputtxt){
+              var numbers = /^[0-9]+$/;  
+              if(inputtxt.match(numbers))  
+              {
+                return true;  
+              }else{  
+                return false;  
+              }  
+           }  
+        });
+    });
+    </script>
+    <style type="text/css">
+        .span-error{
+          color: #e02b27;
+          font-size: 1.2rem;
+          margin-top: 7px;
+        }
+        .radio-control.active {
+          background: rgba(0, 0, 0, 0) url("<?php echo $block->getViewFileUrl('images/custom-ora.png');?>") no-repeat scroll 0 0;
+        }
+        .radio-control {
+          background: rgba(0, 0, 0, 0) url("<?php echo $block->getViewFileUrl('images/custom-ora.png');?>") no-repeat scroll 0 -22px;
+          display: inline-block;
+          height: 22px;
+          width: 25px;
+          cursor: pointer;
+        }
+        .col-md-2 {
+            width: 10%;
+        }
+        .col-md-9 {
+          width: 70%;
+        }
+        .col-md-12 {
+          width: 100%;
+        }
+        .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9 {
+          float: left;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .col-md-3 {
+          width: 25%;
+        }
+        .left-label {
+          line-height: 70px;
+        }
+        .divide-payment {
+          margin: 5px 0;
+          text-align: center;
+          width: 47%;
+        }
+        .divide-payment > span {
+            color: #bbb;
+            font-size: 22px;
+        }
+        .tab-pane .field .label{
+            display: inline-block;
+            margin: 0 0 8px;
+            font-weight: 600;
+        }
+        .tab-pane .field.required .label::after{
+          color: #e02b27;
+          content: "*";
+          margin: 0 0 0 5px;
+        }
+    </style>
+<?php }else{ ?>
+    <div class="message info empty"><span><?php echo __('You have no Amount to Withdraw.'); ?></span></div>
+<?php } ?>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Add Advertiser</title>
+    </head>
+	<update handle="customer_account"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Cibilia\Cibilians\Block\Advertisers" name="newadvertisers_type2" template="referral_type2.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,30 @@
+<?php
+/**
+ * CibilianSummary template for separate item
+ *
+ */
+
+/**
+ * @var $this Cibilia\CibilianSummary\Block\View
+ * @see Cibilia\CibilianSummary\Block\View
+ */
+?>
+<?php $_cibiliansummaryItem = $this->getCibilianSummary(); ?>
+    <div class="cibiliansummary_item_subtitle">
+        <?php echo $this->formatDate($_cibiliansummaryItem->getPublishedAt()) ?> |
+        <?php echo $this->escapeHtml($_cibiliansummaryItem->getAuthor()) ?>
+    </div>
+
+<div class="cibiliansummary_item_view">
+    <?php if ($imageUrl = $this->getImageUrl($_cibiliansummaryItem, 400)): ?>
+       <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($_cibiliansummaryItem->getTitle()) ?>" /></p>
+    <?php endif; ?>
+
+    <div class="cibiliansummary_item_content"><?php echo $_cibiliansummaryItem->getContent() ?></div>
+
+    <div class="pager">
+        <a href="<?php echo $this->getBackUrl() ?>">
+            <?php echo __('Return to list') ?>
+        </a>
+    </div>
+</div>

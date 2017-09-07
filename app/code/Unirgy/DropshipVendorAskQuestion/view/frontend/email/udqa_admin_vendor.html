@@ -1,0 +1,30 @@
+<!--@subject {{trans "New Question"}} {{if question.shipment_id}}{{trans "for Shipment #"}}{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}{{trans "for Product"}} {{var question.product_name}}{{/if}}@-->
+
+{{trans "New Question for"}} {{if question.shipment_id}}{{trans "Shipment #"}}{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}{{trans "Product"}} {{var question.product_name}}{{/if}} {{trans "have been asked."}} 
+<br/>
+{{trans "Please see details below:"}}
+<br/>
+<br/>
+<b>{{trans "Customer Name:"}}</b>  {{var question.customer_name}}
+<br/>
+<b>{{trans "Customer E-mail:"}}</b>  {{var question.customer_email}}
+<br/>
+<b>{{trans "Vendor Name:"}}</b>  {{var question.vendor_name}}
+<br/>
+<b>{{trans "Vendor E-mail:"}}</b>  {{var question.vendor_email}}
+<br/>
+<br/>
+{{if question.shipment_id}}
+<b>{{trans "Shipment:"}}</b>  {{var question.shipment_increment_id}}
+<br/>
+{{/if}}
+{{if question.product_id}}
+<b>Product:</b>  {{var question.product_name}}
+<br/>
+{{/if}}
+<b>{{trans "Question:"}}</b> <pre>{{var question.question_text}}</pre>
+
+<br/>
+<br/>
+
+{{trnas "You can view details in"}} <a href="{{var question.getAdminUrl()}}">{{trans "admin area"}}</a>

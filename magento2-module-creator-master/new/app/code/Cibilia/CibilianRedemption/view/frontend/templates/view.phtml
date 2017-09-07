@@ -1,0 +1,30 @@
+<?php
+/**
+ * CibilianRedemption template for separate item
+ *
+ */
+
+/**
+ * @var $this Cibilia\CibilianRedemption\Block\View
+ * @see Cibilia\CibilianRedemption\Block\View
+ */
+?>
+<?php $_cibilianredemptionItem = $this->getCibilianRedemption(); ?>
+    <div class="cibilianredemption_item_subtitle">
+        <?php echo $this->formatDate($_cibilianredemptionItem->getPublishedAt()) ?> |
+        <?php echo $this->escapeHtml($_cibilianredemptionItem->getAuthor()) ?>
+    </div>
+
+<div class="cibilianredemption_item_view">
+    <?php if ($imageUrl = $this->getImageUrl($_cibilianredemptionItem, 400)): ?>
+       <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($_cibilianredemptionItem->getTitle()) ?>" /></p>
+    <?php endif; ?>
+
+    <div class="cibilianredemption_item_content"><?php echo $_cibilianredemptionItem->getContent() ?></div>
+
+    <div class="pager">
+        <a href="<?php echo $this->getBackUrl() ?>">
+            <?php echo __('Return to list') ?>
+        </a>
+    </div>
+</div>

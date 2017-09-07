@@ -1,0 +1,173 @@
+<?php //$this->helper('Cibilia\Cibilians\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $vid = $this->getRequest()->getParam('id'); 
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $objVendor = $objectManager->create('\Unirgy\Dropship\Model\Vendor')->load($vid);
+?>
+<?php if($objVendor && $objVendor->getId()) { ?>
+    <form class="form-address-edit" method="POST" action="<?php echo $this->getUrl('idproofs/index/vendorpost',array('id' => $vid)); ?>" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}'> 
+ <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('General Information') ?></span></legend><br>
+           <?php /*<div class="field required">
+            <label class="label" for="udmember"><span><?php echo __('Referral Type') ?></span></label>
+            <div class="control">
+                <select id="udmember" name="udmember[membership]" title="<?php echo __('State/Province') ?>" class="validate-select">
+                    <option value=""><?php echo __('Please select a referral type') ?></option>
+                    <option value="1">Type 1</option>
+                    <option value="2">Type 2</option>
+                </select>
+            </div>
+        </div> */ ?>
+        <div class="field name required">
+            <label class="label" for="vendor_name"><span><?php echo __('Company Name') ?></span></label>
+            <div class="control">
+                <input name="vendor_name" id="vendor_name" title="<?php echo __('Company name') ?>" value="<?php echo $objVendor->getVendorName();?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field name">
+            <label class="label" for="vendor_fbpage"><span><?php echo __('Facebook Page') ?></span></label>
+            <div class="control">
+                <input name="vendor_fbpage" id="vendor_fbpage" title="<?php echo __('Facebook Page') ?>" value="<?php echo $objVendor->getVendorFbpage();?>" class="input-text" type="text" data-validate="{required:false}"/>
+            </div>
+        </div>
+        
+        
+        <div class="field">
+            <label class="label" for="website"><span><?php echo __('Website') ?></span></label>
+            <div class="control">
+                <input name="vendor_website" id="vendor_website" type="text" value="<?php echo $objVendor->getVendorWebsite();?>" data-validate="{required:false}"/>
+            </div>
+        </div>
+        <?php 
+        
+        $arrVendorwork = $block->getVenodorwork();
+        $arrVendorcat = $block->getVendorcat(); 
+        ?>
+        <?php if(count($arrVendorwork) > 0){ ?>
+            <div class="field required">
+                <label for="vendor_work" class="label"><span><?php echo __('Are you referring ') ?></span></label>
+                <div class="control">
+                    <select data-validate="{required:false}" class="validate-select" title="<?php echo __('Are you referring a') ?>" name="vendor_work" id="vendor_work" aria-required="true">
+                        <?php foreach ($arrVendorwork as $key => $value) { ?>
+                            <option <?php echo ($value['value'] == $objVendor->getVendorWork()) ? 'selected="selected"' : "";?> value="<?php echo $value['value']; ?>"><?php echo $value['label'];?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if(count($arrVendorcat) > 0){ ?>
+            <?php $arrVendorCats = explode(',',$objVendor->getVendorCategories());?>
+            <div class="field">
+                <label for="vendor_categories" class="label"><span><?php echo __('Choose the categories which the company you are referring.') ?></span></label>
+                <div class="control">
+                    <select style="height: 150px;background:none;" data-validate="{required:true}" class="validate-select multi-select" title="<?php echo __('Choose the categories which the company you are referring') ?>" name="vendor_categories[]" id="vendor_categories" aria-required="true" multiple="multiple">
+                         <?php foreach ($arrVendorcat as $key => $value) { ?>
+                            <option <?php echo (in_array($value['value'], $arrVendorCats)) ? 'selected="selected"' : "";?> value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="field required">
+            <label for="vendor_about" class="label"><span><?php echo __('What do you know about this company ?') ?></span></label>
+            <div class="control">
+                <textarea placeholder="(min 100 words be written)" style="height: 150px;background:none;" data-validate="{required:true}" class="textarea" title="<?php echo __('What do you know about this company ?') ?>" min-words="100" name="vendor_about" id="vendor_about" aria-required="true"><?php echo $objVendor->getVendorAbout();?></textarea>
+            </div>
+        </div>
+        <div class="field required">
+            <label for="vendor_letter" class="label"><span><?php echo __('Write a short motivation letter that will be sent along with your application form to the contact person you are about to contact with this form.') ?></span></label>
+            <div class="control">
+                <textarea placeholder="(min 500 words be written)" style="height: 150px;background:none;" data-validate="{required:true}" class="textarea" title="<?php echo __('Write a short motivation letter that will be sent along with your application form to the contact person you are about to contact with this form.') ?>" name="vendor_letter" min-words="500" id="vendor_letter" aria-required="true"><?php echo $objVendor->getVendorLetter();?></textarea>
+            </div>
+        </div>
+        <div class="field required">
+            <label for="vendor_represent" class="label"><span><?php echo __('How would you present this company publicly ?') ?></span></label>
+            <div class="control">
+                <textarea placeholder="(min 100 words be written)" style="height: 150px;background:none;" data-validate="{required:true}" class="textarea" title="<?php echo __('How would you present this company publicly ?') ?>" min-words="100" name="vendor_represent" id="vendor_represent" aria-required="true"><?php echo $objVendor->getVendorRepresent();?></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <?php 
+        $arrVendorName = explode(" ",$objVendor->getvendorAttn(),2);
+        $strVendorFname = $arrVendorName[0];
+        $strVendorLname = $arrVendorName[1];
+    ?>
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Contact Information') ?></span></legend><br>
+        <div class="field required">
+            <label class="label" for="vendor_fname"><span><?php echo __('Contact Person First Name') ?></span></label>
+            <div class="control">
+                <input name="vendor_fname" id="vendor_fname" title="<?php echo __('Contact Person First Name') ?>" value="<?php echo $strVendorFname; ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+         <div class="field required">
+            <label class="label" for="vendor_lname"><span><?php echo __('Contact Person Last Name') ?></span></label>
+            <div class="control">
+                <input name="vendor_lname" id="vendor_lname" title="<?php echo __('Contact Person Last Name') ?>" value="<?php echo $strVendorLname; ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <?php /*<div class="field required">
+            <label class="label" for="telephone"><span><?php echo __('Mobile') ?></span></label>
+            <div class="control">
+                <input name="telephone" id="telephone" title="<?php echo __('Mobile') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div> */?>
+        <div class="field email required">
+            <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
+            <div class="control">
+                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $objVendor->getEmail(); ?>" class="input-text" type="email" data-validate="{required:true}"/>
+            </div>
+        </div>
+      
+        
+    </fieldset>
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Login Information') ?></span></legend><br>
+        <div class="field required">
+            <label class="label" for="vendor_userid"><span><?php echo __('User Id') ?></span></label>
+            <div class="control">
+                <input disabled="disabled" name="vendor_userid" id="vendor_userid" title="<?php echo __('User Id') ?>" value="<?php echo $objVendor->getEmail(); ?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+         <div class="field required">
+            <label class="label" for="password"><span><?php echo __('Password') ?></span></label>
+            <div class="control">
+                <input name="password" id="password" title="<?php echo __('Password') ?>" value="" class="input-text" type="password" data-validate="{required:true}"/>
+            </div>
+        </div>
+    </fieldset>
+    <?php $arrVendortype = $block->getVendortype(); ?>
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Vendor Type Selection') ?></span></legend><br>
+        <div class="field name required">
+            <label class="label" for="vendor_type"><span><?php echo __('Select your type') ?></span></label>
+            <div class="control">
+                <?php if(count($arrVendortype) > 0){ ?>
+                    <?php foreach ($arrVendortype as $key => $value) { ?>
+                        <?php if($value['value'] == 0){
+                            continue;
+                        }?>
+                        <input type="radio" data-validate="{required:true}" <?php echo ($value['value'] == 1) ? 'checked="checked"' : '';?> name="vendor_type" value="<?php echo $value['value']; ?>"><?php echo $value['label'];?><br>
+                    <?php } ?>
+                            
+                <?php } ?>
+            </div>
+        </div>
+    </fieldset>
+    <div style="clear:both;">&nbsp;</div>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action save primary" title="<?php /* @escapeNotVerified */ echo __('Save Info') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('Save Info') ?></span>
+            </button>
+        </div>
+    </div>
+    <style type="text/css">
+        .form-address-edit .fieldset:nth-child(3),.form-address-edit .fieldset:nth-child(4){
+            float: right;
+            clear: none;
+        }
+    </style>
+</form>
+<?php }else{ ?>
+    <h4><?php echo __('No Vendor Found') ?></h4>
+<?php } ?>

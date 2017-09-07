@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+    <reference name="order_items">
+      <action method="addItemRender">
+        <arguments>
+          <argument xsi:type="string" name="type">bundle</argument>
+          <argument xsi:type="string" name="block">Unirgy\Dropship\Model\Adminhtml\Order\Itemsrenderer\Bundle</argument>
+          <argument xsi:type="string" name="template">Unirgy_Dropship::udropship/sales/order/view/items/bundle.phtml</argument>
+        </arguments>
+      </action>
+    </reference>
+    <referenceContainer name="content">
+      <block class="Magento\Framework\View\Element\Template" template="Unirgy_Dropship::udropship/sales/order/view/vendor_rates.phtml" name=""/>
+    </referenceContainer>
+  </body>
+</page>

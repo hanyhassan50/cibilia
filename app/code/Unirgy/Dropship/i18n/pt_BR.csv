@@ -1,0 +1,2736 @@
+Download Labels,Download de etiquetas
+ID,identidade
+Created At,Criado em
+Title,Título
+Vendor,Fornecedor
+Label Type,Tipo de etiqueta
+# of Shipments,# De remessas
+Action,Açao
+Label Batches,Lotes de etiquetas
+Shipment #,Envio #
+Date Shipped,data de envio
+Total Qty,quantidade total
+Shipping Price,Preço de envio
+Status,Status
+Method,Método
+Order #,Ordem #
+Order Date,Data do pedido
+Order Status,Status do pedido
+Order Total,total de pedidos
+$poStr #,$ PoStr #
+$poStr Date,$ PoStr Data
+$poStr Status,$ PoStr Status
+$poStr Subtotal,$ PoStr Subtotal
+$poStr Total Cost,$ PoStr Custo total
+$poStr Tax Amount,$ PoStr Imposto Montante
+$poStr Shipping Price,$ PoStr Preço de envio
+$poStr Total Qty,$ PoStr Quantidade total
+Tracking #,Rastreamento #
+Tracking Total,Total de acompanhamento
+Tax State,Estado Fiscal
+Order coupon codes,Códigos de cupão de encomendas
+CSV,CSV
+XML,XML
+Dropship ,Dropship
+PO #,PO #
+PO Date,PO Data
+PO Status,Status do pedido
+PO Shipping Price,Preço de envio
+PO Item SKU,PO Item SKU
+PO Item Name,Nome do item do PO
+PO Item Price,PO Item Preço
+PO Item Discount,Desconto de Item de PO
+PO Item Cost,PO Item Custo
+PO Item Qty,Quantidade do item de pedido
+PO Item Tax,Imposto de item PO
+PO Item Row Total,PO Item Row Total
+Dropship Item Details Report,Relatório de detalhes do item Dropship
+Ship to Name,Enviar para Nome
+Ship to First name,Nome do envio
+Ship to Last name,Enviar para sobrenome
+Statement Ready At,Declaração pronta em
+View,Visão
+Resend PO Notifications,Reenviar notificações de pedido
+Mark as shipped,Marcar como enviado
+Shipping Info,Informação de Envio
+Shipping Method Code,Código do Método de Envio
+Shipping Method Title,Método de envio Título
+Days In Transit,Dias em trânsito
+Websites,Websites
+Associated System Methods,Métodos do Sistema Associado
+* Not used,* Não usado
+* Any available,* Qualquer disponível
+Titles,Títulos
+Default Title,Título Padrão
+Default Title for All Store Views,Título padrão para todas as visualizações da loja
+Store View Specific Title,Exibir título específico da loja
+Manage Shipping,Gerenciar Envio
+Shipping Information,Informação de envio
+Save Shipping Method,Guardar método de envio
+Delete Shipping Method,Excluir método de envio
+Edit Method '%s,Editar o método '% s
+New Method,Novo método
+All websites,Todos os sites
+Method Code,Código de Método
+Method Title,Título do método
+Website,Local na rede Internet
+System Methods,Métodos do sistema
+Delete,Excluir
+Are you sure?,Você tem certeza?
+Manage Shipping Methods,Gerenciar métodos de envio
+Add New Shipping Method,Adicionar novo método de envio
+Select Category,Selecione a Categoria
+Add Carrier,Adicionar Portador
+Custom Vendor Information,Informação personalizada do fornecedor
+Custom Data,Dados Personalizados
+"
+Enter custom data for this vendor.<br/>
+Each part should start with:<br/>
+<pre>===== part_name =====</pre><br/>
+Parts can be referenced from product template like this:
+<xmp>
+<?php echo Mage::helper('udropship')
+  ->getVendor(\$_product)
+    ->getData('part_name')?>
+</xmp>
+","
+Digite dados personalizados para esse fornecedor. <br/>
+Cada parte deve começar com: <br/>
+<Pre> ===== part_name ===== </ pre> <br/>
+As peças podem ser referenciadas a partir de um modelo de produto como este:
+<Xmp>
+<? Php echo Mage :: ajudante ('udropship')
+  -> getVendor (\ $ _ product)
+    -> getData ('part_name')?>
+</ Xmp>
+"
+Vendor Info,Informação do Fornecedor
+Vendor Name,Nome do vendedor
+Membership Profile,Perfil do quadro social
+* Please select,* Por favor selecione
+Membership,Adesão
+Allow Microsite,Permitir Microsite
+Limit Products,Limite de Produtos
+Billing Type,Tipo de faturamento
+DO NOT Automatically synchronize status with profile,NÃO Sincronizar automaticamente o status com o perfil
+Reject Reason,Rejeitar a razão
+Send Reject Email,Enviar rejeitar e-mail
+Resend Confirmation Email,Reenviar e-mail de confirmação
+Send Confirmation Email,Enviar e-mail de confirmação
+Resending confirmation email will reset password (revoke old one). New password will be sent to vendor in separate email once he click at the link in this confirmation email.,"Reenviar e-mail de confirmação irá redefinir a senha (revogar a antiga). Nova senha será enviada ao fornecedor em e-mail separado, uma vez que ele clicar no link neste e-mail de confirmação."
+Send Confirmation Email. Password will be sent to vendor in separate email once he click at the link in this confirmation email.,"Enviar email de confirmação. A senha será enviada ao fornecedor em um e-mail separado, uma vez que ele clicar no link neste e-mail de confirmação."
+Waiting for email confirmation,Aguardando confirmação por e-mail
+No,Não
+Yes,sim
+Preferred Carrier,Operadora Preferida
+Use Rates Fallback Chain,Cadeia de Tarifas de Tarifas de Uso
+Will try to find available estimate rate for dropship shipping methods in order <br>1. Estimate Carrier <br>2. Override Carrier <br>3. Default Carrier,"Vai tentar encontrar a taxa de estimativa disponível para dropship métodos de envio, a fim de 1. Estimativa Do Portador <br> 2. Substituir portadora <br> 3. Default Carrier"
+Vendor Email,E-mail do fornecedor
+Email is also used as username,O e-mail também é usado como nome de usuário
+New Password,Nova senha
+Leave empty for no change,Deixe vazio para nenhuma alteração
+Log In Password,Senha de login
+Login disabled if empty,Login desativado se vazio
+Vendor Telephone,Telefone Fornecedor
+Phone number is required for FedEx label printing,O número de telefone é obrigatório para a impressão de etiquetas FedEx
+Vendor Fax,Fornecedor Fax
+Use Default Configuration,Usar configuração padrão
+Notification Template,Modelo de notificação
+Allow shipping extra charge,Permitir frete adicional
+Default shipping extra charge suffix,Suplemento de carga adicional de envio padrão
+Default shipping extra charge type,Tipo de taxa de envio adicional padrão
+Default shipping extra charge,Taxa de envio adicional padrão
+Is extra charge shipping default,É padrão de envio de carga extra
+URL friendly identifier,Identificador amigável de URL
+Please select state...,Selecione o estado ...
+Shipping Origin Address,Endereço de Origem de Envio
+Attention To,Atenção a
+Street,Rua
+City,Cidade
+Zip / Postal code,CEP / Código Postal
+Country,País
+Please select Country,Por favor selecione País
+State,Estado
+Please select State,Por favor selecione Estado
+Billing Address,endereço de cobrança
+Same as Shipping,Igual ao envio
+Leave empty to use shipping origin,Deixe vazio para usar origem de remessa
+Email,O email
+Leave empty to use default,Deixe vazio para usar o padrão
+Telephone,Telefone
+Fax,Fax
+Name,Nome
+SKU,SKU
+Vendor SKU,SKU do fornecedor
+Price,Preço
+Vendor Cost,Custo do Fornecedor
+Vendor Price,Preço do fornecedor
+Vendor Title,Título do fornecedor
+State/Condition,Estado / Condição
+Backorders,Backorders
+Vendor Stock Qty,Quantidade de estoque do fornecedor
+Availability State,Disponibilidade Estado
+Availability Date,Data de disponibilidade
+Special Price,Preço especial
+Priority,Prioridade
+Code,Código
+Extra Charge,Custo extra
+* Use Default,* Use o padrão
+Estimate Carrier,Estimativa do transportador
+* Use Estimate,* Usar estimativa
+Carrier Override,Substituição da operadora
+Default,Padrão
+Manage Vendors,Gerenciar Fornecedores
+Vendor Information,Informações de vendedor
+Preferences,Preferências
+Shipping methods,Métodos de Envio
+Associated Products,Produtos Associados
+Save Vendor,Salvar Fornecedor
+Save and Continue Edit,Salvar e continuar Editar
+Delete Vendor,Excluir fornecedor
+Edit Vendor '%s,Editar Fornecedor '% s
+New Vendor,Novo fornecedor
+Vendor ID,ID do fornecedor
+Distributor,Distribuidor
+Used Carrier,Carrier usado
+Shipping Profile,Perfil de Envio
+Change status,Alterar status
+Change Preferred Carrier,Alterar transportadora preferida
+Change Shipping Profile,Alterar perfil de envio
+WYSIWYG Editor,Editor WYSIWYG
+Use Default,Use o padrão
+Allow Extra Charge,Permitir carga extra
+From Date,Da data
+To Date,Até a presente data
+Includes Reserved Qty,Inclui Qtd reservado
+Add Adjustment,Adicionar ajuste
+Add,Adicionar
+Adjustment ID,ID de ajuste
+PO ID,ID de pedido
+PO Type,Tipo de pedido
+Amount,Montante
+Username,Nome de usuário
+Comment,Comente
+Statement Info,Informações da instrução
+Statement ID,ID da instrução
+Po Type,Tipo de Po
+Number of Orders,Número de encomendas
+Total Payout,Pagamento total
+Total Paid,Total pago
+Total Due,Total devido
+Total Invoice,Total da fatura
+Notes,Notas
+Adjustment,Ajustamento
+Payout ID,ID do pagamento
+Payout Type,Tipo de pagamento
+Payout Status,Status do pagamento
+Transaction ID,ID da transação
+# of Orders,Nº de Pedidos
+Order ID,ID da encomenda
+Refund ID,ID de reembolso
+Refund Date,Data do reembolso
+Subtotal,Subtotal
+Com Amount,Montante Com
+Tax,Imposto
+Shipping,Remessa
+Discount,Desconto
+Total Refund,Reembolso total
+PO Ready Date,Data de preparação do pedido
+Trans Fee,Taxa Trans
+Paid,Pago
+Manage Statements,Gerenciar declarações
+Statement Information,Declaração de Informações
+Payouts,Pagamentos
+Rows,Linhas
+Refunds,Reembolsos
+Adjustments,Ajustes
+Delete Statement,Excluir declaração
+Save and Pay,Salvar e pagar
+Save and Refresh,Salvar e atualizar
+Statement,Declaração
+Period,Período
+Total Payment,Pagamento total
+Sent,Enviei
+Deleting selected statement(s). Are you sure?,Excluindo instruções selecionadas. Você tem certeza?
+Refresh,Atualizar
+Download/Print,Download / Impressão
+Send Emails,Mande emails
+Emailing selected statement(s) to vendors. Are you sure?,Enviando por e-mail as declarações selecionadas aos fornecedores. Você tem certeza?
+Statements Generation Criteria,Critérios de Geração de Demonstrações
+Vendor Selection,Seleção de Fornecedores
+All Active Vendors,Todos os fornecedores ativos
+Selected Vendors,Fornecedores selecionados
+Vendors,Fornecedores
+Orders From Date,Ordens da data
+Orders To Date,Pedidos até à data
+Use Locale Timezone,Usar local fuso horário
+Statement Period,Período de declaração
+"If empty, will take YYMM of ""Orders From Date","Se estiver vazio, será necessário YYMM de ""Orders From Date"
+Generate Statements,Gerar declarações
+Generate Vendor Statements,Gerar declarações de fornecedor
+Vendor Statements,Declarações do Fornecedor
+Add New Vendor,Adicionar novo fornecedor
+* Use PO carrier *,* Use portadora de PO *
+Custom Value,Valor personalizado
+Images (%s),Imagens (% s)
+Media Storage,Armazenamento de mídia
+Create Folder...,Criar pasta...
+Delete Folder,Excluir pasta
+Delete File,Excluir arquivo
+Insert File,Inserir arquivo
+New Folder Name:,Nome da Nova Pasta:
+Are you sure you want to delete current folder?,Tem certeza de que deseja excluir a pasta atual?
+Are you sure you want to delete the selected file?,Tem certeza de que deseja excluir o arquivo selecionado?
+Storage Root,Raiz de Armazenamento
+Invalid username or password.,Nome de usuário ou senha inválidos.
+Login and password are required,Login e senha são obrigatórios
+Report,Relatório
+Shipment has been marked as complete,A remessa foi marcada como completa
+There was a problem marking this shipment as complete: ,Ocorreu um problema ao marcar esta transferência como completa:
+Invalid shipment ID supplied,ID de remessa inválido fornecido
+This shipment no longer exists.,Esta transferência não existe mais.
+Comment text field cannot be empty.,O campo de texto do comentário não pode ficar em branco.
+Canceled shipment cannot be reverted,A remessa cancelada não pode ser revertida
+%s\n\n[%s has changed the shipment status to %s],% S \ n \ n [% s alterou o status da remessa para% s]
+%s\n\n[%s tried to change the shipment status to %s],% S \ n \ n [% s tentou alterar o status da remessa para% s]
+Cannot add new comment.,Não é possível adicionar novo comentário.
+%s notifications sent.,% S notificações enviadas.
+Problems during notifications resend.,Problemas durante as notificações reenviar.
+Shipping Methods,Métodos de Envio
+"Only one system method could be selected when using ""* Any available"" wildcard method","Somente um método de sistema poderia ser selecionado ao usar o método curinga ""* Qualquer disponível"""
+Shipping Method was successfully saved,Método de envio foi salvo com sucesso
+Shipping Method was successfully deleted,Método de envio foi excluído com êxito
+Please select shipping method(s),Selecione o (s) método (s) de envio
+Total of %d record(s) were successfully deleted,Total de% d registro (s) foram excluídos com sucesso
+Generate,Gerar
+"All done, <a href=""%s"">click here</a> to be redirected to statements grid.","Tudo feito, <a href=""%s""> clique aqui </a> para ser redirecionado para a grade de declarações."
+Statements,Afirmações
+Statement was successfully refreshed,A declaração foi atualizada com êxito
+Statement '%s' no longer exists,A instrução '% s' não existe mais
+Statement was successfully saved,A declaração foi salva com êxito
+Statement was successfully deleted,A instrução foi excluída com êxito
+Please select statement(s),"Por favor, selecione declaração (s)"
+Total of %d record(s) were successfully refreshed,Total de% d registro (s) foram atualizados com êxito
+No statements found to print,Nenhuma declaração encontrada para imprimir
+There was an error while download vendor statement(s): %s,Ocorreu um erro ao baixar as declarações do fornecedor:% s
+Total of %d statement(s) have been sent,Total de% d declaração (s) foram enviadas
+Vendor was successfully saved,O fornecedor foi salvo com êxito
+This shipping methods were not saved: %s. Try to use overrides.,Estes métodos de envio não foram guardados:% s. Tente usar substituições.
+Vendor was successfully deleted,O fornecedor foi eliminado com êxito
+Please select vendor(s),Selecione o (s) fornecedor (es)
+Total of %d record(s) were successfully updated,Total de% d registro (s) foram atualizados com sucesso
+There was an error while updating vendor(s) status,Ocorreu um erro ao atualizar o status do fornecedor
+There was an error while updating vendor(s) preferred carrier,Ocorreu um erro ao atualizar o (s) fornecedor (es) preferido (s)
+Create and Download Labels Batch,Criar e baixar lote de etiquetas
+Download Packing Slips,Download Embalagens
+Your session has been expired. Please log in again.,A sua sessão expirou. Por favor faça login novamente.
+Invalid confirmation link,Link de confirmação inválido
+Your password has been reset.,Sua senha foi alterada.
+"Thank you, password reset instructions have been sent to the email you have provided, if a vendor with such email exists.","Obrigado, as instruções de redefinição de senha foram enviadas para o e-mail fornecido, se houver um fornecedor com esse e-mail."
+Invalid form data,Dados de formulário inválidos
+Settings has been saved,As configurações foram salvas
+No updates were made,Nenhuma atualização foi feita
+%s printed label ID %s,% S ID da etiqueta impressa% s
+No items are available for shipment,Não há itens disponíveis para remessa
+%s added tracking ID %s,ID de rastreamento% s adicionado% s
+Tracking ID has been added,O ID de acompanhamento foi adicionado
+%s has changed the shipment status to %s,% S alterou o status da remessa para% s
+%s tried to change the shipment status to %s,% S tentou alterar o status da remessa para% s
+Shipment status has been changed,O status da remessa foi alterado
+%s x [%s] %s,% S x [% s]% s
+Your comment has been sent to store administrator,O teu comentário foi enviado para o administrador da loja
+%s voided tracking ID %s,ID de rastreamento anulado% s% s
+Track %s was voided,A faixa% s foi anulada
+%s attempted to void tracking ID %s: %s,% S tentou anular o ID de rastreamento% s:% s
+Problem voiding track %s: %s,Problema de anulação da faixa% s:% s
+%s deleted tracking ID %s,% S ID de rastreamento excluído% s
+Track %s was deleted,A faixa% s foi eliminada
+Track %s was not found,A faixa% s não foi encontrada
+No shipments found with supplied IDs,Nenhuma remessa encontrada com os IDs fornecidos
+No shipments found for these criteria,Nenhuma remessa encontrada para esses critérios
+No status selected,Nenhum status selecionado
+Shipment status has been updated for the selected shipments,O status da remessa foi atualizado para os envios selecionados
+You are not authorized to print this shipment,Você não está autorizado a imprimir esta remessa
+%s printed packing slip,% S comprovante de embalagem impressa
+Vendor specific custom text on the bottom of packing slip,Texto personalizado específico do fornecedor na parte inferior do recibo de remessa
+Dropship,Dropship
+General Details,Detalhes Gerais
+Item Details,Detalhes do item
+Dropship Labels,Etiquetas Dropship
+Drop Shipping,Envio da gota
+Administrator Options,Opções do administrador
+Vendor Comments Receiver (store owner),Vendor Comentários Receiver (proprietário da loja)
+Vendor Comments Email Subject,E-mail Assunto
+Vendor Comments Template,Modelo de comentários do fornecedor
+Letterhead Info,Informações sobre papel timbrado
+Letterhead Logo,Logotipo do cabeçalho
+Letterhead Logo Aspect Ratio,Rácio de aspecto do cabeçalho
+Admin Interface Theme,Tema de interface de administrador
+Subscribe for extension update notifications,Inscrever-se para notificações de atualização de extensão
+Use ShipService_v12.wsdl for fedex shipping labels,Use ShipService_v12.wsdl para etiquetas de remessa Fedex
+"Show vendor rates in ""Shipping & Handling Information""
+ box of order view page","Mostrar taxas de fornecedor em ""Informações sobre Envio e Manuseio"" """
+"Use ""select ... for update"" to check if order already split to pos"," Caixa de ordem ver página """
+This option should be used when you experience problem when duplicate POs created,"Use ""select ... for update"" para verificar se a ordem já está dividida em pos"
+Local Vendor,Esta opção deve ser utilizada quando ocorrer um problema quando forem criadas ordens de produção duplicadas
+Make Available to Dropship on Order Status(es),Fornecedor local
+Change order status after POs beeing generated,Disponibilizar para Dropship no Status do Pedido (es)
+"Strict mode of ""Change order status after POs beeing generated""",Alterar o status da ordem após a geração de POs
+"NOTE: ""yes"" will not change order status to the one selected in ""Change order status after POs beeing generated"" unless it was in one of ""Make Available to Dropship on Order Status(es)"" <br /> That could happen when you manually create POs in ""Advanced PO"" add-on and order poccess status not from the list of ""Make Available to Dropship on Order Status(es)"" <br /> ""no"" have no restriction","Modo estrito de ""Alterar o status da ordem após a geração de POs"""
+Default Vendor Order (Shipment) Status,"OBSERVAÇÃO: ""Sim"" não alterará o status da ordem para o selecionado em ""Alterar o status da ordem depois que as OPs forem geradas"", a menos que esteja em uma das opções ""Disponibilizar para Dropship no Status da Ordem"" <br /> Isso pode acontecer quando Você cria manualmente POs no complemento ""Advanced PO"" e não faz o status do poccess da ordem na lista de ""Make Available to Dropship no Status do Pedido"" <br /> ""no"" não tem nenhuma restrição"
+Make Order Ready to Ship on Printing Packing Slip,Status padrão da ordem do fornecedor (envio)
+Vendor Notification Email Sender,Faça a encomenda pronta para ser enviada na embalagem de impressão
+Default Vendor Notification Template,Envio de e-mail de notificação de fornecedor
+Shipment Comment Vendor Notification Template,Modelo de notificação de fornecedor padrão
+Default Vendor Password Reminder Template,Modelo de notificação do fornecedor de comentário de remessa
+Low stock vendor notification template,Modelo de lembrete de senha de fornecedor padrão
+Special Cost Product Attribute,Modelo de notificação do fornecedor de estoque baixo
+NOTE: If date of order falls between special_from_date and special_to_date this attribute will be used as cost,Atributo de produto de custo especial
+Vendor SKU Product Attribute,NOTA: Se a data da encomenda cair entre special_from_date e special_to_date este atributo será utilizado como custo
+Font to use in PDF,Vendedor SKU Atributo do Produto
+NOTE: Using standard fonts will yield much smaller file size,Fonte a ser usada em PDF
+Attach Packing Slip to Vendor Notification,NOTA: Utilizar tipos de letra padrão irá produzir tamanho de ficheiro muito menor
+Attach Shipping Label to Vendor Notification,Anexar Deslizamento de Embalagem à Notificação do Fornecedor
+Unique Email,Anexar etiqueta de remessa à notificação do fornecedor
+NOTE: Email/password combination is always unique,Email exclusivo
+Unique Vendor Name,NOTA: A combinação de email / senha é sempre exclusiva
+Vendor Interface Theme,Nome exclusivo do fornecedor
+Visible Preferences,Tema da interface do fornecedor
+"NOTE: if none are selected, all will be shown by default",Preferências Visíveis
+Allowed HTML Tags for Vendor Preferences,"NOTA: se nenhum for selecionado, todos serão exibidos por padrão"
+Master Password,Tags HTML Permitidas para Preferências de Fornecedor
+Use this master password with vendor email to login to any vendor account,Senha mestra
+Attempt to void labels on deletion,Use esta senha mestra com e-mail do fornecedor para fazer login em qualquer conta de fornecedor
+Support for UPS only at the moment,Tentativa de anular etiquetas na exclusão
+Allow vendors to change shipment status manually,Suporte para UPS apenas no momento
+Automatically complete vendor shipment,Permitir que os fornecedores alterem o status de remessa manualmente
+Available system shipping methods during vendor reassign in order,Completar automaticamente a remessa do fornecedor
+Allow wysiwyg editor,Métodos de envio do sistema disponíveis durante a reatribuição do fornecedor em ordem
+Use autocomplete for vendor html select,Permitir editor wysiwyg
+Hide shipping amount in packingslip,Usar preenchimento automático para html do fornecedor select
+Restrict shipment statuses in vendor interface,Esconder o valor de envio em embalagens
+Available shipment statuses in vendor interface,Restringir status de envio na interface do fornecedor
+"Show product ID in ""Manage Stock"" in vendor interface",Status de remessa disponível na interface do fornecedor
+Always allow generate labels for these system carriers,"Mostrar ID do produto em ""Gerenciar estoque"" na interface do fornecedor"
+Allow use of all PO udropship method associated system carriers when generate label,Sempre permitir gerar rótulos para essas operadoras de sistema
+Allow use of all carrier methods when generate label,Permitir o uso de todas as operadoras associadas do sistema udropship do PO ao gerar o rótulo
+Default custom text on the bottom of packing slip,Permitir o uso de todos os métodos de transporte ao gerar o rótulo
+Show totals in vendor portal order view,Texto personalizado padrão na parte inferior do recibo de remessa
+Statement Email Sender,Mostrar totais na visualização do pedido do portal do fornecedor
+Statement Email Template,Declaração de remetente de e-mail
+Adjustment Comment Trigger Word,Modelo de e-mail de demonstração
+Use this as a first word in shipment comment for adjustment amounts in the following format:<br/>ADJUSTMENT: -120<br/>Comment here,Comentário de ajuste Trigger Word
+Statement Usage,Use isto como uma primeira palavra no comentário de remessa para quantidades de ajuste no seguinte formato: <br/> AJUSTE: -120 <br/> Comentar aqui
+"Default ""Apply commission on Discount""",Uso da instrução
+"Default ""Apply commission on Tax""","Padrão ""Aplicar comissão sobre desconto"""
+"Default ""Apply commission on Shipping""","Padrão ""Aplicar comissão sobre Imposto"""
+"Default ""Discount In Payout""","Padrão ""Aplicar comissão sobre Envio"""
+"Default ""Tax In Payout""","Padrão ""Desconto em Pagamento"""
+"Default ""Shipping In Payout""","Padrão ""Tax In Payout"""
+"Default ""Include shipping tax in shipping amount""","Padrão ""Incluir imposto de envio no valor de remessa"""
+"Default ""Statement subtotal calculation based on""","Padrão ""Cálculo do subtotal da instrução com base em"""
+"Default ""Statement calculation based on""","Padrão ""Cálculo de declaração com base em"""
+"Default ""Statement on following shipment statuses""","Padrão ""Declaração sobre os status de envio seguintes"""
+Enable Refunds,Ativar reembolsos
+Customer Options,Opções do cliente
+Action on enable/disable vendor,Ação em ativar / desativar fornecedor
+Action on delete vendor,Ação para excluir o fornecedor
+Customer Notification on Shipment Completion,Notificação do cliente na conclusão da remessa
+Customer Notification on Tracking ID,Notificação do cliente no ID de rastreamento
+Tracking ID Notification Template,Modelo de notificação de identificação de rastreamento
+Tracking ID Notification Template for Guests,Modelo de notificação de ID de rastreamento para convidados
+Repeat tracking poll every ...,Repetir rastreamento sondagem cada ...
+hours,Horas
+Poll Tracking API,API de acompanhamento de pesquisas
+"Will periodically poll available carrier tracking APIs, and mark items as shipped only after receiving confirmation that the packages were picked up",Examinará periodicamente as APIs de acompanhamento de veiculadores disponíveis e marcará os itens como enviados somente após receber a confirmação de que os pacotes foram capturados
+Estimate Total Method,Estimativa do Método Total
+Estimate Error Action,Estimativa de Ação de Erro
+This action will be taken if one or more of vendor carriers participating in estimate returns an error or no results,Esta ação será tomada se uma ou mais operadoras de fornecedores que participam da estimativa retornarem um erro ou nenhum resultado
+Use Custom HTML Customer Address Template For Vendors,Use o modelo de endereço de cliente HTML personalizado para fornecedores
+HTML Customer Address Template For Vendors,Modelo de endereço de cliente HTML para fornecedores
+Use Custom PDF Customer Address Template For Vendors,Usar modelo de endereço de cliente PDF personalizado para fornecedores
+PDF Customer Address Template For Vendor,Modelo de endereço de cliente PDF para fornecedor
+Product Stock Options,Opções de stock do produto
+Vendor Decision Method,Método de decisão do fornecedor
+Vendor Decision Method For Reassign,Método de decisão do fornecedor para reatribuição
+When doing order items vendor reassign (Multivendor add-on) or manually creating PO (Advanced PO add-on) use this decision method to check vendors stock,Ao fazer a reatribuição de fornecedores de itens de ordem (complemento Multivendor) ou criar manualmente PO (complemento de PO avançado) use este método de decisão para verificar o estoque de fornecedores
+Skip Stock Check For Reassign,Saltar verificação de estoque para reatribuição
+Skip Limit Address Check For Reassign,Ignorar o endereço de limite Verificar a reatribuição
+"Skip Bundle ""Ship Separately"" limitation","Omissão de pacote ""Envio separadamente"" limitação"
+"By default to allow bundle items to be shipped separatelly all bundle specific options should be dynamic (Price, Weight, Ship Separately). This option skip that limitation and only ""Ship Separately"" considered. Using that option make sure your shipping calculation methods does not rely on weight. Also it could lead in some cases order/invoice totals to be calculated incorrectly. So use it very carefully.","Por padrão, para permitir que os itens do pacote sejam enviados separadamente, todas as opções específicas do pacote devem ser dinâmicas (Preço, Peso, Enviar separadamente). Esta opção ignorar essa limitação e apenas ""Ship Separately"" considerado. Usando essa opção certifique-se de seus métodos de cálculo de envio não depende de peso. Também poderia levar em alguns casos a ordem / faturar totais para ser calculado incorretamente. Então, use-o com muito cuidado."
+Split Bundle by vendors,Pacote dividido por fornecedores
+Yes - will split bundle into multiple cart items by child items vendors,Sim - dividirá o pacote em vários itens de carrinho por fornecedores de itens filho
+Show vendor sku column in vendor portal stock section,Mostrar coluna de fornecedor sku na seção de estoque do portal do fornecedor
+Miscellaneous,Diversos
+Email Transport,Email Transporte
+Poll Tracking Error Notifications Options,Opções de Notificações de Erros
+Enabled,ativado
+Sender (email from identity),Remetente (e-mail de identidade)
+Receiver (store owner),Receptor (proprietário da loja)
+Label Request Failed Email Subject,E-mail do pedido de etiqueta falhou
+Label Request Failed Email Template,Modelo de pedido de etiqueta com falha
+Poll Tracking Failed Email Subject,Assunto do e-mail do rastreamento por sondagem
+Poll Tracking Failed Email Template,Modelo de e-mail com falha de acompanhamento de pesquisa
+Poll Tracking Limit,Limite de rastreamento de pesquisa
+Poll Tracking Limit Exceeded Email Subject,Limite de rastreamento de sondagens excedido Assunto do e-mail
+Poll Tracking Limit Exceeded Email Template,Limite de rastreamento da sondagem excedeu o modelo de e-mail
+Turn on udropship functionality explicitly,Ativar a funcionalidade udropship explicitamente
+Allow Free Shipping,Permitir frete grátis
+Allow Rule Based Free Shipping,Permitir envio gratuito com base em regras
+Free methods,Métodos livres
+Free Shipping with Minimum Order Amount,Frete grátis com o valor mínimo da ordem
+Minimum Order Amount for Free Shipping,Quantidade mínima de pedido para frete grátis
+Calculate Handling Fee,Calcular Taxa de Manuseio
+Handling Fee,Taxa de Manuseio
+Minimum Package Weight,Peso mínimo do pacote
+Ship to applicable countries,Envio aos países aplicáveis
+Ship to Specific countries,Enviar para países específicos
+Show Method if Not Applicable,Mostrar método se não aplicável
+Displayed error message,Mensagem de erro exibida
+Sort order,Ordem de classificação
+General,Geral
+Use Global settings for labels API,Usar configurações globais para etiquetas API
+Shipping Labels,Etiquetas de envio
+Dimension Units,Dimensão Unidades
+Default Package Length,Comprimento padrão do pacote
+Default Package Width,Largura padrão do pacote
+Default Package Height,Altura do pacote padrão
+PDF Specific,Especificação do PDF
+PDF Page Size,Tamanho da página PDF
+PDF Page Width,Largura da página PDF
+PDF Page Height,Altura da página PDF
+PDF Label Rotation,Rotação de etiquetas PDF
+PDF Label Left Offset,Etiqueta em PDF Deslocamento para a esquerda
+PDF Label Top Offset,PDF Label Top Offset
+EPL Specific,Específico da EPL
+Enable Printing DocTab,Ativar impressão DocTab
+Fedex Settings,Configurações Fedex
+Test Mode,Modo de teste
+User Key,Chave do usuário
+User Password,Senha do usuário
+Account Number,Número da conta
+Meter Number,Número do medidor
+Smart Post Hub ID,ID do Hub do Smart Post
+Payment Type,Tipo de pagamento
+3rd Party Account Number,Número de conta de terceiros
+3rd Party Contact Name,Nome de contato de terceiros
+3rd Party Company,Empresa terceirizada
+3rd Party Phone,Telefone de terceiros
+Default Dry Ice Weight (KG),Peso do gelo seco padrão (KG)
+Drop Off Type,Drop Off Type
+Label Stock Type,Tipo de arquivo de etiqueta
+PDF Label Width,Largura da etiqueta PDF
+PDF Label Height,Altura da etiqueta PDF
+Signature Option,Opção de assinatura
+Insurance,Seguro
+Shipment notification types,Tipos de notificação de remessa
+Shipment notification email(s),Notificação de envio de e-mail (s)
+Comma separated,Separado por vírgulas
+ITN (Internal Transaction Number),ITN (número de transação interna)
+"For shipments requiring an EEI/SED, enter the ITN number received from AES when you filed your shipment or the FTR (Foreign Trade Regulations) exemption number.<br/>Proper format: <strong>AES XYYYYMMDDNNNNNN</strong> where YYYYMMDD is date and NNNNNN are numbers generated by the AES.<br/>Apply at <a href=""http://www.aesdirect.gov"">http://www.aesdirect.gov</a>","Para remessas que exigem uma EEI / SED, insira o número ITN recebido da AES quando você arquivou sua remessa ou o número de isenção FTR (Foreign Trade Regulations). <br/> Formato apropriado: <strong> AES XYYYYMMDDNNNNNN </ strong> onde YYYYMMDD é Data e NNNNNN são números gerados pelo AES. <br/> Inscreva-se em <a href=""http://www.aesdirect.gov""> http://www.aesdirect.gov </a>"
+Endicia Settings,Configurações de Endicia
+Endicia API URL,URL da Endicia API
+Label Test Mode,Modo de Teste de Etiqueta
+Requester ID,ID do Requerente
+Account ID,ID da conta
+Pass Phrase,Pass Phrase
+New Pass Phrase,Nova frase de passagem
+Entering new passpharse will issue Endicia ChangePassPhraseXML API call,A introdução de nova passpharse irá emitir a chamada da Endicia ChangePassPhraseXML API
+Confirm New Pass Phrase,Confirmar nova frase de passagem
+Default Mail Class,Classe de correio padrão
+Default Mail Piece Shape,Padrão Mail Piece Shape
+Stealth,Furtividade
+Delivery Confirmation,Confirmação de entrega
+Signature Confirmation,Confirmação de assinatura
+Return Receipt,Recebimento de devolução
+Electronic Return Receipt,Recepção eletrônica
+Insured Mail,Correio seguro
+Restricted Delivery,Entrega Restrita
+COD,BACALHAU
+Balance Threshold,Limiar de saldo
+Leave empty to disable automatic funding of the account,Deixe em branco para desativar o financiamento automático da conta
+Recredit Amount,Montante de Recr.
+UPS Settings,Configurações do UPS
+UPS API URL,URL da API do UPS
+UPS Shipper Number,UPS Shipper Number
+3rd Party Country,País de terceiros
+3rd Party Postal Code,Código postal de terceiros
+Verbal Confirmation,Confirmação verbal
+Pickup Type,Tipo de coletor
+Container Type,Tipo de recipiente
+Destination Type,Tipo de Destino
+* Select category,* Selecione a Categoria
+Marked as shipped,Marcado como enviado
+Unknown,Desconhecido
+Error connecting to API: %s,Erro ao conectar-se à API:% s
+Tracking ID %s was picked up from %s,A ID de rastreamento% s foi coletada de% s
+Tracking ID %s was delivered to customer,ID de rastreamento% s foi entregue ao cliente
+Shipment has been complete,A remessa foi concluída
+PO #%s [%s],PO #% s [% s]
+%s (qty: x%s) [status: %s],% S (qty: x% s) [status:% s]
+%s (qty: %s),% S (qty:% s)
+Vendor SKU:,Vendedor SKU:
+Commission Percent,Percentagem da Comissão
+Transaction Fee,Taxa de transação
+Commission Amount,Montante da Comissão
+Tax Amount,Imposto
+Cost,Custo
+Row Cost,Custo da linha
+Row Total,Total de linhas
+"Invalid stock availability method callback: %s, %s","Retorno de chamada do método de disponibilidade de estoque inválido:% s,% s"
+Grouped Rates Calculation: qty constraint failed for item (%s [SKU: %s]),Cálculo de Taxas Agrupadas: a restrição qty falhou para o item (% s [SKU:% s])
+Selected required options are not available.,As opções selecionadas não estão disponíveis.
+Required options are not selected.,As opções necessárias não estão selecionadas.
+Unirgy Vendor-Product Associations Indexer,Unirgy Vendedor-Product Associations Indexer
+Error parsing confirmation response,Erro ao analisar a resposta de confirmação
+"Cannot delete local vendor. Please change ""Configuration / Drop Shipping / Vendor Options / Local Vendor"" before","Não é possível excluir o fornecedor local. Por favor mude ""Configuração / Drop Shipping / Vendor Options / Local Vendor"" antes"
+Order status changed after POs generated,Status do pedido alterado após a geração de pedidos
+ORDER WAS CANCELED: shipment status was changed to %s,A encomenda foi cancelada: o estado da remessa foi alterado para% s
+Page %s of %s,Página% s de% s
+Packingslip # ,Talão de embalagem #
+Qty,Quantidade
+Products,Produtos
+Order # ,Ordem #
+Purchase Order # ,Ordem de compra #
+Order Date: ,Data do pedido:
+Purchase Order Date: ,Data da ordem de compra:
+SOLD TO:,VENDIDO A:
+SHIP TO:,ENVIAR PARA:
+Payment Method:,Método de pagamento:
+Payment Method,Método de pagamento
+Shipping Method:,Método de envio:
+Total Shipping Charges,Total dos Encargos de Transporte
+Carrier,Portador
+Number,Número
+N/A,N / D
+No orders found for this period.,Nenhum pedido encontrado para este período.
+%s for %s - Page %s of %s,% S para% s - Página% s de% s
+Statement #,Declaração #
+Statement Date,Data de declaração
+Date,Encontro
+Order#,Ordem#
+Product,produtos
+Comm (%)/Trans,Comm (%) / Trans
+Net Amount,Valor líquido
+Adjustment#,Ajustamento#
+Type,Tipo
+Payout,Pagamento
+Due,Vencimento
+Comm (%),Comm (%)
+Total Product Revenue,Receita total do produto
+Total Tax,Imposto total
+Total Tax (non-payable),Total Imposto (não-pagável)
+Total Shipping,Envio total
+Total Shipping (non-payable),Envio total (não pagável)
+Total Discount,Desconto total
+Total Discount (non-payable),Desconto Total (não-pago)
+Total Handling,Manuseio Total
+Total Commission,Total da Comissão
+Total Transaction Fees,Total de taxas de transação
+Total Adjustments,Total Ajustes
+Total Refunds,Reembolsos totais
+Page %s,Páginas
+Adjust,Ajustar
+Statement Totals,Total de declarações
+Handling,Manipulação
+Comm,Comm
+Trans,Trans
+Refund,Restituição
+Payment,Forma de pagamento
+Commission,Comissão
+Trans.Fee,Taxa de transporte
+Image file was not found: %s,O arquivo de imagem não foi encontrado:% s
+Use config,Usar config
+Disable,Desativar
+When Tracking ID is added,Quando o ID de acompanhamento é adicionado
+When Vendor Shipment is complete,Quando a remessa do fornecedor estiver concluída
+When Order is completely shipped,Quando a encomenda é completamente enviada
+Fail estimate and show the error,Estime a estimativa e mostre o erro
+Skip failed carrier call and show prices without,Ignorar a chamada de operadora com falha e mostrar os preços sem
+* Do not change,* Não mude
+Pending,Pendente
+Exported,Exportado
+Acknowledged,Reconhecido
+Backorder,Backorder
+On Hold,Em espera
+Ready to Ship,Pronto para enviar
+Pending Pickup,Recolha pendente
+Label(s) printed,Rótulo (s) impresso (s)
+Shipped,Enviado
+Delivered,Entregue
+Canceled,Cancelado
+Returned,Devolvida
+* Default (global setting),* Predefinição (definição global)
+* Use Vendor Email,* Usar email do fornecedor
+When all items are shipped,Quando todos os itens são enviados
+At least one item shipped,Pelo menos um item enviado
+* Magento Bundled Fonts,* Magento Bundled Fontes
+Times New Roman,Times New Roman
+Helvetica,helvética
+Courier,Correio
+Sum of order vendors estimates,Soma das estimativas dos fornecedores de ordens
+Maximum of order vendors estimates,Máximo de estimativas de fornecedores de ordens
+* Automatic,Automático
+Sendmail,Enviar correio
+Active,Ativo
+Inactive,Inativo
+Disabled,Desativado
+Rejected,Rejeitado
+Pending Membership,Adesão Pendente
+Suspended Membership,Subscrição suspensa
+Canceled Membership,Afiliação Cancelada
+Expired Membership,Cadastro Expirado
+* No notification,* Sem notificação
+* Email notification,* Notificação de Email
+Invoice,Fatura
+Include,Incluir
+Exclude but Show,Excluir mas mostrar
+Exclude and Hide,Excluir e ocultar
+* Local database,* Banco de dados local
+Always in stock,Sempre em estoque
+Use system configured handling fee only,Utilize apenas a taxa de processamento configurada pelo sistema
+Use vendor configured handling fee only,Utilize apenas a taxa de processamento configurada pelo fornecedor
+Add vendor handling fee to the system handling fee,Adicionar taxa de manuseamento do fornecedor à taxa de tratamento do sistema
+* Disable tracking API polling,* Desativar a pesquisa de API de monitoramento
+* Use label carrier API if available,"* Use a API da portadora de etiquetas, se disponível"
+No label printing,Sem impressão de etiquetas
+PDF,PDF
+EPL,EPL
+ZPL,ZPL
+4X6,4X6
+Next Day Air Early AM,Dia seguinte
+Next Day Air Early AM Letter,Carta do dia do ar do dia seguinte AM
+Next Day Air,Próximo dia de ar
+Next Day Air Letter,Carta do ar do dia seguinte
+Next Day Air Intra (Puerto Rico),Próximo Dia Air Intra (Porto Rico)
+Next Day Air Saver,Poupança de ar no dia seguinte
+Next Day Air Saver Letter,Carta do dia seguinte do saque do ar
+2nd Day Air AM,2º Dia Air AM
+2nd Day Air AM Letter,2º Dia Carta AM AM
+2nd Day Air,Dia 2 de ar
+2nd Day Air Letter,Carta do ar do segundo dia
+3 Day Select,3 Dia Selecionado
+Ground,Chão
+Ground Commercial,Comercial em terra
+Ground Residential,Residencial Terreno
+Canada Standard,Padrão do Canadá
+Worldwide Express,Worldwide Express
+Worldwide Express Saver,Worldwide Express Saver
+Worldwide Express Letter,Carta Expressa Mundial
+Worldwide Express Plus,Worldwide Express Plus
+Worldwide Express Plus Letter,Carta Mundial Expressa Plus
+Worldwide Expedited,Em todo o mundo acelerado
+UPS Next Day Air,UPS Next Day Air
+UPS Second Day Air,UPS segundo dia de ar
+UPS Ground,UPS Ground
+UPS Worldwide Express,UPS Worldwide Express
+UPS Worldwide Expedited,UPS Worldwide Expedited
+UPS Standard,Padrão UPS
+UPS Three-Day Select,Seleção UPS de Três Dias
+UPS Next Day Air Saver,UPS Next Day Air Saver
+UPS Next Day Air Early A.M.,UPS Next Day Air Early A.M.
+UPS Worldwide Express Plus,UPS Worldwide Express Plus
+UPS Second Day Air A.M.,UPS Second Day Air A.M.
+UPS Saver,UPS Saver
+UPS Today Standard,UPS Today Standard
+UPS Today Dedicated Courrier,UPS Today Dedicated Courrier
+UPS Today Intercity,UPS Hoje Intercity
+UPS Today Express,UPS Today Express
+UPS Today Express Saver,UPS Today Express Saver
+Sender,Remetente
+Third Party,Terceiro
+Regular Pickup,Recolha regular
+Request Courier,Pedido de correio
+Drop Box,Dropbox
+Business Service Center,Centro de Serviços para Empresas
+Station,Estação
+PDF: Paper 4x6,PDF: Papel 4x6
+PDF: Paper 4x8,PDF: Papel 4x8
+PDF: Paper 4x9,PDF: Papel 4x9
+PDF: Paper 7x4.75,PDF: Papel 7x4.75
+PDF: Paper 8.5x11 Bottom Half Label,"PDF: Papel 8,5x11 Meia etiqueta inferior"
+PDF: Paper 8.5x11 Top Half Label,PDF: Papel 8.5x11 Top Meio Rótulo
+EPL: Stock 4x6,EPL: Estoque 4x6
+EPL: Stock 4x6.75 Leading Doc Tab,EPL: Stock 4x6.75 Leading Tab Doc
+EPL: Stock 4x6.75 Trailing Doc Tab,EPL: Stock 4x6.75 Guia Trailing Doc
+EPL: Stock 4x8,EPL: Stock 4x8
+EPL: Stock 4x9 Leading Doc Tab,EPL: Stock 4x9 Leading guia Doc
+EPL: Stock 4x9 Trailing Doc Tab,EPL: Arquivo 4x9 Trailing Tab Doc
+All,Todos
+Limit by order shipping method,Limite por ordem de envio
+Shipment,envio
+Purchase Order,Ordem de compra
+Available for Shipping Date,Disponível para Data de remessa
+Delivery Method,Método de Entrega
+Shipping Status,Estado do envio
+Ascending,Ascendente
+Descending,descendente
+Fixed,Fixo
+Percent of shipping amount,Porcentagem do valor de remessa
+Percent of vendor subtotal,Porcentagem do subtotal do fornecedor
+No action,Nenhuma ação
+Enable / Disable vendor products,Ativar / Desativar produtos do fornecedor
+* Default System Rules,* Regras Padrão do Sistema
+Simple Custom Rules,Regras personalizadas simples
+Advanced Custom Rules,Regras personalizadas avançadas
+Total Price,Preço total
+Total Cost,Custo total
+Line Number,Número da Linha
+Weight,Peso
+Vendor Package,Pacote de Fornecedores
+Row Separate Rate,Taxa de Linha Separada
+Item Separate Rate,Item Taxa separada
+Assign to local vendor and leave vendor products enabled,Atribua ao fornecedor local e deixe os produtos do fornecedor ativados
+Assign to local vendor and disable vendor products,Atribuir a fornecedor local e desativar produtos de fornecedor
+Delete vendor products,Excluir produtos do fornecedor
+* All Countries,* Todos os países
+Invalid request for source options: ,Pedido inválido de opções de origem:
+This item is not available for your location.,Este item não está disponível para sua localização.
+This item is not available for your country.,Este item não está disponível para seu país.
+This item is not available for your zipcode.,Este item não está disponível para o seu CEP.
+This product is currently out of stock.,Este produto está atualmente fora de estoque.
+Some items are not available for your location.,Alguns itens não estão disponíveis para sua localização.
+Some items are not available for your country.,Alguns itens não estão disponíveis para o seu país.
+Some items are not available for your zipcode.,Alguns itens não estão disponíveis para o seu CEP.
+Some of the products are currently out of stock,Alguns dos produtos estão atualmente fora de estoque
+Undefined product type.,Tipo de produto não definido.
+Internal adjustment to sync payout with statement total due,Ajuste interno para sincronizar o pagamento com o total da declaração
+This account is not confirmed.,Esta conta não está confirmada.
+Invalid stock check callback: %s,Retorno de chamada de verificação de estoque inválido:% s
+This URL Key is already used for different vendor (%s). Please choose another.,Essa chave de URL já é usada para diferentes fornecedores (% s). Escolha outro.
+This URL Key is reserved. Please choose another.,Esta chave de URL está reservada. Escolha outro.
+A vendor with supplied email already exists.,Já existe um fornecedor com o e-mail fornecido.
+A vendor with supplied email and password already exists.,Já existe um fornecedor com e-mail e senha fornecidos.
+A vendor with supplied name already exists.,Já existe um fornecedor com o nome fornecido.
+Location,Localização
+Error,Erro
+Updated At,Atualizado em
+Sku,Sku
+Stock Qty,Quantidade de estoque
+Stock Qty Add,Stock Qty Adicionar
+Vendor Sku,Vendedor Sku
+Item SKU,Item SKU
+Batch Info,Informações do Lote
+Use Template,Usar modelo
+Batch notes,Notas do lote
+Export to vendor's default locations,Exportar para as localizações predefinidas do fornecedor
+Default locations,Localizações padrão
+Export and download file,Exportar e baixar arquivo
+Download file,? Fazer download do arquivo
+Download file name,Download do nome do arquivo
+"If empty, will be autogenerated","Se estiver vazio, será gerado automaticamente"
+Export to custom locations,Exportar para locais personalizados
+Custom locations,Localizações personalizadas
+"Use <a href=""http://unirgy.com/wiki/udropship/batch/reference"" target=""udbatch_reference"">reference</a> for location format, separate multiple locations with new line","Use <a href=""http://unirgy.com/wiki/udropship/batch/reference"" target=""udbatch_reference""> referência </a> para o formato de local, separe vários locais com nova linha"
+Number of Rows,Numero de linhas
+Content,Conteúdo
+Stock Status,Estado das Ações
+Special From,Especial de
+Special To,Especial para
+Tracking ID,ID de rastreamento
+Has error,Tem erro
+Error Info,Informações sobre erros
+Import from vendor's default locations,Importação dos locais padrão do fornecedor
+Import from uploaded file,Importar do arquivo enviado
+Upload file,Subir arquivo
+Import from pasted content,Importar de conteúdo colado
+Paste content,Colar conteúdo
+Import from custom locations,Importar de locais personalizados
+Manage Batches,Gerir lotes
+Batch Information,Informações do lote
+Data Rows,Linhas de dados
+Export Orders,Ordens de exportação
+Import Orders,Ordens de Importação
+Export Stock PO,Exportação Stock PO
+Import Stock PO,Import PO Stock
+Import Inventory,Importar inventário
+Delete Batch,Excluir lote
+Create Batch(es),Criar lote (es)
+Batch Type,Tipo de Lote
+Batch Status,Status do lote
+# of Rows,# De linhas
+Scheduled At,Programado em
+Vendor PO Import/Export Batches,Vendedor PO Import / Export Lotes
+Create Stock PO Export Batch,Criar estoque PO Exportar lote
+Create Stock PO Import Batch,Criar lote de importação de PO de estoque
+Create Order Export Batch,Criar lote de exportação de pedidos
+Create Tracking Import Batch,Criar acompanhamento de lote de importação
+Create Inventory Import Batch,Criar lote de importação de inventário
+Location ID,ID do local
+Batch ID,ID do lote
+Batch Created At,Lote Criado em
+Hist Updated At,Hist Atualizado em
+Retry,Tentar novamente
+Vendor PO Import/Export History,Histórico de importação / exportação do fornecedor
+* All Vendors *,* Todos os fornecedores *
+Batch was successfully saved,O lote foi salvo com êxito
+Batch was successfully deleted,O lote foi excluído com êxito
+Please select batch(es),Selecione o (s) lote (s)
+There was an error while updating batch(es) status,Ocorreu um erro ao atualizar o status do lote (es)
+There was an error while updating history(ies) status,Ocorreu um erro ao atualizar o status do histórico (s)
+Total of %d record(s) were retried,Total de% d registros foram repetidos
+There was an error while retrying distribution: ,Ocorreu um erro ao tentar novamente a distribuição:
+Processed %s import rows,% S linhas de importação processadas
+Empty input,Entrada vazia
+Empty delimiter,Delimitador vazio
+Empty enclosure,Invólucro vazio
+Empty fields,Campos vazios
+"Required ""%s"" (or ""%s"") field is not specified","O campo ""% s"" (ou ""% s"") obrigatório não foi especificado"
+"Required ""%s"" field is not specified","O campo ""% s"" necessário não foi especificado"
+"%s"" field is not allowed. will be ignored.","% S ""campo não é permitido. Será ignorado."
+Invalid rows: %s,Linhas inválidas:% s
+Empty rows: %s,Linhas vazias:% s
+Missing required field in rows: %s,Falta o campo obrigatório nas linhas:% s
+Duplicate sku within file in rows: %s,Duplicar sku dentro do arquivo em linhas:% s
+Product not found for sku in rows: %s,Produto não encontrado para sku em linhas:% s
+Products not associated with vendor in rows: %s,Produtos não associados ao fornecedor em linhas:% s
+Batch Import/Export,Importação / Exportação de Lote
+Batches,Lotes
+Action History,Histórico de Ações
+Orders Batch Options,Opções de lote de encomendas
+Default Email Sender,Remetente padrão de e-mail
+Default Email Subject,Assunto de e-mail padrão
+Default Export Orders Filename,Ordens de exportação padrão Nome do arquivo
+Export On Po Statuses,Exportar em status Po
+Save inventory import data in batch,Salvar dados de importação de inventário em lote
+Allow import new vendor/product association with inventory import,Permitir importação nova associação de fornecedor / produto com importação de inventário
+This option applicable to multivendor add-on,Esta opção aplicável ao complemento multivendor
+If import by vendor sku and it maps to multiple products,Se importação por vendedor sku e mapeia para vários produtos
+Replace new line with custom char in fields during export,Substituir nova linha por caracteres personalizados nos campos durante a exportação
+This supports only fields with simple format [var.name] (Magento CMS templating conventions {{var var.name}} not supported),Isso suporta somente campos com formato simples [var.name] (as convenções de templates do Magento CMS {{var var.name}} não são suportadas)
+Custom char to replace new line in fields during export,Caracteres personalizados para substituir a nova linha nos campos durante a exportação
+Custom templates for manual import,Modelos personalizados para importação manual
+Custom templates for manual export,Modelos personalizados para exportação manual
+Statement Export Template,Modelo de exportação de demonstrações
+Invalid vendor,Fornecedor inválido
+"Please select ""Use Template","Selecione ""Usar modelo"
+"Errors during importing, please see individual batches for details","Erros durante a importação, consulte lotes individuais para obter detalhes"
+Invalid batch type,Tipo de lote inválido
+Empty Export Template,Modelo de exportação vazio
+Empty Item Export Template,Modelo de exportação de item vazio
+From:,A partir de:
+To:,Para:
+Message:,Mensagem:
+Invalid row format,Formato de linha inválido
+Missing required field: sku or vendor_sku,Campo obrigatório em falta: sku ou vendor_sku
+Missing required field: sku,Campo obrigatório em falta: sku
+Duplicate sku within file,Duplicar sku dentro do arquivo
+Duplicate vendor sku within file,Duplicar o sku do fornecedor dentro do arquivo
+Neither sku or vendor_sku specified,Nem sku nem vendor_sku especificados
+Product not found for ,Produto não encontrado para
+"Vendor sku ""%s"" maps to multiple products (ids: ""%s"")","O sku do fornecedor ""% s"" mapeia para vários produtos (ids: ""% s"")"
+Product with ,Produto com
+Missing required field,Campo obrigatório em falta
+Duplicate tracking_id within file,Duplicar tracking_id dentro do arquivo
+Invalid Order or PO ID,Ordem inválida ou ID do pedido
+Duplicate tracking_id,Duplicar tracking_id
+Invalid model for %s (%s),Modelo inválido para% s (% s)
+Added new vendor/product association,Adicionada nova associação fornecedor / produto
+Unsupported destination '%s,Destino não compatível '% s
+Could not write to file '%s,Não foi possível gravar no ficheiro '% s
+Tracking ID %s was added,A ID de acompanhamento% s foi adicionada
+Could not read from file '%s,Não foi possível ler do arquivo '% s
+Invalid local destination '%s,Destino local inválido '% s
+Import/Export Batches,Lotes de Importação / Exportação
+Export Stock POs,Exportação de POs
+Import Stock POs,Importar ordens de ações
+No Action,Nenhuma ação
+Rename,Renomear
+Move,Mover
+Rename+Move,Renomear + Mover
+Realtime,Tempo real
+Full,Cheio
+Manual,Manual
+Scheduled,Programado
+Missed,Perdido
+Processing,Em processamento
+Exporting,Exportador
+Importing,Importação
+Empty,Vazio
+Success,Sucesso
+Partial,Parcial
+New,Novo
+* No export,* Sem exportação
+Manual only,Apenas manual
+Auto Scheduled,Programação automática
+Instant,Instante
+Instant by status,Instantâneo por status
+* No import,* Sem importação
+Vendor's Default locations,Locais padrão do fornecedor
+* Use vendor default,* Usar predefinição de fornecedor
+Yes (manual only),Sim (apenas manual)
+Yes (manual and scheduled),Sim (manual e programado)
+Update only first product,Atualizar apenas o primeiro produto
+Update all products,Atualizar todos os produtos
+Skip and report error,Ignorar e informar o erro
+Dropship Vendor,Fornecedor Dropship
+Registration ID,ID de registo
+Manage Registrations,Gerenciar Registos
+Grid,Grade
+List,Lista
+Home,Casa
+Go to Home Page,Vá para a página inicial
+Vendor Registrations,Registros de fornecedores
+Please select registration(s),"Por favor, selecione registro (s)"
+Thank you for application. Instructions were sent to your email to confirm it,Obrigado pela aplicação. As instruções foram enviadas para o seu e-mail para confirmá-lo
+"Thank you for application. As soon as your registration has been verified, you will receive an email confirmation","Obrigado pela aplicação. Assim que seu registro for confirmado, você receberá um e-mail de confirmação"
+Incorrect CAPTCHA.,Captcha incorreto.
+MicroSite Options,MicroSite Opções
+"Enable ""System View"" menu item in vendor portal","Ativar item de menu ""Visão do sistema"" no portal do fornecedor"
+"If enabled this option gives vendors limited access to admin area to create new products, update existing (filtered by Dropship Vendor attribute). The option may be overridden on vendor level.","Se ativada, esta opção oferece aos fornecedores acesso limitado à área de administração para criar novos produtos, atualização existente (filtrada pelo atributo Fornecedor Dropship). A opção pode ser substituída no nível do fornecedor."
+Allow per vendor sudomain level selection,Permitir seleção de nível de sudomínio por fornecedor
+Subdomain level to use for vendor,Nível de subdomínio a ser usado pelo fornecedor
+Landing page title,Título da página de destino
+Landing page Meta Keywords,Landing page Meta Palavras-chave
+Landing page Meta Description,Página de destino Meta Descrição
+Use this vendor as a template for new registrations,Utilize este fornecedor como modelo para novos registos
+Update Store Base URL,Atualizar URL base da loja
+Automatically approve vendor applications,Aprovar automaticamente as aplicações do fornecedor
+Registration Confirmation Email Template,Modelo de e-mail de confirmação de inscrição
+New Vendor Welcome Email Template,Modelo de e-mail de boas-vindas do novo fornecedor
+Carriers to allow during vendor registration,Operadoras a serem autorizadas durante o registro do fornecedor
+New Registrations Receiver(s),Novo Registo (s) Receptor (es)
+New Registrations Email Subject,Novas Inscrições Assunto do Email
+New Registrations Template,Novo Modelo de Registos
+Staging Website,Site de Implementação
+Product attributes to HIDE from vendors,Atributos do produto para OCULTAR de fornecedores
+Show all vendor products on frontend (including multivendor associations),Mostrar todos os produtos do fornecedor no frontend (incluindo associações de vários fornecedores)
+Enable filter vendor categories on frontend,Ativar categorias de fornecedores de filtros no frontend
+Stick microsite products in cart,Stick microsite produtos no carrinho
+"Products that added to cart from vendor microsite will be stuck to that vendor regardless of decision method <br> ""Yes and display vendor"" - will display vendor name as item custom option ","Os produtos que foram adicionados ao carrinho do microsite do fornecedor ficarão presos a esse fornecedor independentemente do método de decisão. ""Sim e exibir o fornecedor"" - exibirá o nome do fornecedor como opção personalizada do item"
+Joined field with this alias is already declared,Campo associado com este alias já está declarado
+"Invalid alias, already exists in joined attributes","Alias ??inválido, já existe em atributos unidos"
+"Invalid alias, already exists in joint attributes.","Alias ??inválido, já existe em atributos comuns."
+"%s"" action is not allowed","% S ""ação não é permitida"
+Incomplete form data,Dados de formulário incompletos
+Passwords do not match,As senhas não correspondem
+"This subdomain is already taken, please choose another.","Este subdomínio já está selecionado, escolha outro."
+From URL Path (domain.com/vendor),A partir do caminho do URL (domain.com/vendor)
+2nd level subdomain (vendor.com),Subdomínio de 2º nível (vendor.com)
+3rd level subdomain (vendor.domain.com),Subdomínio de 3º nível (vendor.domain.com)
+4th level subdomain (vendor.subdomain.domain.com),Subdomínio de 4º nível (vendor.subdomain.domain.com)
+5th level subdomain (vendor.subdomain2.subdomain1.domain.com),Subdomínio de 5º nível (fornecedor.subdomínio2.subdomínio1.domínio.com)
+* Use Config,* Usar Config
+Yes and activate,Sim e ativar
+Yes and display vendor,Sim e exibir fornecedor
+Yes (only when in stock),Sim (somente quando em estoque)
+Yes (only when in stock) and display vendor,Sim (somente quando em estoque) e exibir fornecedor
+Enable Selected,Ativar selecionado
+Disable Selected,Desativar selecionado
+* None,* Nenhum
+* Use config,* Use config
+Invalid base url type,Tipo de URL de base inválido
+Bad request.,Pedido ruim.
+Wrong confirmation key.,Chave de confirmação errada.
+Failed to confirm vendor account.,Falha ao confirmar a conta do fornecedor.
+Wrong vendor account specified.,Conta de fornecedor errada especificada.
+Vendor Registration,Registro do fornecedor
+Default Vendor Landing Page,Página de destino padrão do fornecedor
+Registration Form,Formulário de registro
+Fieldsets,Fieldsets
+Skip confirmation email,Ignorar e-mail de confirmação
+New Vendor Confirmation Email Template,Novo modelo de e-mail de confirmação de fornecedor
+New Vendor Reject Email Template,Modelo de e-mail de rejeição de novo fornecedor
+Comments,Comentários
+Yes Agree,"Sim, concordo"
+Drop Shipping Vendors,Fornecedores do transporte da gota
+Magento SKU,Magento
+Magento Price,Preço Magento
+Invalid parameters.,Parâmetros inválidos.
+The vendors have been updated successfully.,Os fornecedores foram atualizados com êxito.
+No changes were neccessary.,Nenhuma alteração era necessária.
+The vendors stock has been checked successfully.,O estoque de fornecedores foi verificado com êxito.
+Available,acessível
+To be published,A ser publicado
+Reprinting in progress,Reimpressão em andamento
+Currently unavailable,Atualmente indisponivel
+Change of distributor in progress,Mudança de distribuidor em andamento
+Sold out,Esgotado
+Unavailable until further notice,Indisponível até novo aviso
+To be republished,Para ser republicado
+Total Quantity Method,Quantidade total Método
+Hide out of stock vendors,Esconder fora dos fornecedores de estoque
+Default status for product multivendor data,Status padrão para dados multivendor do produto
+"Invalid data: vendor_id=%s, product_id=%s","Dados inválidos: vendor_id =% s, product_id =% s"
+Failed to update vendor stock: vendor is not associated with this item (%s),Falha ao atualizar o estoque do fornecedor: o fornecedor não está associado a este item (% s)
+"Only ""%s"" of this product in stock.","Apenas ""% s"" deste produto em estoque."
+This product is not available in the requested quantity. %s of the items will be backordered.,Este produto não está disponível na quantidade solicitada. % S dos itens serão encomendados.
+This product is not available for your country.,Este produto não está disponível para seu país.
+"%s"" is not available for your country.","% S ""não está disponível para seu país."
+This product is not available for your location.,Este produto não está disponível para a sua localização.
+This product is not available for your zipcode.,Este produto não está disponível para o seu CEP.
+"%s"" is not available for your location.","% S ""não está disponível para a sua localização."
+"%s"" is not available for your zipcode.","% S ""não está disponível para o seu CEP."
+The minimum quantity allowed for purchase is %s.,A quantidade mínima permitida para a compra é% s.
+"The minimum quantity allowed for purchase for ""%s"" is %s.","A quantidade mínima permitida para compra para ""% s"" é% s."
+The maximum quantity allowed for purchase is %s.,A quantidade máxima permitida para compra é% s.
+"The maximum quantity allowed for purchase for ""%s"" is %s.","A quantidade máxima permitida para compra para ""% s"" é% s."
+"%s"" is currently out of stock.","% S ""está atualmente fora de estoque."
+"Only ""%s"" of ""%s"" in stock.","Apenas ""% s"" de ""% s"" em estoque."
+"%s"" is not available in the requested quantity. %s of the items will be backordered.","% S ""não está disponível na quantidade solicitada.% S dos itens serão enviados em espera."
+Some of the products cannot be ordered in requested quantity.,Alguns dos produtos não podem ser encomendados na quantidade solicitada.
+Stock configuration problem,Problema de configuração de estoque
+Not all products are available in the requested quantity,Nem todos os produtos estão disponíveis na quantidade solicitada
+Allow Backorder by Availability State/Date,Permitir pedido pendente por estado / data de disponibilidade
+Track Reserved Qty,Rastrear a quantidade reservada
+Use Avail State/Date to Allow Qty Below 0,Usar estado / data de disponibilidade para permitir Qty abaixo de 0
+Use Avail State/Date to Allow Qty Below 0 and Notify Customer,Usar estado / data de disponibilidade para permitir Qty abaixo de 0 e notificar o cliente
+Used,Usava
+Used: As new,Usado: Como novo
+Used: Very Good,Usado - Muito Bom
+Used: Good,Usado: Bom
+Used: Just OK,Usado: Apenas OK
+A product type is not defined for the indexer.,Um tipo de produto não está definido para o indexador.
+Po ID,Po ID
+Payout Info,Informações de Pagamento
+Method Specific Details,Detalhes específicos do método
+Payout Additional Details,Pagamento
+Paypal Correlation ID,ID de correlação do Paypal
+Payment Paid,Pagamento pago
+Payment Due,Pagamento devido
+Messages,Mensagens
+Manage Payouts,Gerenciar pagamentos
+Payout Information,Informações de Pagamento
+Delete Payout,Excluir pagamento
+Create Payout(s),Criar Pagamento (s)
+Sender Transaction ID,ID da transação do remetente
+Pay,Pagamento
+Vendor Payouts,Pagamentos de fornecedores
+Generate Payouts,Gerar Pagamentos
+Payout was successfully paid,O pagamento foi pago com êxito
+Payout '%s' no longer exists,O pagamento '% s' não existe mais
+Payout was successfully saved,O pagamento foi salvo com êxito
+Payout was successfully deleted,O pagamento foi eliminado com êxito
+Please select payout(s),Selecione o (s) pagamento (s)
+%s of %d record(s) were successfully deleted,% S de% d registro (s) foram excluídos com êxito
+%s of %d record(s) were successfully updated,% S de% d registro (s) foram atualizados com sucesso
+There was an error while updating payout(s) status,Ocorreu um erro ao atualizar o status do pagamento (s)
+%s of %s payouts  were successfully paid,% S de pagamentos de% s foram pagos com êxito
+There was an error during payout(s) mass pay,Ocorreu um erro durante o (s) pagamento (s) de pagamento em massa
+Paypal,Paypal
+Check,Verifica
+Bank Transfer,Transferência bancária
+Offline,desligada
+Payout Options,Opções de Pagamento
+Predefined Payout Schedules,Programações de pagamento predefinidas
+Payout Paypal Options,Payout Paypal Opções
+Use IPN to complete payout,Utilizar IPN para concluir o pagamento
+Account Email,Conta de e-mail
+Password,Senha
+Signature,Assinatura
+Please select vendors,Selecione fornecedores
+This payout already paid,Este pagamento já pago
+This payout is canceled,Este pagamento é cancelado
+This payout wait paypal IPN,Este payout espera paypal IPN
+"Payout ""total due"" must be positive","Pagamento ""total devido"" deve ser positivo"
+Empty payout method,Método de pagamento vazio
+Unknown payout method: '%s,Método de pagamento desconhecido:% s
+Can't find payout method class,Não é possível encontrar a classe do método de pagamento
+Successfully send payment. Waiting for IPN to complete.,Envie com êxito o pagamento. Esperando IPN para concluir.
+Successfully paid,Pago com sucesso
+* No Payout,* Sem pagamento
+Auto,Auto
+Use Statement preferences,Utilizar preferências de declaração
+Custom,personalizadas
+Hold,Aguarde
+Waiting for Paypal IPN,A aguardar IPN do Paypal
+* Use Custom,* Use Personalizar
+There was error during payment finalization.,Ocorreu um erro durante a finalização do pagamento.
+Paypal Adaptive,Paypal Adaptive
+Application ID,ID do aplicativo
+Adaptive Payments,Pagamentos Adaptativos
+"Accept credit cards and PayPal payments securely and send chained payments to multiple recipients (vendors), one after the other. Each recipient can take a cut of the payment (vendor payout).","Aceite os cartões de crédito e os pagamentos do PayPal de forma segura e envie pagamentos encadeados a vários destinatários (vendedores), um após o outro. Cada destinatário pode tomar um corte do pagamento (pagamento do fornecedor)."
+Required PayPal Settings,Configurações do PayPal necessárias
+Use Parallel Payments,Usar pagamentos paralelos
+All customer payment will go to vendors accounts. Select Statement Usage as Invoice in dropship settings and generate/send it to invoice vendors commissions,Todo o pagamento do cliente irá para as contas dos fornecedores. Selecione o uso da instrução como a fatura em ajustes do dropship e gere / envie-o às comissões dos vendedores da factura
+Enable this Solution,Ativar esta solução
+Basic Settings - PayPal Adaptive Payments,Configurações básicas - PayPal Adaptive Payments
+"It is recommended to set this value to ""PayPal"" per store views.","É recomendável definir esse valor como ""PayPal"" por vistas de loja."
+Sort Order,Ordem de classificação
+Payment Action,Ação de pagamento
+Advanced Settings,Configurações avançadas
+Payment Applicable From,Pagamento Aplicável a partir de
+Countries Payment Applicable From,Países Pagamento Aplicável a partir de
+Summary Text for Aggregated Cart,Texto resumido para o carrinho agregado
+Uses store frontend name by default.,Usa o nome do frontend da loja por padrão.
+Debug Mode,Modo de depuração
+Enable SSL verification,Ativar verificação SSL
+Paid amount of %s.,Quantidade paga de% s.
+Sale,Venda
+Update Qty\'s,Atualizar Qtds
+Create Purchase Orders,Criar pedidos
+New Purchase Orders for Order #%s,Novas ordens de compra para a ordem #% s
+Save Costs Update,Atualização de custos
+Edit Costs for Purchase Orders #%s,Editar custos para ordens de compra #% s
+Purchase Order #,Ordem de compra #
+Purchase Order Created,Ordem de Compra Criado
+Stock Vendor,Vendedor
+Excel,Excel
+PDF Purchase Orders,Pedidos de compra em PDF
+Resend Vendor PO Notification,Reenviar Notificação do Fornecedor
+Delete POs and Notify Vendors,Excluir pedidos e notificar fornecedores
+Information,Em formação
+Order Information,Informação da encomenda
+Cannot get the order instance.,Não é possível obter a instância da ordem.
+Purchase Order View,Ver Ordem de Compra
+Edit Costs,Editar Custos
+Create Shipment,Criar Envio
+Print,Impressão
+Purchase Order #%1$s | %2$s,Ordem de Compra #% 1 $ s | % 2 $ s
+Purchase Orders,Ordens de compra
+PO Subtotal,PO Subtotal
+PO Total Cost,PO Custo total
+PO Tax Amount,Montante do imposto de OP
+PO Total Qty,Quantidade total de pedidos
+Dropship Advanced PO Details Report,Dropship Advanced PO Details Report
+Dropship Advanced PO Item Details Report,Dropship Advanced PO Detalhes do item Relatório
+Date Created,Data Criada
+New Shipment for PO #%s [Order #%s],Nova remessa para PO #% s [Ordem #% s]
+This purchase order no longer exists.,Esta ordem de compra não existe mais.
+Sales,Vendas
+Shipments,Envios
+The po no longer exists.,O po já não existe.
+Cannot do shipment for the po.,Não pode fazer a remessa para o po.
+New Shipment,Nova remessa
+The shipment has been created.,A remessa foi criada.
+Shipment was succesfully invoiced,A remessa foi faturada com êxito
+Shipment was not invoiced,A remessa não foi faturada
+Cannot initialize shipment.,Não é possível inicializar a remessa.
+Cannot save shipment.,Não é possível salvar a remessa.
+This order no longer exists.,Esta ordem não existe mais.
+Cannot create PO with this qtys,Não é possível criar PO com este qtys
+Cannot update item quantity.,Não é possível atualizar a quantidade do item.
+PO was successfully deleted,PO foi excluído com êxito
+Cannot delete PO.,Não é possível excluir PO.
+New Purchase Order,Nova ordem de compra
+View Purchase Order,Exibir ordem de compra
+Created %s Purchase Orders,Pedidos de compra criados% s
+Cannot save po.,Não é possível salvar po.
+Canceled purchase order cannot be reverted,A ordem de compra cancelada não pode ser revertida
+%s items were canceled,% S itens foram cancelados
+There were no items to cancel that match requested condition,Não havia itens para cancelar essa condição de correspondência solicitada
+Status cannot be changed to canceled because po still have processing items,Status não pode ser alterado para cancelado porque po ainda tem itens de processamento
+Po Status changed to canceled,Po Status alterado para cancelado
+Cannot change status from %s to %s,Não é possível alterar o status de% s para% s
+Costs were successfully updated,Os custos foram atualizados com sucesso
+%s POs deleted.,% S POs excluídos.
+Cannot save delete POs.,Não é possível salvar as ordens de saída.
+Purchase order status has been changed,O status da ordem de compra foi alterado
+Cannot change purchase order status,Não é possível alterar o status da ordem de compra
+No purchase orders found for these criteria,Nenhuma ordem de compra encontrada para esses critérios
+Purchase Order status has been updated for the selected orders,O status da ordem de compra foi atualizado para os pedidos selecionados
+%s printed purchase order pdf,% S ordem de compra impressa pdf
+Created %d shipments,Criado% d remessas
+Sent %d shipment customer notifications,Enviadas notificações de clientes de envio do% d
+Vendor specific custom text on the bottom of purchase order PDF,Texto personalizado específico do fornecedor na parte inferior da ordem de compra PDF
+View Order Costs,Ver custos de encomenda
+View PO Costs,Ver custos de OP
+Edit PO Costs,Editar custos de OP
+Advanced PO Details,Detalhes da OP Avançada
+Advanced PO Item Details,Advanced PO Detalhes do item
+Shipment Details,Detalhes da remessa
+Purchase Order Options,Opções da ordem de compra
+Autoinvoice shipment,Envio de confirmação automática
+Auto-Invoice on these shipment statuses,Auto-Fatura nestes status de remessa
+Default PO Status,Status do pedido padrão
+Default Virtual PO Status,Status de pedido virtual padrão
+PO Increment Type,Tipo de Incremento de PO
+Shipment Increment Type,Tipo de incremento de remessa
+Attach PO Pdf to Vendor Notification,Anexar PO Pdf à Notificação do Fornecedor
+Make PO Ready to Ship on Printing PO PDF,Fazer PO pronto para enviar na impressão PO PDF
+New PO Vendor Notification Template,Novo modelo de notificação de fornecedor de PO
+PO Comment Vendor Notification Template,PO Comentário Modelo de notificação de fornecedor
+Allow change costs when manualy create po,Permitir custos de mudança quando manualmente criar po
+Default custom text on the bottom of purchase order PDF,Texto personalizado padrão na parte inferior da ordem de compra PDF
+Default Statement on following PO statuses,Declaração padrão sobre os seguintes status de pedido
+Default Customer Shipment Status,Status padrão de envio do cliente
+Restrict PO statuses in vendor interface,Restringir status de pedido na interface do fornecedor
+Available PO statuses in vendor interface,Status dos pedidos disponíveis na interface do fornecedor
+Allowed forced PO status change,Mudança de status do PO forçado permitido
+Hide shipping amount in po pdf,Esconder o valor do envio em pdf
+Vendor Shipment Comments Email Subject,Envio de Fornecedores Comentários Email Assunto
+Vendor Shipment Comments Template,Modelo de Comentários de Remessa de Fornecedor
+Vendor PO Comments Email Subject,Fornecedor PO Comentários Email Assunto
+Vendor PO Comments Template,Modelo de comentários do fornecedor PO
+Hide vendors that failed stock check on admin area Create PO page,Ocultar fornecedores que falharam na verificação de estoque na área de administração Criar página do PO
+Cannot autoinvoice shipment # %s,Não é possível efetuar a remessa automática #% s
+Cannot autoinvoice shipment # %s: order payment method does not allow partial capture,Não é possível enviar a remessa automática #% s: o método de pagamento de ordens não permite a captura parcial
+Cannot autoinvoice shipment # %s: order payment method does not allow online capture,Não é possível enviar a remessa automática #% s: o método de pagamento do pedido não permite a captura on-line
+created invoice # %s for shipment # %s,Criou a fatura #% s para remessa #% s
+Autoinvoice Error for shipment # %s: %s,Autoinvoice Erro na remessa #% s:% s
+"Invalid qty to ship for item ""%s","Quantidade inválida para enviar para o item ""% s"
+"Invalid qty to invoice for item ""%s","Quantidade inválida para faturar o item ""% s"
+Shipment was not created due to label request error: %s,A remessa não foi criada devido ao erro de solicitação de etiqueta:% s
+Shipment was deleted due to label request error: %s,A remessa foi excluída devido ao erro de solicitação de etiqueta:% s
+Shipment was canceled due to label request error: %s,A remessa foi cancelada devido ao erro de solicitação de etiqueta:% s
+[%s changed PO status from '%s' to '%s'],[% S alterou o status do pedido de '% s' para '% s']
+[PO status changed from '%s' to '%s'],[Status do pedido alterado de '% s' para '% s']
+%s tried to change PO status from '%s' to '%s,% S tentou alterar o status do pedido de '% s' para '% s
+Create PO,Criar PO
+ORDER WAS CANCELED,A encomenda foi cancelada
+Grand Total,Total geral
+Grand Totals,Principais totais
+Extra Adjustments,Ajustes Extra
+"Invalid qty to create purchase order for item ""%s","Quantidade inválida para criar o pedido do item ""% s"
+Purchase Order # %s: (%s)\n%s,Ordem de Compra #% s: (% s) \ n% s
+Cannot create an empty purchase order.,Não é possível criar uma ordem de compra vazia.
+Partially Shipped,enviado parcialmente
+Ready for stock PO,Pronto para estoque PO
+Exported stock PO,Estoque exportado PO
+Received stock PO,Estoque recebido PO
+Magento Native,Magento Native
+Order Based,Baseado em Pedidos
+Trigger whole order invoice,Acionar a fatura de pedido inteira
+PO Based,Baseado em PO
+* Email notification By Status,* Notificação de e-mail por status
+Unirgy_DropshipPo module does not support this version of magento,O módulo Unirgy_DropshipPo não suporta esta versão do magento
+Is Featured,É Destaque
+Change Is Featured,A mudança está em destaque
+My Sell List,Minha Lista de Vendas
+Sell Yours,Venda seu
+Relevance,Relevância
+There was an error while updating vendor(s) is featured,Ocorreu um erro ao atualizar o (s) fornecedor (es)
+You already selling this item,Você já vendeu este item
+The request to sell this product need to be approved by admin,O pedido de venda deste produto precisa ser aprovado pelo administrador
+Your sell request was succesfully submitted,Sua solicitação de venda foi enviada com êxito
+Empty sell request form data,Dados vazios do formulário de solicitação de venda
+All Offers,Todas as Ofertas
+Dropship Sell Yours,Dropship vende os seus
+Sell Yours Form,Venda seu formulário
+Add Product Options Fields,Adicionar campos de opções do produto
+Vendor Specific Fields,Campos específicos do fornecedor
+This customer username already exists.,Esse nome de usuário do cliente já existe.
+Account Type,tipo de conta
+Basic,Básico
+Pro,Pró
+Customer Ship Class Information,Informações sobre a classe de envio do cliente
+Class Name,Nome da classe
+Countries,Países
+Save Customer Ship Class,Salvar classe de envio de cliente
+Delete Customer Ship Class,Excluir classe de envio de cliente
+Edit Customer Ship Class '%s,Editar Classe de envio do cliente '%s
+New Customer Ship Class,Classe de navio de novo cliente
+State/Region,Estado / Região
+Zip/Post Code,Código postal
+Customer Ship Classes,Classes de navio do cliente
+Vendor Ship Class Information,Informações sobre a classe de navio do fornecedor
+Save Vendor Ship Class,Salvar a Classe do Vendedor do Navio
+Delete Vendor Ship Class,Excluir classe do navio do fornecedor
+Edit Vendor Ship Class '%s,Editar a Classe de Fornecedor do Navio '% s
+New Vendor Ship Class,Nova Classe de Vendedor de Navios
+Vendor Ship Classes,Classes de Navios Fornecedores
+This class no longer exists,Esta classe não existe mais
+"%s"" Customer Ship Class","% S ""Classe de navio do cliente"
+Edit Class,Editar classe
+New Class,Nova classe
+Edit Customer Ship Class,Editar a classe de envio do cliente
+The customer ship class has been saved.,A classe ship do cliente foi salva.
+An error occurred while saving this customer ship class.,Ocorreu um erro ao salvar esta classe de navio cliente.
+The ship class has been deleted.,A classe de navio foi excluída.
+An error occurred while deleting this ship class.,Ocorreu um erro ao excluir esta classe de navio.
+"%s"" Vendor Ship Class","% S ""Classe de Navio Fornecedor"
+Edit Vendor Ship Class,Editar classe de fornecedor de navio
+The vendor ship class has been saved.,A classe de fornecedor foi salva.
+An error occurred while saving this vendor ship class.,Ocorreu um erro ao salvar esta classe de fornecedor.
+Shipping Classes,Classes de envio
+An error occurred while saving this ship class. A class with the same name already exists.,Ocorreu um erro ao salvar esta classe de navio. Já existe uma classe com o mesmo nome.
+Customer Ship Class,Classe de navio do cliente
+Vendor Ship Class,Classe Vendedor de Navios
+* Other Vendor,* Outro Fornecedor
+* Other Customer,* Outros clientes
+Drop Shipping (Split Rates),Envio Drop (Split Rates)
+Displayed Error Message,Mensagem de erro exibida
+Hide vendor names on checkout,Ocultar nomes de fornecedores no checkout
+Hide items amounts and subtotal on shipping method page,Ocultar quantidades de itens e subtotal na página do método de remessa
+Check for external checkout usage,Verifique se há uso de check-out externo
+Dispatch external checkout check events,Enviar eventos de verificação externa de checkout
+"'Yes' will dispatch events that should do extra check of external checkout usage. <br>
+                                Events: udsplit_check_is_external_checkout, udsplit_check_is_paypal_express, udsplit_check_is_google_checkout
+                            ","'Sim' irá despachar eventos que devem fazer verificação extra do uso de check-out externo.
+                                Eventos: udsplit_check_is_external_checkout, udsplit_check_is_paypal_express, udsplit_check_is_google_checkout
+                            "
+Total,Total
+Rates Definition,Definição de Preços
+Commission fallback lookup method,Método de pesquisa de fallback da Comissão
+Rates,Preços
+Fixed Rates Calculation Type,Tipo de cálculo das taxas fixas
+Default Commission Percent,Porcentagem padrão da Comissão
+<br />Default value: %.2F. Leave empty to use default.,<br /> Valor padrão:% .2F. Deixe vazio para usar o padrão.
+Fixed Flat Rate (per po) [old transaction fee],Fixed Flat Rate (por po) [taxa de transação antiga]
+Rule for Fixed Rates,Regra para Tarifas Fixas
+Rule Based Fixed Rates,Taxas Fixas Baseadas em Regras
+Tier Commission,Comissão de Nível
+Parent category for tiered categories,Categoria principal para categorias hierárquicas
+Match Subcategories,Comparar Subcategorias
+"Product attribute code for ""Commission percent""","Código de atributo do produto para ""Percentagem da Comissão"""
+Used to set per product commission percent (instead of tier commission percent),Usado para definir por porcentagem de comissão de produto (em vez de porcentagem de comissão de nível)
+"Product attribute code for ""Tier Fixed Rate (per item)""","Código de atributo do produto para ""Taxa fixa de nível (por item)"""
+Used to set per product fixed rate (instead of tier fixed rate),Usado para definir por produto taxa fixa (em vez de taxa fixa de camada)
+Tiered Rates,Tarifas escalonadas
+Used for transaction fee calculation,Usado para cálculo de taxa de transação
+Tier Commissions,Comissões de Nível
+Item Price,Preço do item
+* Use Global Config,* Usar configuração global
+Vendor First,Fornecedor Primeiro
+Tier First,Nível Primeiro
+Flat (per po),Flat (por po)
+Tier (per item),Nível (por item)
+Rule Based (per item),Baseado em Regras (por item)
+Tier + Rule Based,Nível + Baseado em Regras
+Flat + Tier,Flat + Tier
+Flat + Rule Based,Baseado em Regras
+Flat + Tier + Rule Based,Flat + Tier + baseado em regras
+Cost for the first item,Custo para o primeiro item
+Additional item cost,Custo do item adicional
+Tier handling fee,Taxa de tratamento de nível
+Use Vendor Specific Rates,Use as taxas específicas do fornecedor
+Select Delivery Type To Setup Rates,Selecione o tipo de entrega para as taxas de configuração
+V2 Simple First/Additional Rates,V2 Simple Primeiro / Tarifas Adicionais
+V2 Simple Conditional Rates,V2 taxas condicionais simples
+V2 Rates,V2 Preços
+Tier Shipping,Envio de camadas
+Method name,Nome do método
+Use Rates Setup,Configuração de taxas de utilização
+Use Customer Group Condition,Usar a condição do grupo de clientes
+Allow Vendors modify rates from vendor portal,Permitir que os fornecedores alterem as tarifas do portal do fornecedor
+"""Cost for the first item"" Calculation Type",Custo do primeiro item Tipo de Cálculo
+"""Additional item cost"" Calculation Type",Custo do item adicional Tipo de cálculo
+"""Tier handling fee"" Calculation Type",Taxa de tratamento de nível Tipo de cálculo
+"""Tier handling fee"" Apply Method",Taxa de Manuseio de Nível Aplicar Método
+Rates Calculation Method,Método de cálculo das taxas
+"Product attribute code for ""Cost for the first item""","Código de atributo do produto para ""Custo para o primeiro item"""
+Used to set per product rates,Usado para definir as taxas por produto
+"Product attribute code for ""Additional item cost""","Código de atributo do produto para ""Custo de item adicional"""
+"Product attribute code for ""Tier handling fee""","Código de atributo do produto para ""Taxa de tratamento de nível"""
+Fallback lookup method,Método de pesquisa de retorno
+Fallback Cost for the first item,Custo de reposição para o primeiro item
+Used when there is no matched category found,Usado quando não há nenhuma categoria correspondente encontrada
+Fallback Additional item cost,Custo de item adicional
+Fallback Tier handling fee,Taxa de manuseio da taxa de reposição
+Simple Rates,Taxas Simples
+Delivery Types,Tipos de Entrega
+Configure Delivery Type Rates,Configurar Taxas de Tipo de Entrega
+Select Delivery Type to load settings in V2 Rates,Selecione Tipo de entrega para carregar as configurações em V2 Tarifas
+Show method if not applicable,Mostrar método se não aplicável
+Shipping Rates,Taxas de envio
+Separate per customer shipclass,Separado por cliente shipclass
+Base plus percent per customer shipclass,Base mais porcentagem por cliente shipclass
+Base plus fixed per customer shipclass,Base mais fixo por cliente shipclass
+Max first item other additional,Max primeiro item outros adicionais
+Max first item (discard qty),Máximo primeiro item (quantidade de descarte)
+Sum first item other additional,Soma primeiro item outros adicionais
+Sum first item (discard qty),Soma primeiro item (quantidade de descarte)
+Multiply first item (additional not used),Multiplicar primeiro item (adicional não usado)
+Vendor up to BASE,Fornecedor até BASE
+Vendor up to DEFAULT,Fornecedor até DEFAULT
+Vendor/Global by tier,Fornecedor / Global por camadas
+V1 Rates,V1 Preços
+V1 Simple Rates,V1 Preços Simples
+V2 By Category/VendorClass First/Additional/Handling Rates,V2 Por Categoria / VendorClass Primeiro / Adicional / Taxas de Manuseio
+Full Weight,Peso Total
+Vendor Vacation Message,Mensagem de férias do fornecedor
+"NOTE: Use {{vacation_end}} code for ""Vacation Ends At"" date","OBSERVAÇÃO: Use o código {{vacation_end}} para a data ""Vacation Ends At"""
+Vacation Mode,Modo de férias
+Vacation Ends At,Férias termina em
+Not Vacation,Não férias
+Notify Customer On Availability,Notificar ao Cliente sobre Disponibilidade
+Disable Products,Desativar produtos
+Question Details,Detalhes da pergunta
+"<a href=""%1$s"" onclick=""this.target=\'blank\'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>","<a href=""%1$s"" onclick=""this.target=\'blank\'"">% 2 $ s% 3 $ s </a> <a href=""mailto:%4$s""> ( % 4 $ s) </a>"
+Guest,Convidado
+Administrator,Administrador
+Posted By,Postado por
+Visibility,Visibilidade
+Question Status,Pergunta Status
+Question Text,Texto da pergunta
+Answer Status,Respondido Status
+Answer Text,Respondido Text
+Save Question,Salvar pergunta
+Delete Question,Excluir pergunta
+Are you sure you want to do this?,Você tem certeza de que quer fazer isso?
+Edit Question,Editar pergunta
+New Question,Nova pergunta
+Question Date,Data da pergunta
+Customer Name,nome do cliente
+Answer Date,Resposta Data
+Context,Contexto
+Edit,Editar
+Update Question Status,Estado da pergunta de atualização
+Update Answer Status,Atualizar status da resposta
+Send Customer Notification,Enviar notificação ao cliente
+Send Vendor Notification,Enviar Notificação de Fornecedor
+Pending Vendor Questions of Customer `%s`,Perguntas pendentes do fornecedor do cliente `% s`
+Pending Vendor Questions,Perguntas pendentes do fornecedor
+All Vendor Questions of Customer `%s`,Todas as Questões de Fornecedor do Cliente `% s`
+All Vendor Questions,Todas as perguntas do fornecedor
+QUESTION DATE,DATA DA PERGUNTA
+CUSTOMER NAME,NOME DO CLIENTE
+SHIPMENT,ENVIO
+#%s for order #%s,#% S para a ordem #% s
+PRODUCT,PRODUTOS
+Customer email,Email do cliente
+Vendor Questions,Perguntas do Vendedor
+All Questions/Answers,Todas as perguntas / respostas
+Pending Questions/Answers,Perguntas / Respostas Pendentes
+Edit Vendor Question,Editar pergunta do fornecedor
+The question was removed by another user or does not exist.,A questão foi removida por outro usuário ou não existe.
+The question has been saved.,A pergunta foi salva.
+The question has been deleted,A pergunta foi eliminada
+Please select question(s).,"Por favor, selecione a (s) pergunta (s)."
+Total of %d record(s) have been deleted.,Total de% d registro (s) foram excluídos.
+Total of %d record(s) have been updated.,Total de% d registro (s) foram atualizados.
+An error occurred while updating the selected question(s).,Ocorreu um erro ao atualizar a (s) pergunta (s) selecionada (s).
+Total of %d customer notification(s) have been sent.,Total de% d notificações de clientes foram enviadas.
+An error occurred while sending customer notification(s).,Ocorreu um erro ao enviar notificações ao cliente.
+Total of %d vendor notification(s) have been sent.,Total de% d notificações de fornecedor foram enviadas.
+An error occurred while sending vendor notification(s).,Ocorreu um erro ao enviar notificações de fornecedor.
+My Vendor Questions,Perguntas sobre o meu fornecedor
+Question not found.,Pergunta não encontrada.
+Your question has been accepted for moderation.,Sua pergunta foi aceita para moderação.
+Unable to post the question.,Não é possível postar a pergunta.
+Question was successfully saved,A pergunta foi salva com êxito
+Unable to find a data to save,Não é possível encontrar dados para salvar
+Is product view info use tabbed layout,A exibição de produtos usa um layout tabulado
+Default Question Status,Status da pergunta padrão
+Default Answer Status,Status da resposta padrão
+Show customer info to vendor,Mostrar informações do cliente ao fornecedor
+Show vendor info to customer,Mostrar informações do fornecedor para o cliente
+Admin Notification Email Recipient,Destinatário de email de notificação de administrador
+Send new customer question/vendor answer notifications to admin,Enviar notificações de resposta de novos clientes / fornecedores a admin
+Admin New Question Notification Template,Novo modelo de notificação de pergunta do Admin
+Admin Answer Notification Template,Modelo de notificação de resposta do administrador
+Send customer/vendor notifications copy to admin,Enviar notificações de cliente / vendedor para admin
+Send vendor notifications,Enviar notificações de fornecedor
+Vendor Notification Template,Modelo de notificação de fornecedor
+Send customer notifications,Enviar notificações ao cliente
+Customer Notification Email Sender,Envio de e-mail de notificação de cliente
+Customer Notification Template,Modelo de notificação de cliente
+Customer Questions,Perguntas do cliente
+Please enter the question text.,Digite o texto da pergunta.
+Please enter your name.,"Por favor, insira seu nome."
+"Invalid email address ""%s"".","Endereço de e-mail inválido ""% s""."
+Shipment not found.,Envio não encontrado.
+Approved,Aprovado
+Declined,Recusou
+Private,Privado
+Public,Público
+Unable to initialize Express Checkout.,Não foi possível inicializar o Checkout expresso.
+Unable to start Express Checkout.,Não é possível iniciar o Checkout expresso.
+Express Checkout and Order have been canceled.,O Checkout e Pedido Expresso foram cancelados.
+Express Checkout has been canceled.,O Checkout expresso foi cancelado.
+Unable to cancel Express Checkout.,Não foi possível cancelar o Checkout expresso.
+Unable to process Express Checkout approval.,Não foi possível processar a aprovação do Check-out expresso.
+Unknown membership,Associação desconhecida
+Vendor Membership,Membro Vendedor
+Membership Types,Tipos de associação
+Products Limit Exceed.,Produtos Limite Exceder.
+Membership Options,Opções de associação
+Template SKUs,Modelos de SKUs
+Allow vendor choose configurable attributes,Permitir que o fornecedor escolha atributos configuráveis
+Product SKUs used as templates (per attribute set),SKUs de produto usados ??como modelos (por conjunto de atributos)
+- Select %s -,- Selecionar% s -
+"Images (.gif, .jpg, .png)","Imagens (.gif, .jpg, .png)"
+All Files,Todos os arquivos
+Samples,Amostras
+Links,Links
+Add Product Options,Adicionar opções de produto
+Simples Management,Simples Gestão
+Custom Options,Opções personalizadas
+Custom Options Management,Gerenciamento de opções personalizadas
+Downloadable Options,Opções para download
+Downloadable Options Management,Gerenciamento de opções para download
+Images,Imagens
+Attribute Set,Conjunto de Atributos
+Catalog,Catálogo
+Manage Products,Gerenciar produtos
+Template Sku,Modelo Sku
+An error occurred while getting the requested content.,Ocorreu um erro ao obter o conteúdo solicitado.
+Forbidden,Proibido
+Product was deleted,O produto foi excluído
+Product name is invalid,O nome do produto é inválido
+Product has been saved,O produto foi salvo
+Vendor Products Edit,Produtos de fornecedor Editar
+Use custom product zoom on frontend,Usar o zoom personalizado do produto no frontend
+Preselect configurable options,Selecionar opções configuráveis
+Allow vendor delete products,Permitir que o fornecedor exclua produtos
+Upload images into configrable simples,Carregar imagens em simples configrable
+Explicitly show media gallery in configurable product,Explicitamente mostrar galeria de mídia em produtos configuráveis
+Gallery upload is required,O upload da galeria é obrigatório
+Allow add/edit custom options,Permitir adicionar / editar opções personalizadas
+Show vendor sku column in vendor portal products edit grid,Mostrar a coluna sku do fornecedor na grade de edição de produtos do portal do fornecedor
+Type of product,Tipo de produto
+Create type of products here and group attribute sets per type of product,Criar tipos de produtos aqui e agrupar conjuntos de atributos por tipo de produto
+Prefix vendor created products' SKUs with vendor id,Prefixo fabricante de produtos criados 'SKUs com identificação do fornecedor
+Automatically generate SKUs of vendor created products,Gerar automaticamente SKUs de produtos criados por fornecedores
+Check vendor SKU is unique within vendor products,Verifique o SKU do fornecedor é único dentro dos produtos do fornecedor
+Unpublish vendor product on following changes,Anular a publicação do produto do fornecedor nas seguintes alterações
+Show hidden categories to vendor if the field presented on product edit form,Mostrar categorias ocultas para o fornecedor se o campo apresentado no formulário de edição do produto
+Allowed types of product,Tipos de produtos permitidos
+"Disable product name ""is empty"" check","Desativar o nome do produto ""está vazio"" check"
+"For some languages might not work (e.g. Arabic). In that case select ""Yes""","Para alguns idiomas pode não funcionar (por exemplo, árabe). Nesse caso, selecione ""Sim"""
+Notifications,Notificações
+Send vendor pending products notifications,Enviar notificações de produtos pendentes do fornecedor
+Pending Products Vendor Notification Template,Modelo de notificação de fornecedor de produtos pendentes
+Send admin pending products notifications,Enviar notificações de produtos pendentes do administrador
+Pending Products Admin Notification Template,Modelo de notificação de administração de produtos pendentes
+Send vendor approved products notifications,Enviar notificações de produtos aprovados pelo fornecedor
+Approved Products Vendor Notification Template,Modelo de Notificação de Fornecedor de Produtos Aprovados
+Send admin approved products notifications,Enviar notificações de produtos aprovados pelo administrador
+Approved Products Admin Notification Template,Modelo de Notificação Administrada de Produtos Aprovados
+Send vendor fix products notifications,Enviar notificações de produtos de correção de fornecedores
+Fix Products Vendor Notification Template,Modelo de Notificação de Fornecedores de Produtos Fixos
+Send admin fix products notifications,Enviar notificações de administração de produtos correcionais
+Fix Products Admin Notification Template,Modelo de Notificação de Administrador de Produtos Fixos
+"Select Type of Product to load setting in ""Product SKUs used as templates""","Selecione o tipo de produto a ser carregado em ""SKUs de produtos usados ??como modelos"""
+Vendor Product Edit Form,Formulário de edição do produto do fornecedor
+Add Product Options Layout,Adicionar opções de produtos Layout
+Configurable Attributes Layout,Layout de Atributos Configuráveis
+Configurable Attributes Column Title,Título da coluna de atributos configuráveis
+"Applicable only if ""Configurable Attributes"" Layout is ""One Column""","Aplicável somente se ""Layout de Atributos Configuráveis"" for ""Uma Coluna"""
+Columns,Colunas
+Stock Data,Dados de estoque
+"Vendor SKU ""%s"" is already used","A SKU do fornecedor ""% s"" já está sendo usada"
+In Stock,Em estoque
+Out of Stock,Fora de estoque
+Stock Item Fields,Campos de estoque
+Categories,Categorias
+Manage Stock,Gerenciar ações
+Qty for Item\'s Status to Become Out of Stock,Qtd. Para que o status do item fique fora de estoque
+Minimum Qty Allowed in Shopping Cart,Quantidade mínima permitida no carrinho de compras
+Maximum Qty Allowed in Shopping Cart,Quantidade máxima permitida no carrinho de compras
+Vendor SKU ,SKU do fornecedor
+Vendor Stock Qty ,Quantidade de estoque do fornecedor
+Vendor Cost ,Custo do Fornecedor
+Vendor Status ,Status do fornecedor
+Vendor Backorders ,Backorders do fornecedor
+Vendor Price ,Preço do fornecedor
+Vendor Group Price ,Preço do Grupo Fornecedor
+Vendor Tier Price ,Fornecedor Preço Tier
+Vendor Special Price ,Vendor Preço Especial
+Vendor Special From Date ,Especial do fornecedor a partir da data
+Vendor Special To Date ,Especial do fornecedor até à data
+Vendor Free Shipping ,Vendedor Frete Grátis
+Vendor Shipping Price ,Preço de envio do fornecedor
+Vendor State(Condition) ,Estado Fornecedor (Condição)
+Vendor State Description ,Descrição do estado do fornecedor
+Vendor Title ,Título do fornecedor
+State (Condition),Estado (Condição)
+State description,Descrição do estado
+Group Price,Preço do Grupo
+Tier Price,Preço Tier
+Vendor Special Price,Vendor Preço Especial
+Vendor Special From Date,Especial do fornecedor a partir da data
+Vendor Special To Date,Especial do fornecedor até à data
+Is Free Shipping,É frete grátis
+Vendor Backorders,Backorders do fornecedor
+"SKU ""%s"" is already used","SKU ""% s"" já está sendo usado"
+Removed Image(s),Imagem (s) removida (s)
+Added Image(s),Imagem (ns) adicionada (s)
+Fix,Consertar
+Discard,Descartar
+Vacation,Período de férias
+Suspended,Suspenso
+-- Please Select --,-- Por favor selecione --
+Yes and hide per option upload,Sim e ocultar por opção de upload
+One Column,Uma coluna
+Separate Columns,Colunas separadas
+None,Nenhum
+New Product,Novo produto
+Image Added,Imagem adicionada
+Image Removed,Imagem removida
+Configurable Simple Added,Configurable Simple Adicionado
+Configurable Simple Removed,Configurable Simple Removed
+Attribute Value Changed,Valor do atributo alterado
+Stock Changed,Estoque alterado
+Custom Options Changed,Opções personalizadas alteradas
+* None *,* Nenhum *
+* All *,* Todos *
+Out of stock,Fora de estoque
+In stock,Em estoque
+Published,Publicados
+Under Review,Sob revisão
+Description,Descrição
+Uses per Coupon,Usos por Cupom
+Uses per Customer,Usos por cliente
+Usage limit enforced for logged in customers only,Limite de uso aplicado apenas para clientes conectados
+Coupon,Cupom
+Coupon Code,Código do cupom
+Use Auto Generation,Usar geração automática
+If you select and save the rule you will be able to generate multiple coupon codes.,"Se você selecionar e salvar a regra, será capaz de gerar vários códigos de cupom."
+Conditions [Apply the rule only if the following conditions are met (leave blank for all products)],Condições [Aplicar a regra somente se as seguintes condições forem cumpridas (deixe em branco para todos os produtos)]
+Conditions,Condições
+Actions,Ações
+Apply,Aplique
+Percent of product price discount,Percentagem do desconto do preço do produto
+Fixed amount discount,Desconto de quantidade fixa
+Fixed amount discount for whole cart,Desconto de quantidade fixa para carrinho inteiro
+Buy X get Y free (discount amount is Y),Comprar X obter Y grátis (quantidade de desconto é Y)
+Discount Amount,Valor do desconto
+Maximum Qty Discount is Applied To,O desconto de quantidade máxima é aplicado a
+Discount Qty Step (Buy X),Desconto Qtde Passo (Comprar X)
+Apply to Shipping Amount,Aplicar ao valor do envio
+Free Shipping,Frete grátis
+For matching items only,Apenas para itens correspondentes
+For shipment with matching items,Para remessa com itens correspondentes
+Actions Filter [Apply the rule only to cart items matching the following conditions (leave blank for all items)],Filtro de ações [Aplicar a regra somente aos itens de carrinho que correspondam às seguintes condições (deixe em branco para todos os itens)]
+Apply To,Aplicar a
+Coupons,Cupões
+Coupons Information,Informações sobre cupões
+Coupon Qty,Quantidade do cupão
+Code Length,Comprimento do código
+"Excluding prefix, suffix and separators.","Excluindo prefixo, sufixo e separadores."
+Code Format,Formato de código
+Code Prefix,Prefixo de código
+Code Suffix,Sufixo de código
+Dash Every X Characters,Traço Todos os Personagens X
+If empty no separation.,Se vazio sem separação.
+Wrong rule specified.,Regra errada especificada.
+The rule has been saved.,A regra foi salva.
+An error occurred while saving the rule data. Please review the log and try again.,Ocorreu um erro ao salvar os dados da regra. Revise o log e tente novamente.
+Rating Title,Classificação Título
+Is Aggregatable,É agregável
+Default Value,Valor padrão
+Rating Visibility,Avaliação Visibilidade
+Visible In,Visível em
+"If you do not specify a rating title for a store, the default value will be used.","Se você não especificar um título de classificação para uma loja, o valor padrão será usado."
+Assigned Options,Opções atribuídas
+Option Label,Etiqueta de opção
+Rating Information,Avaliação de Informações
+Rating Options,Opções de Rating
+Save Rating,Guardar classificação
+Delete Rating,Eliminar Classificação
+Edit Rating,Editar classificação
+New Rating,Nova Classificação
+Rating Name,Classificação Nome
+Manage Ratings,Gerenciar classificações
+Add New Rating,Adicionar Nova Classificação
+Review Details,Detalhes da revisão
+Summary Rating,Avaliação Sumária
+Detailed Rating,Avaliação detalhada
+Detailed Non-Aggregatable Rating,Classificação detalhada não agregável
+Nickname,Apelido
+Summary of Review,Resumo da revisão
+Review,Reveja
+Save Review,Revisão
+Delete Review,Excluir comentário
+Edit Review '%s,Editar revisão '% s
+New Review,Nova revisão
+Created On,Criado em
+Product Name,Nome do Produto
+Product SKU,SKU do produto
+Update Status,Atualizar o status
+Pending Vendor Reviews of Customer `%s`,Comentários de fornecedores pendentes do cliente `% s`
+Pending Vendor Reviews,Comentários de vendedores pendentes
+All Vendor Reviews of Customer `%s`,Todas as opiniões dos fornecedores do cliente `% s`
+All Vendor Reviews,Todas as avaliações de fornecedores
+Rating with %s id not found,Classificação com% s id não encontrado
+The rating has been saved.,A classificação foi guardada.
+The rating has been deleted.,A avaliação foi apagada.
+Reviews and Ratings,Comentários e Classificações
+Edit Vendor Review,Editar revisão do fornecedor
+Customer Reviews,Avaliações de Clientes
+The review was removed by another user or does not exist.,A revisão foi removida por outro usuário ou não existe.
+The review has been saved.,A revisão foi salva.
+The review has been deleted,A revisão foi excluída
+Please select review(s).,Selecione a (s) revisão (s).
+An error occurred while updating the selected review(s).,Ocorreu um erro ao atualizar as revisões selecionadas.
+Unable to get the product ID.,Não é possível obter o ID do produto.
+My Vendor Pending Reviews,Meu Vendedor Pendente Comentários
+My Vendor Reviews,Meu fornecedor Comentários
+Review not allowed.,Revisão não permitida.
+Your review has been accepted for moderation.,Sua avaliação foi aceita para moderação.
+Unable to post the review.,Não foi possível publicar a revisão.
+You have already voted on this review!,Você já votou neste comentário!
+Your voice has been accepted. Thank you!,Sua voz foi aceita. Obrigado!
+Review was not found!,A revisão não foi encontrada!
+"Unable to vote. Please, try again later.","Incapaz de votar. Por favor, tente novamente mais tarde."
+Reviews for vendor %s,Comentários para vendor% s
+Pending Reviews,Comentários pendentes
+All Reviews,Todos os Comentários
+Vendor Rating Options,Opções de avaliação do fornecedor
+Allow customer review on the following statuses,Permitir a revisão do cliente nos seguintes estados
+"Delay in days to send ""Email notification / Follow up emails""","Atraso em dias para enviar ""notificação por e-mail / follow-up e-mails"""
+"Setup delay in days when to send ""Email notification / Follow up emails"" to inspire customer review vendor shipments. Separate multiple days with comma "","". This will allow arbitrary days to send email notification and further follow up emails.","Atraso de configuração em dias quando enviar ""Notificação por e-mail / E-mails de acompanhamento"" para inspirar as remessas de fornecedores de revisões de clientes. Separe vários dias com vírgula "","". Isso permitirá que dias arbitrários enviem notificações por e-mail e acompanhem os e-mails."
+Rating with the same title,Classificação com o mesmo título
+Vendor Reviews,Avaliações de fornecedores
+Allow customers review/rate vendor,Permitir que os clientes revisem / avaliem o fornecedor
+entity_id=%s is already used in rating/rating_entity. Change it in %s.,Entity_id =% s já é usado em rating / rating_entity. Alterá-lo em% s.
+entity_id=%s is already used in review/review_entity. Change it in %s.,Entity_id =% s já é usado em review / review_entity. Alterá-lo em% s.
+Customer Tax Class Information,Informações sobre a classe de imposto de cliente
+Vendor Tax Class Information,Informações da classe de imposto do fornecedor
+Product Tax Class Information,Informações sobre a classe de imposto de produto
+Product Tax Classes,Classes de imposto de produto
+Add New Class,Adicionar nova classe
+Customer Tax Classes,Classes de imposto de cliente
+Vendor Tax Classes,Classes de imposto sobre fornecedores
+Tax Rule Information,Informações sobre a regra fiscal
+Customer Tax Class,Classe de imposto de cliente
+Product Tax Class,Classe de imposto sobre o produto
+Vendor Tax Class,Classe de imposto do fornecedor
+Tax Rate,Taxa de imposto
+"Tax rates at the same priority are added, others are compounded.","Taxas de imposto com a mesma prioridade são adicionados, outros são compostos."
+There was an error while updating vendor(s) type,Ocorreu um erro ao atualizar o (s) tipo (s) de fornecedor
+You cannot delete this tax class as it is used in Tax Rules. You have to delete the rules it is used in first.,Não é possível excluir esta classe de imposto como ela é usada em Regras de imposto. Você tem que excluir as regras que é usado em primeiro lugar.
+You cannot delete this tax class as it is used for %d vendors.,Não é possível excluir esta classe de imposto como ela é usada para os fornecedores% d.
+The tax class has been deleted.,A classe de imposto foi excluída.
+An error occurred while deleting this tax class.,Ocorreu um erro ao eliminar esta classe de imposto.
+Manage Vendor Tax Classes,Gerenciar classes de imposto de fornecedor
+"Rules (%s) already exist for the specified Tax Rate, Customer Tax Class and Product Tax Class combinations","Regras (% s) já existem para as combinações de Taxa de Imposto, Classe de Imposto de Clientes e Taxa de Imposto do Produto"
+Change Vendor Tax Class,Alterar classe de imposto de fornecedor
+Submit Return,Enviar resposta
+Submit Shipment,Enviar Envio
+New Return for Order #%s,Novo retorno para ordem #% s
+Return #,Retorna #
+Return Created,Voltar Criado
+Shipper Name,Nome do remetente
+Tracking Price,Preço de acompanhamento
+Return View,Voltar Ver
+uReturn #%1$s | %2$s,UReturn #% 1 $ s | % 2 $ s
+uReturns,UReturns
+Invalid entity model,Modelo de entidade inválido
+Order # %s,Ordem #% s
+About Your Return,Sobre o Seu Regresso
+This Return no longer exists.,Esse Retorno não existe mais.
+The order no longer exists.,A ordem não existe mais.
+The Return has been created.,O Retorno foi criado.
+New Return,Novo retorno
+View Return,Ver Retorno
+Wrong generate label request.,Erro gerar solicitação de etiqueta.
+Cannot initialize rma for adding tracking number.,Não é possível inicializar rma para adicionar número de rastreamento.
+Cannot add tracking number.,Não é possível adicionar o número de rastreamento.
+Cannot initialize rma.,Não é possível inicializar rma.
+Cannot printf label.,Não é possível imprimir a etiqueta.
+The carrier needs to be specified.,A transportadora precisa ser especificada.
+Tracking number cannot be empty.,O número de rastreamento não pode estar vazio.
+Cannot initialize rma for delete tracking number.,Não é possível inicializar o rma para o número de rastreamento de exclusão.
+Cannot delete tracking number.,Não é possível excluir o número de rastreamento.
+Cannot load track with retrieving identifier.,Não é possível carregar a trilha com o identificador de recuperação.
+Cannot retrieve tracking number detail.,Não é possível obter detalhes do número de rastreamento.
+uReturn,UReturn
+RMA status has been changed,O status do RMA foi alterado
+Cannot change RMA status,Não é possível alterar o status do RMA
+Your comment has been sent,O seu comentário foi enviado
+No RMAs found for these criteria,Não foram encontradas RMAs para esses critérios
+RMA status has been updated,O status do RMA foi atualizado
+New uReturn,Novo uReturn
+uReturn Update,Atualização do uReturn
+Returns,Retorna
+Returns Email Sender,Retorna o remetente do e-mail
+Returns Email Template,Modelo de e-mail de devoluções
+Send Returns Email Copy To,Enviar Retorna Email Copiar para
+Comma-separated.,Separado por vírgulas.
+Send Returns Email Copy Method,Método de Envio de Retorno de Email
+uReturns Comments,UReturns Comentários
+Returns Comment Email Sender,Retorna Comentário Email Sender
+Returns Comment Email Template,Retorna Comentário Email Template
+Send Returns Comment Email Copy To,Enviar Devoluções Comentar E-mail Copiar para
+New RMA Vendor Notification Email Template,Novo modelo de e-mail de notificação do fornecedor RMA
+RMA Comment Vendor Notification Email Template,Modelo de e-mail de notificação do fornecedor de RMA
+Hide order information from customer on existing RMA page,Ocultar informações da ordem do cliente na página RMA existente
+"Hide order information from customer on ""Request New RMA"" page","Ocultar informações de pedido do cliente na página ""Solicitar nova RMA"""
+Statuses,Status
+Reasons to return,Razões para retornar
+Item Conditions,Condições do Item
+Customer success,Sucesso do cliente
+Customer no items selected,Cliente nenhum item selecionado
+"Customer instructions on ""Request New RMA"" page","Instruções do cliente na página ""Solicitar nova RMA"""
+Create uReturn,Criar uReturn
+"Invalid qty to create rma for item ""%s","Quantidade inválida para criar rma para o item ""% s"
+"No detail for number ""%s","Nenhum detalhe para o número ""% s"
+Cannot register existing rma,Não é possível registrar rma existente
+Cannot create an empty rma.,Não é possível criar um rma vazio.
+Global,Global
+RMA ID,RMA ID
+RMA Date,Data RMA
+RMA Status,Status do RMA
+Reason to return,Razão para retornar
+Origin,Origem
+Title/Sort Order,Título / Ordem de classificação
+Template,Modelo
+Header,Cabeçalho
+Item Separate Template,Modelo de item separado
+Totals Template,Modelo de totais
+Use Item Separate Template,Usar Modelo de Item Separado
+Footer Separate Template,Modelo separado de rodapé
+Remove,Remover
+Add Template,Adicionar modelo
+Billing,Faturamento
+Limits,Limites
+Code:,Código:
+Title:,Título:
+Billing Type:,Tipo de faturamento:
+Offline (Manual),Offline (Manual)
+Auto (Paypal Express),Auto (Paypal Express)
+Product SKU:,SKU do produto:
+Limit Products:,Limite de Produtos:
+Allow Microsite:,Permitir Microsite:
+Show On Registration Form:,Mostrar no Formulário de Inscrição:
+Add Membership Type,Adicionar tipo de associação
+Fieldset Title/Sort Order,Título do campo / Ordem de classificação
+Top/Bottom wide fields,Campos superiores / inferiores
+Left/Right column fields,Campos da coluna Esquerda / Direita
+Top Wide Fields,Top Wide Fields
+Bottom Wide Fields,Campos inferiores
+Left Column Fields,Campos da coluna esquerda
+Right Column Fields,Campos da coluna direita
+Add Fieldset,Adicionar Fieldset
+Field,Campo
+Is Required,É necessário
+Use custom label,Usar etiqueta personalizada
+Has URL,Tem URL
+Add Field,Adicionar campo
+Row Subtotal,Subtotal da linha
+Gift,Presente
+No ordered items,Nenhum item encomendado
+Update Items and Qty\'s,Atualizar Itens e Qtds
+Total %d product(s),Total% d produto (s)
+Subtotal:,Subtotal:
+Excl. Tax,Excl. Imposto
+Incl. Tax,Incl. Imposto
+Total incl. tax,Total incl. Imposto
+Tier Pricing,Preços
+Custom Price,Preço personalizado
+Move to Shopping Cart,Mover para o carrinho de compras
+Move to Wishlist,Mover para Lista de desejos
+This product has not been configured.,Este produto não está configurado.
+Save Vendor Updates,Salvar atualizações do fornecedor
+Check Vendors Stock,Verificar estoque de fornecedores
+Are you sure you want to change the vendors and send notifications?,Tem a certeza de que pretende alterar os fornecedores e enviar notificações?
+No stock available,Sem estoque disponível
+Customer Group,Grupo de clientes
+All Websites,Todos os sites
+Add Group Price,Adicionar Preço do Grupo
+QTY,QTY
+ALL GROUPS,TODOS OS GRUPOS
+and above,e acima
+Add Tier Price,Adicionar preço Tier
+Add Vendor,Adicionar Fornecedor
+Drop Shipping Vendor Associations,Drop Shipping Vendedor Associações
+Price/Cost,Preço / Custo
+Availability,Disponibilidade
+Status/State(Condition),Estado / Estado (Condição)
+Vendor Price:,Preço do fornecedor:
+Cost:,Custo:
+Vendor Special Price:,Vendor Preço Especial:
+Special From Date:,Especial da data:
+Special To Date:,Especial até à data:
+Free Shipping:,Frete grátis:
+Shipping Price:,Preço de envio:
+Group Price:,Preço do Grupo:
+Tier Price:,Preço Tier:
+Backorders:,Backorders:
+State:,Estado:
+Date:,Encontro:
+Status:,Status:
+State(Condition):,Estado (Condição):
+State Description:,Estado Descrição:
+Tips:,Dicas:
+"If the same vendor is selected multiple times, only the first occurence will be saved","Se o mesmo fornecedor for selecionado várias vezes, somente a primeira ocorrência será salva"
+"If Vendor SKU is empty, the Product SKU will be used for this vendor.","Se a SKU do Fornecedor estiver vazia, a SKU do Produto será usada para esse fornecedor."
+"If Vendor Cost is empty, the Product Cost will be used for this vendor.","Se o custo do fornecedor estiver vazio, o custo do produto será utilizado para esse fornecedor."
+"If custom stock check is used, stock quantity will be ignored.<br/>If stock quantity is 0, the product is out of stock for this vendor.<br/>If stock quantity is empty and custom stock check is NOT used, the product is always in stock for this vendor.","Se a verificação de estoque personalizada for usada, a quantidade de estoque será ignorada. <br/> Se a quantidade de estoque for 0, o produto estará esgotado para este fornecedor. <br/> Se a quantidade de estoque estiver vazia e a verificação de estoque personalizada NÃO for usada, O produto está sempre em estoque para este fornecedor."
+Schedule,Cronograma
+Add Schedule,Adicionar programação
+By default only items that do not have corresponding shipment items will be canceled,"Por padrão, somente os itens que não tiverem itens de remessa correspondentes serão cancelados"
+Nonshipped Cancel,Cancelar Cancelar
+This will cancel non shipped shipments,Isso cancelará as remessas não enviadas
+Full Cancel,Cancelar Completo
+This will cancel even shipped shipments,Isso cancelará mesmo as remessas enviadas
+Comment Text,Texto do comentário
+Notify Vendor by Email,Notificar ao fornecedor por e-mail
+Visible to Vendor,Visível para o fornecedor
+Notified,Notificado
+Not Notified,Não notificado
+Such status change is not allowed. Please confirm forced transition,Essa alteração de status não é permitida. Confirme a transição forçada
+This will cancel purchase order and all shipments (if possible).,Isso cancelará o pedido e todas as remessas (se possível).
+This will mark as shipped purchase order and all shipments (if possible).,Isso marcará como ordem de compra enviada e todas as remessas (se possível).
+Payment Information,Informação de pagamento
+The order was placed using %s,A ordem foi colocada usando% s
+Items to Po,Itens para Po
+Qty to Po,Qty to Po
+Purchase Order Comments,Comentários da ordem de compra
+Order Shipping Amount,Encomenda de envio
+Total Shipping Amount,Valor total do envio
+Purchase Order for %s,Pedido de compra de% s
+Shipping Method,método de envio
+Shipping Amount,Valor do envio
+Items,Unid
+Generate Label,Gerar rótulo
+Shipment Info,Informações de remessa
+Weight:,Peso:
+Value:,Valor:
+Declared Value,Valor declarado
+Pkg. Dimensions,Pkg. Dimensões
+Length:,Comprimento:
+Length,comprimento
+Width:,Largura:
+Width,Largura
+Height:,Altura:
+Height,Altura
+Package Count,Contagem de pacotes
+Reference,Referência
+Use Label Amount,Use a quantidade da etiqueta
+Use Label Shipping Amount,Use o Valor de Envio da Etiqueta
+Invoice Shipment,Envio de faturas
+Mark As Shipped,Marcar como enviado
+PO Sent,PO enviado
+PO Canceled,PO Cancelado
+Order was placed using %s,A ordem foi colocada usando% s
+Purchase Order Items,Itens da ordem de compra
+Purchase Order History,Histórico de pedidos
+Do Not Automatically Generate PO,Não gera automaticamente PO
+Ordered,Encomendado
+Invoiced,Facturado
+Refunded,Devolveu
+Links with associated products will retain only after saving current product.,Os links com produtos associados só serão mantidos depois de salvar o produto atual.
+Create Simple Associated Product,Criar produto associado simples
+Super product attributes configuration,Configuração de super atributos de produto
+Price values for options should be specified in system base currency.,Os valores dos preços das opções devem ser especificados na moeda base do sistema.
+Attrribute names can be specified per store.,Os nomes Attrribute podem ser especificados por loja.
+Attribute Name:,Nome do Atributo:
+Use default,Use o padrão
+Use To Identify Image,Use para identificar a imagem
+Option:,Opção:
+Price:,Preço:
+Percentage,Percentagem
+Use Default Value,Usar valor padrão
+Product with this combination of attributes already associated to configurable.,Produto com esta combinação de atributos já associados ao configurável.
+Image type and information need to be specified for each store view.,O tipo de imagem ea informação precisam ser especificados para cada exibição de loja.
+Image,Imagem
+Label,Rótulo
+Exclude,Excluir
+Roll Over for preview,Role para visualização
+Choose an Option...,Escolha uma opção...
+No image,Nenhuma imagem
+"This content requires last version of Adobe Flash Player. <a href=""%s"">Get Flash</a>","Este conteúdo requer a última versão do Adobe Flash Player. <a href=""%s""> Get Flash </a>"
+Turn OFF Required,DESLIGAR Requerido
+Turn ON Required,Ativar necessário
+Attribute,Atributo
+Identify Images,Identificar imagens
+Limit by product type,Limite por tipo de produto
+Simple,Simples
+Configurable,Configurável
+Downloadable,Downloadable
+Virtual,Virtual
+Grouped,Agrupado
+Column Title,Título da coluna
+Fields,Campos
+Add Column,Adicionar Coluna
+Default Template SKU,Modelo Padrão SKU
+Default Configurable Attributes,Atributos Configuráveis ??Padrão
+Category,Categoria
+Allow grouped,Permitir agrupamento
+Allow downloadables,Permitir download
+Allow virtual,Permitir virtual
+Disallow simple,Não permitir simples
+Use from template product,Usar a partir do modelo de produto
+Type of Product,Tipo de produto
+Attribute Sets,Conjuntos de atributos
+Failed,Falhou
+Template SKU,Modelo SKU
+Configurable Attributes,Atributos Configuráveis
+Attributes Used To Identify Images,Atributos usados ??para identificar imagens
+Default Attributes Used To Identify Images,Atributos padrão usados ??para identificar imagens
+* Check to use default,* Verificar para usar o padrão
+1 star,1 estrela
+2 stars,2 estrelas
+3 stars,3 estrelas
+4 stars,4 estrelas
+5 stars,5 estrelas
+Please select one of each ratings above,Selecione uma de cada avaliação acima
+Rating isn't Available,Classificação não está disponível
+Notify Customer,Notificar ao Cliente
+Customer,Cliente
+This will cancel shipment (if possible).,Isso cancelará o envio (se possível).
+This will mark shipment as shipped (and if possible change PO status as well).,"Isso marcará o envio como enviado (e, se possível, altere o status do pedido também)."
+This will mark shipment as delivered (and if possible change PO status as well).,"Isso marcará a remessa como entregue (e, se possível, altere o status do pedido também)."
+Qty Shipped,Quantidade enviada
+the order confirmation email was sent,O email de confirmação do pedido foi enviado
+the order confirmation email is not sent,O email de confirmação do pedido não foi enviado
+Order Date (%s),Data da encomenda (% s)
+Purchased From,Comprado de
+Link to the New Order,Link para a nova ordem
+Link to the Previous Order,Link para a ordem anterior
+Placed from IP,Colocado do IP
+%s / %s rate:,% S /% s taxa:
+Account Information,Informação da conta
+Date of Birth,Data de nascimento
+TAX/VAT Number,Número de imposto / IVA
+Shipping Address,endereço de entrega
+If Up To,Se até
+Use Value,Valor de Uso
+Amount is required,O valor é necessário
+Region,Região
+Postcode,Código postal
+Add Country Rows,Adicionar linhas de país
+Incl. Tax ,Incl. Imposto
+Update Shipping Methods,Atualizar Métodos de Envio
+Refresh Rates,Taxas de atualização
+Click to change shipping method,Clique para alterar o método de envio
+"Sorry, no quotes are available for this order at this time.","Lamentamos, mas não há cotações disponíveis para esta encomenda neste momento."
+Get shipping methods and rates,Obter métodos e taxas de envio
+Shipping method selection is not applicable,A seleção do método de envio não é aplicável
+Default Commission Percent (per item),Padrão Comissão Porcentagem (por item)
+Default Fixed Rate (per item),Taxa fixa padrão (por item)
+Commission Percent (per item),Comissão Porcentagem (por item)
+Fixed Rate (per item),Taxa fixa (por item)
+Default Fixed Rate,Taxa fixa padrão
+Delivery Type,Tipo de entrega
+*** All ***,*** Todos ***
+Custmer Group,Grupo Custmer
+Add Rate,Adicionar Taxa
+Category vs Ship Classes,Categoria vs Classes de Navios
+Maximum,Máximo
+Default Rate,Taxa padrão
+Base Rate,Taxa de base
+Add Delivery Type,Adicionar tipo de entrega
+Surcharge,Sobretaxa
+Add Surcharge,Adicionar sobrecarga
+If Condition Up To,Se a condição até
+Add Condition,Adicionar condição
+Conditional Rates,Taxas condicionais
+Condition Name,Nome da condição
+If  Condition Up To,Se a condição até
+Value,Valor
+Resolution notes,Notas de resolução
+Notify Customer By Email,Notificar ao Cliente por E-mail
+Visible on frontend,Visível no frontend
+Items to Return,Itens a devolver
+Condition,Condição
+Qty to Return,Qtde retornar
+Return Comments,Voltar Comentários
+Append Comments,Anexar Comentários
+Email Copy of Return,Cópia de e-mail do retorno
+Return Sent,Retornar Enviado
+Return Sender,Remetente de retorno
+Return Receiver,Receptor de retorno
+Return Tracking Info,Informações de rastreamento de devolução
+Return Items,Retornar Itens
+Return History,Histórico de Devolução
+Track this Return,Acompanhe este retorno
+Print Labels,Imprimir etiquetas
+Return Info,Voltar informações
+Customer Notes,Notas do cliente
+Allow resolution notes,Permitir notas de resolução
+Show Receiver To Customer,Mostrar Receptor ao Cliente
+There are no products matching the selection.,Não existem produtos que correspondam à seleção.
+%s %s from,% S% s de
+Add to Cart,Adicionar ao carrinho
+View Details,Ver detalhes
+Add to Wishlist,Adicionar a lista de desejos
+Add to Compare,Adicionar para comparar
+Learn More,Saber mais
+Select Vendor,Selecionar Fornecedor
+<strong>%s-%s</strong> of %s offers,<Strong>% s-% s </ strong> de% s oferece
+Sort By,Ordenar por
+Price + Shipping,Preço Envio
+Seller,Vendedor
+Seller Rating,Classificação do vendedor
+Update Cart,Atualizar carrinho
+Click to zoom out,Click to zoom out
+Click to zoom in,Click to zoom in
+Ask A Question,Ask A Question
+Shipment #%s for order #%s,Shipment #%s for order #%s
+VENDOR,VENDOR
+* Required Fields,* Required Fields
+Submit,Submit
+My Questions,My Questions
+Ask New Question,Ask New Question
+Details,Details
+ANSWER DATE,ANSWER DATE
+You have no questions.,You have no questions.
+Vendor Questions/Answers,Vendor Questions/Answers
+<b>%s</b> asks vendor <b>%s</b>,<b>%s</b> asks vendor <b>%s</b>
+Answer,Answer
+Not Answered yet,Not Answered yet
+No questions asked yet.,No questions asked yet.
+Ask Vendor A Question,Ask Vendor A Question
+Your Name,Your Name
+Reply question #%s from %s,Reply question #%s from %s
+* Indicated Required Fields,* Indicated Required Fields
+"Please wait, submitting...","Please wait, submitting..."
+Save,Save
+Save And Email,Save And Email
+Return to questions list,Return to questions list
+From Order ID,From Order ID
+To Order ID,To Order ID
+Question Visibility,Question Visibility
+Any,Any
+From Question Date,From Question Date
+To Question Date,To Question Date
+Question,Question
+Is Replied,Is Replied
+Reset Filter,Reset Filter
+Search,Search
+VISIBILITY,VISIBILITY
+Estimate Shipping and Tax,Estimate Shipping and Tax
+Enter your destination to get a shipping estimate.,Enter your destination to get a shipping estimate.
+State/Province,State/Province
+"Please select region, state or province","Please select region, state or province"
+Zip/Postal Code,Zip/Postal Code
+Get a Quote,Get a Quote
+Update Total,Update Total
+There are no vendors matching the selection.,There are no vendors matching the selection.
+Items %s to %s of %s total,Items %s to %s of %s total
+%s Item(s),%s Item(s)
+Show,Show
+per page,per page
+View as,View as
+Set Ascending Direction,Set Ascending Direction
+Set Descending Direction,Set Descending Direction
+Gift Message,Gift Message
+Item,Item
+Gift Message for this Order,Gift Message for this Order
+System Sku,System Sku
+Select Shipping:,Select Shipping:
+Unknown vendor,Unknown vendor
+No Pending Reviews,No Pending Reviews
+No Reviews,No Reviews
+Review by <span>%s</span>,Review by <span>%s</span>
+(Posted on %s),(Posted on %s)
+Summary of Your Review,Summary of Your Review
+Submit Review,Submit Review
+Please select one of each of the ratings above,Please select one of each of the ratings above
+%d Review(s),%d Review(s)
+Select Delivery Type to edit Rates,Select Delivery Type to edit Rates
+"Please wait, loading...","Please wait, loading..."
+Your application has been received.,Your application has been received.
+Thank you for the registeration!,Thank you for the registeration!
+Your recurring payment profiles:,Your recurring payment profiles:
+"Payment profile # %s: ""%s"".","Payment profile # %s: ""%s""."
+Go To Vendor Portal,Go To Vendor Portal
+No Membership,No Membership
+Shop description must be between %s char and %s char,Shop description must be between %s char and %s char
+Become a Vendor,Become a Vendor
+Register,Register
+Return to log in,Return to log in
+Required Fixes,Required Fixes
+Data Changed,Data Changed
+NEW PRODUCT,NEW PRODUCT
+Attributes Changes,Attributes Changes
+Added configurable simple products,Added configurable simple products
+Removed configurable simple products,Removed configurable simple products
+Please upload images,Please upload images
+Add/Edit Images,Add/Edit Images
+Upload Pictures,Upload Pictures
+Main Image,Main Image
+(Type of product: %s),(Type of product: %s)
+Save And Continue Edit,Save And Continue Edit
+Return to product list,Return to product list
+Price Value,Price Value
+Percent,Percent
+Add Option Price,Add Option Price
+Add Another %s,Add Another %s
+Add Other Options,Add Other Options
+At least one option should be added,At least one option should be added
+Autogenerate Vendor Sku,Autogenerate Vendor Sku
+Add Configuration,Add Configuration
+Links can be purchased separately,Links can be purchased separately
+Max. Downloads,Max. Downloads
+Shareable,Shareable
+Sample,Sample
+File,File
+"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.","Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'."
+There are files that were selected but not uploaded yet. Please upload or remove them first,There are files that were selected but not uploaded yet. Please upload or remove them first
+Delete Group Price,Delete Group Price
+"At least one ""%s"" should be added","At least one ""%s"" should be added"
+Add Another ,Add Another 
+Delete Tier,Delete Tier
+Use Config Settings,Use Config Settings
+System SKU,System SKU
+System Status,System Status
+From Price,From Price
+To Price,To Price
+From Stock Qty,From Stock Qty
+To Stock Qty,To Stock Qty
+Type of product: ,Type of product: 
+Add Virtual Product,Add Virtual Product
+Add Dowloadable Product,Add Dowloadable Product
+Add Grouped Product,Add Grouped Product
+Add New Product (with options),Add New Product (with options)
+Add New Product,Add New Product
+System ID,System ID
+"This action will delete product ""%s"".","This action will delete product ""%s""."
+My Products,My Products
+"Promotion #%s ""%s","Promotion #%s ""%s"
+Return to rules list,Return to rules list
+Date Start,Date Start
+From Date Start,From Date Start
+To Date Start,To Date Start
+Date Expire,Date Expire
+From Date Expire,From Date Expire
+To Date Expire,To Date Expire
+Add New Promotion,Add New Promotion
+My Promotions,My Promotions
+Create an Account,Create an Account
+Personal Information,Personal Information
+Email Address,Email Address
+Sign Up for Newsletter,Sign Up for Newsletter
+Address Information,Address Information
+Company,Company
+Street Address,Street Address
+Street Address %s,Street Address %s
+Login Information,Login Information
+Confirm Password,Confirm Password
+Back,Back
+Options,Options
+#NAME?,#NAME?
+- Select Option -,- Select Option -
+Additional details about Condition,Additional details about Condition
+Your Price,Your Price
+#NAME?,#NAME?
+Allow free shipping for this product,Allow free shipping for this product
+State Description,State Description
+My SKU,My SKU
+My Title,My Title
+Browse All Products,Browse All Products
+Sell with Us,Sell with Us
+Help,Help
+RSS,RSS
+Monster Market,Monster Market
+All rights reserved.,All rights reserved.
+Privacy Policy,Privacy Policy
+Terms of Use,Termos de uso
+Sell Your Product,Venda seu produto
+Logged in as %s,Conectado como% s
+Log out,Sair
+Welcome!,Bem vinda!
+Switch To Sell Yours,Mude para vender os seus
+Switch To My Sell List,Mudar para a minha lista de venda
+Find,Encontrar
+Go,Ir
+Didn't find what you're looking for? <span>Create your product</span>,Não encontrou o que procurava? <Span> Crie o seu produto </ span>
+"Search Results for ""%s"" in category ""%s","Resultados da pesquisa para ""% s"" na categoria ""% s"
+"Browsing category ""%s","Navegando pela categoria ""% s"
+"Search Results for ""%s","Resultados da Procura por ""% s"
+Edit My Offer,Editar minha oferta
+"<span>Or,</span> Browse by Category","<Span> Ou, </ span> Procurar por categoria"
+Didn't find what you're looking for?,Não encontrou o que procurava?
+Create your product,Crie o seu produto
+Tracking Information,Informações de acompanhamento
+Close Window,Janela fechada
+RMA #,RMA #
+Tracking Number:,Numero de rastreio:
+Carrier:,Transportadora:
+Error:,Erro:
+Tracking information is currently not available. Please ,As informações de rastreamento não estão disponíveis no momento. Por favor
+contact us,Contate-Nos
+ for more information or , Para mais informações ou
+email us at ,Envie-nos um email para
+Info:,Info:
+Track:,Acompanhando Dados de:
+Delivered on:,Entregue em:
+Signed by:,Assinado por:
+Delivered to:,Entregue a:
+Shipped or billed on:,Enviado ou faturado em:
+Service Type:,Tipo de serviço:
+Local Time,Horário local
+There is no tracking available for this shipment.,Não há rastreamento disponível para esta remessa.
+There is no tracking available.,Não há rastreamento disponível.
+From Order Date,A partir da data da encomenda
+To Order Date,Para a data da encomenda
+From RMA ID,De RMA ID
+To RMA ID,Para RMA ID
+From RMA Date,De RMA Data
+To RMA Date,Para RMA Data
+Direction,Direção
+Reason,Razão
+Perform on all retrieved records:,Executar em todos os registros recuperados:
+* No action,* Nenhuma ação
+Collapse all rows,Recolher todas as linhas
+Expand all rows,Expandir todas as linhas
+"Please wait, loading RMA information...","Aguarde, carregando informações de RMA ..."
+This action will print PDF for all filtered purchase orders.,Esta ação imprimirá PDF para todas as ordens de compra filtradas.
+Please select a status.,Selecione um status.
+This action will update status for all filtered RMAs.,Essa ação atualizará o status de todos os RMAs filtrados.
+Qty Available,Quantidade disponível
+Proceed with tracking ID deletion?,Continuar com a exclusão de identificação de rastreamento?
+Tracking IDs,IDs de rastreamento
+Delete tracking number,Excluir número de rastreamento
+RMA Items,Itens RMA
+Carrier Title,Título da operadora
+Add Tracking ID,Adicionar ID de acompanhamento
+Add Comment,Adicionar comentário
+Visible to Customer,Visível para o Cliente
+Change Status,Alterar status
+Resolution Notes,Notas de resolução
+Add RMA Comment,Adicionar RMA Comentário
+Comments history,Histórico de comentários
+My Orders,minhas ordens
+Ship To,Enviar para
+View Order,Ver pedido
+Track Order,Acompanhar Pedido
+Reorder,Reordenar
+View RMA,Visualizar RMA
+Request RMA,Solicitar RMA
+You have placed no orders.,Você não fez nenhum pedido.
+Order #%s - %s,Ordem #% s -% s
+Subscribe to Order Status,Subscrever o estado do pedido
+Print Order,Ordem de impressão
+About This Order:,Sobre esta Ordem:
+Order Date: %s,Data da encomenda:% s
+No shipping information available,Não há informações de envio disponíveis
+Instructions,Instruções
+Order #%s,Ordem #% s
+Shipment #%s,Envio #% s
+Recent Orders,pedidos recentes
+View All,Ver tudo
+General Notes,Notas gerais
+RMA Sender,Remetente RMA
+RMA Receiver,Receptor RMA
+Track this RMA,Acompanhe este RMA
+Print Label,Etiqueta de impressão
+Tracking Number(s):,Rastreando números):
+of %s,De% s
+Create New RMA,Criar novo RMA
+Create RMA,Criar RMA
+Back to My Orders,Voltar para Meus Pedidos
+From Vendor Price,Do preço do fornecedor
+To Vendor Price,Preço do fornecedor
+Update Information On This Page,Atualizar informações nesta página
+About the calendar,Sobre o calendário
+DHTML Date/Time Selector,Seletor de data / hora DHTML
+For latest version visit: %s,"Para a versão mais recente, visite:% s"
+Distributed under GNU LGPL. See %s for details.,Distribuído sob GNU LGPL. Consulte% s para obter detalhes.
+Date selection:,Data de seleção:
+"- Use the %s, %s buttons to select year","- Use os botões% s,% s para selecionar o ano"
+- Use the %s buttons to select month,- Use os botões% s para selecionar o mês
+#NAME?,#NOME?
+Time selection:,Seleção de tempo:
+#NAME?,#NOME?
+#NAME?,#NOME?
+#NAME?,#NOME?
+Prev. year (hold for menu),Anterior. Ano (segure para o menu)
+Prev. month (hold for menu),Anterior. Mês (segure para o menu)
+Go Today,Vá hoje
+Next month (hold for menu),Próximo mês (segure para menu)
+Next year (hold for menu),Próximo ano (segure para menu)
+Select date,Selecionar data
+Drag to move,Arraste para mover
+Display %s first,Exibir% s primeiro
+Close,Fechar
+(Shift-)Click or drag to change value,(Shift-) Clique ou arraste para alterar o valor
+Time:,Tempo:
+Skip to Main Content,Ir para o conteúdo principal
+Dashboard,painel de controle
+Stock POs,POs de ações
+Pending Stock PO,PO de estoque pendente
+Commission Percents,Comissão Porcentagem
+Settings,Configurações
+Import Stock,Estoque de Importação
+Manage Stock And Price,Gerenciar estoque e preço
+Products Edit,Produtos Editar
+Select &amp; Sell,Selecione & amp; Vender
+Shipments Report,Relatório de remessas
+Advanced PO Report,Relatório de pedido avançado
+System View,Visualização do sistema
+Welcome to Dropship Vendor Interface,Bem-vindo à Dropship Vendor Interface
+Vendor Log in,Entrar no Vendedor
+Username / Email Address,Nome de usuário / endereço de e-mail
+Login,Entrar
+Vendor Password Reset,Redefinição de senha do fornecedor
+Email Address/User name,Endereço de e-mail / Nome de usuário
+Reset Password,Trocar a senha
+Save All Settings,Salvar todas as configurações
+Not Applicable,Não aplicável
+Available for Shipping From Date,Disponível para envio a partir de data
+Available for Shipping To Date,Disponível para envio até à data
+Download Existing Labels Batch,Faça o download do lote de etiquetas existente
+Update Shipments Status,Atualizar status de remessas
+Available On,Disponível em
+Download,Transferir
+Packing Slip,Talão de embalagem
+"Please wait, loading shipment information...","Aguarde, carregando informações de remessa ..."
+This action will create shipping labels for all filtered shipments and mark them as shipped.,Esta ação criará etiquetas de remessa para todas as remessas filtradas e as marcará como enviadas.
+This action will print packing slips for all filtered shipments and mark them as ready to ship.,Esta ação imprimirá as bordas de remessa para todos os envios filtrados e os marcará como prontos para serem enviados.
+This action will print existing shipping labels for all filtered shipments.,Esta ação imprimirá as etiquetas de remessa existentes para todos os envios filtrados.
+This action will update status for all filtered shipments.,Essa ação atualizará o status de todos os envios filtrados.
+Left / Ship,Esquerda / Navio
+Print label,Imprimir etiqueta
+Delete tracking number and void/refund label if possible,"Eliminar o número de rastreio e a etiqueta void / refund, se possível"
+Partial Availability: ,Disponibilidade parcial:
+* Select action,* Selecionar ação
+Inform retailer,Informar o revendedor
+Ship partial,Navio parcial
+Order Items,Itens de ordem
+Show/Hide Gift Message for the item above,Mostrar / ocultar mensagem de presente para o item acima
+From: %s,De:% s
+To: %s,Para:% s
+Order Gift Message:,Mensagem do presente do pedido:
+Show Extra Params,Mostrar Parâmetros Adicionais
+Add Comment<br/>(for retailer),Adicionar comentário <br/> (para o varejista)
+Mark as Shipped,Marcar como enviado
+Pkg#,Pkg #
+Shipment Info/Pkg. Dimensions,Informações de envio / Pkg. Dimensões
+Use Custom label weight/value,Usar peso / valor da etiqueta personalizada
+X,X
+px.,Px.
+No files found,Nenhum arquivo encontrado
+Collapse All,Recolher todos
+Expand All,Expandir todos
+Register Vendor Account,Registrar conta de fornecedor
+Business Name,Nome da empresa
+Phone Number,Número de telefone
+Quick Register,Registro Rápido
+Setup Wizard,Assistente de configuração
+Dropship Vendor Registration,Registro do Vendedor Dropship
+Preferred Shipping Carrier,Operadora de transporte preferencial
+Please select...,Por favor selecione...
+Preferred subdomain name,Nome do subdomínio preferido
+URL Key,Chave de URL
+Street Address Line 2,Endereço Linha 2
+Import Orders File,Arquivo de pedidos de importação
+Import Orders Content,Importação de Conteúdo de Pedidos
+Import,Importar
+Field 1,Campo 1
+Select Field 1,Selecione Campo 1
+Field 2,Campo 2
+Select Field 2,Selecionar Campo 2
+Field 3,Campo 3
+Select Field 3,Selecione o campo 3
+Field 4,Campo 4
+Select Field 4,Selecionar Campo 4
+Field 5,Campo 5
+Select Field 5,Selecione Campo 5
+Field Delimiter,Delimitador de campo
+Field Enclosure,Recinto de Campo
+Import Stock File,Arquivo de arquivo de importação
+Import Stock Content,Conteúdo de estoque de importação
+From PO ID,De ID de PO
+To PO ID,Para PO ID
+From PO Date,De PO Data
+To PO Date,Para PO Data
+VIRTUAL PO,PO VIRTUAL
+Create Shipments,Criar remessas
+Create Shipments and Send Customer Notifications,Criar remessas e enviar notificações ao cliente
+"Please wait, loading purchase order information...","Aguarde, carregando as informações da ordem de compra ..."
+This action will create shipments and shipping labels for all filtered purchase orders and mark them as shipped.,Esta ação criará remessas e etiquetas de remessa para todas as ordens de compra filtradas e as marcará como enviadas.
+This action will print packing slips for all filtered purchase orders and mark them as ready to ship.,Esta ação imprimirá as bordas de remessa para todas as ordens de compra filtradas e as marcará como prontas para serem enviadas.
+This action will print existing shipping labels for all filtered purchase orders.,Esta ação imprimirá as etiquetas de remessa existentes para todas as ordens de compra filtradas.
+This action will create shipments for all filtered purchase orders and send customer notification.,Esta ação criará remessas para todas as ordens de compra filtradas e enviará notificação ao cliente.
+This action will create shipments for all filtered purchase orders.,Esta ação criará remessas para todas as ordens de compra filtradas.
+This action will update status for all filtered purchase orders.,Essa ação atualizará o status de todas as ordens de compra filtradas.
+Shipment ID,ID de remessa
+Specify New Shipment Shipping Amount,Especifique o novo valor de remessa da remessa
+Add PO Comment,Adicionar PO Comentário
+Page:,Página:
+Previous Page,Página anterior
+Next Page,Próxima página
+Previous,Anterior
+Next,Próximo
+Orders,Ordens
+Import Tracking,Rastreamento de importação
+Stock And Price,Estoque e preço
+Stock,estoque
+Product Manager,Gerente de Produto
+Manual Labels,Etiquetas manuais
+Promotions,Promoções
+Edit Offer,Editar oferta
+Filter Orders,Ordens de filtro
+Apply Filter,Aplicar filtro
+Perform on all retrieved records,Executar em todos os registros recuperados
+PO # ,PO #
+Shipment # ,Envio #
+PO Gift Message:,Mensagem do presente de OP:
+Import File,Importar arquivo
+Import Content,Importar Conteúdo
+Export Purchase Orders,Expor as ordens de compra
+Stock PO #,Stock PO #
+Stock PO Items,Stock PO Itens
+Stock PO ID,ID de PO de estoque
+Stock PO Date,Data de PO de estoque
+PDF Stock POs,PDF Stock POs
+"Please wait, loading stock PO information...","Aguarde, carregando informações sobre o estoque ..."
+This action will update status for all filtered stock POs.,Essa ação atualizará o status de todas as OPs de estoque filtradas.
+Update Info,Informação de atualização
+"Please wait, updating shipment information...","Aguarde, atualizando informações de remessa ..."
+Registered Vendor,Fornecedor Registado
+"If you have an account, sign in with your email address.","Se você tiver uma conta, faça login com seu endereço de e-mail."
+New Vendors,Novos fornecedores
+"Creating an account has many benefits: check out faster, keep more than one address, track orders and more.","A criação de uma conta tem muitos benefícios: verifique mais rápido, mantenha mais de um endereço, rastreie ordens e muito mais."
+Dear,caro
+Your e-mail,Seu email
+must be confirmed before using it to log in to our store,Deve ser confirmado antes de usá-lo para fazer login em nossa loja
+This link is valid only once,Este link é válido apenas uma vez
+Best regards,Cumprimentos
+Your application request was rejected,Sua solicitação de aplicativo foi rejeitada
+due to the following reason,Devido ao seguinte motivo
+Thank you for your application,Obrigado pela sua aplicação
+"Your request should be processed shortly, and you should receive a confirmation email.","Seu pedido deve ser processado em breve, e você deve receber um e-mail de confirmação."
+Congratulations, your application has been approved!,Parabéns, seu pedido foi aprovado!
+Use the following values when prompted to log in,Use os seguintes valores quando solicitado a efetuar login
+The following products were approved by site administrator,Os seguintes produtos foram aprovados pelo administrador do site
+Thanks again for being a Partner Producer,Agradecemos novamente por ser um produtor parceiro
+All the best,Muito bem sucedida
+The following products were marked by site administrator as requiring fix,Os seguintes produtos foram marcados pelo administrador do site como sendo necessário corrigir
+The following products are pending and waiting for site administrator approve,Os seguintes produtos estão pendentes e aguardando aprovação pelo administrador do site
+Question toÂ ,Pergunta para
+regarding shipment,Sobre a remessa
+regarding product,Sobre o produto
+has been answered,Foi respondido
+Please see details below,Veja detalhes abaixo
+Customer E-mail,Email do cliente
+Vendor E-mail,E-mail do fornecedor
+You can view details in,Você pode ver detalhes em
+admin area,Área de administração
+New Question for,Nova pergunta para
+ProductÂ ,Produto
+have been asked,Foram perguntados
+Your question to,Sua pergunta para
+Their answer is,Sua resposta é
+This email was sent to you because you have requested a password reset.,Este e-mail foi enviado para você porque você solicitou uma redefinição de senha.
+"If you have not requested a password reset, you can ignore this email","Se você não solicitou uma redefinição de senha, ignore este e-mail"
+Go to this link to reset your password,Acesse este link para redefinir sua senha
+Please find your statement for the previous period attached to this email,"Por favor, encontre seu extrato do período anterior anexado a este e-mail"
+If you have any questions don't hesitate to reach out,"Se você tiver alguma dúvida, não hesite em"
+You can also,Você também pode
+log in,entrar
+to view specific information about individual orders,Para ver informações específicas sobre pedidos individuais
+Please fulfill this new order,"Por favor, preencha esta nova ordem"
+For,Para
+Please ship via,"Por favor, envie via"
+"If that is not available, please notify us before shipping.","Se isso não estiver disponível, notifique-nos por favor antes de enviar."
+The following products reached low stock level,Os seguintes produtos atingiram níveis de estoque baixos
+Store administrator added comment for the order,Comentário do administrador da loja adicionado para a ordem
+Thank you for your partnership,Obrigado pela sua parceria
+You have been unsubscribed from the newsletter,Você foi cancelado da newsletter
+Click here to logon to your shipping control panel,Clique aqui para efetuar login no painel de controle de envio
+Please,Por favor
+logon to your control panel,Logon no seu painel de controle
+and increase qtys if possible,E aumentar qtys se possível
+You can,Você pode
+download packing slip PDF here,Faça o download do folheto informativo PDF aqui
+Click here to logon to your shipping control panel,Clique aqui para efetuar login no painel de controle de envio
+once you are ready to notify us of the shipment and input tracking numbers.,Uma vez que você está pronto para nos notificar da remessa e os números de rastreamento de entrada.
+To confirm the e-mail and instantly log in,Para confirmar o e-mail e efetuar login instantaneamente
+Please,Por favor
+Use,Usar
+this confirmation link,Este link de confirmação
+This link is valid only once.,Este link é válido somente uma vez.
+You can reply from the,Você pode responder
+vendor portal,Portal de fornecedores
+"To sign in to our site, use these credentials during checkout or on the <a href=""%customer_url"">My Account</a> page: Email:","Para iniciar sessão no nosso site, utilize estas credenciais durante a saída ou na página <a href=""%customer_url""> A minha conta </a>: Email:"
+Password:,Senha:
+"Forgot your account password? Click <a href=""%reset_url"">here</a> to reset it.","Esqueceu a senha da sua conta? Clique <a href=""%reset_url""> aqui </a> para redefini-lo."
+"When you sign in to your account, you will be able to:","Ao fazer login em sua conta, você será capaz de:"
+You must confirm your %customer_email email before you can sign in (link is only valid once):,Você deve confirmar seu e-mail% customer_email antes de fazer login (o link é válido apenas uma vez):
+Thank you for confirming your %store_name account.,Obrigado por confirmar a sua conta %store_name.
+Proceed through checkout faster,Proceder ao checkout mais rápido
+Check the status of orders,Verificar o estado das encomendas
+View past orders,Ver encomendas passadas
+Store alternative addresses (for shipping to multiple family members and friends),Armazene endereços alternativos (para enviar para vários membros da família e amigos)
+"To sign in to our site and set a password, click on the <a href=""%create_password_url"">link</a>:","Para iniciar sessão no nosso site e definir uma palavra-passe, clique no link <a href=""%create_password_url""> </a>:"
+Thank you for your order from %store_name.,Obrigado pela sua encomenda de %store_name.
+"You can check the status of your order by <a href=""%account_url"">logging into your account</a>.","Você pode verificar o status de seu pedido por <a href=""%account_url""> login em sua conta </a>."
+"If you have questions about your order, you can email us at <a href=""mailto:%store_email"">%store_email</a>.","Se você tiver dúvidas sobre seu pedido, envie um e-mail para <a href=""mailto:%store_email"">% store_email </a>."
+Your Credit Memo #%creditmemo_id for Order #%order_id,A sua nota de crédito #% creditmemo_id para o pedido #% order_id
+Billing Info,Informação de pagamento
+Shipping Info,Informação de Envio
+Payment Method,Método de pagamento
+Your order #%increment_id has been updated with a status of <strong>%order_status</strong>.,Sua ordem #% increment_id foi atualizada com um status de <strong>% order_status </ strong>.
+About Us,Sobre nós
+Customer Service,Serviço ao cliente
+"Hours of Operation:<br /><span class=""no-link"">%store_hours</span>.","Horas de Operação: <br /> <span class = ""no-link"">% store_hours </ span>."
+Your Invoice #%invoice_id for Order #%order_id,A sua fatura #% invoice_id para Order #% order_id
+Once your package ships we will send you a tracking number.,Uma vez que seu pacote envia nós lhe enviaremos um número de rastreamento.
+"Your Order <span class=""no-link"">#%increment_id</span>","Sua ordem <span class = ""no-link""> #% increment_id </ span>"
+"Placed on <span class=""no-link"">%created_at</span>","Colocado em <span class = ""no-link"">% created_at </ span>"
+There was recently a request to change the password for your account.,"Recentemente, houve um pedido para alterar a senha da sua conta."
+"If you requested this change, set a new password here:","Se você solicitou essa alteração, defina uma nova senha aqui:"
+Set a New Password,Definir uma nova senha
+"If you did not make this request, you can ignore this email and your password will remain the same.","Se você não fez este pedido, você pode ignorar este e-mail e sua senha permanecerá a mesma."
+The password for your account has been successfully changed.,A senha da sua conta foi alterada com êxito.
+"If you did not request this change, please contact us.","Se você não solicitou essa alteração, entre em contato conosco."
+"%name,","%nome,"
+%sender_name wants to share this product with you:,% Sender_name deseja compartilhar este produto com você:
+Message from %sender_name:,Mensagem de% sender_name:
+%customer_name wants to share this Wish List from %store_name with you:,% Customer_name deseja compartilhar esta lista de desejos de %store_name com você:
+Message from %customer_name:,Mensagem de% customer_name:
+Your shipping confirmation is below. Thank you again for your business.,Sua confirmação de entrega esta abaixo. Obrigado novamente pelo seu negócio.
+Your Shipment #%shipment_id for Order #%order_id,Sua remessa #% shipment_id para a ordem #% order_id
+Thank you for subscribing to our newsletter.,Obrigado por subscrever a nossa newsletter.
+"To begin receiving the newsletter, you must first confirm your subscription by clicking on the following link:","Para começar a receber o boletim, você deve primeiro confirmar sua assinatura clicando no seguinte link:"
+You have been successfully subscribed to our newsletter.,Você foi assinado com sucesso em nossa newsletter.
+Welcome to,Bem-vindo ao
+Please confirm your,Confirme sua
+account,conta
+Credit memo for your,Nota de crédito da sua
+Update to your,Atualização para sua
+credit memo,nota de crédito
+Footer,Rodapé
+Invoice for your,Fatura para a sua
+order,ordem
+Update to your,Atualização para sua
+invoice,fatura
+Your,Seu
+order confirmation,confirmação de encomenda
+Update to your,Atualizar para sua
+order,ordem %store_name
+Reset your,Redefinir sua
+password,senha
+password has been changed,senha foi alterada
+Products price changed alert,Alerta de preços de produtos alterados
+order has shipped,ordem foi enviada
+Take a look at {{var customerName}}'s Wish List,Dê uma olhada na Lista de Desejos de {{var customerName}}
+Update to your,Atualização para a
+shipment,remessa de
+Products back in stock alert,Produtos voltar no estoque
+Newsletter subscription confirmation,Boletim de confirmação
+Newsletter subscription success,Subscrição Newsletter sucesso
+Newsletter unsubscription success,Sucesso do cancelamento do boletim informativo
+New Vendor Product Approval Notification,Nova Notificação de Aprovação de Produto do Fornecedor
+The following Product is Approve by site administrator,O seguinte produto é aprovado pelo administrador do site
+Identity Proof request from,Pedido de Identity Proof
+First Name,Primeiro nome
+Last Name,Último nome
+Application Confirmation from,Confirmação da aplicação de
+Account confirmation for,Confirmação da conta para
+Application Rejected at,Aplicação Rejeitada em
+Your application request was rejected,Sua solicitação de aplicativo foi rejeitada
+due to the following reason,Devido ao seguinte motivo
+has invited you to Join Cibilia.com as Vendor,Convidou você para se juntar Cibilia.com como fornecedor
+Motivational Quote,Citações inspiradores
+Regards,"Atenciosamente,"
+Verify Now,Verifique agora
+Verification Link,Link de verificação
+"To verify your information, click on the link below","Para verificar as suas informações, clique no link abaixo"
+has invited you to Join Cibilia.com as Vendor. His Motivation Quote is as follows,Convidou você para se juntar Cibilia.com como fornecedor.Sua Motivação Citação é a seguinte
+Vendor Type Selection Email  for,Seleção de tipo de fornecedor Email para
+to select  your vendor type,Para selecionar o tipo de fornecedor
+Product Sku,Referência do produto:
+Product Name,Nome do Produto
+The following Cibilian Product is Approve by site administrator,O seguinte produto Cibilian é aprovado pelo administrador do site
+Identity Proof Approval for,Aprovação de Prova de Identidade para
+Identity Proof request from,Pedido de Identity Proof
+Your Identity Proof has been approved,Sua Prova de Identidade foi aprovada
+Product Approval Notification,Notificação de Aprovação do Produto
+Cibilian Name,Cibilian Nome
+Cibilian Email,E-mail Cibilian
+Withdrawl request from,Pedido de retirada de
+has submitted withdrawal request for amount,Apresentou um pedido de levantamento de montante
+Vendor Type Updated for,Tipo de fornecedor Atualizado para
+has updated their vendor type as,Atualizou seu tipo de fornecedor como
+Payment Transaction Failed Reminder,Lembrete de falha na transação de pagamento
+Contact Form,Formulário de Contato
+Products price changed alert,Alerta de preços de produtos alterados
+Products back in stock alert,Produtos voltar no estoque
+New Shipment Request for Order,Novo pedido de remessa para pedido
+From,De
+Update,Atualizar
+Vendor password reset instructions from,Instruções de redefinição de senha do fornecedor de
+Statement for,Declaração para
+Low stock products notification,Notificação de baixo estoque de produtos
+Question replied by vendor,Pergunta respondida pelo fornecedor
+New Question,Nova pergunta
+for Shipment #,Para expedição #
+for Product,Para o produto
+Question replied by vendor,Pergunta respondida pelo fornecedor
+Approved products notification,Notificação de produtos aprovados
+Approved products notification for,Notificação de produtos aprovados para
+Fix products notification,Corrigir notificação de produtos
+Fix products notification for,Corrigir notificação de produtos para
+Pending products notification,Notificação de produtos pendentes
+Pending products notification for,Notificação de produtos pendentes para
+Account confirmation for,Confirmação da conta para 
+At,No
+Application Rejected at,Aplicação Rejeitada em

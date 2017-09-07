@@ -1,0 +1,51 @@
+<?php
+$filterManager = \Magento\Framework\App\ObjectManager::getInstance()->get('\Magento\Framework\Filter\FilterManager');
+$qaHlp = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\DropshipVendorAskQuestion\Helper\Data');
+$_question = $this->getQuestion();
+?>
+<?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title title-buttons">
+    <button type="button" title="<?php echo __('Ask New Question') ?>" class="button" onclick="window.location='<?php echo $this->getNewUrl() ?>';"><span><span><?php echo __('Ask New Question') ?></span></span></button>
+</div>
+
+<div class="col1-set addresses-list">
+    <h2><?php echo __('Question Details') ?></h2>
+    <ol>
+        <li class="item">
+            <h5><?php echo __('VENDOR') ?></h5>
+            <span class="nobr"><?php echo $_question->getVendorName() ?></span>
+            <h5><?php echo __('QUESTION DATE')?></h5>
+            <span class="nobr"><?php echo $this->formatDate($_question->getQuestionDate()) ?></span>
+            <?php if ($_question->canCustomerViewAnswer() && !$_question->isEmptyAnswerDate()): ?>
+            <h5><?php echo __('ANSWER DATE')?></h5>
+            <?php echo $this->formatDate($_question->getAnswerDate(), \IntlDateFormatter::SHORT, true); ?>
+            <?php endif ?>
+            <?php if ($_question->getShipmentId()): ?>
+            <h5><?php echo __('SHIPMENT')?></h5>
+            <a href="<?php echo $this->getShipmentUrl($_question)?>"><?php echo __('#%1 for order #%2', $_question->getShipmentIncrementId(), $_question->getOrderIncrementId())?></a>
+            <?php endif ?>
+            <?php if ($_question->getProductId()): ?>
+            <h5><?php echo __('PRODUCT')?></h5>
+            <a href="<?php echo $this->getProductUrl($_question)?>"><?php echo $this->getProductName()?></a>
+            <?php endif ?>
+        </li>
+    </ol>
+    <h2><?php echo __('Question Text') ?></h2>
+    <ol>
+        <li class="item">
+            <p><?php echo $this->escapeHtml($_question->getQuestionText()) ?></p>
+        </li>
+    </ol>
+    <?php if ($_question->canCustomerViewAnswer()): ?>
+    <h2><?php echo __('Answer Text') ?></h2>
+    <ol>
+        <li class="item">
+            <p><?php echo $this->escapeHtml($_question->getAnswerText()) ?></p>
+        </li>
+    </ol>
+    <?php endif ?>
+</div>
+
+<div class="buttons-set">
+    <p class="back-link"><a href="<?php echo $this->getUrl('udqa/customer')?>"><small>« </small>Back</a></p>
+</div>

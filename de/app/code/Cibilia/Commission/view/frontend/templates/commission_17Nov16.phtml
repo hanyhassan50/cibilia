@@ -1,0 +1,35 @@
+<?php $this->helper('Cibilia\Commission\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $_commission = $this->getCollection(); ?>
+<?php if ($_commission->getSize()): ?>
+<div class="commission_list_view">
+    <?php ///foreach ($_commission as $commissionItem): ?>
+        <div class="table-wrapper orders-history">
+            <table class="data table table-order-items history" id="commission-earned-list">
+                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Commision Earned List') ?></caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Id #') ?></th>
+                        <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Order #') ?></th>
+                        <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Total Order Amount') ?></th>
+                        <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Total Commission') ?></th>
+                        <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Created At') ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($_commission as $commissionItem): ?>
+                        <tr>
+                            <td data-th="<?php echo $block->escapeHtml(__('Id')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $commissionItem->getData("commission_id"); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $commissionItem->getData("order_id"); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Total Order Amount')) ?>" class="col shipping"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($commissionItem->getData("total_amount"),true,false); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Total Commission')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($commissionItem->getData("total_commission"),true,false); ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Created At')) ?>" class="col total"><?php /* @escapeNotVerified */ echo date("M d, Y, h:i:s",strtotime($commissionItem->getData("created_at")));?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+    </div>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no Commission Earned.'); ?></span></div>
+<?php endif ?>

@@ -1,0 +1,8 @@
+{
+    "readiness_checks": {
+        "file_permissions_verified": false,
+        "error": "Found non-writable path(s):<br/>/chroot/home/cibiliac/cibilia.com/html/tst/app/app<br/>/chroot/home/cibiliac/cibilia.com/html/tst/pub/pub<br/>/chroot/home/cibiliac/cibilia.com/html/tst/lib/lib"
+    },
+    "last_timestamp": 1504592823,
+    "current_timestamp": 1504592883
+}

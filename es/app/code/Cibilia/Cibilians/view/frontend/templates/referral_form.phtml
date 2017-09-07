@@ -1,0 +1,302 @@
+<?php $this->helper('Cibilia\Cibilians\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+       $customerSession = $objectManager->create('Magento\Customer\Model\Session');?>
+       
+<div id="alertsuccessmsg"></div>
+<div id="alerterrormsg"></div>
+<div class="loading-mask" data-role="loader" style="display: none;">
+	<div class="loader">
+		<img alt="Loading..." src="http://tst.foodmakers.cibilia.com/pub/static/frontend/Magento/luma/en_GB/images/loader-2.gif">
+		<p>Please wait...</p>
+	</div>
+</div>
+<form class="form-address-edit" method="POST" action="<?php echo $this->getUrl('cibilians/advertisers/post'); ?>" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}' id="cibilians-advertisers-form" enctype="multipart/form-data" > 
+<div id="step1">
+ <fieldset class="fieldset"> 
+		<legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Step 1') ?></span></legend><br>
+		<div class="field name required">
+			<label class="label" for="vendor_name"><span><?php echo __('Company Name') ?></span></label>
+			<div class="control">
+				<input name="vendor_name" id="vendor_name" title="<?php echo __('Company name') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+			</div>
+		</div>
+		<div class="field name required">
+			<label class="label" for="owner_name"><span><?php echo __('Name and Surname of Owner/Responsible') ?></span></label>
+			<div class="control">
+				<input name="owner_name" id="owner_name" title="<?php echo __('Name and Surname of Owner/Responsible') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+			</div>
+		</div>
+		<?php $getVendorRole = $block->getVendorRole(); ?>
+		<?php if(count($getVendorRole) > 0){ ?>
+			<div class="field required">
+				<label for="your_role" class="label"><span><?php echo __('Your role') ?></span></label>
+				<div class="control">
+					<select data-validate="{required:true}" class="validate-select" title="<?php echo __('Your role') ?>" name="your_role" id="your_role" aria-required="true">
+						<?php foreach ($getVendorRole as $key => $value) { ?>
+							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		
+		<div class="field name required">
+			<label class="label" for="company_address"><span><?php echo __('Company Registered Address') ?></span></label>
+			<div class="control">
+				<input name="company_address" id="company_address" title="<?php echo __('Company Registered Address') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+			</div>
+		</div>
+		<div class="field email required">
+            <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
+            <div class="control">
+                <input name="email" id="email" title="<?php echo __('Email') ?>" value="" class="input-text" type="email" data-validate="{required:true}"/>
+                <input name="password" value="vendor123" class="input-text" type="hidden"/>
+                <input name="password_confirm" value="vendor123" class="input-text" type="hidden"/>
+                <input name="carrier_code" value="fedex" class="input-text" type="hidden"/>
+                <input name="udmember[membership]" value="1" class="input-text" type="hidden"/>
+                <input name="url_key" value="test" class="input-text" type="hidden"/>
+                <input name="street1" value="Your address" class="input-text" type="hidden"/>
+                <input name="city" value="City name" class="input-text" type="hidden"/>
+                <input name="zip" value="121212" class="input-text" type="hidden"/>
+                <input name="country_id" value="In" class="input-text" type="hidden"/>
+                <input name="telephone" value="1234567890" class="input-text" type="hidden"/>
+                <input name="vendor_attn" value="test" class="input-text" type="hidden"/>
+                <input name="referred_by" value="<?php echo $customerSession->getCustomer()->getId();?>" type="hidden"/>
+            </div>
+        </div>
+		<?php $getcompanyemployee = $block->getcompanyemployee(); ?>
+		<?php if(count($getcompanyemployee) > 0){ ?>
+			<div class="field required">
+				<label for="company_employee" class="label"><span><?php echo __('Question 1: How many people work in the company you wish to sign up?') ?></span></label>
+				<div class="control">
+					<select data-validate="{required:true}" class="validate-select" title="<?php echo __('Question 1: How many people work in the company you wish to sign up?') ?>" name="company_employee" id="company_employee" aria-required="true">
+						<?php foreach ($getcompanyemployee as $key => $value) { ?>
+							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		
+		<?php $getcompanytype = $block->getcompanytype(); ?>
+		<?php if(count($getcompanytype) > 0){ ?>
+			<div class="field required">
+				<label for="company_type" class="label"><span><?php echo __('Question 2: Is your company part of a group of companies?') ?></span></label>
+				<div class="control">
+					<select data-validate="{required:true}" class="validate-select" title="<?php echo __('Question 2: Is your company part of a group of companies?') ?>" name="company_type" id="company_type" aria-required="true">
+						<?php foreach ($getcompanytype as $key => $value) { ?>
+							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		<div class="buttons-set">
+			<input type="hidden" value="" name="is_ajax" id="is_ajax" />
+			<button class="form-button" type="button" name="step1" id="step1_submit"><?php echo __('Save & continue') ?>
+			<button class="form-button" type="button"><a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Go back') ?></span></a></button>
+		</div>
+  </fieldset>
+</div>
+<div id="step2" style="display:none">
+		<?php $product_categories = $block->productcategories(); ?>
+		<?php if(count($product_categories) > 0){ ?>
+			<div class="field required">
+				<label for="product_categories" class="label"><span><?php echo __('In which categories your products fit in?') ?></span></label>
+				<div class="control">
+					<select class="validate-select" title="<?php echo __('In which categories your products fit in?') ?>" name="product_categories[]" id="product_categories[]" multiple="multiple" required>
+						<?php foreach ($product_categories as $key => $value) { ?>
+							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		
+		<?php $product_sell_place = $block->productsellplace(); ?>
+		<?php if(count($product_sell_place) > 0){ ?>
+			<div class="field required">
+				<label for="product_sell_place[]" class="label"><span><?php echo __('Where do you currently sell your products?') ?></span></label>
+				<div class="control">
+					<select class="validate-select" title="<?php echo __('Where do you currently sell your products?') ?>" name="product_sell_place[]" id="product_sell_place[]" multiple="multiple" required>
+						<?php foreach ($product_sell_place as $key => $value) { ?>
+							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		<div class="field name required">
+			<label class="label" for="product_sell_place_other"><span><?php echo __('other') ?></span></label>
+			<div class="control">
+				<input name="product_sell_place_other" id="product_sell_place_other" title="<?php echo __('other') ?>" value="" class="input-text" type="text" data-validate="{required:false}" required />
+			</div>
+		</div>
+		<div class="field name required">
+			<label class="label" for="telephone"><span><?php echo __('Phone Number') ?></span></label>
+			<div class="control">
+				<input name="telephone" id="telephone" title="<?php echo __('Phone Number') ?>" value="" class="input-text" type="text" data-validate="{required:false}" required />
+			</div>
+		</div>
+		<?php $bestTimetocall = $block->bestTimetocall(); ?>
+		<?php if(count($bestTimetocall) > 0){ ?>
+			<div class="field required">
+				<label for="best_time_to_call" class="label"><span><?php echo __('When is the best time to call you ') ?></span></label>
+				<div class="control">
+					<select class="validate-select" title="<?php echo __('When is the best time to call you') ?>" name="best_time_to_call" id="best_time_to_call" required>
+						<?php foreach ($bestTimetocall as $key => $value) { ?>
+							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		<div class="field name required">
+			<label class="label" for="vat_number"><span><?php echo __('VAT Number') ?></span></label>
+			<div class="control">
+				<input name="vat_number" id="vat_number" title="<?php echo __('VAT Number') ?>" value="" class="input-text" type="text" required />
+			</div>
+		</div>
+		<div class="field name required">
+			<label class="label" for="foundation_year"><span><?php echo __('Year of foundation') ?></span></label>
+			<div class="control">
+				<input name="foundation_year" id="foundation_year" title="<?php echo __('Year of foundation') ?>" value="" class="input-text" type="number" max="2017" required />
+			</div>
+		</div>
+		<div class="field name">
+			<label class="label" for="company_fb_page"><span><?php echo __('Company Facebook page') ?></span></label>
+			<div class="control">
+				<input name="company_fb_page" id="company_fb_page" title="<?php echo __('Company Facebook page') ?>" value="" class="input-text" type="text" />
+			</div>
+		</div>
+		<div class="field name">
+			<label class="label" for="company_website"><span><?php echo __('Company website ') ?></span></label>
+			<div class="control">
+				<input name="company_website" id="company_website" title="<?php echo __('Company website ') ?>" value="" class="input-text" type="text" />
+			</div>
+		</div>
+		<div class="field name">
+			<label class="label" for="company_linkedin"><span><?php echo __('Company LinkedIn page ') ?></span></label>
+			<div class="control">
+				<input name="company_linkedin" id="company_linkedin" title="<?php echo __('Company LinkedIn page ') ?>" value="" class="input-text" type="text" />
+			</div>
+		</div>
+		<div class="field name">
+			<label class="label" for="company_twitter"><span><?php echo __('Company twitter') ?></span></label>
+			<div class="control">
+				<input name="company_twitter" id="company_twitter" title="<?php echo __('Company twitter') ?>" value="" class="input-text" type="text" />
+			</div>
+		</div>
+		<div class="field name">
+			<label class="label" for="url_key"><span><?php echo __('Preferred subdomain name') ?></span></label>
+			<div class="control">
+				<input name="url_key" id="url_key" title="<?php echo __('Preferred subdomain name') ?>" value="" class="input-text" type="text" />
+				<strong>.cibilia.com</strong>
+			</div>
+		</div>
+		<div class="field required">
+			<label class="label" for="logo"><span>Logo Image</span></label>
+			<input id="logo" name="logo" value="" type="file" class="input-file">
+		</div>
+		<div class="field">
+			 <label class="label" for="company_photos"><span>Company Photos </span></label>
+		     <input id="company_photos" name="company_photos" value="" type="file" class=" input-file">
+		</div>
+		<div class="actions-toolbar">
+			<div class="primary">
+				<button type="submit" class="action save primary" title="<?php /* @escapeNotVerified */ echo __('Send') ?>" id="submit">
+					<span><?php /* @escapeNotVerified */ echo __('Send') ?></span>
+				</button>
+			</div>
+			<div class="secondary">
+				<a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Go back') ?></span></a>
+			</div>
+		</div>
+	</fieldset>
+</div>
+</form>
+<script type="text/javascript">
+require(["jquery", "prototype", "varien/form"], function(jQuery) {
+	
+	jQuery(document).ready(function($){
+		$("#form_key").val($("input[name=form_key]").val());
+		
+		$('#step1_submit').on('click', function() {			
+			$("#is_ajax").val("1");
+			$("#cibilians-advertisers-form").valid();
+			if($("#cibilians-advertisers-form").valid()){
+				var employee = $("#company_employee").val();
+				var type = $("#company_type").val();
+				if((employee == "more_than_50" && type =="yes") || (employee == "more_than_50" || type =="yes")){
+					$(".loading-mask").css("display","block");
+					$.ajax({
+						url:'<?php echo $this->getUrl('cibilians/advertisers/post')?>', 
+						type: 'POST',
+						data: $('#cibilians-advertisers-form').serialize(),
+						error: function(transport){
+							alert('Error during form submission');
+						},
+						success: function (responseText){
+							$(".loading-mask").css("display","none");
+							if(responseText == "success"){
+								$("#alertsuccessmsg").html("Sorry, we regret to inform you that we are looking for small companies with no more than 50 employees. Thank you for your interest in cibilia.com.").css("color","red");
+								setTimeout(function(){
+									$("#alertsuccessmsg").html('');
+								}, 6000);
+								$('#vendor_name').val("");
+								$('#owner_name').val("");
+								$('#your_role').val("owner");
+								$('#company_address').val("");
+								$('#email').val("");
+								$('#company_employee').val(1);
+								$('#company_type').val("yes");
+							} else if(responseText == "error"){
+								$("#alerterrormsg").html("Error occured while saving your details, please try again.").css("color","red");
+								setTimeout(function(){
+									$("#alerterrormsg").html('');
+								}, 6000);
+							}
+						}
+					});
+				}else{
+					$(".loading-mask").css("display","block");
+					setTimeout(function(){		
+						$("#step1").hide();
+					}, 6000);
+					
+					setTimeout(function(){
+						$("#step2").show();
+						$(".loading-mask").css("display","none");
+					}, 6000);
+				}
+			}
+		});
+		
+		$("#submit").click(function(){
+			$("#is_ajax").val("0");
+			$("select[name='product_sell_place[]'] option:selected").each(function(){
+				console.log($(this).val());
+				if($(this).val() == "other"){
+					$("#product_sell_place_other").prop('required',true);
+				}
+			});
+			$("select[name='product_categories[]']").prop('required',true);
+			$("select[name='product_sell_place[]']").prop('required',true);
+				
+			$("#logo").prop('required',true);
+			$("#vat_number").prop('required',true);
+			$("#foundation_year").prop('required',true);
+			$("#telephone").prop('required',true);
+			$("#cibilians-advertisers-form").valid();
+			
+			if($("#cibilians-advertisers-form").valid()){
+				$(".loading-mask").css("display","block");
+				setTimeout(function(){
+					$("#cibilians-advertisers-form").submit();
+					$(".loading-mask").css("display","none");
+				}, 6000);
+			}
+		});
+	});
+});
+</script>

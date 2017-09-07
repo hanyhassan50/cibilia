@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="custom_cibilia_withdrawl_request_email_template" label="Withdrawl Request Email" file="custom_cibilia_withdrawl_request_email_template.html" type="html" module="Cibilia_Redemption" area="frontend"/>
+    <template id="custom_cibilia_order_vendor_notify_template" label="Order Notification for Vendor" file="custom_cibilia_order_vendor_notify_template.html" type="html" module="Cibilia_Redemption" area="frontend"/>
+</config>

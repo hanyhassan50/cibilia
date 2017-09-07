@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Cibilia_Cibilianpayout::cibilianpayout" title="Cibilianpayout" module="Cibilia_Cibilianpayout" sortOrder="30" resource="Cibilia_Cibilianpayout::cibilianpayout"/>
+        <add id="Cibilia_Cibilianpayout::cibilianpayout_manage" title="All Items" module="Cibilia_Cibilianpayout" sortOrder="10" parent="Cibilia_Cibilianpayout::cibilianpayout" action="cibilianpayout/index/" resource="Cibilia_Cibilianpayout::manage"/>
+    </menu>
+</config>

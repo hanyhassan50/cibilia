@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="left">
+            <block class="Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Tabs" name="custom_attribute_edit_tabs">
+                <container label="Main" name="main">
+                    <block class="Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Tab\Main" as="base"/>
+                    <block class="Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Tab\Options" as="advanced"/>
+                    <block class="Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Tab\Advanced" as="options"/>
+                </container>
+                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" as="labels"/>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit" name="custom_attribute_edit_content"/>
+        </referenceContainer>
+    </body>
+</page>

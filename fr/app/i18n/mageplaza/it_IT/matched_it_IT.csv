@@ -1,0 +1,249 @@
+SKU,SKU,module,Magento_AdvancedCheckout
+SKU:,SKU:,module,Magento_AdvancedCheckout
+Sku,Sku,module,Magento_AdvancedCheckout
+File,File,module,Magento_AdvancedCheckout
+TestMessage,TestMessage,module,Magento_Analytics
+"Free Tier","Free Tier",module,Magento_Analytics
+API,API,module,Magento_Analytics
+"BI Essential","BI Essential",module,Magento_Analytics
+"BI Essentials","BI Essentials",module,Magento_Analytics
+"Meta Information","Meta Information",module,Magento_AsynchronousOperations
+"Transaction Key","Transaction Key",module,Magento_Authorizenet
+Debug,Debug,module,Magento_Authorizenet
+Magento,Magento,module,Magento_Backend
+"Magento Admin","Magento Admin",module,Magento_Backend
+"Magento Connect","Magento Connect",module,Magento_Backend
+"Connect Manager","Connect Manager",module,Magento_Backend
+Debug,Debug,module,Magento_Backend
+Host,Host,module,Magento_Backend
+"Community Edition","Community Edition",module,Magento_Backend
+Database,Database,module,Magento_Backup
+FTP,FTP,module,Magento_Backup
+Rollback,Rollback,module,Magento_Backup
+"PayPal Logo","PayPal Logo",module,Magento_Braintree
+MM,MM,module,Magento_Braintree
+Braintree,Braintree,module,Magento_Braintree
+Debug,Debug,module,Magento_Braintree
+URL,URL,module,Magento_Braintree
+"Braintree Settlement Report","Braintree Settlement Report",module,Magento_BraintreeTwo
+MM,MM,module,Magento_BraintreeTwo
+BraintreeTwo,BraintreeTwo,module,Magento_BraintreeTwo
+&nbsp;,&nbsp;,module,Magento_BraintreeTwo
+Debug,Debug,module,Magento_BraintreeTwo
+SKU,SKU,module,Magento_Bundle
+SKU,SKU,module,Magento_BundleStaging
+CAPTCHA,CAPTCHA,module,Magento_Captcha
+SKU,SKU,module,Magento_Catalog
+Varchar,Varchar,module,Magento_Catalog
+AM,AM,module,Magento_Catalog
+PM,PM,module,Magento_Catalog
+frontend_label,frontend_label,module,Magento_Catalog
+"%1 - %2","%1 - %2",module,Magento_Catalog
+px.,px.,module,Magento_Catalog
+123,123,module,Magento_Catalog
+1%,1%,module,Magento_Catalog
+AttributeSetText,AttributeSetText,module,Magento_Catalog
+StatusText,StatusText,module,Magento_Catalog
+Base,Base,module,Magento_Catalog
+SKU,SKU,module,Magento_CatalogRule
+Promo,Promo,module,Magento_CatalogRule
+No,No,module,Magento_CatalogRule
+No,No,module,Magento_CatalogRuleStaging
+20,20,module,Magento_CatalogRuleStaging
+30,30,module,Magento_CatalogRuleStaging
+50,50,module,Magento_CatalogRuleStaging
+100,100,module,Magento_CatalogRuleStaging
+200,200,module,Magento_CatalogRuleStaging
+20,20,module,Magento_CatalogStaging
+30,30,module,Magento_CatalogStaging
+50,50,module,Magento_CatalogStaging
+100,100,module,Magento_CatalogStaging
+200,200,module,Magento_CatalogStaging
+SKU,SKU,module,Magento_CatalogWidget
+HTML,HTML,module,Magento_CheckoutAgreements
+CMS,CMS,module,Magento_Cms
+LocalizedException,LocalizedException,module,Magento_Cms
+RuntimeException,RuntimeException,module,Magento_Cms
+px.,px.,module,Magento_Cms
+20,20,module,Magento_CmsStaging
+30,30,module,Magento_CmsStaging
+50,50,module,Magento_CmsStaging
+100,100,module,Magento_CmsStaging
+200,200,module,Magento_CmsStaging
+1%,1%,module,Magento_Config
+No,No,module,Magento_Config
+.,.,module,Magento_Config
+some_label,some_label,module,Magento_Config
+some_comment,some_comment,module,Magento_Config
+test,test,module,Magento_Config
+test2,test2,module,Magento_Config
+"Magento Admin","Magento Admin",module,Magento_Config
+SKU,SKU,module,Magento_ConfigurableProduct
+SKU,SKU,module,Magento_ConfigurableProductStaging
+URL,URL,module,Magento_CustomAttributeManagement
+SKU,SKU,module,Magento_Customer
+Offline,Offline,module,Magento_Customer
+NoSuchEntityException,NoSuchEntityException,module,Magento_Customer
+InputException,InputException,module,Magento_Customer
+frontend_label,frontend_label,module,Magento_Customer
+CSV,CSV,module,Magento_CustomerImportExport
+"Excel XML","Excel XML",module,Magento_CustomerImportExport
+CSV,CSV,module,Magento_CustomerSegment
+"Excel XML","Excel XML",module,Magento_CustomerSegment
+Cybersource,Cybersource,module,Magento_Cybersource
+"Transaction Key","Transaction Key",module,Magento_Cybersource
+Debug,Debug,module,Magento_Cybersource
+Sprintline,Sprintline,module,Magento_Dhl
+Europack,Europack,module,Magento_Dhl
+Jetline,Jetline,module,Magento_Dhl
+DHL,DHL,module,Magento_Dhl
+Debug,Debug,module,Magento_Dhl
+Fixer.io,Fixer.io,module,Magento_Directory
+Webservicex,Webservicex,module,Magento_Directory
+URL,URL,module,Magento_Downloadable
+File,File,module,Magento_Downloadable
+SKU,SKU,module,Magento_Downloadable
+U,U,module,Magento_Downloadable
+download,download,module,Magento_Downloadable
+No,No,module,Magento_Eav
+URL,URL,module,Magento_Eav
+"Elasticsearch Server Timeout","Elasticsearch Server Timeout",module,Magento_Elasticsearch
+1%,1%,module,Magento_Email
+BeagleScore,BeagleScore,module,Magento_Eway
+"Live API Key","Live API Key",module,Magento_Eway
+Debug,Debug,module,Magento_Eway
+"Intl Economy Freight","Intl Economy Freight",module,Magento_Fedex
+"Drop Box","Drop Box",module,Magento_Fedex
+"Business Service Center","Business Service Center",module,Magento_Fedex
+Station,Station,module,Magento_Fedex
+"FedEx Pak","FedEx Pak",module,Magento_Fedex
+"FedEx Box","FedEx Box",module,Magento_Fedex
+"FedEx Tube","FedEx Tube",module,Magento_Fedex
+"FedEx 10kg Box","FedEx 10kg Box",module,Magento_Fedex
+FedEx,FedEx,module,Magento_Fedex
+"Hub ID","Hub ID",module,Magento_Fedex
+Debug,Debug,module,Magento_Fedex
+No,No,module,Magento_GiftCard
+"%1 [%2]","%1 [%2]",module,Magento_GiftCard
+No,No,module,Magento_GiftCardAccount
+CSV,CSV,module,Magento_GiftCardAccount
+"Excel XML","Excel XML",module,Magento_GiftCardAccount
+SKU,SKU,module,Magento_GiftRegistry
+1%,1%,module,Magento_GiftRegistry
+1%,1%,module,Magento_GiftWrapping
+No,No,module,Magento_GoogleTagManager
+"Universal Analytics","Universal Analytics",module,Magento_GoogleTagManager
+"Google Tag Manager","Google Tag Manager",module,Magento_GoogleTagManager
+SKU,SKU,module,Magento_GroupedProduct
+SKU,SKU,module,Magento_GroupedProductStaging
+API,API,module,Magento_Integration
+OAuth,OAuth,module,Magento_Integration
+Rollback,Rollback,module,Magento_Logging
+Widget,Widget,module,Magento_Logging
+CSV,CSV,module,Magento_Logging
+"Excel XML","Excel XML",module,Magento_Logging
+"File System","File System",module,Magento_MediaStorage
+Database,Database,module,Magento_MediaStorage
+InvalidArgumentException,InvalidArgumentException,module,Magento_MultipleWishlist
+CSV,CSV,module,Magento_MultipleWishlist
+"Excel XML","Excel XML",module,Magento_MultipleWishlist
+SKU,SKU,module,Magento_MultipleWishlist
+CSV,CSV,module,Magento_Newsletter
+"Excel XML","Excel XML",module,Magento_Newsletter
+sandbox_button_label,sandbox_button_label,module,Magento_Paypal
+"AVS Street Match","AVS Street Match",module,Magento_Paypal
+"AVS zip","AVS zip",module,Magento_Paypal
+CNPJ,CNPJ,module,Magento_Paypal
+CPF,CPF,module,Magento_Paypal
+AutoSweep,AutoSweep,module,Magento_Paypal
+"Payflow Link","Payflow Link",module,Magento_Paypal
+"Payflow Pro","Payflow Pro",module,Magento_Paypal
+Uploader:,Uploader:,module,Magento_ProductVideo
+No,No,module,Magento_Reminder
+SKU,SKU,module,Magento_Reminder
+LocalizedException,LocalizedException,module,Magento_Reminder
+SKU,SKU,module,Magento_Reports
+CSV,CSV,module,Magento_Reports
+"Excel XML","Excel XML",module,Magento_Reports
+SKU,SKU,module,Magento_Review
+"%1 %2","%1 %2",module,Magento_Review
+SKU,SKU,module,Magento_ReviewStaging
+"%1 = %2","%1 = %2",module,Magento_Reward
+SKU,SKU,module,Magento_Rma
+RMA,RMA,module,Magento_Rma
+#,#,module,Magento_Rma
+Feed,Feed,module,Magento_Rss
+SKU,SKU,module,Magento_Sales
+1%,1%,module,Magento_Sales
+No,No,module,Magento_SalesRule
+CSV,CSV,module,Magento_SalesRule
+"Excel XML","Excel XML",module,Magento_SalesRule
+20,20,module,Magento_SalesRuleStaging
+30,30,module,Magento_SalesRuleStaging
+50,50,module,Magento_SalesRuleStaging
+100,100,module,Magento_SalesRuleStaging
+200,200,module,Magento_SalesRuleStaging
+No,No,module,Magento_ScalableInventory
+ASCII,ASCII,module,Magento_ScheduledImportExport
+CSV,CSV,module,Magento_Search
+"Excel XML","Excel XML",module,Magento_Search
+in,in,module,Magento_Shipping
+lb,lb,module,Magento_Shipping
+kg,kg,module,Magento_Shipping
+SKU,SKU,module,Magento_Shipping
+No,No,module,Magento_Signifyd
+Signifyd,Signifyd,module,Magento_Signifyd
+"API URL","API URL",module,Magento_Signifyd
+Debug,Debug,module,Magento_Signifyd
+"Data Collector","Data Collector",module,Magento_Support
+"OS X","OS X",module,Magento_Support
+"Core Global Cron Jobs","Core Global Cron Jobs",module,Magento_Support
+SKU,SKU,module,Magento_Support
+File,File,module,Magento_Support
+Logs,Logs,module,Magento_Support
+CSV,CSV,module,Magento_TaxImportExport
+"Excel XML","Excel XML",module,Magento_TaxImportExport
+1%,1%,module,Magento_Theme
+testMessage,testMessage,module,Magento_Theme
+"Vul hier een geldige datum in.","Vul hier een geldige datum in.",module,Magento_Ui
+CSV,CSV,module,Magento_Ui
+"Excel XML","Excel XML",module,Magento_Ui
+"UPS Next Day Air","UPS Next Day Air",module,Magento_Ups
+"UPS Ground","UPS Ground",module,Magento_Ups
+"UPS Worldwide Express","UPS Worldwide Express",module,Magento_Ups
+"UPS Standard","UPS Standard",module,Magento_Ups
+"UPS Worldwide Express Plus","UPS Worldwide Express Plus",module,Magento_Ups
+"UPS Saver","UPS Saver",module,Magento_Ups
+"UPS Worldwide Saver","UPS Worldwide Saver",module,Magento_Ups
+"UPS Express","UPS Express",module,Magento_Ups
+"UPS Worldwide Express PlusSM","UPS Worldwide Express PlusSM",module,Magento_Ups
+"UPS Today Express Saver","UPS Today Express Saver",module,Magento_Ups
+"Ground Commercial","Ground Commercial",module,Magento_Ups
+"Worldwide Express Saver","Worldwide Express Saver",module,Magento_Ups
+PAK,PAK,module,Magento_Ups
+"UPS Worldwide 10 kilo","UPS Worldwide 10 kilo",module,Magento_Ups
+Pallet,Pallet,module,Magento_Ups
+"United Parcel Service","United Parcel Service",module,Magento_Ups
+"United Parcel Service XML","United Parcel Service XML",module,Magento_Ups
+UPS,UPS,module,Magento_Ups
+Debug,Debug,module,Magento_Ups
+SKU,SKU,module,Magento_UrlRewrite
+"Media Mail","Media Mail",module,Magento_Usps
+No,No,module,Magento_Usps
+track_summary,track_summary,module,Magento_Usps
+USPS,USPS,module,Magento_Usps
+Debug,Debug,module,Magento_Usps
+No,No,module,Magento_Variable
+1%,1%,module,Magento_Variable
+CMS,CMS,module,Magento_VersionsCms
+"Visual Merchandiser","Visual Merchandiser",module,Magento_VisualMerchandiser
+SKU,SKU,module,Magento_VisualMerchandiser
+FPT,FPT,module,Magento_Weee
+label_value,label_value,module,Magento_Weee
+frontend_label,frontend_label,module,Magento_Weee
+Widget,Widget,module,Magento_Widget
+CMS,CMS,module,Magento_Widget
+1%,1%,module,Magento_Widget
+LocalizedException,LocalizedException,module,Magento_Wishlist
+Debug,Debug,module,Magento_Worldpay
+Zustand,Zustand,theme,frontend/Magento/luma

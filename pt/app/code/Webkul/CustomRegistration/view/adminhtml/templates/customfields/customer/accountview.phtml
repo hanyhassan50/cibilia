@@ -1,0 +1,17 @@
+<script>
+	require([
+            'jquery',
+            "mage/mage",
+        ], function($){
+    	var alerttext = '';
+         $("#save_custom_fields").on( "click", function() {
+         	 $.ajax('<?php echo $block->getAjaxCheckUrl() ?>', {
+         	 	method: 'post',
+         	 	data:$('#custom_form').serialize(),
+                onSuccess: function(transport){
+
+                }
+         	 });
+         });       
+    });
+</script> 

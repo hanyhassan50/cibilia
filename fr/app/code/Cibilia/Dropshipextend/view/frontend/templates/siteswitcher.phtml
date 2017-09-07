@@ -1,0 +1,43 @@
+
+
+<?php
+
+	list($detail,$isVisible) = $block->getWebsitesData();
+	//print_r($detail);
+
+	if($isVisible){
+
+?>
+
+<script type="text/javascript">
+    require([
+        'jquery',
+        'jquery/ui'
+    ], function ($) {       
+        //$(".siteSwitch").customswitch();
+		$(document).ready(function() {
+        $(document.body).on("change",".siteSwitch",function(){
+
+    			var $option = $(this).find('option:selected');
+
+    			var value = $option.val();
+
+ 					window.location.href = value;
+				});		
+   			return false;
+    	});
+    });
+</script>
+
+<select style="width:11%;" name="country" class="siteSwitch">
+
+<?php
+foreach($detail as $key => $value):
+	echo '<option value="'.$value['url'].'" class="selectedSite">'.$value['name'].'</option>'; //close your tags!!
+endforeach;
+?>
+
+</select>
+<?php
+	}
+

@@ -1,0 +1,26 @@
+<?php $_cibilianredemption = $this->getCollection(); ?>
+<?php if ($_cibilianredemption->getSize()): ?>
+<div class="cibilianredemption_list_view">
+    <?php foreach ($_cibilianredemption as $cibilianredemptionItem): ?>
+        <div id="item_<?php echo $cibilianredemptionItem->getId() ?>" class="cibilianredemption_list_item">
+            <h2>
+                <a href="<?php echo $this->getItemUrl($cibilianredemptionItem) ?>">
+                    <?php echo $this->escapeHtml($cibilianredemptionItem->getTitle()) ?>
+                </a>
+            </h2>
+
+            <div class="cibilianredemption_item_subtitle">
+                <?php echo $this->formatDate($cibilianredemptionItem->getPublishedAt()) ?> |
+                <?php echo $this->escapeHtml($cibilianredemptionItem->getAuthor()) ?>
+            </div>
+
+            <?php if ($imageUrl = $this->getImageUrl($cibilianredemptionItem, 100)): ?>
+               <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($cibilianredemptionItem->getTitle()); ?>" /></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no CibilianRedemption.'); ?></span></div>
+<?php endif ?>

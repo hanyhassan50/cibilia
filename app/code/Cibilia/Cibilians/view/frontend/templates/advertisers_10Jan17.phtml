@@ -1,0 +1,98 @@
+<?php $this->helper('Cibilia\Cibilians\Helper\Customer')->redirectIfNotLoggedIn();?>
+<fieldset class="fieldset">
+	<div class="actions-toolbar">
+		<div class="primary">
+			<?php /*
+            <a href="<?php echo $this->getUrl('cibilians/advertisers/edit'); ?>"<button type="submit" title="<?php echo __('Add Advertiser') ?>" class="action submit primary">
+				<span><?php echo __('Add Advertiser - Referral 1') ?></span>
+			</button></a>
+			<a href="<?php echo $this->getUrl('cibilians/advertisers/editp'); ?>"<button type="submit" title="<?php echo __('Add Advertiser') ?>" class="action submit primary">
+				<span><?php echo __('Add Advertiser - Referral 2') ?></span>
+			</button></a> */ ?>
+            <a class="action submit primary" href="<?php echo $this->getUrl('cibilians/advertisers/edit'); ?>"><span><?php echo __('Add New Advertiser') ?></span></a>
+		</div>
+	</div>
+</fieldset>
+<?php $_vendors = $block->getOrders(); ?>
+<?php echo $block->getChildHtml('info');?>
+<?php if ($_vendors && count($_vendors)): ?>
+
+    <?php 
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$objVendorStatuses  = $objectManager->create('\Unirgy\Dropship\Model\Source');
+	/*$arrStatus = $objVendorStatuses->setPath('vendor_statuses')->toOptionHash();
+    $arrStatus['Z'] = 'Pending';*/
+
+    $arrGridData = $block->_prepareGridData($_vendors);
+    /* $arrStatus = array(
+        'I'=> 'Inactive',`
+        'A'=> 'Active',
+        'D'=> 'Disabled',
+        'X'=> 'Vendor rejected',
+        'V'=> 'Vendor approved',
+        'R'=> 'Rejected',
+        'P'=> 'Pending Membership',
+        'S'=> 'Suspended Membership',
+        'C'=> 'Canceled Membership',
+        'e'=> 'Expired Membership',
+        'Z'=> 'Pending'
+    ); */
+?>
+    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Orders') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Vendor #') ?></th>
+                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Reg. date') ?></th>
+                    <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Company name') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Email') ?></th>
+                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Mobile') ?></th>
+                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
+                    <?php if($arrGridData['manage']) { ?>
+                        <th scope="col" class="col store"><?php /* @escapeNotVerified */ echo __('Manage Vendors') ?></th>
+                    <?php } ?>
+                    <th scope="col" class="col actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_vendors as $_vendor): ?>
+                    <tr>
+                        <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_vendor->getData("reg_id"); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_vendor->getData('registered_at')) ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $_vendor->getData("vendor_name"); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_vendor->getData("email");?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_vendor->getData("telephone");?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php echo $arrGridData[$_vendor->getId()]['status']; ?></td>
+                        <?php if($arrGridData['manage']) { ?>
+                            <td data-th="<?php echo $block->escapeHtml(__('Manage Store')) ?>" class="col store"><?php echo $arrGridData[$_vendor->getId()]['link']; ?></td>
+                        <?php } ?>
+                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                            <a href="<?php /* @escapeNotVerified */ echo $block->getRecommedationUrl($_vendor) ?>" class="action order">
+                                    <span><?php /* @escapeNotVerified */ echo __('Recommend') ?></span>
+                                </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <style type="text/css">
+            a.reject-tooltip{
+                background-image:url(<?php echo $block->getViewFileUrl('images/tooltip_icon.png') ?>);
+                display: inline-block;
+                height: 18px;
+                margin-left: 5px;
+                vertical-align: top;
+                width: 18px;
+            }
+            a.reject-tooltip:hover {
+                text-decoration: none;
+            }
+        </style>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have not referred any advertisers'); ?></span></div>
+<?php endif ?>

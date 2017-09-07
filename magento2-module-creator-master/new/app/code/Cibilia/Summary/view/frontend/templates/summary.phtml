@@ -1,0 +1,26 @@
+<?php $_summary = $this->getCollection(); ?>
+<?php if ($_summary->getSize()): ?>
+<div class="summary_list_view">
+    <?php foreach ($_summary as $summaryItem): ?>
+        <div id="item_<?php echo $summaryItem->getId() ?>" class="summary_list_item">
+            <h2>
+                <a href="<?php echo $this->getItemUrl($summaryItem) ?>">
+                    <?php echo $this->escapeHtml($summaryItem->getTitle()) ?>
+                </a>
+            </h2>
+
+            <div class="summary_item_subtitle">
+                <?php echo $this->formatDate($summaryItem->getPublishedAt()) ?> |
+                <?php echo $this->escapeHtml($summaryItem->getAuthor()) ?>
+            </div>
+
+            <?php if ($imageUrl = $this->getImageUrl($summaryItem, 100)): ?>
+               <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($summaryItem->getTitle()); ?>" /></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no Summary.'); ?></span></div>
+<?php endif ?>

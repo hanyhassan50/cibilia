@@ -1,0 +1,26 @@
+<?php $_commissions = $this->getCollection(); ?>
+<?php if ($_commissions->getSize()): ?>
+<div class="commissions_list_view">
+    <?php foreach ($_commissions as $commissionsItem): ?>
+        <div id="item_<?php echo $commissionsItem->getId() ?>" class="commissions_list_item">
+            <h2>
+                <a href="<?php echo $this->getItemUrl($commissionsItem) ?>">
+                    <?php echo $this->escapeHtml($commissionsItem->getTitle()) ?>
+                </a>
+            </h2>
+
+            <div class="commissions_item_subtitle">
+                <?php echo $this->formatDate($commissionsItem->getPublishedAt()) ?> |
+                <?php echo $this->escapeHtml($commissionsItem->getAuthor()) ?>
+            </div>
+
+            <?php if ($imageUrl = $this->getImageUrl($commissionsItem, 100)): ?>
+               <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($commissionsItem->getTitle()); ?>" /></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no Commissions.'); ?></span></div>
+<?php endif ?>

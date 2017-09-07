@@ -1,0 +1,77 @@
+<?php $this->helper('Cibilia\Cibilians\Helper\Customer')->redirectIfNotLoggedIn();?>
+<form class="form-address-edit" method="POST" action="<?php echo $this->getUrl('umicrosite/vendor/registerpost'); ?>" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}'> 
+ <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('General Information') ?></span></legend><br>
+		<div class="field required">
+            <label class="label" for="referral_type"><span><?php echo __('Referral Type') ?></span></label>
+            <div class="control">
+				<select id="referral_type" name="referral_type" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select">
+                    <option value=""><?php /* @escapeNotVerified */ echo __('Please select a referral type') ?></option>
+                    <option value="1">Type 1</option>
+                    <option value="2">Type 2</option>
+                </select>
+            </div>
+        </div>
+         <div class="field name required">
+            <label class="label" for="name"><span><?php echo __('Company Name') ?></span></label>
+            <div class="control">
+                <input name="company_name" id="company_name" title="<?php echo __('Company name') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        
+        <div class="field required">
+            <label class="label" for="website"><span><?php echo __('Website') ?></span></label>
+            <div class="control">
+                <input name="website" id="website" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        
+    </fieldset>
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Contact Information') ?></span></legend><br>
+        <div class="field required">
+            <label class="label" for="contact_person"><span><?php echo __('Contact Person') ?></span></label>
+            <div class="control">
+                <input name="contact_person" id="contact_person" title="<?php echo __('question') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field required">
+            <label class="label" for="mobile"><span><?php echo __('Mobile') ?></span></label>
+            <div class="control">
+                <input name="mobile" id="mobile" title="<?php echo __('question') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field email required">
+            <label class="label" for="email_id"><span><?php echo __('Email') ?></span></label>
+            <div class="control">
+                <input name="email_id" id="email_id" title="<?php echo __('question') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+                <input name="udmember[membership]" id="udmember_membership_1" value="1" class="input-text" type="hidden"/>
+                <input name="email" value="info@iarianatech.com" class="input-text" type="hidden"/>
+                <input name="vendor_name" value="Vendor test" class="input-text" type="hidden"/>
+                <input name="vendor_attn" value="Vendortest" class="input-text" type="hidden"/>
+                <input name="telephone" value="908414123" class="input-text" type="hidden"/>
+                <input name="password" value="vendor123" class="input-text" type="hidden"/>
+                <input name="password_confirm" value="vendor123" class="input-text" type="hidden"/>
+                <input name="carrier_code" value="fedex" class="input-text" type="hidden"/>
+                <input name="url_key" value="testtest" class="input-text" type="hidden"/>
+                <input name="street1" value="adasd asd asdas" class="input-text" type="hidden"/>
+                <input name="city" value="nashik" class="input-text" type="hidden"/>
+                <input name="zip" value="422009" class="input-text" type="hidden"/>
+                <input name="country_id" value="IN" class="input-text" type="hidden"/>
+            </div>
+        </div>
+      
+        
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action save primary" title="<?php /* @escapeNotVerified */ echo __('Save') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('Save') ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Go back') ?></span></a>
+        </div>
+    </div>
+	
+</form>

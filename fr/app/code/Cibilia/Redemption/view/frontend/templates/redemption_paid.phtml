@@ -1,0 +1,62 @@
+<?php $this->helper('Cibilia\Commission\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $_orders = $block->getCollection(); ?>
+<?php if ($_orders && count($_orders)): ?>
+    <?php $arrWithdrawlTypes = array('1'=>'Bank Transfer','2'=>'Paypal'); ?>
+    <?php $arrWithdrawlStatus = array('1'=>'Paid','2'=>'Unpaid','3'=>'Cancled'); ?>
+    <div class="table-wrapper orders-history paid-history">
+        <table class="data table table-order-items history" id="redemption-paid-orders-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Paid Withdrawal List') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Id#') ?></th>
+                        <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Order#') ?></th>
+                        <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Amount') ?></th>
+                        <th scope="col" class="col"><?php /* @escapeNotVerified */ echo __('WithdrawalType') ?></th>
+                        <th scope="col" class="col"><?php /* @escapeNotVerified */ echo __('Paypal/BankDetails') ?></th>
+                        <th scope="col" class="col"><?php /* @escapeNotVerified */ echo __('TransactionId') ?></th>
+                        <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('CreatedAt') ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_orders as $_order): ?>
+                    <tr>
+                         <td data-th="<?php echo $block->escapeHtml(__('Id #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getData("redemption_id"); ?></td>
+                            <?php if(!$_order->getData("order_id")){ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo __('-'); ?></td>
+                            <?php }else{ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getData("order_id"); ?></td>
+                            <?php } ?>
+                            <td data-th="<?php echo $block->escapeHtml(__('Amount')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($_order->getData("amount"),true,false); ?></td>
+                            <?php if($_order->getData("order_id")){ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Withdrawal Type')) ?>" class="col"><?php /* @escapeNotVerified */ echo __('Redeem'); ?></td>
+                            <?php }else{ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Withdrawal Type')) ?>" class="col"><?php /* @escapeNotVerified */ echo $arrWithdrawlTypes[$_order->getData("withdrawal_type")]; ?></td>
+                            <?php } ?>
+                            <?php if($_order->getData("order_id")){ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Paypal/Bank Details')) ?>" class="col"><?php /* @escapeNotVerified */ echo __('-'); ?></td>
+                            <?php }else{ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Paypal/Bank Details')) ?>" class="col"><?php /* @escapeNotVerified */ echo $_order->getData("email_bank_details"); ?></td>
+                            <?php } ?>
+                            <?php if($_order->getData("order_id")){ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Paypal/Bank Details')) ?>" class="col"><?php /* @escapeNotVerified */ echo __('-'); ?></td>
+                            <?php }else{ ?>
+                                <td data-th="<?php echo $block->escapeHtml(__('Paypal/Bank Details')) ?>" class="col"><?php /* @escapeNotVerified */ echo $_order->getData("transaction_id"); ?></td>
+                            <?php } ?>
+                            <td data-th="<?php echo $block->escapeHtml(__('Created At')) ?>" class="col date"><?php /* @escapeNotVerified */ echo date("M d, Y, h:i:s",strtotime($_order->getData("created_at")));?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no Paid Commission.'); ?></span></div>
+<?php endif ?>
+<style type="text/css">
+    .table-wrapper.paid-history{
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+</style>

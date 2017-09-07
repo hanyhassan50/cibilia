@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Cibilia_Commissions::commissions" title="Commissions" module="Cibilia_Commissions" sortOrder="30" resource="Cibilia_Commissions::commissions"/>
+        <add id="Cibilia_Commissions::commissions_manage" title="All Items" module="Cibilia_Commissions" sortOrder="10" parent="Cibilia_Commissions::commissions" action="commissions/index/" resource="Cibilia_Commissions::manage"/>
+    </menu>
+</config>

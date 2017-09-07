@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+    <reference name="order_info">
+      <action method="setTemplate">
+        <arguments>
+          <argument xsi:type="string" name="template">Unirgy_Dropship::udropship/sales/order/view/info.phtml</argument>
+        </arguments>
+      </action>
+    </reference>
+    <reference name="order_comments">
+      <action method="setTemplate">
+        <arguments>
+          <argument xsi:type="string" name="template">Unirgy_Dropship::udropship/sales/order/shipment/comments/view.phtml</argument>
+        </arguments>
+      </action>
+    </reference>
+    <reference name="shipment_items">
+      <action method="addItemRender">
+        <arguments>
+          <argument xsi:type="string" name="type">bundle</argument>
+          <argument xsi:type="string" name="block">Magento\Bundle\Model\Adminhtml\Sales\Order\Items\Renderer</argument>
+          <argument xsi:type="string" name="template">Unirgy_Dropship::udropship/sales/order/shipment/items/bundle.phtml</argument>
+        </arguments>
+      </action>
+      <action method="setTemplate">
+        <arguments>
+          <argument xsi:type="string" name="template">Unirgy_Dropship::udropship/sales/order/shipment/items.phtml</argument>
+        </arguments>
+      </action>
+    </reference>
+  </body>
+</page>

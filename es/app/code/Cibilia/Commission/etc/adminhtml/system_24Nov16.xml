@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <section id="custom_cibilia" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="commission_config" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cibilian Commission Configuration</label>
+                <field id="cibi_global_rate" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cibilia Global Commission Rate</label>
+                </field>
+                <field id="global_type1_rate" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Global Vendor Type1 Commission Rate</label>
+                </field>
+                <field id="global_type2_rate" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Global Vendor Type2 Commission Rate</label>
+                </field>
+                <field id="global_cost_rate" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Global Cost of Sale</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

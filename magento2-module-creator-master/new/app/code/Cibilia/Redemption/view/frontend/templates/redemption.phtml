@@ -1,0 +1,26 @@
+<?php $_redemption = $this->getCollection(); ?>
+<?php if ($_redemption->getSize()): ?>
+<div class="redemption_list_view">
+    <?php foreach ($_redemption as $redemptionItem): ?>
+        <div id="item_<?php echo $redemptionItem->getId() ?>" class="redemption_list_item">
+            <h2>
+                <a href="<?php echo $this->getItemUrl($redemptionItem) ?>">
+                    <?php echo $this->escapeHtml($redemptionItem->getTitle()) ?>
+                </a>
+            </h2>
+
+            <div class="redemption_item_subtitle">
+                <?php echo $this->formatDate($redemptionItem->getPublishedAt()) ?> |
+                <?php echo $this->escapeHtml($redemptionItem->getAuthor()) ?>
+            </div>
+
+            <?php if ($imageUrl = $this->getImageUrl($redemptionItem, 100)): ?>
+               <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($redemptionItem->getTitle()); ?>" /></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no Redemption.'); ?></span></div>
+<?php endif ?>

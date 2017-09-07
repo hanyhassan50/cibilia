@@ -1,0 +1,15 @@
+<!--@subject {{trans "Question replied by vendor"}}@-->
+{{trans "Dear"}} {{var question.customer_name}},
+<br/>
+<br/>
+{{trans "Your question to"}} {{var question.vendor_name}} {{if show_vendor_info}}({{var question.vendor_email}}){{/if}} {{if question.shipment_id}}{{trans "regarding shipment #"}}{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}{{trans "regarding product"}} {{var question.product_name}}{{/if}} {{trans "has been answered"}}
+<br/><br/>
+{{trans "Your question:"}}
+<pre>{{var question.question_text}}</pre>
+<br/>
+<br/>
+{{trans "Their answer is:"}}
+<pre>{{var question.answer_text}}</pre>
+
+
+

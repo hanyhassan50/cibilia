@@ -1,0 +1,936 @@
+ID,CARN… DE IDENTIDAD,module,Magento_AdvancedCheckout
+SKU,SKU,module,Magento_AdvancedCheckout
+The SKU was not found in the catalog.,El SKU no fue encontrado en el cat·logo.,module,Magento_AdvancedCheckout
+No,No,module,Magento_AdvancedCheckout
+Subtotal,Total parcial,module,Magento_AdvancedCheckout
+Subtotal:,Total parcial:,module,Magento_AdvancedCheckout
+SKU:,SKU:,module,Magento_AdvancedCheckout
+Sku,Sku,module,Magento_AdvancedCheckout
+button_label,Button_label,module,Magento_AdvancedSearch
+ID,CARN… DE IDENTIDAD,module,Magento_AdvancedSearch
+No,No,module,Magento_AdvancedSearch
+"Sorry, there has been an error processing your request. Please try again later.","Se ha producido un error al procesar tu solicitud. Por favor, intÈntelo de nuevo m·s tarde.",module,Magento_Analytics
+"Sorry, there was an error processing your registration request to Magento Analytics. Please try again later.",Se produjo un error al procesar tu solicitud de registro a Magento Analytics.Por favor intÈntalo m·s tarde.,module,Magento_Analytics
+Error occurred during postponement notification,Se produjo un error durante la notificaciÛn de aplazamiento,module,Magento_Analytics
+Command was not found.,No se encontrÛ el comando.,module,Magento_Analytics
+There was an error save new configuration value.,Se ha producido un error al guardar el nuevo valor de configuraciÛn.,module,Magento_Analytics
+Please select a vertical.,Seleccione una vertical.,module,Magento_Analytics
+--Please Select--,"--Por favor, seleccione--",module,Magento_Analytics
+Cannot find predefined integration user!,No se puede encontrar el usuario de integraciÛn predefinido!,module,Magento_Analytics
+TestMessage,Mensaje de prueba,module,Magento_Analytics
+Error message,Mensaje de error,module,Magento_Analytics
+Apps and Games,Aplicaciones y juegos,module,Magento_Analytics
+Athletic/Sporting Goods,ArtÌculos deportivos / deportivos,module,Magento_Analytics
+Art and Design,Arte y DiseÒo,module,Magento_Analytics
+Free Tier,Nivel Libre,module,Magento_Analytics
+An error occurred while subscription process.,Se ha producido un error durante el proceso de suscripciÛn.,module,Magento_Analytics
+Analytics,An·lisis,module,Magento_Analytics
+API,API,module,Magento_Analytics
+Configuration,ConfiguraciÛn,module,Magento_Analytics
+BI Essential,BI esencial,module,Magento_Analytics
+Basic Tier,Nivel b·sico,module,Magento_Analytics
+BI Essentials,BI Essentials,module,Magento_Analytics
+General,Generalidades,module,Magento_Analytics
+Send the system and transaction data to Magento Analytics service,EnvÌe los datos del sistema y la transacciÛn al servicio de Magento Analytics,module,Magento_Analytics
+Vertical,Vertical,module,Magento_Analytics
+Analytics Subscription,SuscripciÛn de Analytics,module,Magento_Analytics
+Subscription Confirmation,ConfirmaciÛn de SuscripciÛn,module,Magento_Analytics
+Cancel,Cancelad,module,Magento_Analytics
+Ok,Muy bien.,module,Magento_Analytics
+I agree with sending my system configuration and transaction data to Magento Analytics.,Estoy de acuerdo con enviar mi configuraciÛn de sistema y datos de transacciÛn a Magento Analytics.,module,Magento_Analytics
+Done,Listo,module,Magento_AsynchronousOperations
+Retry,Volver ha intentar,module,Magento_AsynchronousOperations
+'Action Details - #' .,'Detalles de AcciÛn - #'.,module,Magento_AsynchronousOperations
+"%1 item(s) have been scheduled for update.""","% 1 artÌculo (s) han sido programados para su actualizaciÛn. """,module,Magento_AsynchronousOperations
+Bulk Actions Log,Registro de acciones masivas,module,Magento_AsynchronousOperations
+%1 item(s) are currently being updated.,% 1 artÌculo (s) se est·n actualizando.,module,Magento_AsynchronousOperations
+"Task ""%1"":","Tarea 1"":",module,Magento_AsynchronousOperations
+%1 item(s) have been scheduled for update.,% 1 artÌculo (s) han sido programados para su actualizaciÛn.,module,Magento_AsynchronousOperations
+%1 item(s) have been successfully updated.,% 1 artÌculo (s) se han actualizado correctamente.,module,Magento_AsynchronousOperations
+%1 item(s) failed to update,No se ha podido actualizar% 1 elemento (s),module,Magento_AsynchronousOperations
+Details,Detalles,module,Magento_AsynchronousOperations
+View Details,Ver Detalles,module,Magento_AsynchronousOperations
+Dismiss,Rechazar,module,Magento_AsynchronousOperations
+"Pending, in queue...","Pendiente, en cola ...",module,Magento_AsynchronousOperations
+%1 items selected for mass update,% 1 elementos seleccionados para la actualizaciÛn masiva,module,Magento_AsynchronousOperations
+", %1 successfully updated",",% 1 actualizado correctamente",module,Magento_AsynchronousOperations
+", %1 failed to update",",% 1 no pudo actualizar",module,Magento_AsynchronousOperations
+Something went wrong.,Algo saliÛ mal.,module,Magento_AsynchronousOperations
+Action Log,Registro de AcciÛn,module,Magento_AsynchronousOperations
+Bulk Actions,Acciones masivas,module,Magento_AsynchronousOperations
+Days Saved in Log,DÌas guardados en registro,module,Magento_AsynchronousOperations
+Description of Operation,DescripciÛn de la operaciÛn,module,Magento_AsynchronousOperations
+Summary,Resumen,module,Magento_AsynchronousOperations
+Start Time,Tiempo de empezar,module,Magento_AsynchronousOperations
+Items to Retry,Elementos a repetir,module,Magento_AsynchronousOperations
+"To retry, select the items and click ‚ÄúRetry‚Äù.","Para volver a intentar, seleccione los elementos y haga clic en ‚ Ä úRetry‚ Ä.",module,Magento_AsynchronousOperations
+Items That Can‚Äôt Be Updated.,ArtÌculos que no se pueden actualizar.,module,Magento_AsynchronousOperations
+ID,CARN… DE IDENTIDAD,module,Magento_AsynchronousOperations
+Status,Estado,module,Magento_AsynchronousOperations
+Action,AcciÛn,module,Magento_AsynchronousOperations
+Meta Information,Meta informacion,module,Magento_AsynchronousOperations
+Error,Error,module,Magento_AsynchronousOperations
+Dismiss All Completed Tasks,Descartar todas las tareas finalizadas,module,Magento_AsynchronousOperations
+Action Details - #,Detalles de la acciÛn - #,module,Magento_AsynchronousOperations
+Number of Records Affected,N˙mero de registros afectados,module,Magento_AsynchronousOperations
+Total,Total ,module,Magento_Backend
+General,Generales,module,Magento_Backend
+No,No.,module,Magento_Backend
+You can't change status of cache type(s) in production mode,No puede cambiar el estado de los tipos de cachÈ en modo de producciÛn,module,Magento_Backend
+Error,Eerror,module,Magento_Backend
+YTD,YTD,module,Magento_Backend
+2YTD,2YTD,module,Magento_Backend
+Cannot apply unknown condition,No se puede aplicar una condiciÛn desconocida,module,Magento_Backend
+Magento,Magento,module,Magento_Backend
+Copyright &copy; %1 Magento Commerce Inc. All rights reserved.,Copyright y copia; % 1 Magento Commerce Inc. Todos los derechos reservados.,module,Magento_Backend
+ver. %1,"Ver. 1, 2, 3,",module,Magento_Backend
+WK,Sem,module,Magento_Backend
+Report a Bug,Informar sobre un error (bug),module,Magento_Backend
+JavaScript/CSS,JavaScript / CSS,module,Magento_Backend
+Marketing,M·rketing,module,Magento_Backend
+Host,Propietario,module,Magento_Backend
+Web,TelaraÒa,module,Magento_Backend
+Magento_Ui/js/dynamic-rows/record,Magento_Ui / js / dynamic-rows / registro,module,Magento_Backend
+FTP,FTP,module,Magento_Backup
+Rollback,Revertir,module,Magento_Backup
+Banners,Banderas,module,Magento_Banner
+ID,CARN… DE IDENTIDAD,module,Magento_Banner
+Banner,Anuncio,module,Magento_Banner
+Error,Eerror,module,Magento_Banner
+PayPal Account,Cuenta de Paypal,module,Magento_Braintree
+PayPal Logo,Logotipo de PayPal,module,Magento_Braintree
+MM,MM,module,Magento_Braintree
+YY,YY,module,Magento_Braintree
+Payment,Pago,module,Magento_Braintree
+Braintree,Braintree,module,Magento_Braintree
+Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.,Acepta tarjetas de crÈdito / dÈbito y PayPal en tu tienda Magento. <br/> No hay configuraciÛn ni cuotas mensuales y tus clientes nunca saldr·n de tu tienda para completar la compra.,module,Magento_Braintree
+Vault Enabled,Vault activado,module,Magento_Braintree
+Skip Order Review,Omitir la revisiÛn de la orden,module,Magento_Braintree
+Dynamic Descriptors,Descriptores din·micos,module,Magento_Braintree
+Name,Nombre ,module,Magento_Braintree
+Phone,TelÈfono,module,Magento_Braintree
+URL,URL ,module,Magento_Braintree
+MM,MM,module,Magento_BraintreeTwo
+&nbsp;,& Nbsp;,module,Magento_BraintreeTwo
+ID,CARN… DE IDENTIDAD,module,Magento_Bundle
+SKU,Id,module,Magento_Bundle
+We can't save custom-defined options for bundles with dynamic pricing.,No podemos guardar opciones personalizadas para bundles con precios din·micos.,module,Magento_Bundle
+Default Title,TÌtulo predeterminado,module,Magento_Bundle
+%1 x %2,%1 x %2,module,Magento_Bundle
+Subtotal,Sub-Total ,module,Magento_Bundle
+ID,CARN… DE IDENTIDAD,module,Magento_BundleStaging
+SKU,Id,module,Magento_BundleStaging
+CAPTCHA,CAPTCHA,module,Magento_Captcha
+ID,CARN… DE IDENTIDAD,module,Magento_Catalog
+SKU,Id,module,Magento_Catalog
+[GLOBAL],[GLOBAL],module,Magento_Catalog
+Global,Un Pensador Global,module,Magento_Catalog
+No,No.,module,Magento_Catalog
+Varchar,Varchar,module,Magento_Catalog
+Decimal,Decimal,module,Magento_Catalog
+Visible,Visible,module,Magento_Catalog
+Comparable,Comparable,module,Magento_Catalog
+AM,A.M.,module,Magento_Catalog
+PM,MP,module,Magento_Catalog
+You moved the category.,Cambiaste la categorÌa.,module,Magento_Catalog
+The value of Admin must be unique.,El valor de Admin debe ser ˙nico.,module,Magento_Catalog
+Are you sure you want to remove this item from your Compare Products list?,øSeguro que desea eliminar este elemento de la lista de productos comparados?,module,Magento_Catalog
+Are you sure you want to remove all items from your Compare Products list?,øSeguro que desea eliminar todos los elementos de la lista de productos de comparaciÛn?,module,Magento_Catalog
+frontend_label,Frontend_label,module,Magento_Catalog
+Manual,Manuales,module,Magento_Catalog
+Discount,Descuento ,module,Magento_Catalog
+12h AM/PM,12h AM / PM,module,Magento_Catalog
+24h,24h,module,Magento_Catalog
+%1 - %2,% 1 -% 2,module,Magento_Catalog
+Percentage value must be a number between 0 and 100.,El valor de porcentaje debe ser un n˙mero entre 0 y 100.,module,Magento_Catalog
+px.,Px.,module,Magento_Catalog
+Invalid attribute %fieldName = %fieldValue.,Atributo no v·lido% fieldName =% fieldValue.,module,Magento_Catalog
+"Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.","No se ha encontrado el almacÈn solicitado. ID de fila: SKU =% SKU, ID de tienda:% storeId.",module,Magento_Catalog
+"Invalid attribute Cost = %cost. Row ID: SKU = %SKU, Store ID: %storeId.","Invalid atributo Costo =% costo. ID de fila: SKU =% SKU, ID de tienda:% storeId.",module,Magento_Catalog
+Could not save Prices.,No se pudo guardar los precios.,module,Magento_Catalog
+Could not delete Prices,No se han podido eliminar los precios,module,Magento_Catalog
+"Requested product doesn't exist. Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.","El producto solicitado no existe. ID de fila: SKU =% SKU, ID de tienda:% storeId, Precio Desde:% priceFrom, Precio Hasta:% priceTo.",module,Magento_Catalog
+"Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.","No se ha encontrado el almacÈn solicitado. ID de fila: SKU =% SKU, ID de tienda:% storeId, Precio Desde:% priceFrom, Precio Hasta:% priceTo.",module,Magento_Catalog
+"Invalid attribute %label = %priceTo. Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.","Atributo no v·lido% label =% PriceTo .ID de fila: SKU =% SKU, ID de tienda:% storeId, Precio Desde:% priceFrom, Precio Hasta:% priceTo.",module,Magento_Catalog
+"Invalid attribute Price = %price. Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.","Invalid atributo Precio =% precio. ID de fila: SKU =% SKU, ID de tienda:% storeId, Precio Desde:% priceFrom, Precio Hasta:% priceTo.",module,Magento_Catalog
+Could not save Tier Prices,No se pudo guardar los precios de nivel,module,Magento_Catalog
+Could not replace Tier Prices,No se pudo reemplazar los Precios de Nivel,module,Magento_Catalog
+Could not delete Tier Prices,No se han podido eliminar los precios de nivel,module,Magento_Catalog
+"Invalid attribute SKU = %SKU. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","Atributo no v·lido SKU =% SKU. ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+"Invalid attribute Price = %price. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","Invalid atributo Precio =% precio. ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+"Invalid attribute Price Type = %priceType. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","Invalid attribute Tipo de precio =% priceType .ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+"Invalid attribute Quantity = %qty. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","Atributo no v·lido Cantidad =% qty. ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+"Invalid attribute Website ID = %websiteId. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","Atributo no v·lido ID del sitio web =% websiteId .ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+"We found a duplicate website, tier price, customer group and quantity: Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","Encontramos un sitio web duplicado, nivel de precio, grupo de clientes y cantidad: Customer Group =% customerGroup, Website ID =% websiteId , Quantity =% qty.ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+"No such entity with Customer Group = %customerGroup. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.","No existe tal entidad con Customer Group =% customerGroup .ID de fila: SKU =% SKU, ID de sitio web:% websiteId, Grupo de clientes:% customerGroup, Cantidad:% qty.",module,Magento_Catalog
+Database connection error,Error de conexiÛn a la base de datos,module,Magento_Catalog
+Database deadlock found when trying to get lock,Bloqueo de base de datos encontrado al intentar obtener bloqueo,module,Magento_Catalog
+Database lock wait timeout exceeded,Tiempo de espera de bloqueo de base de datos excedido,module,Magento_Catalog
+Processor %1 doesn't implement BaseSelectProcessorInterface,El procesador% 1 no implementa BaseSelectProcessorInterface,module,Magento_Catalog
+test,prueba,module,Magento_Catalog
+Could not get extension attributes,No se pudieron obtener atributos de extensiÛn,module,Magento_Catalog
+Some exception,Alguna excepciÛn,module,Magento_Catalog
+fl,desaf,module,Magento_Catalog
+Lock wait timeout,Tiempo de espera de bloqueo de espera,module,Magento_Catalog
+123,123,module,Magento_Catalog
+Customer Group Price,Precio del grupo de clientes,module,Magento_Catalog
+1%,1%,module,Magento_Catalog
+"If your Magento installation has multiple websites, you can edit the scope to use the product on specific sites.","Si la instalaciÛn de Magento tiene varios sitios web, puede editar el ·mbito para utilizar el producto en sitios especÌficos.",module,Magento_Catalog
+Please select a node.,Seleccione un nodo.,module,Magento_Catalog
+"An attribute group named ""/name/"" already exists.","Ya existe un grupo de atributos llamado ""/ name /"".",module,Magento_Catalog
+%1 <span>x</span> %2 <span>px.</span>,% 1 <span> x </ span>% 2 <span> px. </ Span>,module,Magento_Catalog
+{size},{tamaÒo},module,Magento_Catalog
+{width}^{height} px,{Width} ^ {height} px,module,Magento_Catalog
+Prev,Anterior,module,Magento_Catalog
+"This value does not follow the specified format (for example, 200X300).","Este valor no sigue el formato especificado (por ejemplo, 200X300).",module,Magento_Catalog
+Default Product Listing Sort By,Listado de productos por defecto Ordenar por,module,Magento_Catalog
+Layout Update XML,XML de actualizaciÛn de diseÒo,module,Magento_Catalog
+AttributeSetText,AttributeSetText,module,Magento_Catalog
+StatusText,StatusText,module,Magento_Catalog
+Base,A base,module,Magento_Catalog
+Skip to the end of the images gallery,Saltar al final de la galerÌa de im·genes,module,Magento_Catalog
+Skip to the beginning of the images gallery,Saltar al principio de la galerÌa de im·genes,module,Magento_Catalog
+[GLOBAL],[GLOBAL],module,Magento_CatalogEvent
+ID,CARN… DE IDENTIDAD,module,Magento_CatalogEvent
+'Entity type model must be an instance of ' .,'Modelo de tipo de entidad debe ser una instancia de'.,module,Magento_CatalogImportExport
+Stock,Existencia,module,Magento_CatalogInventory
+No,No.,module,Magento_CatalogPermissions
+ID,CARN… DE IDENTIDAD,module,Magento_CatalogRule
+SKU,Id,module,Magento_CatalogRule
+Catalog rule indexing failed. See details in exception log.,Error en la indexaciÛn de reglas de cat·logo. Ver detalles en el registro de excepciones.,module,Magento_CatalogRule
+No,No.,module,Magento_CatalogRule
+ID,CARN… DE IDENTIDAD,module,Magento_CatalogRuleStaging
+Remove Catalog Price Rule from Update,Eliminar la regla de precios de cat·logo de la actualizaciÛn,module,Magento_CatalogRuleStaging
+No,No.,module,Magento_CatalogRuleStaging
+Move to Another Update,Pasar a otra actualizaciÛn,module,Magento_CatalogRuleStaging
+The catalog price rule will be removed from the update and all scheduled changes will be lost.,La regla de precio de cat·logo se eliminar· de la actualizaciÛn y se perder·n todos los cambios programados.,module,Magento_CatalogRuleStaging
+20,20,module,Magento_CatalogRuleStaging
+30,30,module,Magento_CatalogRuleStaging
+50,50,module,Magento_CatalogRuleStaging
+100,100,module,Magento_CatalogRuleStaging
+200,200,module,Magento_CatalogRuleStaging
+No,No.,module,Magento_CatalogSearch
+Advanced Search Results,Resultados de b˙squeda Avanzada,module,Magento_CatalogSearch
+". "" which is inconsistent with state of scope resolver""",". ""Que es inconsistente con el estado de la resoluciÛn del alcance""",module,Magento_CatalogSearch
+%1 - %2,% 1 -% 2,module,Magento_CatalogSearch
+Could not save Prices.,No se pudo guardar los precios.,module,Magento_CatalogStaging
+Invalid attribute %fieldName = %fieldValue.,Atributo no v·lido% fieldName =% fieldValue.,module,Magento_CatalogStaging
+The requested price is not found.,El precio solicitado no se encuentra.,module,Magento_CatalogStaging
+Could not delete Prices,No se han podido eliminar los precios,module,Magento_CatalogStaging
+Update %1 from %2 to %3.,Actualizar% 1 de% 2 a% 3.,module,Magento_CatalogStaging
+Remove Category from Update,Eliminar categorÌa de actualizaciÛn,module,Magento_CatalogStaging
+Schedule Update,Programar Actualizacion,module,Magento_CatalogStaging
+Move to Another Update,Pasar a otra actualizaciÛn,module,Magento_CatalogStaging
+The category will be removed from the update and all scheduled changes will be lost.,La categorÌa se eliminar· de la actualizaciÛn y se perder·n todos los cambios programados.,module,Magento_CatalogStaging
+20,20,module,Magento_CatalogStaging
+30,30,module,Magento_CatalogStaging
+50,50,module,Magento_CatalogStaging
+100,100,module,Magento_CatalogStaging
+200,200,module,Magento_CatalogStaging
+ID,CARN… DE IDENTIDAD,module,Magento_CatalogStaging
+AttributeSetText,AttributeSetText,module,Magento_CatalogStaging
+StatusText,StatusText,module,Magento_CatalogStaging
+SKU,Id,module,Magento_CatalogStaging
+Remove Product from Update,Eliminar producto de la actualizaciÛn,module,Magento_CatalogStaging
+The product will be removed from the update and all scheduled changes will be lost.,El producto se eliminar· de la actualizaciÛn y se perder·n todos los cambios programados.,module,Magento_CatalogStaging
+Currently Active,Actualmente activo,module,Magento_CatalogStaging
+SKU,SKU,module,Magento_CatalogWidget
+Payment Page,P·gina de pago,module,Magento_Checkout
+We found an invalid request for adding product to quote.,Encontramos una solicitud no v·lida para aÒadir producto al presupuesto.,module,Magento_Checkout
+An error occurred on the server. Please try to place the order again.,"Se ha producido un error en el servidor. Por favor, intente volver a realizar el pedido.",module,Magento_Checkout
+Error!,°Error!,module,Magento_Checkout
+Subtotal,Total parcial,module,Magento_Checkout
+Payment Transaction Failed Reminder,Error en la transacciÛn de pago,module,Magento_Checkout
+Total:,Total:,module,Magento_Checkout
+View and Edit Cart,Ver y Editar Carrito,module,Magento_Checkout
+Select a new payment method,Seleccione un nuevo mÈtodo de pago,module,Magento_Checkout
+Display Billing Address On,Mostrar la direcciÛn de facturaciÛn activada,module,Magento_Checkout
+Maximum Number of Items to Display in Order Summary,N˙mero m·ximo de elementos a mostrar en el resumen del pedido,module,Magento_Checkout
+Number of Items to Display Pager,N˙mero de elementos a mostrar Pager,module,Magento_Checkout
+Number of Items to Display Scrollbar,N˙mero de elementos a mostrar Barra de desplazamiento,module,Magento_Checkout
+Maximum Number of Items to Display,N˙mero m·ximo de elementos a mostrar,module,Magento_Checkout
+Summary,Resumen,module,Magento_Checkout
+HTML,HTML,module,Magento_CheckoutAgreements
+Checkbox Text,Texto de casilla de verificaciÛn,module,Magento_CheckoutAgreements
+ID,CARN… DE IDENTIDAD,module,Magento_CheckoutAgreements
+ID,CARN… DE IDENTIDAD,module,Magento_Cms
+CMS,CMS,module,Magento_Cms
+"This identifier is reserved for ""CMS No Route Page"" in configuration.","Este identificador est· reservado para ""CMS No Route Page"" en la configuraciÛn.",module,Magento_Cms
+"This identifier is reserved for ""CMS Home Page"" in configuration.","Este identificador est· reservado para ""P·gina principal de CMS"" en la configuraciÛn.",module,Magento_Cms
+"This identifier is reserved for ""CMS No Cookies Page"" in configuration.","Este identificador est· reservado para ""CMS No Cookies Page"" en configuraciÛn.",module,Magento_Cms
+Privacy and Cookie Policy,PolÌtica de privacidad y cookies,module,Magento_Cms
+LocalizedException,LocalizedException,module,Magento_Cms
+RuntimeException,ExcepciÛn en tiempo de ejecuciÛn,module,Magento_Cms
+Delete %1,Eliminar% 1,module,Magento_Cms
+Are you sure you wan't to delete a %1 record?,øSeguro que quieres borrar un registro% 1?,module,Magento_Cms
+px.,px ,module,Magento_Cms
+Error,Error,module,Magento_CmsStaging
+Remove CMS block from Update,Quitar bloque de CMS de ActualizaciÛn,module,Magento_CmsStaging
+Move to Another Update,Pasar a otra actualizaciÛn,module,Magento_CmsStaging
+The block will be removed from the update and all scheduled changes will be lost.,El bloque se eliminar· de la actualizaciÛn y todos los cambios programados se perder·n.,module,Magento_CmsStaging
+20,20,module,Magento_CmsStaging
+30,30,module,Magento_CmsStaging
+50,50,module,Magento_CmsStaging
+100,100,module,Magento_CmsStaging
+200,200,module,Magento_CmsStaging
+Remove CMS page from Update,Quitar la p·gina de CMS de la actualizaciÛn,module,Magento_CmsStaging
+The page will be removed from the update and all scheduled changes will be lost.,La p·gina se eliminar· de la actualizaciÛn y todos los cambios programados se perder·n.,module,Magento_CmsStaging
+Remove CMS Page from Campaign,Quitar p·gina de CMS de la campaÒa,module,Magento_CmsStaging
+Remove CMS Block from Campaign,Eliminar bloqueo de CMS de la campaÒa,module,Magento_CmsStaging
+ID,CARN… DE IDENTIDAD,module,Magento_CmsStaging
+[GLOBAL],[GLOBAL],module,Magento_Config
+"Class for type ""%1"" was not declared","La clase para el tipo ""% 1"" no fue declarada",module,Magento_Config
+%1 should implement %2,% 1 debe implementar% 2,module,Magento_Config
+"We can't save this option because Magento is not installed. To lock this value, enter the command again using the --%1 option.","No podemos guardar esta opciÛn porque Magento no est· instalado.Para bloquear este valor, vuelva a introducir el comando utilizando la opciÛn -% 1.",module,Magento_Config
+"The value you set has already been locked. To change the value, use the --%1 option.","El valor que estableciÛ ya se ha bloqueado. Para cambiar el valor, utilice la opciÛn -% 1.",module,Magento_Config
+1%,1%,module,Magento_Config
+"Configuration for path: ""%1"" doesn't exist","ConfiguraciÛn de ruta: ""% 1"" no existe",module,Magento_Config
+Bcc,Bcc,module,Magento_Config
+No,No.,module,Magento_Config
+HTTPS (SSL),HTTPS (SSL),module,Magento_Config
+"%1: Instance of %2 is expected, got %3 instead","% 1: se espera la instancia de% 2, en su lugar se obtiene% 3",module,Magento_Config
+.,.,module,Magento_Config
+'There is no defined type ' .,'No hay tipo definido'.,module,Magento_Config
+'Object is not instance of ' .,'Objeto no es instancia de'.,module,Magento_Config
+Filesystem is not writable.,El sistema de archivos no puede escribirse.,module,Magento_Config
+Test exception,ExcepciÛn de prueba,module,Magento_Config
+error message,mensaje de error,module,Magento_Config
+some_label,Alguna etiqueta,module,Magento_Config
+some_comment,Algun comentario,module,Magento_Config
+test2,Test2,module,Magento_Config
+Parent product does not have configurable product options,El producto principal no tiene opciones de producto configurables,module,Magento_ConfigurableProduct
+Child product does not have attribute value %1,El producto hijo no tiene valor de atributo% 1,module,Magento_ConfigurableProduct
+SKU,SKU,module,Magento_ConfigurableProduct
+Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.,Seleccione los valores de cada atributo a incluir en este producto. Cada combinaciÛn ˙nica de valores crea un SKU de producto ˙nico.,module,Magento_ConfigurableProduct
+{size},{tamaÒo},module,Magento_ConfigurableProduct
+{width}^{height} px,{Width} ^ {height} px,module,Magento_ConfigurableProduct
+Special Price,Precio especial,module,Magento_ConfigurableProduct
+Regular Price,Precio regular,module,Magento_ConfigurableProduct
+Choose this option to delete and replace extension data for all past configurations.,Seleccione esta opciÛn para eliminar y reemplazar los datos de extensiÛn de todas las configuraciones pasadas.,module,Magento_ConfigurableProduct
+"When you remove or add an attribute, we automatically update all configurations and you will need to recreate current configurations manually.","Cuando quita o agrega un atributo, actualizamos autom·ticamente todas las configuraciones y necesitaremos recrear las configuraciones actuales manualmente.",module,Magento_ConfigurableProduct
+Buy %1 for %2 each and,Compre% 1 para% 2 cada uno y,module,Magento_ConfigurableProduct
+save,salvar,module,Magento_ConfigurableProduct
+ID,CARN… DE IDENTIDAD,module,Magento_ConfigurableProduct
+Visible,Visible,module,Magento_ConfigurableProduct
+Comparable,Comparable,module,Magento_ConfigurableProduct
+ID,CARN… DE IDENTIDAD,module,Magento_ConfigurableProductStaging
+SKU,Id,module,Magento_ConfigurableProductStaging
+Visible,Visible,module,Magento_ConfigurableProductStaging
+Comparable,Comparable,module,Magento_ConfigurableProductStaging
+Some error,Alg˙n error,module,Magento_Cron
+Invalid callback: Not_Existed_Class::execute can't be called,DevoluciÛn de llamada no v·lida: Not_Existed_Class :: execute no se puede llamar,module,Magento_Cron
+Test exception,ExcepciÛn de prueba,module,Magento_Cron
+[GLOBAL],[GLOBAL],module,Magento_CustomAttributeManagement
+[WEBSITE],[SITIO WEB],module,Magento_CustomAttributeManagement
+No,No.,module,Magento_CustomAttributeManagement
+URL,URL ,module,Magento_CustomAttributeManagement
+ID,CARN… DE IDENTIDAD,module,Magento_Customer
+SKU,Id,module,Magento_Customer
+Total,Total ,module,Magento_Customer
+No,No.,module,Magento_Customer
+You did not sign in correctly or your account is temporarily disabled.,No has iniciado sesiÛn correctamente o tu cuenta est· temporalmente deshabilitada.,module,Magento_Customer
+Password confirmation doesn't match entered password.,La confirmaciÛn de la contraseÒa no coincide con la contraseÒa introducida.,module,Magento_Customer
+Something went wrong while saving file.,Se produjo un error al guardar el archivo.,module,Magento_Customer
+"Invalid value of ""%value"" provided for the %fieldName field.","Valor no v·lido de ""% value"" proporcionado para el campo% fieldName.",module,Magento_Customer
+%fieldName is a required field.,% FieldName es un campo obligatorio.,module,Magento_Customer
+Global,Global,module,Magento_Customer
+ALL GROUPS,TODOS LOS GRUPOS,module,Magento_Customer
+"No such entity with %fieldName = %fieldValue, %field2Name = %field2Value","No hay tal entidad con% fieldName =% fieldValue,% field2Name =% field2Value",module,Magento_Customer
+File can not be saved to the destination folder.,No se puede guardar el archivo en la carpeta de destino.,module,Magento_Customer
+Unable to create directory %1.,No se puede crear el directorio% 1.,module,Magento_Customer
+Destination folder is not writable or does not exists.,La carpeta de destino no puede escribirse o no existe.,module,Magento_Customer
+Something went wrong while saving the file.,Se produjo un error al guardar el archivo.,module,Magento_Customer
+"You can't delete group ""%1"".","No se puede eliminar el grupo ""% 1"".",module,Magento_Customer
+No such entity with %fieldName = %fieldValue,Ninguna entidad con% fieldName =% fieldValue,module,Magento_Customer
+NoSuchEntityException,NoSuchEntityException,module,Magento_Customer
+InputException.,InputException.,module,Magento_Customer
+InputException,InputException,module,Magento_Customer
+frontend_label,Frontend_label,module,Magento_Customer
+NOT LOGGED IN,SIN INICIAR SESI”N,module,Magento_Customer
+region is a required field.,RegiÛn es un campo obligatorio.,module,Magento_Customer
+regionId is a required field.,RegionId es un campo obligatorio.,module,Magento_Customer
+Fax,Fax ,module,Magento_Customer
+Password Strength,seguridad de la contraseÒa,module,Magento_Customer
+Welcome to %store_name,Bienvenido a% store_name,module,Magento_Customer
+"%name,","%nombre,",module,Magento_Customer
+Please confirm your %store_name account,Confirme la cuenta% store_name,module,Magento_Customer
+Your %store_name email has been changed,Se ha cambiado el correo electrÛnico% store_name,module,Magento_Customer
+Your %store_name email and password has been changed,Se ha cambiado tu direcciÛn de correo y contraseÒa de% store_name,module,Magento_Customer
+Reset your %store_name password,Restablecer la contraseÒa% store_name,module,Magento_Customer
+Your %store_name password has been changed,Se ha cambiado la contraseÒa% store_name,module,Magento_Customer
+Customer Notification,NotificaciÛn del cliente,module,Magento_Customer
+"If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.","Si su instalaciÛn de Magento tiene varios sitios web, puede editar el ·mbito para asociar al cliente con un sitio especÌfico.",module,Magento_Customer
+No,No.,module,Magento_CustomerBalance
+Store Credit update,ActualizaciÛn de crÈdito de la tienda,module,Magento_CustomerBalance
+"%name,","%nombre,",module,Magento_CustomerBalance
+No,No.,module,Magento_CustomerCustomAttributes
+General,Generales,module,Magento_CustomerCustomAttributes
+Admin Checkout,Admin Checkout,module,Magento_CustomerCustomAttributes
+Length Only,SÛlo longitud,module,Magento_CustomerCustomAttributes
+Fax,Fax ,module,Magento_CustomerCustomAttributes
+Password Strength,seguridad de la contraseÒa,module,Magento_CustomerCustomAttributes
+No Password,Sin contraseÒa,module,Magento_CustomerCustomAttributes
+CSV,CSV,module,Magento_CustomerImportExport
+Excel XML,Excel XML,module,Magento_CustomerImportExport
+Are you sure you want to do this?,øSeguro que quieres hacer esto?,module,Magento_CustomerSegment
+ID,CARN… DE IDENTIDAD,module,Magento_CustomerSegment
+Total,Total ,module,Magento_CustomerSegment
+Subtotal,Total parcial,module,Magento_CustomerSegment
+CSV,CSV,module,Magento_CustomerSegment
+Excel XML,Excel XML,module,Magento_CustomerSegment
+Cybersource,Cybersource,module,Magento_Cybersource
+%1 does not implement %2,% 1 no implementa% 2,module,Magento_Deploy
+Value can't be empty,El valor no puede estar vacÌo,module,Magento_Deploy
+A configuration with this path does not exist or is not sensitive,Una configuraciÛn con esta ruta no existe o no es sensible,module,Magento_Deploy
+File app/etc/%1 can't be read. Please check if it exists and has read permissions.,La aplicaciÛn de archivo / etc /% 1 no se puede leer. Compruebe si existe y tiene permisos de lectura.,module,Magento_Deploy
+There are no sensitive configurations to fill,No hay configuraciones sensibles para rellenar,module,Magento_Deploy
+Compilation from source:,RecopilaciÛn de la fuente:,module,Magento_Deploy
+Wrong deploy strategy type: %1,Tipo de estrategia de despliegue incorrecto:% 1,module,Magento_Deploy
+some message,Alg˙n mensaje,module,Magento_Deploy
+Log to File,Registro en archivo,module,Magento_Developer
+Not available in production mode.,No disponible en modo de producciÛn.,module,Magento_Developer
+cm,cm,module,Magento_Dhl
+Regular,Regular,module,Magento_Dhl
+Sprintline,Sprintline,module,Magento_Dhl
+Secureline,LÌnea segura,module,Magento_Dhl
+Europack,Europack,module,Magento_Dhl
+Jetline,Jetline,module,Magento_Dhl
+DHL,DHL,module,Magento_Dhl
+lbs,libras,module,Magento_Directory
+kgs,kgs,module,Magento_Directory
+Yahoo Finance Exchange,Intercambio de Finanzas de Yahoo,module,Magento_Directory
+Fixer.io,Fixer.io,module,Magento_Directory
+Webservicex,Webservicex,module,Magento_Directory
+Link file not provided,Archivo de vÌnculo no proporcionado,module,Magento_Downloadable
+Provided product must be type 'downloadable'.,"El producto proporcionado debe ser de tipo ""descargable"".",module,Magento_Downloadable
+No,No.,module,Magento_Downloadable
+URL,URL ,module,Magento_Downloadable
+Links,Enlaces ,module,Magento_Downloadable
+[GLOBAL],[GLOBAL],module,Magento_Downloadable
+SKU,Id,module,Magento_Downloadable
+U,S,module,Magento_Downloadable
+Subtotal,total parcial,module,Magento_Downloadable
+Error,Eerror,module,Magento_DownloadableImportExport
+No,No.,module,Magento_Eav
+URL,URL ,module,Magento_Eav
+Unique constraint violation found,Se ha encontrado una violaciÛn de restricciÛn ˙nica,module,Magento_Eav
+"Attribute group with same code already exist. Please rename ""%1"" group","El grupo de atributos con el mismo cÛdigo ya existe. Cambie el nombre del grupo ""% 1""",module,Magento_Eav
+Elasticsearch Server Timeout,Elasticsearch Server Timeout,module,Magento_Elasticsearch
+1%,1%,module,Magento_Email
+Footer,Pie de p·gina,module,Magento_Email
+Header,Encabezamiento,module,Magento_Email
+ID,CARN… DE IDENTIDAD,module,Magento_Email
+No,No.,module,Magento_EncryptionKey
+BeagleScore,BeagleScore,module,Magento_Eway
+eWAY,Eway,module,Magento_Eway
+Live API Key,Clave de la API en vivo,module,Magento_Eway
+Live API Password,Vivo API contraseÒa,module,Magento_Eway
+Live Client-side Encryption Key,Clave de cifrado de cliente en vivo,module,Magento_Eway
+Sandbox API Password,Sandbox API Password,module,Magento_Eway
+Sandbox Client-side Encryption Key,Clave de cifrado de cliente de Sandbox,module,Magento_Eway
+Smart Post,Smart Post,module,Magento_Fedex
+Invalid response from carrier,Respuesta no v·lida del transportista,module,Magento_Fedex
+No available tracking items,No hay elementos de seguimiento disponibles,module,Magento_Fedex
+FedEx,FedEx,module,Magento_Fedex
+Web-Services URL (Sandbox),URL de servicios web (Sandbox),module,Magento_Fedex
+Virtual,Virtual,module,Magento_GiftCard
+No,No.,module,Magento_GiftCard
+[GLOBAL],[GLOBAL],module,Magento_GiftCard
+%1 [%2],% 1 [% 2],module,Magento_GiftCard
+You've been sent a gift from %store_name,Recibiste un regalo de% store_name,module,Magento_GiftCard
+"%name,","%nombre,",module,Magento_GiftCard
+ID,CARN… DE IDENTIDAD,module,Magento_GiftCardAccount
+No,No.,module,Magento_GiftCardAccount
+test message,mensaje de prueba,module,Magento_GiftCardAccount
+total).,total).,module,Magento_GiftCardAccount
+You've been sent a gift from %store_name,Recibiste un regalo de% store_name,module,Magento_GiftCardAccount
+"%name,",°::name::!,module,Magento_GiftCardAccount
+%store_name,%nombre de la tienda,module,Magento_GiftCardAccount
+Low Code Pool Threshold,Umbral bajo del grupo de cÛdigos,module,Magento_GiftCardAccount
+CSV,CSV,module,Magento_GiftCardAccount
+Excel XML,Excel XML,module,Magento_GiftCardAccount
+SKU,Id,module,Magento_GiftRegistry
+Total,Total ,module,Magento_GiftRegistry
+ID,CARN… DE IDENTIDAD,module,Magento_GiftRegistry
+Emails,Los correos electrÛnicos,module,Magento_GiftRegistry
+No,No.,module,Magento_GiftRegistry
+[GLOBAL],[GLOBAL],module,Magento_GiftRegistry
+[WEBSITE],[SITIO WEB],module,Magento_GiftRegistry
+1%,1%,module,Magento_GiftRegistry
+Fax,Fax ,module,Magento_GiftRegistry
+Gift Registry created at %store_name,Registro de regalos creado en% store_name,module,Magento_GiftRegistry
+"%name,","%nombre,",module,Magento_GiftRegistry
+Gift Registry shared at %store_name,Registro de regalo compartido en% store_name,module,Magento_GiftRegistry
+Gift Registry updated at %store_name,Registro de regalos actualizado en% store_name,module,Magento_GiftRegistry
+[GLOBAL],[GLOBAL],module,Magento_GiftWrapping
+[WEBSITE],[SITIO WEB],module,Magento_GiftWrapping
+1%,1%,module,Magento_GiftWrapping
+ID,CARN… DE IDENTIDAD,module,Magento_GiftWrapping
+Google AdWords,AdWords de Google,module,Magento_GoogleAdwords
+Google API,API de Google,module,Magento_GoogleAnalytics
+Google Analytics,Google analitico,module,Magento_GoogleAnalytics
+Anonymize IP,Anonimizar IP,module,Magento_GoogleAnalytics
+No,No.,module,Magento_GoogleTagManager
+Universal Analytics,An·lisis universal,module,Magento_GoogleTagManager
+Google Analytics,Google analitico,module,Magento_GoogleTagManager
+ID,CARN… DE IDENTIDAD,module,Magento_GroupedProduct
+SKU,Id,module,Magento_GroupedProduct
+AttributeSetText,AttributeSetText,module,Magento_GroupedProduct
+StatusText,StatusText,module,Magento_GroupedProduct
+ID,CARN… DE IDENTIDAD,module,Magento_GroupedProductStaging
+SKU,Id,module,Magento_GroupedProductStaging
+AttributeSetText,AttributeSetText,module,Magento_GroupedProductStaging
+StatusText,StatusText,module,Magento_GroupedProductStaging
+Fields Enclosure,Recinto de Campos,module,Magento_ImportExport
+Fixed Price: From,Precio Fijo: Desde,module,Magento_ImportExport
+Fields enclosure,Recinto de campos,module,Magento_ImportExport
+ID,CARN… DE IDENTIDAD,module,Magento_ImportExport
+API,API,module,Magento_Integration
+General,Generales,module,Magento_Integration
+Access Token Secret,Token de acceso secreto,module,Magento_Integration
+Integration not secure,IntegraciÛn no segura,module,Magento_Integration
+OAuth,OAuth,module,Magento_Integration
+Reset,Reiniciar,module,Magento_Invitation
+Save,Guardad,module,Magento_Invitation
+General,Generalidades,module,Magento_Invitation
+Invalid Form Key. Please refresh the page.,"Clave de formulario no v·lida. Por favor, actualice la p·gina.",module,Magento_Invitation
+"You can't send an invitation with status ""%1"".","No puede enviar una invitaciÛn con el estado ""% 1"".",module,Magento_Invitation
+%inviter_name invites you to join Private Sales Site,% Inviter_name le invita a unirse al sitio de ventas privadas,module,Magento_Invitation
+Invite to join Private Sales Site,Invitar a unirse a Ventas Privadas,module,Magento_Invitation
+ID,CARN… DE IDENTIDAD,module,Magento_Invitation
+Invitation,InvitaciÛn,module,Magento_Invitation
+No,No.,module,Magento_LayeredNavigation
+Action Logs,Registros de acciÛn,module,Magento_Logging
+1,1,module,Magento_Logging
+Rollback,Revertir,module,Magento_Logging
+CSV,CSV,module,Magento_Logging
+Excel XML,Excel XML,module,Magento_Logging
+ID,CARN… DE IDENTIDAD,module,Magento_MultipleLocationInventory
+Fax,Fax ,module,Magento_MultipleLocationInventory
+InvalidArgumentException,InvalidArgumentException,module,Magento_MultipleWishlist
+CSV,CSV,module,Magento_MultipleWishlist
+Excel XML,Excel XML,module,Magento_MultipleWishlist
+SKU,Id,module,Magento_MultipleWishlist
+Total,Total ,module,Magento_Multishipping
+Subtotal,total parcial,module,Magento_Multishipping
+General,Generales,module,Magento_NewRelicReporting
+Insights API URL,Insights API URL,module,Magento_NewRelicReporting
+Insights API Key,Clave de API de Insights,module,Magento_NewRelicReporting
+Cron,Cron,module,Magento_NewRelicReporting
+ID,CARN… DE IDENTIDAD,module,Magento_Newsletter
+This email address is already subscribed.,Esta direcciÛn de correo electrÛnico ya est· suscrito.,module,Magento_Newsletter
+No such entity with %fieldName = %fieldValue,Ninguna entidad con% fieldName =% fieldValue,module,Magento_Newsletter
+Newsletter subscription confirmation,BoletÌn de confirmaciÛn,module,Magento_Newsletter
+Newsletter subscription success,La suscripciÛn se ha completado con Èxito.,module,Magento_Newsletter
+Newsletter unsubscription success,Se ha dado de baja del boletÌn.,module,Magento_Newsletter
+CSV,CSV,module,Magento_Newsletter
+Excel XML,Excel XML,module,Magento_Newsletter
+Unable to import data,No se pueden importar datos,module,Magento_OfflineShipping
+"Requested column ""%1"" cannot be resolved","La columna solicitada ""% 1"" no se puede resolver",module,Magento_OfflineShipping
+"Column ""%1"" not found","Columna ""% 1"" no encontrada",module,Magento_OfflineShipping
+Duplicate Row #%1 (duplicates row #%2),Fila duplicada #% 1 (fila de duplicados #% 2),module,Magento_OfflineShipping
+No,No.,module,Magento_OfflineShipping
+Backend host,Host del backend,module,Magento_PageCache
+Grace period,periodo de gracia,module,Magento_PageCache
+"Specify grace period in seconds for config file generation. If field is empty default value 300 will be saved. This grace period will be used to serve cached content when the server is healthy. If the server is not healthy, cached content will be served for 3 days before failing.","Especifique el perÌodo de gracia en segundos para la generaciÛn de archivos de configuraciÛn.Si el campo est· vacÌo, se guardar· el valor predeterminado 300. Este perÌodo de gracia se usar· para servir contenido en cachÈ cuando el servidor estÈ sano. Si el servidor no es saludable, el contenido en cachÈ se servir· durante 3 dÌas antes de fallar.",module,Magento_PageCache
+No,No.,module,Magento_Payment
+Please enter a valid credit card type number.,Introduzca un n˙mero de tarjeta de crÈdito v·lido.,module,Magento_Payment
+Please enter a valid credit card number.,"Por favor, introduzca un n˙mero de tarjeta de crÈdito v·lida.",module,Magento_Payment
+Incorrect credit card expiration month.,Mes de vencimiento incorrecto de la tarjeta de crÈdito.,module,Magento_Payment
+Incorrect credit card expiration year.,AÒo de vencimiento incorrecto de la tarjeta de crÈdito.,module,Magento_Payment
+An error occurred on the server. Please try to place the order again.,"Se ha producido un error en el servidor. Por favor, intente volver a realizar el pedido.",module,Magento_Payment
+ID,CARN… DE IDENTIDAD,module,Magento_Paypal
+button_label,Button_label,module,Magento_Paypal
+sandbox_button_label,Sandbox_button_label,module,Magento_Paypal
+"We can't fetch reports from ""%1@%2.""","No podemos obtener informes de ""% 1 @% 2"".",module,Magento_Paypal
+Please agree to all the terms and conditions before placing the order.,"Por favor, acepte todos los tÈrminos y condiciones antes de realizar el pedido.",module,Magento_Paypal
+"A match of the Shipping Address City, State, and Postal Code failed.","Se ha producido un error en la coincidencia de la direcciÛn de envÌo Ciudad, estado y cÛdigo postal.",module,Magento_Paypal
+No,No.,module,Magento_Paypal
+CNPJ,CNPJ,module,Magento_Paypal
+CPF,CPF,module,Magento_Paypal
+We cannot cancel this order.,No podemos cancelar este pedido.,module,Magento_Paypal
+"IPN ""%1""","NIP ""% 1""",module,Magento_Paypal
+Payflow PNREF: #%1.,Payflow PNREF: #% 1.,module,Magento_Paypal
+Payment error. %value was not found.,Error en el pago. No se encontrÛ el valor%.,module,Magento_Paypal
+Error,Eerror,module,Magento_Paypal
+Subtotal,total parcial,module,Magento_Paypal
+Save credit card information for future use.,Guarde la informaciÛn de la tarjeta de crÈdito para uso futuro.,module,Magento_Paypal
+Recommended Solutions:,Soluciones recomendadas:,module,Magento_Paypal
+Other PayPal Payment Solutions:,Otras soluciones de pago de PayPal:,module,Magento_Paypal
+Other Payment Methods:,Otros mÈtodos de pago:,module,Magento_Paypal
+PayPal All-in-One Payment Solutions&nbsp;<i>Accept and process credit cards and PayPal payments.</i>,PayPal Soluciones de pago todo en uno & nbsp; <i> Acepta y procesa las tarjetas de crÈdito y los pagos de PayPal. </ I>,module,Magento_Paypal
+Payments Pro,Pagos Pro,module,Magento_Paypal
+PayPal Payment Gateways&nbsp;<i>Process payments using your own internet merchant account.</i>,Pagos de pago de PayPal & nbsp; <i> Procesar pagos con su propia cuenta de comerciante de Internet. </ I>,module,Magento_Paypal
+PayPal All-in-One Payment Solutions&nbsp;&nbsp;<i>Accept and process credit cards and PayPal payments.</i>,PayPal Soluciones de pago todo en uno & nbsp; & nbsp; <i> Acepta y procesa las tarjetas de crÈdito y los pagos de PayPal. </ I>,module,Magento_Paypal
+Website Payments Pro,Pagos en el sitio web Pro,module,Magento_Paypal
+Sort Order PayPal Credit,CrÈdito de orden PayPal,module,Magento_Paypal
+Payments Advanced,Pagos avanzados,module,Magento_Paypal
+Accept payments with a PCI-compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>),Acepte pagos con una comprobaciÛn compatible con PCI que mantiene a los clientes en su sitio. (<U> Incluye el Checkout Express </ u>),module,Magento_Paypal
+Payflow Link,Enlace de Payflow,module,Magento_Paypal
+Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>),Conecte su cuenta de comerciante con una puerta de enlace compatible con PCI que permite a los clientes pagar sin salir de su sitio. (<U> Incluye el Checkout Express </ u>),module,Magento_Paypal
+Accept payments with a PCI compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>),Acepte los pagos con una comprobaciÛn compatible con PCI que mantiene a los clientes en su sitio. (<U> Incluye el Checkout Express </ u>),module,Magento_Paypal
+Payflow Pro,Payflow Pro,module,Magento_Paypal
+Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>),Conecte su cuenta de comerciante con un gateway completamente personalizable que permite a los clientes pagar sin salir de su sitio. (<U> Incluye el Checkout Express </ u>),module,Magento_Paypal
+Vault Enabled,Vault activado,module,Magento_Paypal
+Vault Title,TÌtulo de la bÛveda,module,Magento_Paypal
+Product alerts Cron error,Alertas de productos Cron error,module,Magento_ProductAlert
+Products price changed alert,Alerta de precios de productos modificados,module,Magento_ProductAlert
+"%name,",°::name::!,module,Magento_ProductAlert
+Products back in stock alert,Productos volver en la alerta de stock,module,Magento_ProductAlert
+Protocol isn't allowed,No se permite el protocolo,module,Magento_ProductVideo
+{size},{tamaÒo},module,Magento_ProductVideo
+{width}^{height} px,{Width} ^ {height} px,module,Magento_ProductVideo
+Uploader:,Cargador:,module,Magento_ProductVideo
+YouTube API Key,Clave de la API de YouTube,module,Magento_ProductVideo
+Autostart base video,Inicio autom·tico del vÌdeo base,module,Magento_ProductVideo
+Subtotal,Sub-total:,module,Magento_Quote
+Cart %1 does not contain item %2,El carro% 1 no contiene el elemento% 2,module,Magento_Quote
+Minimum order amount is %1,El importe mÌnimo de la orden es% 1,module,Magento_Quote
+An error occurred on the server. Please try to place the order again.,"Se ha producido un error en el servidor. Por favor, intente volver a realizar el pedido.",module,Magento_Quote
+error345,Error345,module,Magento_Quote
+Incorrect amount,Cantidad incorrecta,module,Magento_Quote
+ID,CARN… DE IDENTIDAD,module,Magento_Reminder
+No,No.,module,Magento_Reminder
+subtotal,subtotal,module,Magento_Reminder
+SKU,SKU,module,Magento_Reminder
+Promotion reminder at %store_name,Recordatorio de la promociÛn en% store_name,module,Magento_Reminder
+No,No.,module,Magento_Reports
+SKU,SKU,module,Magento_Reports
+CSV,CSV,module,Magento_Reports
+Excel XML,Excel XML,module,Magento_Reports
+Total,Total ,module,Magento_Reports
+Subtotal,Sub-total:,module,Magento_Reports
+Items,ArtÌculos,module,Magento_Reports
+ID,CARN… DE IDENTIDAD,module,Magento_Reports
+"Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","⁄ltima actualizaciÛn:% 1. Para actualizar las <a href=""%2""> estadÌsticas </a> del dÌa anterior, haz clic <a href=""%3""> aquÌ </a>.",module,Magento_Reports
+Error,Eerror,module,Magento_Reports
+Marketing,M·rketing,module,Magento_Reports
+The report displays the top 5 most viewed products for each interval.,El informe muestra los 5 productos m·s vistos para cada intervalo.,module,Magento_Reports
+ID,CARN… DE IDENTIDAD,module,Magento_Review
+SKU,Id,module,Magento_Review
+Cannot initialize product,No se puede inicializar el producto,module,Magento_Review
+%1 %2,"1, 2, 3,",module,Magento_Review
+ID,CARN… DE IDENTIDAD,module,Magento_ReviewStaging
+SKU,Id,module,Magento_ReviewStaging
+%1 = %2,"1, 2, 3,",module,Magento_Reward
+Reward Points Balance Updated at %store_name,Puntos de Recompensa Saldo Actualizado en% store_name,module,Magento_Reward
+Reward Points Expiry Warning at %store_name,Puntos de recompensa Aviso de caducidad en% store_name,module,Magento_Reward
+ID,CARN… DE IDENTIDAD,module,Magento_Reward
+Items,ArtÌculos,module,Magento_Rma
+SKU,Id,module,Magento_Rma
+RMA,RMA,module,Magento_Rma
+No,No.,module,Magento_Rma
+ID,CARN… DE IDENTIDAD,module,Magento_Rma
+#,# ,module,Magento_Rma
+%store_name:  New customer comment,% Store_name: Comentarios de nuevos clientes,module,Magento_Rma
+%store_name : New Return # %increment_id,% Store_name: Nueva devoluciÛn #% increment_id,module,Magento_Rma
+%store_name: New Return # %increment_id,% Store_name: Nueva devoluciÛn #% increment_id,module,Magento_Rma
+%store_name: Return # %increment_id update,% Store_name: Return #% increment_id update,module,Magento_Rma
+%store_name : New Return #%increment_id,% Store_name: Nueva devoluciÛn #% increment_id,module,Magento_Rma
+ID,CARN… DE IDENTIDAD,module,Magento_Sales
+SKU,Id,module,Magento_Sales
+No,No.,module,Magento_Sales
+Subtotal,Sub-total:,module,Magento_Sales
+-- Please Select --,- Seleccione -,module,Magento_Sales
+"""Invoice Document Validation Error(s):\n"" .","Msgstr ""Error (s) de validaciÛn de documento de factura: \ n"".",module,Magento_Sales
+"Could not save an invoice, see error log for details","No se pudo guardar una factura, consulte el registro de errores para obtener detalles",module,Magento_Sales
+The creditmemo contains product item that is not part of the original order.,El creditmemo contiene elementos del producto que no forman parte del pedido original.,module,Magento_Sales
+The quantity to refund must not be greater than the unrefunded quantity.,La cantidad a devolver no debe ser superior a la cantidad no reembolsada.,module,Magento_Sales
+Order Id is required for creditmemo document,Id de pedido es necesario para el documento creditmemo,module,Magento_Sales
+"The creditmemo contains product SKU ""%1"" that is not part of the original order.","El creditmemo contiene la SKU del producto ""% 1"" que no forma parte de la orden original.",module,Magento_Sales
+"The quantity to creditmemo must not be greater than the unrefunded quantity for product SKU ""%1"".","La cantidad a creditmemo no debe ser mayor que la cantidad no refrendada para el producto SKU ""% 1"".",module,Magento_Sales
+You can't create a creditmemo without products.,No se puede crear un creditmemo sin productos.,module,Magento_Sales
+We can't create creditmemo for the invoice.,No podemos crear creditmemo para la factura.,module,Magento_Sales
+Order Id is required for invoice document,El ID de pedido es necesario para el documento de factura,module,Magento_Sales
+"The quantity to invoice must not be greater than the uninvoiced quantity for product SKU ""%1"".","La cantidad a facturar no debe ser mayor que la cantidad no facturada para el producto SKU ""% 1"".",module,Magento_Sales
+The invoice contains one or more items that are not part of the original order.,La factura contiene uno o m·s elementos que no forman parte de la orden original.,module,Magento_Sales
+Parent shipment cannot be loaded for track object.,El envÌo de los padres no se puede cargar para el objeto de pista.,module,Magento_Sales
+Order Id is required for shipment document,El ID de pedido es necesario para el documento de envÌo,module,Magento_Sales
+You can't create a shipment without products.,No puede crear un envÌo sin productos.,module,Magento_Sales
+"The shipment contains product SKU ""%1"" that is not part of the original order.","El envÌo contiene el producto SKU ""% 1"" que no forma parte del pedido original.",module,Magento_Sales
+"The quantity to ship must not be greater than the unshipped quantity for product SKU ""%1"".","La cantidad a enviar no debe ser mayor que la cantidad no enviada para el producto SKU ""% 1"".",module,Magento_Sales
+An invoice cannot be created when an order has a status of %1,No se puede crear una factura cuando un pedido tiene el estado% 1,module,Magento_Sales
+A creditmemo can not be created when an order has a status of %1,Un creditmemo no se puede crear cuando un pedido tiene un estado de% 1,module,Magento_Sales
+The order does not allow a creditmemo to be created.,El pedido no permite crear un creditmemo.,module,Magento_Sales
+A shipment cannot be created when an order has a status of %1,No se puede crear un envÌo cuando un pedido tiene el estado% 1,module,Magento_Sales
+The order does not allow a shipment to be created.,El pedido no permite la creaciÛn de un envÌo.,module,Magento_Sales
+"""Creditmemo Document Validation Error(s):\n"" .","Msgstr ""Error (s) de ValidaciÛn de Documento de Creditmemo: \ n"".",module,Magento_Sales
+"Could not save a Creditmemo, see error log for details","No se pudo guardar un Creditmemo, consulte el registro de errores para obtener detalles",module,Magento_Sales
+"""Shipment Document Validation Error(s):\n"" .","""Error (s) de ValidaciÛn de Documentos de EnvÌo: \ n"".",module,Magento_Sales
+"Could not save a shipment, see error log for details","No se pudo guardar un envÌo, consulte el registro de errores para obtener detalles",module,Magento_Sales
+Authorized amount of %1.,Cantidad autorizada de% 1.,module,Magento_Sales
+Authorized amount of %1. Order is suspended as its authorizing amount %1 is suspected to be fraudulent.,Cantidad autorizada de% 1. Se suspende el pedido porque se sospecha que su cantidad de autorizaciÛn% 1 es fraudulenta.,module,Magento_Sales
+Captured amount of %1 online.,Cantidad capturada de% 1 en lÌnea.,module,Magento_Sales
+Subtotal:,Subtotal:,module,Magento_Sales
+Payment Information,InformaciÛn del pago,module,Magento_Sales
+1%,1%,module,Magento_Sales
+Credit memo for your %store_name order,Nota de crÈdito para su orden% store_name,module,Magento_Sales
+Update to your %store_name credit memo,Actualizar a su nota de crÈdito% store_name,module,Magento_Sales
+Invoice for your %store_name order,Factura para su orden% store_name,module,Magento_Sales
+Update to your %store_name invoice,Actualizar a su factura de% store_name,module,Magento_Sales
+Your %store_name order confirmation,Su confirmaciÛn de pedido% store_name,module,Magento_Sales
+"%customer_name,","%Nombre del cliente,",module,Magento_Sales
+Update to your %store_name order,Actualizar a su orden% store_name,module,Magento_Sales
+Your %store_name order has shipped,Su orden% store_name ha enviado,module,Magento_Sales
+Update to your %store_name shipment,Actualizar a su envÌo% store_name,module,Magento_Sales
+General,Generales,module,Magento_Sales
+Subtotal,total parcial,module,Magento_SalesArchive
+ID,CARN… DE IDENTIDAD,module,Magento_SalesArchive
+The return to stock argument contains product item that is not part of the original order.,El argumento return to stock contiene elementos de producto que no forman parte de la orden original.,module,Magento_SalesInventory
+No,No.,module,Magento_SalesRule
+CSV,CSV,module,Magento_SalesRule
+Excel XML,Excel XML,module,Magento_SalesRule
+ID,CARN… DE IDENTIDAD,module,Magento_SalesRule
+Subtotal,Sub-total:,module,Magento_SalesRule
+Currently Active,Actualmente activo,module,Magento_SalesRule
+Discount amount is applied to subtotal only,La cantidad de descuento se aplica solo al subtotal,module,Magento_SalesRule
+Discount amount is applied to subtotal and shipping amount separately,La cantidad de descuento se aplica a la cantidad de subtotal y envÌo por separado,module,Magento_SalesRule
+ID,CARN… DE IDENTIDAD,module,Magento_SalesRuleStaging
+Remove Cart Price Rule from Update,Eliminar la regla de precio de la cesta de la actualizaciÛn,module,Magento_SalesRuleStaging
+Move to Another Update,Pasar a otra actualizaciÛn,module,Magento_SalesRuleStaging
+The cart price rule will be removed from the update and all scheduled changes will be lost.,La regla de precio del carrito se eliminar· de la actualizaciÛn y se perder·n todos los cambios programados.,module,Magento_SalesRuleStaging
+20,20,module,Magento_SalesRuleStaging
+30,30,module,Magento_SalesRuleStaging
+50,50,module,Magento_SalesRuleStaging
+100,100,module,Magento_SalesRuleStaging
+200,200,module,Magento_SalesRuleStaging
+No,No.,module,Magento_ScalableInventory
+[GLOBAL],[GLOBAL],module,Magento_ScalableInventory
+ASCII,ASCII,module,Magento_ScheduledImportExport
+%store_name - Scheduled Export Failed,% Store_name - Error de exportaciÛn programada,module,Magento_ScheduledImportExport
+%store_name  - Scheduled Import Failed,% Store_name - Error de importaciÛn programada,module,Magento_ScheduledImportExport
+No,No.,module,Magento_Search
+We can't find a synonym group to delete.,No podemos encontrar un grupo sinÛnimo para eliminar.,module,Magento_Search
+Marketing,M·rketing,module,Magento_Search
+Search synonyms are not supported by the %1 search engine. Any synonyms you enter won't be used.,Los sinÛnimos de b˙squeda no son compatibles con el motor de b˙squeda% 1. No se utilizar·n los sinÛnimos que introduzca.,module,Magento_Search
+CSV,CSV,module,Magento_Search
+Excel XML,Excel XML,module,Magento_Search
+ID,CARN… DE IDENTIDAD,module,Magento_Search
+no,no ,module,Magento_Search
+"%name,","%nombre,",module,Magento_SendFriend
+"""Shipment Document Validation Error(s):\n"" .","""Error (s) de ValidaciÛn de Documentos de EnvÌo: \ n"".",module,Magento_Shipping
+Payment Information,InformaciÛn del pago,module,Magento_Shipping
+cm,cm,module,Magento_Shipping
+lb,lb,module,Magento_Shipping
+kg,Kg,module,Magento_Shipping
+SKU,Id,module,Magento_Shipping
+Error:,Error:,module,Magento_Shipping
+. ':',. ':',module,Magento_Shipping
+Track your order,Rastrea tu orden,module,Magento_Shipping
+No,No.,module,Magento_Signifyd
+Submit Guarantee Request,Enviar solicitud de garantÌa,module,Magento_Signifyd
+Cancel Guarantee Request,Cancelar solicitud de garantÌa,module,Magento_Signifyd
+Order id is required.,Se requiere identificaciÛn de pedido.,module,Magento_Signifyd
+Guarantee has been cancelled for your order.,La garantÌa ha sido cancelada para su pedido.,module,Magento_Signifyd
+"Sorry, we cannot cancel Guarantee for your order.","Lo sentimos, no podemos cancelar la GarantÌa de su pedido.",module,Magento_Signifyd
+Order has been submitted for Guarantee.,Se ha enviado la orden de GarantÌa.,module,Magento_Signifyd
+"Sorry, we cannot submit order for Guarantee.","Lo sentimos, no podemos enviar la orden de GarantÌa.",module,Magento_Signifyd
+This order already has associated case entity,Esta orden ya tiene entidad de caso asociada,module,Magento_Signifyd
+The case entity should not be empty.,La entidad de caso no debe estar vacÌa.,module,Magento_Signifyd
+Cannot update Case entity.,No se puede actualizar la entidad de caso.,module,Magento_Signifyd
+"The ""%1"" should not be empty.","El ""% 1"" no debe estar vacÌo.",module,Magento_Signifyd
+Case entity not found.,No se encontrÛ la entidad de caso.,module,Magento_Signifyd
+Case Update: New score for the order is %1. Previous score was %2.,ActualizaciÛn de caso: La nueva puntuaciÛn para el pedido es% 1. El puntaje anterior fue% 2.,module,Magento_Signifyd
+Error,Eerror,module,Magento_Signifyd
+Cannot generate message.,No se puede generar el mensaje.,module,Magento_Signifyd
+Message is generated.,Se genera un mensaje.,module,Magento_Signifyd
+Fraud Protection Information,InformaciÛn de protecciÛn contra fraudes,module,Magento_Signifyd
+Case Status,Estado del caso,module,Magento_Signifyd
+Case Score,PuntuaciÛn del caso,module,Magento_Signifyd
+Guarantee Eligible,GarantÌa Elegible,module,Magento_Signifyd
+Guarantee Disposition,DisposiciÛn de garantÌa,module,Magento_Signifyd
+Associated Team,Equipo Asociado,module,Magento_Signifyd
+Review Disposition,Revisar la DisposiciÛn,module,Magento_Signifyd
+Case Created,Caso creado,module,Magento_Signifyd
+Case Updated,Caso actualizado,module,Magento_Signifyd
+Fraud Protection Section,SecciÛn de ProtecciÛn contra Fraude,module,Magento_Signifyd
+Fraud Protection,ProtecciÛn contra el Fraude,module,Magento_Signifyd
+Signifyd,Signifyd,module,Magento_Signifyd
+Enable this Solution,Habilitar esta soluciÛn,module,Magento_Signifyd
+API Key,Clave API,module,Magento_Signifyd
+API URL,URL de la API,module,Magento_Signifyd
+Debug,Depurar,module,Magento_Signifyd
+ID,CARN… DE IDENTIDAD,module,Magento_Sitemap
+Solr Server Timeout,Tiempo de espera del servidor Solr,module,Magento_Solr
+Remove from Update,Eliminar de la actualizaciÛn,module,Magento_Staging
+Content Staging Dashboard,Panel de control de contenido,module,Magento_Staging
+Assign to Another Update,Asignar a otra actualizaciÛn,module,Magento_Staging
+Assign to Existing Update,Asignar a actualizaciÛn existente,module,Magento_Staging
+Requested type does not have corresponding implementation,El tipo solicitado no tiene implementaciÛn correspondiente,module,Magento_Staging
+Can not be rescheduled,No se puede reprogramar,module,Magento_Staging
+Action class must implement ActionDataProviderInterface,La clase de acciÛn debe implementar ActionDataProviderInterface,module,Magento_Staging
+entity_type,Entity_type,module,Magento_Staging
+Delete Update,Eliminar actualizaciÛn,module,Magento_Staging
+Error,Eerror,module,Magento_Staging
+This action is unavailable,Esta acciÛn no est· disponible,module,Magento_Staging
+Create New Update,Crear nueva actualizaciÛn,module,Magento_Staging
+General,Generales,module,Magento_Staging
+Update Name,Actualizar nombre,module,Magento_Staging
+"MMM d, y h:mm a","MMM d, yh: mm a",module,Magento_Staging
+Cannot set root directory.,No se puede establecer el directorio raÌz.,module,Magento_Support
+Windows,Ventanas,module,Magento_Support
+OS X,OS X,module,Magento_Support
+No,No.,module,Magento_Support
+ID,CARN… DE IDENTIDAD,module,Magento_Support
+Core Global Cron Jobs,Empleos para Core Global Cron,module,Magento_Support
+Error,Eerror,module,Magento_Support
+Id,IdentificaciÛn,module,Magento_Support
+SKU,Id,module,Magento_Support
+General,Generalidades,module,Magento_Support
+text,texto,module,Magento_Support
+"Are you sure you wan't to delete a ""%1"" record?","øSeguro que quieres borrar un registro ""% 1""?",module,Magento_Support
+Cron,Cron,module,Magento_Support
+Swatch,Muestra de tela,module,Magento_Swatches
+Description,DescripciÛn,module,Magento_Swatches
+The value of Admin must be unique.,El valor de Admin debe ser ˙nico.,module,Magento_Swatches
+Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU.,Seleccione de los siguientes valores de atributo para este producto. Cada combinaciÛn ˙nica de valores crea un SKU de producto ˙nico.,module,Magento_Swatches
+[GLOBAL],[GLOBAL],module,Magento_TargetRule
+ID,CARN… DE IDENTIDAD,module,Magento_TargetRule
+%fieldName is a required field.,% FieldName es un campo obligatorio.,module,Magento_Tax
+"Invalid value of ""%value"" provided for the %fieldName field.","Valor no v·lido de ""% value"" proporcionado para el campo% fieldName.",module,Magento_Tax
+No such entity with %fieldName = %fieldValue,Ninguna entidad con% fieldName =% fieldValue,module,Magento_Tax
+Subtotal,Sub-total:,module,Magento_Tax
+Total,Total ,module,Magento_Tax
+"To apply the discount on prices including tax and apply the tax after discount, set Catalog Prices to ‚ÄúIncluding Tax‚Äù.","Para aplicar el descuento en los precios incluyendo el impuesto y aplicar el impuesto despuÈs de descuento, los precios del cat·logo del sistema a ""incluyendo el impuesto"".",module,Magento_Tax
+"With customer tax applied ‚ÄúBefore Discount‚Äù, the final discount calculation may not match customers‚Äô expectations.","Con el impuesto sobre el cliente aplicado ‚ Ä úAntes del descuento‚ Ä, el c·lculo del descuento final puede no coincidir con las expectativas de los clientes.",module,Magento_Tax
+Your current tax configuration may result in rounding errors.,Su configuraciÛn de impuestos actual puede dar lugar a errores de redondeo.,module,Magento_Tax
+"Warning: To apply the discount on prices including tax and apply the tax after discount, set Catalog Prices to ‚ÄúIncluding Tax‚Äù.","Advertencia: Para aplicar el descuento en los precios incluyendo el impuesto y aplicar el impuesto despuÈs de descuento, los precios de cat·logo de conjunto a ""Incluyendo impuestos"".",module,Magento_Tax
+CSV,CSV,module,Magento_TaxImportExport
+Excel XML,Excel XML,module,Magento_TaxImportExport
+1%,1%,module,Magento_Theme
+General,Generales,module,Magento_Theme
+Global,Un Pensador Global,module,Magento_Theme
+%1 does not contain field '%2',% 1 no contiene el campo '% 2',module,Magento_Theme
+%1 does not contain field 'file',% 1 no contiene el campo 'archivo',module,Magento_Theme
+The %templateName contains an incorrect configuration. The template has a reference to itself. Either remove or change the reference.,El% templateName contiene una configuraciÛn incorrecta.La plantilla tiene una referencia a sÌ misma. Suprima o cambie la referencia.,module,Magento_Theme
+WK,WK,module,Magento_Theme
+"%name,","%nombre,",module,Magento_Theme
+Welcome to %store_name.,Bienvenido a% store_name.,module,Magento_Theme
+"To sign in to our site, use these credentials during checkout or on the <a href=""%customer_url"">My Account</a> page:","Para iniciar sesiÛn en nuestro sitio, utilice estas credenciales durante la comprobaciÛn o en la p·gina <a href=""%customer_url""> Mi cuenta </a>:",module,Magento_Theme
+Email:,Correo: ,module,Magento_Theme
+Password:,ContraseÒa:,module,Magento_Theme
+Password you set when creating account,ContraseÒa que estableciÛ al crear una cuenta,module,Magento_Theme
+"Forgot your account password? Click <a href=""%reset_url"">here</a> to reset it.","øOlvidaste tu contraseÒa de cuenta? Haz clic <a href=""%reset_url""> aquÌ </a> para restablecerlo.",module,Magento_Theme
+"When you sign in to your account, you will be able to:","Cuando inicie sesiÛn en su cuenta, podr·:",module,Magento_Theme
+Proceed through checkout faster,Proseguir con la comprobaciÛn m·s r·pidamente,module,Magento_Theme
+Check the status of orders,Comprobar el estado de las Ûrdenes,module,Magento_Theme
+View past orders,Ver pedidos pasados,module,Magento_Theme
+Store alternative addresses (for shipping to multiple family members and friends),Almacene direcciones alternativas (para enviar a varios familiares y amigos),module,Magento_Theme
+"Copyright ¬© 2013-2017 Magento, Inc. All rights reserved.","Copyright © 2013-2017 Magento, Inc. Todos los derechos reservados.",module,Magento_Theme
+Admin 1column,Admin 1column,module,Magento_Theme
+Scripts and Style Sheets,Scripts y hojas de estilo,module,Magento_Theme
+Logo Attribute Width,Ancho del atributo del logotipo,module,Magento_Theme
+Logo Attribute Height,Altura del atributo del logotipo,module,Magento_Theme
+Menu,Men˙,module,Magento_Theme
+Account,Cuenta,module,Magento_Theme
+Settings,Ajustes,module,Magento_Theme
+"Error while translating phrase ""%s"" in file %s.","Error al traducir la frase ""% s"" en el archivo% s.",module,Magento_Translation
+"Error while generating js translation dictionary: ""%s""","Error al generar el diccionario de traducciÛn js: ""% s""",module,Magento_Translation
+No,No.,module,Magento_Ui
+There are {placeholder} messages requires your attention.,Hay mensajes {placeholder} que requieren su atenciÛn.,module,Magento_Ui
+from,desde,module,Magento_Ui
+to,a ,module,Magento_Ui
+You haven't selected any items!,°No ha seleccionado ning˙n artÌculo!,module,Magento_Ui
+Select Date,Seleccione la fecha,module,Magento_Ui
+Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored.,La longitud mÌnima de este campo debe ser igual o mayor que% 1 sÌmbolos. Los espacios iniciales y finales ser·n ignorados.,module,Magento_Ui
+"Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.","El mÌnimo de diferentes clases de caracteres en la contraseÒa es% 1. Clases de caracteres: min˙sculas, may˙sculas, dÌgitos, caracteres especiales.",module,Magento_Ui
+Please enter a valid integer in this field.,Introduzca un n˙mero entero v·lido en este campo.,module,Magento_Ui
+Please enter a value less than or equal to {0}.,Ingrese un valor menor o igual a {0}.,module,Magento_Ui
+Please enter a value greater than or equal to {0}.,Ingrese un valor mayor o igual a {0}.,module,Magento_Ui
+"Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.","Ingrese direcciones de correo electrÛnico v·lidas, separadas por comas. Por ejemplo, johndoe@domain.com, johnsmith@domain.com.",module,Magento_Ui
+Please enter issue number or start date for switch/solo card type.,Ingrese el n˙mero de emisiÛn o la fecha de inicio para el tipo de tarjeta switch / solo.,module,Magento_Ui
+We don't recognize or support this file extension type.,No reconocemos ni apoyamos este tipo de extensiÛn de archivo.,module,Magento_Ui
+The date is not within the specified range.,La fecha no est· dentro del rango especificado.,module,Magento_Ui
+CSV,CSV,module,Magento_Ui
+Excel XML,Excel XML,module,Magento_Ui
+PAK,PAK,module,Magento_Ups
+error_message,mensaje de error,module,Magento_Ups
+United Parcel Service,United Parcel Service,module,Magento_Ups
+United Parcel Service XML,United Parcel Service XML,module,Magento_Ups
+UPS,°Ups!,module,Magento_Ups
+Enable Free Shipping Threshold,Habilitar el umbral de envÌo gratuito,module,Magento_Ups
+ID,CARN… DE IDENTIDAD,module,Magento_UrlRewrite
+SKU,Id,module,Magento_UrlRewrite
+For Category,Para la categorÌa,module,Magento_UrlRewrite
+For Product,Para el producto,module,Magento_UrlRewrite
+Create URL Rewrite,Crear Reescritura de URL,module,Magento_UrlRewrite
+No,No.,module,Magento_UrlRewrite
+We're unable to send the password reset email.,No podemos enviar el correo electrÛnico de restablecimiento de contraseÒa.,module,Magento_User
+Password Reset Confirmation for %name,ConfirmaciÛn de contraseÒa para% name,module,Magento_User
+New %changes for %user_name,Nuevo% de cambios para% user_name,module,Magento_User
+ID,CARN… DE IDENTIDAD,module,Magento_User
+Priority Mail Medium Flat Rate Box,Priority Mail Caja de tarifa plana media,module,Magento_Usps
+Priority Mail Small Flat Rate Box,Priority Mail Caja de tarifa plana pequeÒa,module,Magento_Usps
+Priority Mail Express International,Priority Mail Express International,module,Magento_Usps
+Priority Mail International,Priority Mail International,module,Magento_Usps
+Global Express Guaranteed (GXG),Global Express garantizado (GXG),module,Magento_Usps
+Global Express Guaranteed Document,Global Express garantizado documento,module,Magento_Usps
+Global Express Guaranteed Non-Document Rectangular,Global Express Garantizado No Documento Rectangular,module,Magento_Usps
+Global Express Guaranteed Non-Document Non-Rectangular,Global Express Garantizado No Documento No Rectangular,module,Magento_Usps
+Priority Mail International Medium Flat Rate Box,Priority Mail Caja internacional de tarifa plana,module,Magento_Usps
+Priority Mail International Large Flat Rate Box,Priority Mail International Caja grande a tarifa plana,module,Magento_Usps
+Variable,Capital,module,Magento_Usps
+Small Flat-Rate Box,Caja pequeÒa de tarifa plana,module,Magento_Usps
+Medium Flat-Rate Box,Caja de tarifa plana media,module,Magento_Usps
+Large Flat-Rate Box,Caja grande de tarifa plana,module,Magento_Usps
+Small Flat-Rate Envelope,Envelope pequeÒo de tarifa plana,module,Magento_Usps
+Window Flat-Rate Envelope,Ventana Enrollable,module,Magento_Usps
+Gift Card Flat-Rate Envelope,Tarjeta de regalo,module,Magento_Usps
+Legal Flat-Rate Envelope,Envolvente Legal a Tasa Fija,module,Magento_Usps
+Padded Flat-Rate Envelope,Sobre acolchado relleno,module,Magento_Usps
+Rectangular,Rectangular,module,Magento_Usps
+Regular,Regular,module,Magento_Usps
+No,No.,module,Magento_Usps
+track_summary,Track_summary,module,Magento_Usps
+USPS,USPS,module,Magento_Usps
+Variable,Capital,module,Magento_Variable
+No,No.,module,Magento_Variable
+1%,1%,module,Magento_Variable
+Variable ID,ID de variable,module,Magento_Variable
+Stored Payment Method was successfully removed,MÈtodo de pago almacenado eliminado correctamente,module,Magento_Vault
+Stored Payment Methods,MÈtodos de pago almacenados,module,Magento_Vault
+No available payment tokens for specified order payment.,No hay tokens de pago disponibles para el pago de orden especificado.,module,Magento_Vault
+You have no stored payment methods.,No tiene mÈtodos de pago almacenados.,module,Magento_Vault
+PayPal Account,Cuenta de Paypal,module,Magento_Vault
+Frame,Marco,module,Magento_VersionsCms
+CMS,CMS,module,Magento_VersionsCms
+No,No.,module,Magento_VersionsCms
+No,No.,module,Magento_VisualMerchandiser
+Visual Merchandiser,Merchandiser Visual,module,Magento_VisualMerchandiser
+SKU,Id,module,Magento_VisualMerchandiser
+Stock,Existencia,module,Magento_VisualMerchandiser
+Magento Web API,Magento Web API,module,Magento_Webapi
+SOAP Settings,ConfiguraciÛn de SOAP,module,Magento_Webapi
+Default Response Charset,Charset de respuesta predeterminado,module,Magento_Webapi
+"If empty, UTF-8 will be used.","Si est· vacÌo, UTF-8 se utilizar·.",module,Magento_Webapi
+"REST and SOAP configurations, generated WSDL file","Configuraciones REST y SOAP, archivo WSDL generado",module,Magento_Webapi
+Web API Security,Seguridad de la API Web,module,Magento_WebapiSecurity
+200 OK,200 OK,module,Magento_WebsiteRestriction
+FPT,FPT,module,Magento_Weee
+label_value,Valor de la etiqueta,module,Magento_Weee
+frontend_label,Frontend_label,module,Magento_Weee
+Total,Total ,module,Magento_Weee
+"Widget ""%1""","Widget ""% 1""",module,Magento_Widget
+CMS,CMS,module,Magento_Widget
+Widgets,Reproductores,module,Magento_Widget
+1%,1%,module,Magento_Widget
+%1 has been added to your Wish List.,% 1 se ha aÒadido a su lista de deseos.,module,Magento_Wishlist
+"Click <a href=""%1"">here</a> to continue shopping.","Haga clic en <a href=""%1""> aquÌ </a> para continuar comprando.",module,Magento_Wishlist
+Take a look at %customer_name's Wish List,Echa un vistazo a la lista de favoritos de% customer_name,module,Magento_Wishlist
+Your purchase process has been cancelled.,Se ha cancelado su proceso de compra.,module,Magento_Worldpay
+Something went wrong while processing your order. Please try again later.,"Se produjo un error al procesar su pedido. Por favor, intÈntelo de nuevo luego.",module,Magento_Worldpay
+Error,Eerror,module,Magento_Worldpay
+Worldpay,Worldpay,module,Magento_Worldpay
+Payment was canceled.,El pago fue cancelado.,module,Magento_Worldpay
+"%name,","%nombre,",theme,frontend/Magento/luma
+Credit memo for your %store_name order,Nota de crÈdito para su orden% store_name,theme,frontend/Magento/luma
+Update to your %store_name credit memo,Actualizar a su nota de crÈdito% store_name,theme,frontend/Magento/luma
+Update to your %store_name invoice,Actualizar a su factura de% store_name,theme,frontend/Magento/luma
+Your %store_name order confirmation,Su confirmaciÛn de pedido% store_name,theme,frontend/Magento/luma
+"%customer_name,","%Nombre del cliente,",theme,frontend/Magento/luma
+Update to your %store_name order,Actualizar a su orden% store_name,theme,frontend/Magento/luma
+Update to your %store_name shipment,Actualizar a su envÌo% store_name,theme,frontend/Magento/luma
+Account Dashboard,Panel de control,theme,frontend/Magento/luma
+Account Information,InformaciÛn de la cuenta,theme,frontend/Magento/luma
+Zustand,Zustand,theme,frontend/Magento/luma
+Color,Color,frontend/Magento/luma

@@ -1,0 +1,26 @@
+<?php $_cibiliansummary = $this->getCollection(); ?>
+<?php if ($_cibiliansummary->getSize()): ?>
+<div class="cibiliansummary_list_view">
+    <?php foreach ($_cibiliansummary as $cibiliansummaryItem): ?>
+        <div id="item_<?php echo $cibiliansummaryItem->getId() ?>" class="cibiliansummary_list_item">
+            <h2>
+                <a href="<?php echo $this->getItemUrl($cibiliansummaryItem) ?>">
+                    <?php echo $this->escapeHtml($cibiliansummaryItem->getTitle()) ?>
+                </a>
+            </h2>
+
+            <div class="cibiliansummary_item_subtitle">
+                <?php echo $this->formatDate($cibiliansummaryItem->getPublishedAt()) ?> |
+                <?php echo $this->escapeHtml($cibiliansummaryItem->getAuthor()) ?>
+            </div>
+
+            <?php if ($imageUrl = $this->getImageUrl($cibiliansummaryItem, 100)): ?>
+               <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($cibiliansummaryItem->getTitle()); ?>" /></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no CibilianSummary.'); ?></span></div>
+<?php endif ?>

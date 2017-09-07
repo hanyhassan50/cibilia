@@ -1,0 +1,559 @@
+<?php
+
+$_hlp = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Helper\Data');
+$_prHlp = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\DropshipVendorProduct\Helper\Data');
+$_session = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
+$_vendor = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session')->getVendor();
+$_product = $this->getProduct();
+
+?>
+<h2>
+<?php if ($_product->getId()): ?>
+<?php echo $_product->getName() ?>
+<?php else: ?>
+<?php echo __('New Product') ?>
+    <?php endif ?> <?php echo __('('.__('Type of product').': %1)', $_prHlp->getProdSetIdLabel($_product)) ?></span>
+</h2>
+<span class="required"><?php echo __('* Indicated Required Fields') ?></span>
+<?php echo $this->getLayout()->getMessagesBlock()->toHtml(); ?>
+<form action="<?php echo $this->getUrl('udprod/vendor/productPost', ['_current'=>true])?>" method="post" id="product-edit-form">
+<input type="hidden" name="id" value="<?php echo $_product->getId() ?>" />
+<input id="udpef-continue_edit" type="hidden" name="continue_edit" value="" />
+<?php if (!$_product->getId()){ ?>
+    <?php $intDefaultCreated = 1; ?>
+    <input id="udpef-created_by" type="hidden" name="product[created_by]" value="<?php echo ($_session->getCreatedBy()) ? 1*$_session->getCreatedBy() : $intDefaultCreated?>" />
+<?php } ?>
+<?php foreach ($this->getForm()->getElements() as $element) {
+    echo $element->toHtml();
+
+} ?>
+
+
+
+<?php /*
+<div class="login-box generic-box">
+<div class="col-1 registered-users">
+<div class="box-head"><h3><?php echo __('Categories') ?></h3></div>
+<table style="width:100%"><tbody><tr><td>
+<?php echo $this->getChildHtml('categories') ?>
+</td></tr></tbody></table>
+</div>
+</div>
+*/?>
+
+<div class="buttons-set">
+    <span class="product-edit-form-loader" style="display:none" id="product-edit-form-loader"><?php echo __('Please wait, submitting...')?></span>
+    <button class="form-button" type="button" onclick="udprodEditFormSubmit(this, false)" name="send"><span><?php echo __('Save') ?></span></button>
+    <button class="form-button" type="button" onclick="udprodEditFormSubmit(this, true)" name="send"><span><?php echo __('Save And Continue Edit') ?></span></button>
+    <div class="clearer"></div><br/>
+    <p><a href="<?php echo $this->getUrl('udprod/vendor/products')?>">&laquo; <?php echo __('Return to product list')?></a></p></p>
+</div>
+</form>
+
+<!-- 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js" /> -->
+
+<script type="text/javascript">
+//<![CDATA[
+
+function getWordCount(wordString) {
+  var words = wordString.split(" ");
+  words = words.filter(function(words) { 
+    return words.length > 0
+  }).length;
+  return words;
+}
+
+function handleAjaxRequest(data, textStatus, jqXHR){
+    {
+            var items = data,
+                    selected, valuesArray, valuesHash = {},
+                    requestQueueLength = requestQueue.length,
+                    old = false,
+                    keep = false,
+                    inputEmptied = false,
+                    inputEmptiedValue = '';
+            if (typing) {
+                //server returned a response, but it's about to become an older response
+                //so discard it and wait until the user is done typing
+                requestQueue.shift();
+                return false;
+            }
+            if (requestQueueLength > 1) {
+                $.each(requestQueue, function (idx, elem) {
+                    if (data.q === elem) {
+                        if (idx !== (requestQueueLength - 1)) {
+                            //found an older response, remove it from the queue and wait for newest response
+                            old = true;
+                            arrayRemove.call(requestQueue, idx);
+                        } else {
+                            //this handles the out of order request/response
+                            //last request came in first, and we want to keep it
+                            keep = true;
+                            //remove all the other older requests
+                            requestQueue.length = 0;
+                        }
+                        return false;
+                    }
+                });
+                //if we found an old response or we found the newest response and want to keep processing
+                if (old || !keep) { return false; }
+            } else {
+                //only 1 request was made by the user remove it from queue and continue processing
+                if (typeof requestQueue.shift() === 'undefined') {
+                    //If all the old responses have been discarded because we've received the new one already
+                    return false;
+                }
+            }
+            //while the request was processing did the user "empty" the input box
+            inputEmptiedValue = $.trim(input.val());//if we have a minLength > 1 then we have to preserve the value (TODO::watch out for potential XSS/other breakages)
+            inputEmptied = inputEmptiedValue.length < minLength;
+
+            //if additional processing needs to occur on the returned json
+            if ('processItems' in options && $.isFunction(options.processItems)) {
+                items = options.processItems(data);
+            } else if ('results' in items) {
+                //default behavior if process items isn't defined
+                //expects there to be a results key in data returned that has the results of the search
+                items = items.results;
+            } else {
+                console.log('Expected results key in data, but was not found. Options could not be built');
+                return false;
+            }
+            //.chzn-choices is only present with multi-selects
+            selected = $('option:selected', select).not(':empty').clone().attr('selected', true);
+            //saving values for deduplication
+            if (!$.isArray(select.val())) {
+                valuesArray = [select.val()];
+            } else {
+                valuesArray = select.val();
+            }
+            $.each(valuesArray, function (i, value) {
+                valuesHash[value] = 1;
+            });
+            $('option', select).remove();
+
+            $('<option value=""/>').appendTo(select);
+            //appending this even on single select in the event the user changes their mind and input is blurred. Keeps selected option selected
+            selected.appendTo(select);
+
+            if (!inputEmptied) {
+                if ($.isArray(items)) {
+                    //array of kv pairs [{id:'', text:''}...]
+                    $.each(items, function (i, opt) {
+                        if (typeof valuesHash[opt.id] === 'undefined') {
+                            $('<option value="' + opt.id + '">' + opt.text + '</option>').appendTo(select);
+                        }
+                    });
+                } else {
+                    //hash of kv pairs {'id':'text'...}
+                    $.each(items, function (value, text) {
+                        if (typeof valuesHash[value] === 'undefined') {
+                            $('<option value="' + value + '">' + text + '</option>').appendTo(select);
+                        }
+                    });
+                }
+            }
+            //update chosen
+            select.trigger("chosen:updated");
+            //right key, for highlight options after ajax is performed
+            keyRight = $.Event('keyup');
+            keyRight.which = 39;
+            //highlight
+            input.val(!inputEmptied ? data.q : inputEmptiedValue).trigger(keyRight).get(0).style.background = inputBG;
+
+            if (items.length > 0) {
+                $('.no-results', chosen).hide();
+            } else {
+                $('.no-results', chosen).show();
+            }
+
+            //fire original success
+            if (callback) {
+                callback(data, textStatus, jqXHR);
+            }
+        }
+}
+
+require(["jquery", "prototype", "varien/form","jqueryValidate","jqueryChosen","jqueryChosenAjax"], function(jQuery) {
+
+    // jQuery.fn.validate
+    {
+        jQuery.validator.addMethod("minWordCount",
+           function(value, element, params) {
+              var count = getWordCount(value);
+              if(count >= params[0]) {
+                 return true;
+              }
+           },
+           jQuery.format("<?php echo __("A minimum of"); ?> {0} <?php echo __("words is required here") ?>.")
+        );
+
+        jQuery.validator.addMethod("maxWordCount",
+           function(value, element, params) {
+              var count = getWordCount(value);
+              if(count < params[0]) {
+                 return true;
+              }
+           },
+           jQuery.format("<?php echo __("Only"); ?> {0} <?php echo __("words are allowed here"); ?>.")
+        );        
+
+
+        jQuery('#product-edit-form').validate({
+            'rules':{
+                "product[altitude_masl]": {
+                    required: true,
+                    number:true,
+                    // minlength:5
+                },
+                "product[olive_trees_ha]":{
+                    required:true,
+                    number:true,
+                },
+                "product[yield_evo_litres_100kg_olives]":{
+                    required:true,
+                    number:true,
+                },
+                "product[promotional_pitch]":{
+                    minWordCount:['100'],
+                    maxWordCount:['500'],
+                },
+
+                "product[tasting]":{
+                    maxWordCount:['100'],  
+                },
+
+                "product[serving_suggestions]":{
+                    maxWordCount:['100'],    
+                },
+
+                "product[ingredients]":{
+                    maxWordCount:['100'],      
+                },
+
+                "product[allergens]":{
+                    maxWordCount:['100'],        
+                },
+
+                "product[sugar]":{
+                    required:true,
+                    number:true,
+                    max:30
+                },
+
+                "product[number_of_plots_from_where_the]":{
+                    required:true,
+                    number:true
+                },
+
+                "product[alcohol]":{
+                    required:true,
+                    number:true
+                },
+
+                "product[plants_ha]":{
+                    required:true,
+                    number:true,
+                },
+
+                "product[yield_quintals_hectare]":{
+                    required:true,
+                    number:true
+                },
+
+                "product[yield_of_grapes_into_wine]":{
+                    required:true,
+                    number:true
+                },
+                "product[average_drying_temperature]":{
+					number:true,
+                    min:['0'],
+                    max:['60'],
+                },
+                "product[average_drying_time]":{
+					number:true,
+                    min:['1'],
+                    max:['72'],
+                },
+                "product[promotional_pitch_pasta]":{
+                    minWordCount:['100'],
+                    maxWordCount:['500'],
+                },
+                "product[tasting_pasta]":{
+                    maxWordCount:['100'],
+                },
+                "product[serving_suggestions_pasta]":{
+                    maxWordCount:['100'],
+                },
+                "product[ingredients_pasta]":{
+                    maxWordCount:['100'],
+                },
+				"product[allergens_pasta]":{
+                    maxWordCount:['100'],
+                },
+			    "product[number_of_plots]":{
+					number:true,
+                },
+                 "product[alcohol_by_volume]":{
+					number:true,
+                    min:['0'],
+                    max:['100'],
+                },
+            }
+        });
+
+        // simple chosen
+        {
+            if(jQuery('#country').length > 0){
+            jQuery('#country').chosen({ width:'529px'});
+        }
+
+        /**
+         if(jQuery("#cultivar").length > 0){
+            jQuery("#cultivar").chosen({ width:'529px' });    
+        }
+        **/
+
+        
+        if(jQuery("#harvest_time").length > 0 ){
+            jQuery("#harvest_time").chosen({ width:'529px' });    
+        }
+        
+        if(jQuery("#harvest_method").length > 0 ){
+            jQuery("#harvest_method").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#type_of_meat").length > 0 ){
+            jQuery("#type_of_meat").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#type_of_cut").length > 0 ){
+            jQuery("#type_of_cut").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#source_of_the_main_ingredient").length > 0 ){
+            jQuery("#source_of_the_main_ingredient").chosen({ width:'529px' });    
+        }        
+
+        if(jQuery("#type_of_curing").length > 0 ){
+            jQuery("#type_of_curing").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#age_meat").length > 0 ){
+            jQuery("#age_meat").chosen({ width:'529px' });    
+        }        
+
+        if(jQuery("#honey_type").length > 0 ){
+            jQuery("#honey_type").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#honey_flavour").length > 0 ){
+            jQuery("#honey_flavour").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#cheese_family").length > 0 ){
+            jQuery("#cheese_family").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#apis_mellifera_subspecies").length > 0 ){
+            jQuery("#apis_mellifera_subspecies").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#jam_flavour").length > 0 ){
+            jQuery("#jam_flavour").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#marmalade_flavour").length > 0 ){
+            jQuery("#marmalade_flavour").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#wine_colour").length > 0 ){
+            jQuery("#wine_colour").chosen({ width:'529px' });    
+        }
+        
+        if(jQuery("#type_of_wine").length > 0 ){
+            jQuery("#type_of_wine").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#wine_taste").length > 0 ){
+            jQuery("#wine_taste").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#grape_varieties").length > 0 ){
+            jQuery("#grape_varieties").chosen({ width:'529px' });    
+        }
+        
+        if(jQuery("#year_on_label").length > 0 ){
+            jQuery("#year_on_label").chosen({ width:'529px' });    
+        }
+        
+        if(jQuery("#vineyard_country").length > 0 ){
+            jQuery("#vineyard_country").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#cellar_country").length > 0 ){
+            jQuery("#cellar_country").chosen({ width:'529px' });    
+        }
+
+        
+        if(jQuery("#type_of_milk").length > 0 ){
+            jQuery("#type_of_milk").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#origin_of_the_milk").length > 0 ){
+            jQuery("#origin_of_the_milk").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#free_range").length > 0 ){
+            jQuery("#free_range").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#coagulation").length > 0 ){
+            jQuery("#coagulation").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#age").length > 0 ){
+            jQuery("#age").chosen({ width:'529px' });    
+        }
+        
+        if(jQuery("#country_of_manufacture").length > 0 ){
+            jQuery("#country_of_manufacture").chosen({ width:'529px' });    
+        }
+
+        if(jQuery("#separation_oil_water").length > 0 ){
+            jQuery("#separation_oil_water").chosen({ width:'529px' });    
+        }   
+        
+		if(jQuery("#type_of_distillate").length > 0 ){
+            jQuery("#type_of_distillate").chosen({ width:'529px' });    
+        } 
+
+        }
+
+        // ajax based chosen
+        {
+            if(jQuery("#cultivar").length > 0){
+
+                jQuery('#cultivar').ajaxChosen({
+                   dataType: 'json',
+                   type: 'POST',
+                   data: { 'attribute_code': 'cultivar' } ,
+                   url:'<?php echo $block->getUrl('dropshipextend/attribute/add'); ?>' ,
+                   success: function (data, textStatus, jqXHR) {
+                        handleAjaxRequest(data, textStatus, jqXHR);
+                   }
+                },{
+                   loadingImg: '<?php echo $block->getViewFileUrl('images/loading.gif'); ?>'
+                });    
+            }
+            
+        }
+
+    }
+
+
+
+Validation.addAllThese([
+    ['validate-urlkey', 'Please use only letters (a-z) or numbers (0-9) in this field, first character should be a letter.', function (v) {
+            return Validation.get('IsEmpty').test(v) ||  /^[a-z]+[a-z0-9]+$/.test(v)
+    }],
+    <?php if (\Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\Config\ScopeConfigInterface')->isSetFlag('udprod/general/gallery_required', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)): ?>
+    ['udvalidate-images-required', null, function(v, el){
+        var val = [];
+        try {
+            val = el.value.evalJSON();
+        } catch (e) {}
+        return Object.isArray(val) && val.length>0;
+    }],
+    <?php endif ?>
+    ['udvalidate-cfg-required', null, function(v){
+        return $$('.udvalidate-cfg-required-row').length>0;
+    }],
+    ['udvalidate-cfg-required-row', null, function(v){
+        return $$('.cfg-quick-create-qty-'+v).length>0;
+    }],
+    ['udvalidate-special_price', 'Sale Price should be less then Price', function(v, el){
+        var pv = $('price') && $F('price');
+        vv = 1*v;
+        v = (''+v).strip();
+        pv = 1*pv;
+        return v===''||vv<=pv;
+    }],
+    ['udvalidate-special_to_date', 'Sale Price To Date is mandatory with non-empty Sale Price', function(v, el){
+        /*
+        var pv = $('special_price') && $F('special_price');
+        pvv = (''+pv).strip();
+        pv = 1*pv;
+        var adv = Validation.getAdvice('udvalidate-special_price', el);
+        try {
+            Validation.methods['udvalidate-special_price'].error = 'Sale Price should be less then Price'+vv+'<'+pv;
+        } catch () {}
+        if (adv) {
+            adv.update('Sale Price should be less then Price'+vv+'<'+pv);
+        }
+        return v===''||vv<pv;
+        */
+        return true;
+    }],
+    ['required-entry', 'This is a required field.', function(v, el) {
+        return !Validation.get('IsEmpty').test(v, el) && (!el.emptyText || v!=el.emptyText);
+    }]
+]);
+if ($('special_price')) {
+    $('special_price').observe('change', udObserveSP);
+}
+if ($('special_from_date')) {
+    $('special_from_date').observe('change', udObserveSP);
+}
+function udObserveSP() {
+    if ((''+($('special_from_date') && $F('special_from_date') || '')).strip().length>0
+        || (''+($('special_price') && $F('special_price') || '')).strip().length>0
+    ) {
+        ['special_from_date','special_to_date','special_price'].each(function(elId){
+        try {
+            $(elId).addClassName('required-entry');
+            var spfdLbl = $$('label[for="'+elId+'"]')[0];
+            if (spfdLbl.down('.required')) {
+                spfdLbl.down('.required').show();
+            } else {
+                spfdLbl.insert(' <span class="required">*</span>');
+            }
+        } catch (e) {}
+        });
+    } else {
+        ['special_from_date','special_to_date','special_price'].each(function(elId){
+        try {
+            $(elId).removeClassName('required-entry');
+            var spfdLbl = $$('label[for="'+elId+'"]')[0];
+            if (spfdLbl.down('.required')) {
+                spfdLbl.down('.required').remove();
+            }
+        } catch (e) {}
+        });
+    }
+}
+udObserveSP();
+var udprodEditForm = new VarienForm('product-edit-form', true);
+window['udprodEditFormSubmit'] = function (elem, continueFlag) {
+    if (continueFlag) {
+        $('udpef-continue_edit').value=1;
+    } else {
+        $('udpef-continue_edit').value=0;
+    }
+    $(elem).up().select('button').invoke('hide');
+    $('product-edit-form-loader').show();
+    var res = false;
+    if (udprodEditForm.validator && udprodEditForm.validator.validate()) {
+        res = true;
+        udprodEditForm.form.submit();
+    } else {
+        $(elem).up().select('button').invoke('show');
+        $('product-edit-form-loader').hide();
+    }
+    return res;
+}
+});
+
+//]]>
+</script>

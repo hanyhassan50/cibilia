@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Cibilia_CibilianSummary::cibiliansummary" title="CibilianSummary" module="Cibilia_CibilianSummary" sortOrder="30" resource="Cibilia_CibilianSummary::cibiliansummary"/>
+        <add id="Cibilia_CibilianSummary::cibiliansummary_manage" title="All Items" module="Cibilia_CibilianSummary" sortOrder="10" parent="Cibilia_CibilianSummary::cibiliansummary" action="cibiliansummary/index/" resource="Cibilia_CibilianSummary::manage"/>
+    </menu>
+</config>

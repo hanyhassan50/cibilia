@@ -1,0 +1,26 @@
+<?php $_cibilianpayout = $this->getCollection(); ?>
+<?php if ($_cibilianpayout->getSize()): ?>
+<div class="cibilianpayout_list_view">
+    <?php foreach ($_cibilianpayout as $cibilianpayoutItem): ?>
+        <div id="item_<?php echo $cibilianpayoutItem->getId() ?>" class="cibilianpayout_list_item">
+            <h2>
+                <a href="<?php echo $this->getItemUrl($cibilianpayoutItem) ?>">
+                    <?php echo $this->escapeHtml($cibilianpayoutItem->getTitle()) ?>
+                </a>
+            </h2>
+
+            <div class="cibilianpayout_item_subtitle">
+                <?php echo $this->formatDate($cibilianpayoutItem->getPublishedAt()) ?> |
+                <?php echo $this->escapeHtml($cibilianpayoutItem->getAuthor()) ?>
+            </div>
+
+            <?php if ($imageUrl = $this->getImageUrl($cibilianpayoutItem, 100)): ?>
+               <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($cibilianpayoutItem->getTitle()); ?>" /></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php echo $this->getPager() ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no Cibilianpayout.'); ?></span></div>
+<?php endif ?>

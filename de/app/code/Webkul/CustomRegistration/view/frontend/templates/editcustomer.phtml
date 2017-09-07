@@ -1,0 +1,356 @@
+<div class="editcustomer">
+	<div class="loading-mask" data-role="loader" style="display: none;">
+		<div class="loader">
+			<img alt="Loading..." src="http://tst.foodmakers.cibilia.com/pub/static/frontend/Magento/luma/en_GB/images/loader-2.gif">
+			<p>Please wait...</p>
+		</div>
+	</div>
+	<div class="step1">
+	  <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Step 1: WARNING') ?></span></legend><br>
+	  <p>You need to fill the information below ONLY IF you wish to become a verified cibilian. As a Verified cibilian you will be able to refer new authentic food makers, add product information for your authentic food makers and for each sale that your product will make, we will reward you with a commission.<br/>
+	This form will consist of 5 easy steps and the aim of it is to verify and match the contact details you are giving us with your Identification Document which you will be asked to download at the end of this 5 steps verification process.</p>
+		<div class="buttons-set">
+			<button class="form-button" type="button" id="verify_step1" name="step1"><span><?php echo __('Yes, please verify me!') ?></span></button>
+			<button class="form-button" type="button"><a href="<?php echo $this->getUrl('customer/account/')?>">&laquo; <?php echo __('No, take me back to my dashboard')?></a></button>
+		</div>
+	</div>
+	<div id="form-validate-wrapper" style="display:none">
+		<legend class="legend" id="legend"></legend><br>
+		<form class="form form-edit-account" action="<?php echo $this->getUrl("customregistration/editadditionalinfo/") ?>" method="post" id="form-validate" enctype="multipart/form-data" data-mage-init='{"validation":{}}'>
+		 <fieldset class="fieldset wk-edit-additional-info" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
+			<?php $_collection = $block->attributeCollectionFilter(); ?>
+					<?php $_customerData = $block->getCurrentCustomer()->toArray(); ?>
+					<?php $mediaUrl = $block->getMedialUrl();?>
+					<?php foreach($_collection as $attributeData){ ?>
+						<?php $attrAsArray = $attributeData->toArray();?>
+						<?php $isRequiredArray = explode(' ', $attributeData->getFrontendClass()); ?>
+						<?php 
+						//var_dump(in_array('dependable_field_'.$attrAsArray['attribute_code'], $isRequiredArray));
+						$usedInForms = $block->getUsedInForms($attributeData->getId());
+						$isShowOnEditPage = in_array('customer_account_edit', $usedInForms);?>
+						<?php $_fieldValue = '';
+							  $_imageValue = '';
+							foreach ($_customerData as $key => $value) {
+								if($attrAsArray['attribute_code'] == $key){
+									if ($attrAsArray['frontend_input'] == 'date') {
+										$_fieldValue = $this->formatDate($value, \IntlDateFormatter::SHORT, false);
+									} elseif ($attrAsArray['frontend_input'] == 'boolean') {
+										$_fieldValue = 'checked';
+									} elseif ($attrAsArray['frontend_input'] == 'select') {
+										$_fieldValue = $value;
+									} elseif ($attrAsArray['frontend_input'] == 'multiselect') {
+										$_fieldValue = $value;
+									} elseif ($attrAsArray['frontend_input'] == 'image') {
+										if($value){
+										$_fieldValue = "<img class='wk_images' width='75' height='75' alt='image' src='".$mediaUrl.'customfield/image'.$value."'/>";
+										}
+										else{
+										$_fieldValue = '';
+										}
+										$_imageValue = $value;
+									} elseif ($attrAsArray['frontend_input'] == 'file') {
+										$_fieldValue = "<a class='wk_images' alt='file' href='".$this->getUrl().'pub/media/customfield/file'.$value."'>".$value."</a>";
+										$_imageValue = $value;
+									} else {
+										$_fieldValue = $value;
+									}
+								}
+							}
+						?>
+						<?php if ($isShowOnEditPage): ?>
+						<div class="field <?php echo $attributeData->getAttributeCode() ?> <?php echo in_array('required', $isRequiredArray)?'required':'' ?>">
+						<?php if ($attributeData->getFrontendInput() != 'boolean' && $attrAsArray['attribute_code'] != 'approval_status'): ?>
+							<label for="<?php echo $attributeData->getAttributeCode() ?>" class="label <?php echo $attributeData->getAttributeCode() ?>"><span><?php /* @escapeNotVerified */ echo __($attributeData->getFrontendLabel()); ?></span></label>
+						<?php endif ?>
+							<div class="control">
+							<!-- showing the status of customer approval -->
+							<?php  if ($attributeData->getFrontendInput() == 'select' && $attrAsArray['attribute_code'] == 'approval_status' ):
+							
+							if (isset($_customerData['idproof']) && $_customerData['idproof'] !== ''){
+								$optiondata = $attributeData->getSource()->getAllOptions();
+								usort($optiondata, function($a, $b) {
+									return $a['value'] - $b['value'];
+								});
+							?>
+								
+								<?php foreach ($optiondata as $instance) { 
+								 if($_fieldValue==$instance['value'] ){ ?>
+								  <span style="font-weight: 600;"><?php /* @escapeNotVerified */ echo __("Status").":"; ?></span>
+								  <?php 
+									if($instance['value'] == ''){
+										echo __('Pending');
+									}else{
+										echo __($instance['label']); 
+									}
+								  }?>
+									<?php }  ?>
+							<?php  }  //end if?>	
+							<!-- showing the status of customer approval --> 
+							<?php elseif ($attributeData->getFrontendInput() == 'text'): ?>
+								<?php if($attributeData->getAttributeCode() == "cibilian_name"){ ?>
+										<input type="text" name="<?php echo $attributeData->getAttributeCode() ?>" id="<?php echo $attributeData->getAttributeCode() ?>" title="<?php /* @escapeNotVerified */ echo __('My Attribute') ?>" class="input-text <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> value="<?php if($_fieldValue) echo $_fieldValue; else echo $block->getCurrentCustomer()->getData("firstname")." ".$block->getCurrentCustomer()->getData("lastname"); ?>" autocomplete="off">			
+								<?php } else {?>
+									<input type="text" name="<?php echo $attributeData->getAttributeCode() ?>" id="<?php echo $attributeData->getAttributeCode() ?>" title="<?php /* @escapeNotVerified */ echo __('My Attribute') ?>" class="input-text <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> value="<?php echo $_fieldValue; ?>" autocomplete="off">
+								<?php } ?>
+							<?php elseif ($attributeData->getFrontendInput() == 'textarea'):?>
+								<textarea name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-text <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> ><?php echo $_fieldValue; ?></textarea>
+							<?php elseif ($attributeData->getFrontendInput() == 'date'): ?>
+								<input type="text" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" value="<?php echo $_fieldValue; ?>" class="dob_type <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> value="<?php echo $_fieldValue; ?>" autocomplete="off">
+							<?php elseif ($attributeData->getFrontendInput() == 'select' && !in_array('dependable_field_'.$attrAsArray['attribute_code'], $isRequiredArray)):
+								$optiondata = $attributeData->getSource()->getAllOptions();
+								usort($optiondata, function($a, $b) {
+									return $a['value'] - $b['value'];
+								});
+							?>
+								<select name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-select <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> <?php ?>>
+								<?php foreach ($optiondata as $instance) { ?>
+									<?php if ($instance['value'] != '') :?>
+										  <option value="<?php echo $instance['value'] ?>" <?php echo $_fieldValue==$instance['value']?'selected':''; ?>> <?php echo $instance['label'] ?></option>
+									<?php endif; ?>
+									<?php } ?>
+								</select>
+								<?php //echo "field name:".$attrAsArray['attribute_code'];?>
+							<?php elseif ($attributeData->getFrontendInput() == 'multiselect'):
+								$optiondata = $attributeData->getSource()->getAllOptions();
+								usort($optiondata, function($a, $b) {
+									return $a['value'] - $b['value'];
+								});
+							?>
+								<select name="<?php echo $attrAsArray['attribute_code'] ?>[]" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-select <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> multiple="multiple">
+								<?php foreach ($optiondata as $instance) { ?>
+									<?php if ($instance['value'] != '') :?>
+										  <option value="<?php echo $instance['value'] ?>" <?php echo in_array($instance['value'], $_fieldValue)?'selected':''; ?>> <?php echo $instance['label'] ?></option>
+									<?php endif; ?>      
+									<?php } ?>
+								</select>
+							<?php elseif ($attributeData->getFrontendInput() == 'boolean'):?>
+								<input type="checkbox" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-text <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> value="1" <?php echo $_fieldValue; ?>>
+								<label for="is_subscribed" class="label <?php echo $attributeData->getAttributeCode() ?>"><span><?php /* @escapeNotVerified */ echo $attributeData->getFrontendLabel(); ?></span></label>
+							<?php elseif ($attributeData->getFrontendInput() == 'image'):?>
+								<input type="file" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" value="<?php echo $_imageValue; ?>" <?php if($_imageValue && $_customerData['approval_status'] != /*215*/ 10 ) echo " disabled";?> class="input-file attribute_image custom_file <?php echo $attributeData->getFrontendClass() ?>" data-allowed = "<?php echo $attrAsArray['note'] ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?>><br>
+								<span class="note"><span><?php echo $attrAsArray['note'] ?></span></span><br>
+								<div id="wk_add_images_container">
+									<?php echo $_fieldValue; ?>
+								</div>
+							<?php elseif ($attributeData->getFrontendInput() == 'file'):?>
+								<input type="file" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-file custom_file <?php echo $attributeData->getFrontendClass() ?>" data-allowed = "<?php echo $attrAsArray['note'] ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?>><br>
+								<span class="note"><span><?php echo $attrAsArray['note'] ?></span></span><br>
+								<span><?php echo $_fieldValue; ?></span>
+							<?php endif; ?>
+							<?php if (in_array('dependable_field_'.$attrAsArray['attribute_code'], $isRequiredArray)):?>
+								<select name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-select <?php echo 'dependable_field_'.$attrAsArray['attribute_code']; ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?>>
+								<?php foreach ($attributeData->getSource()->getAllOptions() as $instance) { ?>
+									<?php if ($instance['value'] != '') :?>
+										  <option value="<?php echo $instance['value'] ?>" <?php echo $_fieldValue==$instance['value']?'selected':''; ?>> <?php echo $instance['label'] ?></option>
+									<?php endif; ?>
+									<?php } ?>
+								</select>
+							<?php endif; ?>
+							</div>
+						</div>
+					<?php endif; ?>
+				<?php } ?>
+				<div class="actions-toolbar">
+					<div class="primary">
+					<button type="submit" class="action save primary" title="Save" style="display:none" id="save"><span><?php echo __('Save'); ?></span></button>
+					</div>
+					<button class="form-button" type="button" id="verify_step2" name="step2" style="display:none" ><span><?php echo __('Save & Continue') ?></span></button>
+					<button class="form-button" type="button" id="verify_step3" name="step3" style="display:none" ><span><?php echo __('Save & Continue') ?></span></button>
+					<button class="form-button" type="button" id="verify_step4" name="step4" style="display:none" ><span><?php echo __('Save & Continue') ?></span></button>
+				</div>
+		</fieldset>
+		</form>
+	</div>
+	<script> 
+		require([
+			"jquery",
+			'jquery/ui',
+			"mage/calendar",
+			'mage/translate',
+		], function ($){
+			$.each($('.dob_type'),function(i,v){
+				$(this).calendar({showsTime: false,dateFormat: "yy-M-d"});
+			});
+			$('.form-edit-account').append($('.wk-edit-additional-info'));
+			$('.attribute_image').on('change',function(){
+				half_upload($(this));
+			});
+			
+			function half_upload(this_input){
+				$("#wk_add_images_container").html("");
+				for(var i=0; i<this_input[0].files.length; i++){
+					if(this_input[0].files && this_input[0].files[i]) {
+						var reader = new FileReader();
+						reader.onload = function (e) {
+							$(this_input).siblings("#wk_add_images_container").html('');
+							$(this_input).siblings("#wk_add_images_container").append("<span class='wk_rma_image_cover'><img class='wk_rma_image' src='"+e.target.result+"' width='75' height='75'/></span>");
+						}
+						reader.readAsDataURL(this_input[0].files[i]);
+					}
+				}
+			}
+			/* Dependable Fields Controll */
+			$.each($( "select[class*='dependable_field_']" ), function(){
+				var childClass = $(this).attr('id');
+				var parentValue = $.trim($(this).find("option:selected").text());
+				if(parentValue == 'No' || parentValue == ''){
+					$('.'+$('.child_'+childClass).attr('id')).hide();
+				}
+			});
+			
+			$( "select[class*='dependable_field_']" ).change(function(target){
+				var childClass = $(this).attr('id');
+				var parentValue = $.trim($(this).find("option:selected").text());
+				if(parentValue == 'Yes'){
+					$('.'+$('.child_'+childClass).attr('id')).show();
+				}else{
+					$('.child_'+childClass).removeAttr('data-validate');
+					$('.'+$('.child_'+childClass).attr('id')).hide();
+				}
+			});
+
+			/* End of Dependable Field controll*/
+
+			$('.custom_file').change(function(){
+				var ext_arr = $(this).attr("data-allowed").split(",");
+				if(ext_arr.indexOf($(this).val().split("\\").pop().split(".").pop()) < 0){	
+					var self = $(this);
+					$('<div />').html('Invalid Image Extension. Allowed extensions are '+$(this).attr("data-allowed"))
+					.modal({
+						title: 'Attention!',
+						autoOpen: true,
+						buttons: [{
+						 text: 'Ok',
+							attr: {
+								'data-action': 'cancel'
+							},
+							'class': 'action',
+							click: function() {
+									self.val('');
+									this.closeModal();
+								}
+						}]
+					 });
+					
+				}
+			});
+        
+        //Custom
+        $("#verify_step1").click(function(){
+			$(".loading-mask").css("display","block");
+			setTimeout(function(){
+				$(".step1").css("display","none");
+				$(".loading-mask").css("display","none");
+				$("#form-validate-wrapper").css("display","block");
+				$("#legend").html("Step 2: CONFIRM anagraphic info");
+				
+				var attr = ["cibilian_name", "cibilian_gender", "cibilian_dob"];
+				$("#form-validate :input").each(function(){
+					if($.inArray($(this).attr("name"), attr) > -1){	
+						$(this).parent().parent().show();
+					}else{
+						$(this).css("display","none");
+						$(this).parent().parent().hide();
+						$(".fieldset").show();
+						$(".actions-toolbar").show();
+						$(".note").hide();
+						$("#wk_add_images_container").hide();
+						$(".approval_status").hide();
+					}
+				});
+				$("#verify_step2").show();
+			}, 6000);
+		});
+		
+		$("#verify_step2").click(function(){
+			$("#form-validate").valid();
+			if($("#form-validate").valid()){
+				$(".loading-mask").css("display","block");
+				setTimeout(function(){
+					$("#legend").html("Step 3: Tell us something about you");
+					var attr = ["cibilian_name", "cibilian_gender", "cibilian_dob","cibilian_fb_link","cibilian_twitter_link","cibilian_instagram_links","cibilian_linkedin_link","cibilian_google_plus_link","ciblian_vk_link","cibilian_blog_link","idproof"];
+					$("#form-validate :input").each(function(){
+						if($.inArray($(this).attr("name"), attr) > -1){	
+							$(this).parent().parent().hide();
+						}else{
+							$(this).css("display","show");
+							$(this).parent().parent().show();
+							$(".fieldset").show();
+							$(".actions-toolbar").show();
+							$("#verify_step2").hide();
+							$(".note").hide();
+							$("#wk_add_images_container").hide();
+							$(".approval_status").hide();
+							$(".cibilian_living_under_18").show();
+							$("#verify_step3").show();
+							$("#verify_step4").hide();
+							$("#save").hide();
+						}
+					});
+					$(".loading-mask").css("display","none");
+				},6000);
+			}
+		});
+		
+		$("#verify_step3").click(function(){
+			$("#form-validate").valid();
+			if($("#form-validate").valid()){
+				$(".loading-mask").css("display","block");
+				setTimeout(function(){
+					$("#legend").html("Step 4: Your Social Media pages");
+					var attr = ["cibilian_name", "cibilian_gender", "cibilian_dob","cibilian_education_level","cibilian_employment_status","cibilian_living","cibilian_living_under_18","cibilian_income_before_tax","idproof"];
+					$("#form-validate :input").each(function(){
+						if($.inArray($(this).attr("name"), attr) > -1){	
+							$(this).parent().parent().hide();
+						}else{
+							$(this).css("display","show");
+							$(this).parent().parent().show();
+							$(".fieldset").show();
+							$(".actions-toolbar").show();
+							$("#verify_step3").hide();
+							$(".note").hide();
+							$("#wk_add_images_container").hide();
+							$(".approval_status").hide();
+							$(".cibilian_living_under_18").hide();
+							$("#verify_step4").show();
+							$("#verify_step2").hide();
+							$("#save").hide();
+						}
+					});
+					$(".loading-mask").css("display","none");
+				},6000);
+			}
+		});
+		
+		$("#verify_step4").click(function(){
+			$("#form-validate").valid();
+			if($("#form-validate").valid()){
+				$(".loading-mask").css("display","block");
+				setTimeout(function(){
+					$("#legend").html("Step 5: Upload your ID");
+					var attr = ["cibilian_name", "cibilian_gender", "cibilian_dob","cibilian_fb_link","cibilian_twitter_link","cibilian_instagram_links","cibilian_linkedin_link","cibilian_google_plus_link","ciblian_vk_link","cibilian_blog_link","cibilian_education_level","cibilian_employment_status","cibilian_living","cibilian_living_under_18","cibilian_income_before_tax"];
+					$("#form-validate :input").each(function(){
+						if($.inArray($(this).attr("name"), attr) > -1){	
+							$(this).parent().parent().hide();
+						}else{
+							$(this).css("display","show");
+							$(this).parent().parent().show();
+							$(".fieldset").show();
+							$(".actions-toolbar").show();
+							$("#verify_step3").hide();
+							$(".note").show();
+							$("#wk_add_images_container").show();
+							$(".approval_status").hide();
+							$(".cibilian_living_under_18").hide();
+							$("#verify_step4").hide();
+							$("#verify_step2").hide();
+							$("#save").show();
+						}
+					});
+					$(".loading-mask").css("display","none");
+				},6000);
+			}
+		});
+    });
+    </script>
+</div>

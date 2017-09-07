@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Cibilia. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+        <add id="Cibilia_Idproofs::idproof" title="Cibilia" module="Cibilia_Idproofs"  sortOrder="30" resource="Cibilia_Idproofs::idproof"/>
+
+        <add id="Cibilia_Idproofs::cibilia_idproof_index" title="Manage Identity Proof" module="Cibilia_Idproofs"  sortOrder="10" dependsOnModule="Cibilia_Idproofs" action="idproofs/idproof/index" resource="Cibilia_Idproofs::cibilia_idproof_index" parent="Cibilia_Idproofs::idproof"/>
+
+        <!-- <add id="Cibilia_Idproofs::cibilia_idproof_commission" title="Cibilian Commision" module="Cibilia_Idproofs"  sortOrder="20" dependsOnModule="Cibilia_Idproofs" action="idproofs/idproof/commission" resource="Cibilia_Idproofs::cibilia_idproof_index" parent="Cibilia_Idproofs::idproof"/> -->
+
+   
+<!--AddMenu-->
+    </menu>
+</config>

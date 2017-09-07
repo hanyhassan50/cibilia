@@ -1,0 +1,61 @@
+<?php $this->helper('Cibilia\Summary\Helper\Customer')->redirectIfNotLoggedIn();?>
+<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); ?>
+<?php $customerSession = $objectManager->get('Magento\Customer\Model\Session'); ?>
+<?php $objSummary = $objectManager->create('Cibilia\Summary\Model\Summary')->load($customerSession->getCustomer()->getId(),'cibilian_id'); ?>
+<?php 
+    $requestedAmount = 0;
+    $arrRequestedCollection = $objectManager->create('Cibilia\Redemption\Model\Redemption')->getCollection()->addFieldToFilter('cibilian_id',$objSummary->getCibilianId())->addFieldToFilter('status',2);
+    foreach ($arrRequestedCollection as $withdraw) {
+       $requestedAmount = $requestedAmount + $withdraw->getAmount();
+    }
+    $finalAmount = $objSummary->getPendingAmount() - $requestedAmount;
+?>
+<?php if ($objSummary && $objSummary->getId()): ?>
+    <div class="summary_list_view">
+        <?php //foreach ($_summary as $summaryItem): ?>
+            <div id="item_<?php echo $objSummary->getId() ?>" class="summary_list_item">
+                <ul>
+                    <li>
+                        <span><?php echo __('Total Commission Earned: '); ?><span class="price"><?php echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($objSummary->getTotalAmount(),true,false);?></span></span>
+                        <span><a href="<?php echo $block->getUrl('commission/index') ?>"><?php echo __('Commission Earned List'); ?></a></span>
+                    </li>
+                    <li>
+                        <span><?php echo __('Total Commission Received: '); ?><span class="price"><?php echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($objSummary->getPaidAmount(),true,false);?></span></span>
+                        <?php if(intval($objSummary->getPaidAmount()) > 0){?>
+                        <span><a href="<?php echo $block->getUrl('redemption/index/paid',array('id' => 1)) ?>"><?php echo __('Commission Received List'); ?></a></span>
+                        <?php } ?>
+                    
+                    </li>
+                    <li>
+                        <span><?php echo __('Total Commission Pending: '); ?><span class="price"><?php echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($finalAmount,true,false);?></span></span>
+                         <?php if(intval($finalAmount) > 0){?>
+                        <span><a href="<?php echo $block->getUrl('redemption/index/withdraw') ?>"><?php echo __('Withdraw Commission'); ?></a></span>
+                        <?php } ?>
+                    </li>
+                    <?php if(count($arrRequestedCollection) > 0){ ?>
+                    <li>
+                        <span><?php echo __('Total Requested Amount: '); ?><span class="price"><?php echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($requestedAmount,true,false);?></span></span>
+                            <span><a href="<?php echo $block->getUrl('redemption/index/requested',array('id' => 2)) ?>"><?php echo __('Requested Withdrawl List'); ?></a></span>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php //endforeach; ?>
+    </div>
+    <style type="text/css">
+    .summary_list_item li {
+      font-size: 18px;
+      list-style: outside none none;
+    }
+    .summary_list_item li .price {
+  margin-left: 5px;
+  margin-right: 15px;
+  font-weight: bold;
+}
+.summary_list_item ul {
+  padding: 0;
+}
+    </style>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no Summary.'); ?></span></div>
+<?php endif ?>

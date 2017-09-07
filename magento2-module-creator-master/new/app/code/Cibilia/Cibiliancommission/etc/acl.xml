@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Cibilia_Adminhtml::admin">
+                <resource id="Cibilia_CibilianCommission::cibiliancommission" title="CibilianCommission" sortOrder="40">
+                    <resource id="Cibilia_CibilianCommission::manage" title="CibilianCommission Module" sortOrder="10">
+						<resource id="Cibilia_CibilianCommission::save" title="Save CibilianCommission" sortOrder="10" />
+                        <resource id="Cibilia_CibilianCommission::news_delete" title="Delete CibilianCommission" sortOrder="20" />
+					</resource>
+                </resource>
+                <resource id="Cibilia_Adminhtml::stores">
+                    <resource id="Cibilia_Adminhtml::stores_settings">
+                        <resource id="Cibilia_Adminhtml::config">
+                            <resource id="Cibilia_CibilianCommission::config_cibiliancommission" title="CibilianCommission Section" sortOrder="50" />
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

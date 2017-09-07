@@ -1,0 +1,46 @@
+<?php
+$prod = $this->getProduct();
+$tpl = $prod->getData('__tpl_product');
+$name = $this->getElement()->getName();
+$id = $this->getElement()->getId();
+$type = $this->getElement()->getType();
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$model = $objectManager->create('\Magento\Eav\Model\Config');
+?>
+<?php 
+$attr =  $model->getAttribute('catalog_product', $this->getElement()->getId()); 
+if($this->getElement()->getId() == "origin_of_raw_materials"){
+	$label = $attr->getStoreLabel();
+	$html = '<label class="label admin__field-label" for="' .$this->getElement()->getId() .'"><span>' .$label .'</span></label>' . "\n";
+}else{
+	$html = $this->getElement()->getLabelHtml();
+}
+?>
+<?php echo $html; ?> <br />
+<?php echo $this->getElementHtml() ?>
+<?php if (in_array($type, ['text','textarea']) && $prod && $tpl && ($tplData = $tpl->getData($id))==$prod->getData($id) && is_scalar($tplData)): ?>
+<script type="text/javascript">
+//<![CDATA[
+
+require(["jquery", "prototype","domReady!"], function(jQuery) {
+    var tpl = '<?php echo preg_replace("/\r\n|\n\r|\r|\n/", '\\n', $this->escapeJsQuote($tplData))?>';
+    var el = $('<?php echo $id?>');
+    if (el) {
+        el.emptyText = tpl;
+        el.observe('blur', function() {
+            if(el.value==''){
+                el.value=tpl;
+            }
+        });
+        el.observe('focus', function() {
+            if(el.value==tpl){
+                el.value='';
+            }
+        });
+    }
+});
+
+//]]>
+</script>
+<?php endif ?>

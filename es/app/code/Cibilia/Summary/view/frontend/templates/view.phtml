@@ -1,0 +1,30 @@
+<?php
+/**
+ * Summary template for separate item
+ *
+ */
+
+/**
+ * @var $this Cibilia\Summary\Block\View
+ * @see Cibilia\Summary\Block\View
+ */
+?>
+<?php $_summaryItem = $this->getSummary(); ?>
+    <div class="summary_item_subtitle">
+        <?php echo $this->formatDate($_summaryItem->getPublishedAt()) ?> |
+        <?php echo $this->escapeHtml($_summaryItem->getAuthor()) ?>
+    </div>
+
+<div class="summary_item_view">
+    <?php if ($imageUrl = $this->getImageUrl($_summaryItem, 400)): ?>
+       <p><img src="<?php echo $imageUrl ?>" alt="<?php echo $this->escapeHtml($_summaryItem->getTitle()) ?>" /></p>
+    <?php endif; ?>
+
+    <div class="summary_item_content"><?php echo $_summaryItem->getContent() ?></div>
+
+    <div class="pager">
+        <a href="<?php echo $this->getBackUrl() ?>">
+            <?php echo __('Return to list') ?>
+        </a>
+    </div>
+</div>

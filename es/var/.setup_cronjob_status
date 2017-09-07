@@ -1,0 +1,43 @@
+{
+    "readiness_checks": {
+        "db_write_permission_verified": true
+    },
+    "php_checks": {
+        "php_version_verified": {
+            "responseType": "success",
+            "data": {
+                "required": "~5.5.0|~5.6.0|~7.0.0",
+                "current": "7.0.20"
+            }
+        },
+        "php_extensions_verified": {
+            "responseType": "success",
+            "data": {
+                "required": {
+                    "0": "mbstring",
+                    "1": "curl",
+                    "2": "dom",
+                    "3": "hash",
+                    "4": "openssl",
+                    "5": "simplexml",
+                    "6": "xmlwriter",
+                    "7": "gd",
+                    "12": "iconv",
+                    "13": "mcrypt",
+                    "16": "spl",
+                    "17": "xsl",
+                    "18": "intl",
+                    "20": "ctype",
+                    "36": "zip"
+                },
+                "missing": []
+            }
+        },
+        "php_settings_verified": {
+            "responseType": "success",
+            "data": []
+        }
+    },
+    "last_timestamp": 1504592824,
+    "current_timestamp": 1504592884
+}
