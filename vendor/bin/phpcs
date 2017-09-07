@@ -1,0 +1,41 @@
+($output->getStream())
+        );
+    }
+
+    public function testDisplayWithQuietVerbosity()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream(true, StreamOutput::VERBOSITY_QUIET), 50);
+        $bar->display();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            '',
+            stream_get_contents($output->getStream())
+        );
+    }
+
+    public function testFinishWithoutStart()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
+        $bar->finish();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            $this->generateOutput(' 50/50 [============================] 100%'),
+            stream_get_contents($output->getStream())
+        );
+    }
+
+    public function testPercent()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
+        $bar->start();
+        $bar->display();
+        $bar->advance();
+        $bar->advance();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            $this->generateOutput('  0/50 [>---------------------------]   0%').
+            $this->generateOutput('  0/50 [>---------------------------]   0%').
+           

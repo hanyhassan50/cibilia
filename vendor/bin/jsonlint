@@ -1,0 +1,75 @@
+      $bar->finish();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            $this->generateOutput(' 50/50 [============================] 100%'),
+            stream_get_contents($output->getStream())
+        );
+    }
+
+    public function testPercent()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
+        $bar->start();
+        $bar->display();
+        $bar->advance();
+        $bar->advance();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            $this->generateOutput('  0/50 [>---------------------------]   0%').
+            $this->generateOutput('  0/50 [>---------------------------]   0%').
+            $this->generateOutput('  1/50 [>---------------------------]   2%').
+            $this->generateOutput('  2/50 [=>--------------------------]   4%'),
+            stream_get_contents($output->getStream())
+        );
+    }
+
+    public function testOverwriteWithShorterLine()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
+        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%%');
+        $bar->start();
+        $bar->display();
+        $bar->advance();
+
+        // set shorter format
+        $bar->setFormat(' %current%/%max% [%bar%]');
+        $bar->advance();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            $this->generateOutput('  0/50 [>---------------------------]   0%').
+            $this->generateOutput('  0/50 [>---------------------------]   0%').
+            $this->generateOutput('  1/50 [>---------------------------]   2%').
+            $this->generateOutput('  2/50 [=>--------------------------]     '),
+            stream_get_contents($output->getStream())
+        );
+    }
+
+    public function testStartWithMax()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream());
+        $bar->setFormat('%current%/%max% [%bar%]');
+        $bar->start(50);
+        $bar->advance();
+
+        rewind($output->getStream());
+        $this->assertEquals(
+            $this->generateOutput(' 0/50 [>---------------------------]').
+            $this->generateOutput(' 1/50 [>---------------------------]'),
+            stream_get_contents($output->getStream())
+        );
+    }
+
+    public function testSetCurrentProgress()
+    {
+        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
+        $bar->start();
+        $bar->display();
+        $bar->advance();
+        $bar->setProgress(15);
+        $bar->setProgress(25);
+
+        rewind($output->getStream());
+        $this->assertEq

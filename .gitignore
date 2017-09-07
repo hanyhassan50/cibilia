@@ -9,13 +9,13 @@ atlassian*
 /.idea
 /.gitattributes
 
-/app/code/Magento
-/app/design/*/Magento
-/app/etc
-/app/i18n/magento
-/app/*.*
+#/app/code/Magento
+#/app/design/*/Magento
+#/app/etc
+#/app/i18n/magento
+#/app/*.*
 
-/bin
+#/bin
 
 /dev/shell
 
@@ -48,15 +48,15 @@ atlassian*
 
 /dev/*.*
 
-/lib
+#/lib
 
 /pub
 
-/setup
+#/setup
 
 /var
 
-/vendor
+#/vendor
 
 #/*.*
 

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageSpecialist
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@magespecialist.it so we can send you a copy immediately.
+ *
+ * @category   MSP
+ * @package    MSP_Shield
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <msp_securitysuite_shield>
+            <general>
+                <enabled>0</enabled>
+                <enabled_backend>0</enabled_backend>
+                <min_impact_log>3</min_impact_log>
+                <min_impact_stop>6</min_impact_stop>
+                <check_cookies>0</check_cookies>
+                <params_whitelist>COOKIE.mage-cache-storage
+COOKIE.mage-cache-storage-section-invalidation
+COOKIE.ls_mage-cache-storage
+COOKIE.mage-messages
+GET.__utmz
+GET.__utmc</params_whitelist>
+                <uri_whitelist>/$admin/cms/page/save
+/$admin/cms/block/save
+/$admin/widget_instance/validate
+/$admin/widget_instance/save
+/$admin/catalog/product/save
+/$admin/catalog/category/save</uri_whitelist>
+            </general>
+        </msp_securitysuite_shield>
+    </default>
+</config>
