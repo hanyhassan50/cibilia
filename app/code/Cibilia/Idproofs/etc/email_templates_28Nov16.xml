@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
-    <template id="custom_cibilia_general_template" label="Identity Proof Notify Email" file="custom_cibilia_general_template.html" type="html" module="Cibilia_Idproofs" area="frontend"/>
-    <template id="custom_cibilia_vendor_review_email_template" label="Vendor Information Review Email" file="custom_cibilia_vendor_review_email_template.html" type="html" module="Cibilia_Idproofs" area="frontend"/>
-    <template id="custom_cibilia_vendor_type_select_email_template" label="Vendor Type Selection Email" file="custom_cibilia_vendor_type_select_email_template.html" type="html" module="Cibilia_Idproofs" area="frontend"/>
-     <template id="custom_cibilia_new_advertiser_email_template" label="New Advertiser Registration Email" file="custom_cibilia_new_advertiser_email_template.html" type="html" module="Cibilia_Idproofs" area="frontend"/>
-     <template id="custom_cibilia_vendor_type_email_template" label="Vendor Type Updation Email" file="custom_cibilia_vendor_type_email_template.html" type="html" module="Cibilia_Idproofs" area="frontend"/>
-</config>

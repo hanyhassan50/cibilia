@@ -1,3 +1,0 @@
-/**
- * udropship.js
- **/

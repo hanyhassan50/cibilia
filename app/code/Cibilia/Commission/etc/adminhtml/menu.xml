@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <!-- <add id="Cibilia_Commission::commission" title="Commission" module="Cibilia_Commission" sortOrder="30" resource="Cibilia_Commission::commission"/> -->
-        <!-- <add id="Cibilia_Commission::commission_manage" title="Cibilian Commission" module="Cibilia_Commission" sortOrder="20" parent="Cibilia_Idproofs::idproof" action="commission/index/" resource="Cibilia_Commission::manage"/> -->
-    </menu>
-</config>
