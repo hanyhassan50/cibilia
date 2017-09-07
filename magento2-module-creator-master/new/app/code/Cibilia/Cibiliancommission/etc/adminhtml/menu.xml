@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Cibilia_CibilianCommission::cibiliancommission" title="CibilianCommission" module="Cibilia_CibilianCommission" sortOrder="30" resource="Cibilia_CibilianCommission::cibiliancommission"/>
-        <add id="Cibilia_CibilianCommission::cibiliancommission_manage" title="All Items" module="Cibilia_CibilianCommission" sortOrder="10" parent="Cibilia_CibilianCommission::cibiliancommission" action="cibiliancommission/index/" resource="Cibilia_CibilianCommission::manage"/>
-    </menu>
-</config>

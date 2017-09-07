@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Cibilia_Redemption::redemption" title="Redemption" module="Cibilia_Redemption" sortOrder="30" resource="Cibilia_Redemption::redemption"/>
-        <add id="Cibilia_Redemption::redemption_manage" title="All Items" module="Cibilia_Redemption" sortOrder="10" parent="Cibilia_Redemption::redemption" action="redemption/index/" resource="Cibilia_Redemption::manage"/>
-    </menu>
-</config>
