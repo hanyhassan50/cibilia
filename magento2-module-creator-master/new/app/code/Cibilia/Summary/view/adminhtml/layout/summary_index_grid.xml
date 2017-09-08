@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="formkey"/>
-    <container name="root" label="Root">
-        <block class="Cibilia\Summary\Block\Adminhtml\summary\Grid" name="admin.summary.grid"/>
-    </container>
-</page>
