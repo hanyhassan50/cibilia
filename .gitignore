@@ -50,7 +50,7 @@ atlassian*
 
 #/lib
 
-/pub
+/pub/static/*
 
 #/setup
 
