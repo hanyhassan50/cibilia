@@ -104,12 +104,9 @@ require(["jquery", "prototype"], function(jQuery) {
     {
         toggleFields.each(function(pair) {
             var key = pair.key
-            console.log(pair)
             $A(pair.value).each(function(val) {
                 var yesKey = suffixIdTpl.evaluate({key: 'yes__'+key+'_'+val+'_'+row});
                 var noKey = suffixIdTpl.evaluate({key: 'no__'+key+'_'+val+'_'+row});
-                console.log(val)
-                console.log(data[key])
                 if (data[key]!=val) {
                     $$('.'+yesKey).invoke('hide');
                     $$('.'+noKey).invoke('show');

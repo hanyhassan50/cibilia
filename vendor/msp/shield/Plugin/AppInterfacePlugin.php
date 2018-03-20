@@ -23,12 +23,9 @@ namespace MSP\Shield\Plugin;
 use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\Http;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\UrlInterface;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
+use MSP\SecuritySuiteCommon\Api\LockDownInterface;
 use MSP\Shield\Api\ShieldInterface;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 
 class AppInterfacePlugin
 {
@@ -36,16 +33,6 @@ class AppInterfacePlugin
      * @var RequestInterface
      */
     private $request;
-
-    /**
-     * @var Http
-     */
-    private $http;
-
-    /**
-     * @var UrlInterface
-     */
-    private $url;
 
     /**
      * @var State
@@ -58,70 +45,65 @@ class AppInterfacePlugin
     private $shield;
 
     /**
-     * @var EventInterface
+     * @var LockDownInterface
      */
-    private $event;
+    private $lockDown;
 
     /**
-     * @var ObjectManagerInterface
+     * @var AlertInterface
      */
-    private $objectManager;
-
+    private $alert;
 
     public function __construct(
         RequestInterface $request,
-        Http $http,
-        UrlInterface $url,
         State $state,
         ShieldInterface $shield,
-        EventInterface $event,
-        ObjectManagerInterface $objectManager
+        AlertInterface $alert,
+        LockDownInterface $lockDown
     ) {
         $this->request = $request;
-        $this->http = $http;
-        $this->url = $url;
         $this->state = $state;
         $this->shield = $shield;
-        $this->event = $event;
-        $this->objectManager = $objectManager;
+        $this->lockDown = $lockDown;
+        $this->alert = $alert;
     }
 
+    /**
+     * @param AppInterface $subject
+     * @param \Closure $proceed
+     * @return \Magento\Framework\App\Response\Http|mixed
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
+     */
     public function aroundLaunch(AppInterface $subject, \Closure $proceed)
     {
         // We are creating a plugin for AppInterface to make sure we can perform an IDS scan early in the code.
-        // A predispatch observer is not an option.
-        if ($this->shield->isEnabled() && $this->shield->shouldScan($this->request)) {
+        if ($this->shield->isEnabled() && $this->shield->shouldScan()) {
             $res = $this->shield->scanRequest();
 
-            if ($res) {
-                $tags = implode(', ', $res->getTags());
-
+            if ($res && ($res->getScore() > 0)) {
                 $stopAction = $this->shield->getMinImpactToStop() &&
-                    $this->shield->getMinImpactToStop() <= $res->getImpact();
+                    $this->shield->getMinImpactToStop() <= $res->getScore();
 
                 $logAction = $stopAction ||
                     ($this->shield->getMinImpactToLog() &&
-                        $this->shield->getMinImpactToLog() <= $res->getImpact()
+                        $this->shield->getMinImpactToLog() <= $res->getScore()
                     );
 
                 if ($logAction) {
-                    $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                        'module' => 'MSP_Shield',
-                        'message' => $tags . ' (impact ' . $res->getImpact() . ')',
-                        'action' => $stopAction ? 'stop' : 'log',
-                        'additional' => html_entity_decode(''.$res),
-                    ]);
+                    $this->alert->event(
+                        'MSP_Shield',
+                        $res->getDescription(),
+                        AlertInterface::LEVEL_SECURITY_ALERT,
+                        null,
+                        $stopAction ? AlertInterface::ACTION_LOCKDOWN : AlertInterface::ACTION_LOG,
+                        $res->getAdditionalInfo()
+                    );
                 }
 
                 if ($stopAction) {
                     $this->state->setAreaCode('frontend');
-
-                    // Must use object manager because a session cannot be activated before setting area
-                    $this->objectManager->get('MSP\SecuritySuiteCommon\Api\SessionInterface')
-                        ->setEmergencyStopMessage(__('Hack Attempt or Suspicious Activity detected'));
-
-                    $this->http->setRedirect($this->url->getUrl('msp_security_suite/stop/index'));
-                    return $this->http;
+                    return $this->lockDown->doHttpLockdown(__('Hack Attempt or Suspicious Activity detected'));
                 }
             }
         }

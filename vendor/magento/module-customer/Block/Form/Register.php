@@ -1,12 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Form;
 
+use Magento\Customer\Model\AccountManagement;
+
 /**
  * Customer register form block
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Register extends \Magento\Directory\Block\Data
 {
@@ -26,6 +32,8 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -189,5 +197,27 @@ class Register extends \Magento\Directory\Block\Data
         }
 
         return $this;
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getMinimumPasswordLength()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH);
+    }
+
+    /**
+     * Get number of password required character classes
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getRequiredCharacterClassesNumber()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }

@@ -68,8 +68,8 @@ class Rules extends Template
     }
     public function getUrl($route = '', $params = [])
     {
-        if (!isset($params['_store']) && $this->_oldStoreId) {
-            $params['_store'] = $this->_oldStoreId;
+        if (!isset($params['_scope']) && $this->_oldStoreId) {
+            $params['_scope'] = $this->_oldStoreId;
         }
         return parent::getUrl($route, $params);
     }

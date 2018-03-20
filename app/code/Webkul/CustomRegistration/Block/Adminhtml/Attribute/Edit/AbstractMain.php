@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit;
 
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
@@ -112,6 +120,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         $yesno = $this->_yesnoFactory->create()->toOptionArray();
 
         $label = $attributeObj->getFrontendLabel();
+        $frontendInput = $attributeObj->getFrontendInput();
         $fieldset->addField(
             'attribute_label',
             'text',
@@ -136,7 +145,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'Make sure you don\'t use spaces or more than %1 symbols.',
+                    'Make sure you don\'t use spaces or more than %1 characters.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validationClass,
@@ -166,17 +175,18 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'values' => $yesno
             ]
         );
-
-        $fieldset->addField(
-            'frontend_class',
-            'select',
-            [
-                'name' => 'frontend_class',
-                'label' => __('Input Validation for Store Owner'),
-                'title' => __('Input Validation for Store Owner'),
-                'values' => $this->_eavData->getFrontendClasses($attributeObj->getEntityType()->getEntityTypeCode())
-            ]
-        );
+        if($frontendInput != 'date'){
+            $fieldset->addField(
+                'frontend_class',
+                'select',
+                [
+                    'name' => 'frontend_class',
+                    'label' => __('Input Validation for Store Owner'),
+                    'title' => __('Input Validation for Store Owner'),
+                    'values' => $this->_eavData->getFrontendClasses($attributeObj->getEntityType()->getEntityTypeCode())
+                ]
+            );
+        }
         $fieldset->addField(
             'sort_order',
             'text',
@@ -210,17 +220,9 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'is_visible',
                 'label' => __('Status'),
                 'title' => __('Status'),
-                'values' => $yesno
+                'values' => [['value' => 1, 'label' => __('Enable')], ['value' => 0, 'label' => __('Disable')]]
             ]
         );
-
-        /*if ($attributeObj->getId()) {
-            $form->getElement('attribute_code')->setDisabled(1);
-            $form->getElement('frontend_input')->setDisabled(1);
-            if (!$attributeObj->getIsUserDefined()) {
-                $form->getElement('is_unique')->setDisabled(1);
-            }
-        }*/
 
         $this->propertyLocker->lock($form);
         $this->setForm($form);

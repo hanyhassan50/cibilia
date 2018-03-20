@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Block;
 
 use Magento\Customer\Model\CustomerFactory;
@@ -20,13 +28,19 @@ class Customfields extends \Magento\Framework\View\Element\Template
      */
     protected $_session;
      /**
-     * @var ObjectManagerInterface
-     */
+      * @var ObjectManagerInterface
+      */
     protected $_objectManager;
 
     protected $_attributeFactory;
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attributeCollection
+     * @param \Magento\Eav\Model\Entity $eavEntity
+     * @param CustomerFactory $customer
+     * @param \Magento\Customer\Model\AttributeFactory $attributeFactory
+     * @param Session $session
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array                                            $data
      */
     public function __construct(
@@ -54,19 +68,26 @@ class Customfields extends \Magento\Framework\View\Element\Template
     public function attributeCollectionFilter()
     {
         $typeId = $this->_eavEntity->setType('customer')->getTypeId();
-        $custom_field = $this->_objectManager->create('Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection')->getTable('wk_customfields');
+        $customField = $this->_objectManager->create(
+            'Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection'
+        )->getTable('wk_customfields');
         $collection = $this->_attributeCollection->create()
                 ->setEntityTypeFilter($typeId)
                 ->addFilter('is_user_defined', 1)
                 ->setOrder('sort_order', 'ASC');
+                
         $collection->getSelect()
-        ->join(array("ccp" => "wk_customfields"), "ccp.attribute_id = main_table.attribute_id", array("status" => "status"))->where("ccp.status = 1");
+        ->join(
+            ["ccp" => $customField],
+            "ccp.attribute_id = main_table.attribute_id",
+            ["status" => "status"]
+        )->where("ccp.status = 1");
 
         return $collection;
     }
     /**
-     * [getCurrentCustomer description]
-     * @return [type] [description]
+     * get current customer info.
+     * @return object
      */
     public function getCurrentCustomer()
     {
@@ -75,17 +96,13 @@ class Customfields extends \Magento\Framework\View\Element\Template
         return $customerData;
     }
     /**
-     * [getUsedInForms description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     *
+     * @param  int $id
+     * @return array
      */
     public function getUsedInForms($id)
     {
         $attributeModel = $this->_attributeFactory->create();
         return $attributeModel->load($id)->getUsedInForms();
-    }
-    public function getMedialUrl()
-    {
-        return $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
     }
 }

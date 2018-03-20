@@ -205,7 +205,11 @@ class Catalog extends AbstractHelper
         if ($active) {
             $collection->addAttributeToFilter('is_active', 1);
         }
-        $collection->addIdFilter($cIds);
+        if ($this->flatState->isAvailable()) {
+            $collection->addFieldToFilter('main_table.entity_id', ['in' => $cIds]);
+        } else {
+            $collection->addIdFilter($cIds);
+        }
         return $collection;
     }
     public function processCategoriesData(&$fCatIds, $returnArray=true)
@@ -233,7 +237,7 @@ class Catalog extends AbstractHelper
 
     protected $_isEmulating = false;
 
-    public function setDesignStore($store=null, $area=null, $theme=null)
+    public function setDesignStore($store=null, $area=\Magento\Framework\App\Area::AREA_FRONTEND, $theme=null)
     {
         /** @var \Magento\Store\Model\App\Emulation $appEmulation */
         $appEmulation = $this->_hlp->getObj('\Magento\Store\Model\App\Emulation');
@@ -247,7 +251,11 @@ class Catalog extends AbstractHelper
             if ($theme) {
                 /** @var \Magento\Framework\View\DesignInterface $viewDesign */
                 $viewDesign = $this->_hlp->getObj('\Magento\Framework\View\DesignInterface');
-                $viewDesign->setDesignTheme($theme, $area);
+                try {
+                    $viewDesign->setDesignTheme($theme, $area);
+                } catch (\Exception $e) {
+
+                }
             }
         } else {
             if (!$this->_isEmulating) {
@@ -380,7 +388,8 @@ class Catalog extends AbstractHelper
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID,
             \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID,
             \Magento\Catalog\Model\Indexer\Product\Category\Processor::INDEXER_ID,
-            \Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID
+            \Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID,
+            'udropship_product_vendor_limit'
         ] as $indexerId) {
             if (!$indexerConfig->getIndexer($indexerId)) continue;
             $indexer = $indexerRegistry->get($indexerId);
@@ -630,5 +639,27 @@ class Catalog extends AbstractHelper
         }
 
         return new \Zend_Db_Expr($expression);
+    }
+    public function removePriceIndexFromProductCollection($collection, $countSelect)
+    {
+        if ($collection->getFlag('udskip_price_index')) {
+            $skipIndexTables = ['price_index','stock_status_index'];
+            $select = $countSelect;
+            $fromPart = $select->getPart(\Zend_Db_Select::FROM);
+            $columnsPart = $select->getPart(\Zend_Db_Select::COLUMNS);
+            $newColumnsPart = $newFromPart = array();
+            foreach ($fromPart as $fwIdx=>$fromEntry) {
+                if (!in_array($fwIdx, $skipIndexTables)) {
+                    $newFromPart[$fwIdx] = $fromEntry;
+                }
+            }
+            foreach ($columnsPart as $ceIdx=>$columnEntry) {
+                if (!in_array($columnEntry[0], $skipIndexTables)) {
+                    $newColumnsPart[] = $columnEntry;
+                }
+            }
+            $select->setPart(\Zend_Db_Select::FROM, $newFromPart);
+            $select->setPart(\Zend_Db_Select::COLUMNS, $newColumnsPart);
+        }
     }
 }

@@ -3,7 +3,7 @@
 namespace Unirgy\DropshipShippingClass\Helper;
 
 use Magento\Customer\Model\Session;
-use Magento\Directory\Model\ResourceModel\Region\Collection;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
@@ -19,9 +19,9 @@ class Data extends AbstractHelper
     protected $_helperData;
 
     /**
-     * @var Collection
+     * @var RegionCollectionFactory
      */
-    protected $_regionCollection;
+    protected $_regionCollectionFactory;
 
     /**
      * @var CustomerCollection
@@ -41,13 +41,13 @@ class Data extends AbstractHelper
     public function __construct(
         Context $context,
         HelperData $helper,
-        Collection $regionCollection,
+        RegionCollectionFactory $regionCollectionFactory,
         CustomerCollection $customerCollection,
         VendorCollection $vendorCollection,
         Session $customerSession
     ) {
         $this->_helperData = $helper;
-        $this->_regionCollection = $regionCollection;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
         $this->_customerCollection = $customerCollection;
         $this->_vendorCollection = $vendorCollection;
         $this->_customerSession = $customerSession;
@@ -82,17 +82,18 @@ class Data extends AbstractHelper
                         $shipClass = $cShipClass->getId();
                         break;
                     }
-                }
-                foreach ($cShipClass->getRows() as $row) {
-                    if ($address->getCountryId() == $row['country_id']
-                        && $this->_checkRegion($address, $row)
-                        && $this->_helperData->isZipcodeMatch($address->getPostcode(), $row['postcode'])
-                    ) {
-                        if ($all) {
-                            $shipClass[] = $cShipClass->getId();
-                        } else {
-                            $shipClass = $cShipClass->getId();
-                            break 2;
+                } else {
+                    foreach ($cShipClass->getRows() as $row) {
+                        if ($address->getCountryId() == $row['country_id']
+                            && $this->_checkRegion($address, $row)
+                            && $this->_helperData->isZipcodeMatch($address->getPostcode(), $row['postcode'])
+                        ) {
+                            if ($all) {
+                                $shipClass[] = $cShipClass->getId();
+                            } else {
+                                $shipClass = $cShipClass->getId();
+                                break 2;
+                            }
                         }
                     }
                 }
@@ -127,17 +128,18 @@ class Data extends AbstractHelper
                     $shipClass = $vShipClass->getId();
                     break;
                 }
-            }
-            foreach ($vShipClass->getRows() as $row) {
-                if ($vendor->getCountryId() == $row['country_id']
-                    && $this->_checkRegion($vendor, $row)
-                    && $this->_helperData->isZipcodeMatch($vendor->getZip(), $row['postcode'])
-                ) {
-                    if ($all) {
-                        $shipClass[] = $vShipClass->getId();
-                    } else {
-                        $shipClass = $vShipClass->getId();
-                        break 2;
+            } else {
+                foreach ($vShipClass->getRows() as $row) {
+                    if ($vendor->getCountryId() == $row['country_id']
+                        && $this->_checkRegion($vendor, $row)
+                        && $this->_helperData->isZipcodeMatch($vendor->getZip(), $row['postcode'])
+                    ) {
+                        if ($all) {
+                            $shipClass[] = $vShipClass->getId();
+                        } else {
+                            $shipClass = $vShipClass->getId();
+                            break 2;
+                        }
                     }
                 }
             }
@@ -155,7 +157,7 @@ class Data extends AbstractHelper
         $regionIds = array_filter($regionIds);
         if (empty($regionIds)) return true;
         $rFilterKey = 'main_table.region_id';
-        $regions = $this->_regionCollection
+        $regions = $this->_regionCollectionFactory->create()
             ->addCountryFilter($row['country_id'])
             ->addFieldToFilter($rFilterKey, ['in' => $regionIds]);
         if ($regions->count() == 0 || $regions->getItemById($obj1->getRegionId())) return true;

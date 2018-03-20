@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="svg" xsi:type="string">
+                    <![CDATA[<svg version="1.1" id="si-star-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+				        <path d="M48.5,68.3L33,76.5L36.2,57.6L22.5,44.1L41.5,41.4L50,24.2L58.5,41.4L77.5,44.1L63.8,57.6L67,76.5L50,67.6Z" style="stroke-dasharray: 192, 232; stroke-dashoffset: 0;"></path>
+			        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

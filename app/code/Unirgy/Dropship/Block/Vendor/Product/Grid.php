@@ -167,7 +167,9 @@ class Grid extends Template
             $r = $this->_request;
             $res = $this->_hlp->rHlp();
             $stockTable = $res->getTableName('cataloginventory_stock_item');
-            $collection = $this->_hlp->createObj('\Magento\Catalog\Model\Product')->getCollection()
+            $collection = $this->_hlp->createObj('\Unirgy\Dropship\Model\ResourceModel\ProductCollection')
+                ->setFlag('udskip_price_index',1)
+                ->setFlag('has_stock_status_filter', 1)
                 //->addAttributeToFilter('udropship_vendor', $v->getId())
                 ->addAttributeToFilter('type_id', array('in'=>array('simple','downloadable','virtual')))
                 ->addAttributeToSelect(array('sku', 'name', 'visibility'/*, 'cost'*/))

@@ -12,21 +12,24 @@ class Downloadable extends AbstractElement
     /**
      * @var \Magento\Framework\View\LayoutInterface
      */
-    protected $_modelLayout;
+    protected $_viewLayout;
 
-    public function __construct(Factory $factoryElement, 
+    public function __construct(
+        \Magento\Framework\View\LayoutInterface $viewLayout,
+        Factory $factoryElement,
         CollectionFactory $factoryCollection, 
         Escaper $escaper,
-        \Magento\Framework\View\LayoutInterface $modelLayout)
+        $data = []
+    )
     {
-        $this->_modelLayout = $modelLayout;
+        $this->_viewLayout = $viewLayout;
 
-        parent::__construct($factoryElement, $factoryCollection, $escaper);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     public function getHtml()
     {
-        $this->_renderer = $this->_modelLayout->createBlock('udprod/vendor_product_renderer_downloadable', 'admin.product.options');
+        $this->_renderer = $this->_viewLayout->createBlock('\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\Downloadable', 'admin.product.downloadable');
         $this->_renderer->setProduct($this->_product);
         return parent::getHtml();
     }

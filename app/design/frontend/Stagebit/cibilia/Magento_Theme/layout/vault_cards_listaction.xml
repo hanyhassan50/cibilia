@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="svg" xsi:type="string">
+                    <![CDATA[<svg version="1.1" id="fi-creditcard-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                        <path d="M75.693,68.361H24.307 c-1.861,0-3.384-1.523-3.384-3.384V35.024c0-1.861,1.523-3.384,3.384-3.384h51.386c1.861,0,3.384,1.523,3.384,3.384v29.953 C79.078,66.838,77.555,68.361,75.693,68.361z" style="stroke-dasharray: 184, 224; stroke-dashoffset: 0;"></path>
+                        <path d="M20.922,54.272L79.078,54.272" style="stroke-dasharray: 59, 99; stroke-dashoffset: 0;"></path>
+                        <path d="M79.078,59.789L20.922,59.789" style="stroke-dasharray: 59, 99; stroke-dashoffset: 0;"></path>
+                        <path d="M28.1,39.329L34.013,39.329L34.013,44.483L27.1,44.483L27.1,39.329Z" style="stroke-dasharray: 25, 65; stroke-dashoffset: 0;"></path>
+                    </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

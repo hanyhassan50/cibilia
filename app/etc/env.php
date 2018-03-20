@@ -2,7 +2,7 @@
 return array (
   'backend' => 
   array (
-    'frontName' => 'admin_k3ulux',
+    'frontName' => 'admin',
   ),
   'install' => 
   array (
@@ -24,8 +24,8 @@ return array (
       'default' => 
       array (
         'host' => 'localhost',
-        'dbname' => '',
-        'username' => '',
+        'dbname' => 'cibilia_222',
+        'username' => 'root',
         'password' => '',
         'active' => '1',
       ),
@@ -55,5 +55,7 @@ return array (
     'translate' => 0,
     'config_webservice' => 0,
     'compiled_config' => 1,
+    'customer_notification' => 0,
+    'msp_shield' => 0,
   ),
 );

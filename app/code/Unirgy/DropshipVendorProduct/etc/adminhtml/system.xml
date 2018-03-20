@@ -34,10 +34,10 @@
                     <label>Gallery upload is required</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <!--field id="allow_custom_options" translate="label" sortOrder="5" type="select" showInDefault="1">
+                <field id="allow_custom_options" translate="label" sortOrder="5" type="select" showInDefault="1">
                     <label>Allow add/edit custom options</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field-->
+                </field>
                 <field id="show_vendor_sku_column" translate="label" sortOrder="9" type="select" showInDefault="1">
                     <label>Show vendor sku column in vendor portal products edit grid</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

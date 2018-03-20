@@ -12,14 +12,16 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 
-class TypeOfProduct extends Serialized
+class TypeOfProduct extends \Unirgy\Dropship\Model\SystemConfig\Backend\Serialized
 {
     /**
      * @var Resolver
      */
     protected $_localeResolver;
 
-    public function __construct(Context $context, 
+    public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
+        Context $context,
         Registry $registry, 
         ScopeConfigInterface $config, 
         TypeListInterface $cacheTypeList, 
@@ -30,7 +32,7 @@ class TypeOfProduct extends Serialized
     {
         $this->_localeResolver = $localeResolver;
 
-        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+        parent::__construct($udropshipHelper, $context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     public function beforeSave()

@@ -5,8 +5,25 @@
         <referenceContainer name="udropship.content">
             <block class="Unirgy\DropshipMicrosite\Block\Frontend\Registration"
                    template="Unirgy_DropshipMicrosite::unirgy/microsite/vendor/register.phtml" name="register" cacheable="false">
+                <container name="form.additional.info" label="Form Additional Info"/>
             </block>
         </referenceContainer>
+        <referenceContainer name="form.additional.info">
+            <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
+                <action method="setFormId">
+                    <argument name="formId" xsi:type="string">umicrosite_registration_form</argument>
+                </action>
+                <action method="setImgWidth">
+                    <argument name="width" xsi:type="string">230</argument>
+                </action>
+                <action method="setImgHeight">
+                    <argument name="width" xsi:type="string">50</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="captcha_page_head_components" template="Magento_Captcha::js/components.phtml"/>
+        </referenceBlock>
     </body>
     <update handle="udropship_vendor"/>
 </page>

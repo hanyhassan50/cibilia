@@ -77,8 +77,6 @@ class InstallSchema implements InstallSchemaInterface
         $connection->addColumn($refundRowTable, 'vendor_sku', ['TYPE'=>Table::TYPE_TEXT,'LENGTH'=>128,'nullable' => true,'COMMENT'=>'vendor_sku']);
         $connection->addColumn($refundRowTable, 'vendor_simple_sku', ['TYPE'=>Table::TYPE_TEXT,'LENGTH'=>128,'nullable' => true,'COMMENT'=>'vendor_simple_sku']);
         $connection->addColumn($refundRowTable, 'product', ['TYPE'=>Table::TYPE_TEXT,'LENGTH'=>255,'nullable' => true,'COMMENT'=>'product']);
-        $connection->addColumn($refundRowTable, 'total_payment', ['TYPE' => Table::TYPE_DECIMAL, 'LENGTH' => '12,4', 'nullable' => true, 'default' => 0, 'COMMENT' => 'total_payment']);
-        $connection->addColumn($refundRowTable, 'total_invoice', ['TYPE' => Table::TYPE_DECIMAL, 'LENGTH' => '12,4', 'nullable' => true, 'default' => 0, 'COMMENT' => 'total_invoice']);
         $connection->addIndex(
             $refundRowTable,
             $installer->getIdxName(

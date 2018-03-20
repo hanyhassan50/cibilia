@@ -151,7 +151,7 @@ abstract class AbstractStatement extends AbstractModel implements StatementInter
                 if ($this->getVendor()->getApplyCommissionOnTax()) {
                     $taxCom = round($order['amounts']['tax']*$order['com_percent']/100, 2);
                     $order['amounts']['com_amount'] += $taxCom;
-                    $order['amounts']['total_payout'] -= $taxCom;
+                    //$order['amounts']['total_payout'] -= $taxCom;
                 }
             }
         }
@@ -245,9 +245,11 @@ abstract class AbstractStatement extends AbstractModel implements StatementInter
                 if ($this->getVendor()->getApplyCommissionOnTax()) {
                     $taxCom = round($refund['amounts']['tax']*$refund['com_percent']/100, 2);
                     $refund['amounts']['com_amount'] += $taxCom;
-                    $refund['amounts']['total_refund'] -= $taxCom;
+                    //$refund['amounts']['total_refund'] -= $taxCom;
                 }
             }
+        } else {
+            $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
         }
 
         $refund['amounts']['com_amount'] = round($refund['amounts']['com_amount'], 2);
@@ -268,7 +270,7 @@ abstract class AbstractStatement extends AbstractModel implements StatementInter
             if ($this->getVendor()->getApplyCommissionOnShipping()) {
                 $shipCom = round($refund['amounts']['shipping']*$refund['com_percent']/100, 2);
                 $refund['amounts']['com_amount'] += $shipCom;
-                $refund['amounts']['total_payout'] -= $shipCom;
+                $refund['amounts']['total_refund'] -= $shipCom;
             }
             $refund['amounts']['total_refund'] += $refund['amounts']['shipping'];
         }
@@ -501,6 +503,15 @@ abstract class AbstractStatement extends AbstractModel implements StatementInter
     protected function _resetRefunds()
     {
         $this->_refunds = array();
+        return $this;
+    }
+
+    protected function _resetRefundTotals()
+    {
+        $this->_refunds = array();
+        $this->_totals_amount['total_refund'] = 0;
+        $this->_totals_amount['refund_payment'] = 0;
+        $this->_totals_amount['refund_invoice'] = 0;
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -175,14 +175,13 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_exportToRequestFilters = [
-        'AMT' => '_filterAmount',
-        'ITEMAMT' => '_filterAmount',
-        'TRIALAMT' => '_filterAmount',
-        'SHIPPINGAMT' => '_filterAmount',
-        'TAXAMT' => '_filterAmount',
-        'INITAMT' => '_filterAmount',
+        'AMT' => 'formatPrice',
+        'ITEMAMT' => 'formatPrice',
+        'TRIALAMT' => 'formatPrice',
+        'SHIPPINGAMT' => 'formatPrice',
+        'TAXAMT' => 'formatPrice',
+        'INITAMT' => 'formatPrice',
         'CREDITCARDTYPE' => '_filterCcType',
-        //        'PROFILESTARTDATE' => '_filterToPaypalDate',
         'AUTOBILLAMT' => '_filterBillFailedLater',
         'BILLINGPERIOD' => '_filterPeriodUnit',
         'TRIALBILLINGPERIOD' => '_filterPeriodUnit',
@@ -915,15 +914,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Made additional request to paypal to get autharization id
+     * Made additional request to PayPal to get authorization id
      *
      * @return void
      */
     public function callDoReauthorization()
     {
-        $request = $this->_export($this->_doReauthorizationRequest);
+        $request = $this->_exportToRequest($this->_doReauthorizationRequest);
         $response = $this->call('DoReauthorization', $request);
-        $this->_import($response, $this->_doReauthorizationResponse);
+        $this->_importFromResponse($this->_doReauthorizationResponse, $response);
     }
 
     /**
@@ -992,7 +991,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     {
         $request = $this->_exportToRequest($this->_refundTransactionRequest);
         if ($this->getRefundType() === \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL) {
-            $request['AMT'] = $this->getAmount();
+            $request['AMT'] = $this->formatPrice($this->getAmount());
         }
         $response = $this->call(self::REFUND_TRANSACTION, $request);
         $this->_importFromResponse($this->_refundTransactionResponse, $response);
@@ -1218,14 +1217,16 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             );
             $http->close();
 
-            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t contact the PayPal gateway.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.')
+            );
         }
 
         // cUrl resource must be closed after checking it for errors
         $http->close();
 
         if (!$this->_validateResponse($methodName, $response)) {
-            $this->_logger->critical(new \Exception(__("PayPal response hasn't required fields.")));
+            $this->_logger->critical(new \Exception(__('PayPal response hasn\'t required fields.')));
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while processing your order.')
             );
@@ -1284,12 +1285,22 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         );
         $this->_logger->critical($exceptionLogMessage);
 
+        /**
+         * The response code 10415 'Transaction has already been completed for this token'
+         * must not fails place order. The old Paypal interface does not lock 'Send' button
+         * it may result to re-send data.
+         */
+        if (in_array((string)ProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED, $this->_callErrors)) {
+            return;
+        }
+
         $exceptionPhrase = __('PayPal gateway has rejected request. %1', $errorMessages);
 
         /** @var \Magento\Framework\Exception\LocalizedException $exception */
-        $exception = count($errors) == 1 && $this->_isProcessableError($errors[0]['code'])
+        $firstError = $errors[0]['code'];
+        $exception = $this->_isProcessableError($firstError)
             ? $this->_processableExceptionFactory->create(
-                ['phrase' => $exceptionPhrase, 'code' => $errors[0]['code']]
+                ['phrase' => $exceptionPhrase, 'code' => $firstError]
             )
             : $this->_frameworkExceptionFactory->create(
                 ['phrase' => $exceptionPhrase]
@@ -1480,9 +1491,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected function _applyStreetAndRegionWorkarounds(\Magento\Framework\DataObject $address)
     {
         // merge street addresses into 1
-        if ($address->hasStreet2()) {
-            $address->setStreet(implode("\n", [$address->getStreet(), $address->getStreetLine(2)]));
-            $address->unsStreet2();
+        if ($address->getData('street2') !== null) {
+            $address->setStreet(implode("\n", [$address->getData('street'), $address->getData('street2')]));
+            $address->unsetData('street2');
         }
         // attempt to fetch region_id from directory
         if ($address->getCountryId() && $address->getRegion()) {

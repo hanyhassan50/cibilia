@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_register_success">
+        <observer name="stagebit_custom_registration_register_success_observer" instance="StageBit\CustomCode\Observer\CustomCustomerRegisterSuccessObserver" />
+        <observer name="custom_registration_register_success_observer"
+                  instance="Webkul\CustomRegistration\Observer\CustomerRegisterSuccessObserver"
+                  disabled="true" />
+    </event>
+    <event name="udropship_vendor_save_after">
+        <observer name="stagebit_vendor_after_save" instance="StageBit\CustomCode\Observer\UdropshipVendorSaveAfter"/>
+        <observer name="umicrosite" instance="Unirgy\DropshipMicrosite\Observer\UdropshipVendorSaveAfter" disabled="true"/>
+    </event>
+    <event name="udropship_vendor_login">
+        <observer name="stagebit_vendor_login" instance="StageBit\CustomCode\Observer\UdropshipVendorLogin"/>
+        <observer name="umicrosite" instance="Unirgy\DropshipMicrosite\Observer\UdropshipVendorLogin" disabled="true"/>
+    </event>
+    <event name="core_layout_render_element">
+        <observer name="stagebit_render_top_links" instance="StageBit\CustomCode\Observer\Header\Toplinks"/>
+    </event>
+</config>

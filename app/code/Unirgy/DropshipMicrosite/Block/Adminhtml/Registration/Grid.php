@@ -65,15 +65,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $collection = $this->_registrationFactory->create()->getCollection();
-
-        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-        $connection = $objectManager->get('Magento\Framework\App\ResourceConnection')->getConnection('\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION'); 
-        $vendorResult = $connection->fetchAll("SELECT email FROM udropship_vendor");
-
-         $collection->addFieldToFilter(
-                'email',
-                ['nin' => $vendorResult]);
-
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

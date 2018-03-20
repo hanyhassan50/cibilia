@@ -17,11 +17,7 @@ class MassDelete extends AbstractRegistration
                 /** @var \Unirgy\DropshipMicrosite\Model\Registration $registration */
                 $registration = $this->_hlp->createObj('\Unirgy\DropshipMicrosite\Model\Registration');
                 foreach ($registrationIds as $registrationId) {
-                    //$registration->setId($registrationId)->delete();
-                    $registration->load($registrationId);
-                    $vendorEmail = $registration->getEmail();
-                    $registration->delete();
-                    $this->_removeReferer($vendorEmail);
+                    $registration->setId($registrationId)->delete();
                 }
                 $this->messageManager->addSuccess(
                     __('Total of %1 record(s) were successfully deleted', count($registrationIds))
@@ -31,14 +27,5 @@ class MassDelete extends AbstractRegistration
             }
         }
         return $resultRedirect->setPath('*/*/index');
-    }
-    public function _removeReferer($email)
-    {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        
-        $connection = $objectManager->get('Magento\Framework\App\ResourceConnection')->getConnection('\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION'); 
-        
-        $connection->query("DELETE FROM cibilian_referrals where email_id='".$email."'");
-
     }
 }

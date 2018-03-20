@@ -263,7 +263,7 @@ class VendorStatement extends Statement
                 if ($this->getVendor()->getApplyCommissionOnTax()) {
                     $taxCom = round($order['amounts']['tax'] * $order['com_percent'] / 100, 2);
                     $order['amounts']['com_amount'] += $taxCom;
-                    $order['amounts']['total_payout'] -= $taxCom;
+                    //$order['amounts']['total_payout'] -= $taxCom;
                 }
             }
         } else {
@@ -326,7 +326,7 @@ class VendorStatement extends Statement
     {
         $pOptions = $refundItem->getProductOptions();
         if (!is_array($pOptions)) {
-            $pOptions = unserialize($pOptions);
+            $pOptions = $this->_hlp->unserialize($pOptions);
         }
         $hlp = $this->_hlp;
         $order = [
@@ -349,7 +349,8 @@ class VendorStatement extends Statement
             'vendor_simple_sku' => $refundItem->getVendorSimpleSku(),
             'product' => $refundItem->getName(),
             'po_item_id' => $refundItem->getPoItemId(),
-            'refund_item_id' => $refundItem->getRefundItemId()
+            'refund_item_id' => $refundItem->getRefundItemId(),
+            'refund_id' => $refundItem->getRefundId()
         ];
         $refundQty = min($refundItem->getQty(), $refundItem->getRefundQty());
         $iHiddenTax = $refundItem->getBaseHiddenTaxAmount() / max(1, $refundItem->getQtyOrdered());
@@ -417,9 +418,11 @@ class VendorStatement extends Statement
                 if ($this->getVendor()->getApplyCommissionOnTax()) {
                     $taxCom = round($refund['amounts']['tax'] * $refund['com_percent'] / 100, 2);
                     $refund['amounts']['com_amount'] += $taxCom;
-                    $refund['amounts']['total_refund'] -= $taxCom;
+                    //$refund['amounts']['total_refund'] -= $taxCom;
                 }
             }
+        } else {
+            $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
         }
 
         $refund['amounts']['com_amount'] = round($refund['amounts']['com_amount'], 2);
@@ -444,7 +447,7 @@ class VendorStatement extends Statement
             if ($this->getVendor()->getApplyCommissionOnShipping()) {
                 $shipCom = round($refund['amounts']['shipping'] * $refund['po_com_percent'] / 100, 2);
                 $refund['amounts']['com_amount'] += $shipCom;
-                $refund['amounts']['total_payout'] -= $shipCom;
+                $refund['amounts']['total_refund'] -= $shipCom;
             }
             $refund['amounts']['total_refund'] += $refund['amounts']['shipping'];
         }
@@ -463,7 +466,7 @@ class VendorStatement extends Statement
         if (!is_array($stPoStatuses)) {
             $stPoStatuses = explode(',', $stPoStatuses);
         }
-        $fields = ['base_price', 'base_tax_amount', 'base_discount_amount', 'qty_ordered', 'base_hidden_tax_amount'];
+        $fields = ['base_price', 'base_tax_amount', 'base_discount_amount', 'qty_ordered'];
         //if ($baseCost) $fields[] = 'base_cost';
         $poType = $this->getVendor()->getStatementPoType();
         $res = $this->_rHlp;
@@ -471,7 +474,7 @@ class VendorStatement extends Statement
         $refunds->addFieldToSelect(['refund_item_id' => 'entity_id', 'refund_qty' => 'qty']);
         $refunds->getSelect()
             ->join(
-                ['r' => $res->getTableName('sales/creditmemo')],
+                ['r' => $res->getTableName('sales_creditmemo')],
                 'r.entity_id=main_table.parent_id',
                 [
                     'refund_increment_id' => 'increment_id',
@@ -481,7 +484,7 @@ class VendorStatement extends Statement
                 ]
             )
             ->join(
-                ['o' => $res->getTableName('sales/order')],
+                ['o' => $res->getTableName('sales_order')],
                 'o.entity_id=r.order_id',
                 []
             )

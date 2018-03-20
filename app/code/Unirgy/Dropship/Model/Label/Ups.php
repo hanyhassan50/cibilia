@@ -71,10 +71,11 @@ class Ups
         HelperData $directoryData, 
         StockRegistryInterface $stockRegistry, 
         FormatInterface $localeFormat, 
-        Config $configHelper, 
-        array $data = [], 
-        DropshipHelperData $helperData = null, 
-        DirectoryList $filesystemDirectoryList = null)
+        Config $configHelper,
+        DropshipHelperData $helperData,
+        DirectoryList $filesystemDirectoryList,
+        array $data = []
+    )
     {
         $this->_hlp = $helperData;
         $this->_dirList = $filesystemDirectoryList;
@@ -282,9 +283,9 @@ class Ups
         $request->setNode('Shipment/ShipTo/CompanyName', substr($a->getCompany() ? $a->getCompany() : $a->getName(), 0, 35));
         $request->setNode('Shipment/ShipTo/AttentionName', substr($a->getName(), 0, 35));
         $request->setNode('Shipment/ShipTo/PhoneNumber', substr($a->getTelephone(), 0, 15));
-        $request->setNode('Shipment/ShipTo/Address/AddressLine1', substr(trim($a->getStreet(1)), 0, 35));
-        $request->setNode('Shipment/ShipTo/Address/AddressLine2', substr(trim($a->getStreet(2)), 0, 35));
-        $request->setNode('Shipment/ShipTo/Address/AddressLine3', substr(trim($a->getStreet(3)), 0, 35));
+        $request->setNode('Shipment/ShipTo/Address/AddressLine1', substr(trim($a->getStreetLine(1)), 0, 35));
+        $request->setNode('Shipment/ShipTo/Address/AddressLine2', substr(trim($a->getStreetLine(2)), 0, 35));
+        $request->setNode('Shipment/ShipTo/Address/AddressLine3', substr(trim($a->getStreetLine(3)), 0, 35));
         $request->setNode('Shipment/ShipTo/Address/City', substr($a->getCity(), 0, 30));
         $request->setNode('Shipment/ShipTo/Address/StateProvinceCode', $toState);
         $request->setNode('Shipment/ShipTo/Address/PostalCode', substr($a->getPostcode(), 0, 10));
@@ -297,7 +298,7 @@ class Ups
         }
 
         $request->setNode('Shipment/Service/Code', $serviceCode);
-        $request->setNode('Shipment/Service/Description', $services[$serviceCode]);
+        $request->setNode('Shipment/Service/Description', (string)$services[$serviceCode]);
 
         if ($packageType!='01' && ($fromCountry=='US') && (($toCountry=='CA') || ($toCountry=='US' && $toState=='PR')))  {
             $request->setNode('Shipment/InvoiceLineTotal/CurrencyCode', $currencyCode);
@@ -362,9 +363,9 @@ class Ups
             $request->setNode('Shipment/SoldTo/CompanyName', substr($a->getCompany() ? $a->getCompany() : $a->getName(), 0, 35));
             $request->setNode('Shipment/SoldTo/AttentionName', substr($a->getName(), 0, 35));
             $request->setNode('Shipment/SoldTo/PhoneNumber', substr($a->getTelephone(), 0, 15));
-            $request->setNode('Shipment/SoldTo/Address/AddressLine1', substr(trim($a->getStreet(1)), 0, 35));
-            $request->setNode('Shipment/SoldTo/Address/AddressLine2', substr(trim($a->getStreet(2)), 0, 35));
-            $request->setNode('Shipment/SoldTo/Address/AddressLine3', substr(trim($a->getStreet(3)), 0, 35));
+            $request->setNode('Shipment/SoldTo/Address/AddressLine1', substr(trim($a->getStreetLine(1)), 0, 35));
+            $request->setNode('Shipment/SoldTo/Address/AddressLine2', substr(trim($a->getStreetLine(2)), 0, 35));
+            $request->setNode('Shipment/SoldTo/Address/AddressLine3', substr(trim($a->getStreetLine(3)), 0, 35));
             $request->setNode('Shipment/SoldTo/Address/City', substr($a->getCity(), 0, 30));
             $request->setNode('Shipment/SoldTo/Address/StateProvinceCode', $toState);
             $request->setNode('Shipment/SoldTo/Address/PostalCode', substr($a->getPostcode(), 0, 10));
@@ -563,7 +564,7 @@ EOT;
         $labelImage = base64_decode($labelImage);
         switch ($type) {
         case 'PDF':
-            $tmp = $this->_dirList->getPath('var') . ('label');
+            $tmp = $this->_dirList->getPath('var') . "/label";
             $gifFile = tempnam($tmp, 'GIF');
             $pngFile = tempnam($tmp, 'PNG');
 

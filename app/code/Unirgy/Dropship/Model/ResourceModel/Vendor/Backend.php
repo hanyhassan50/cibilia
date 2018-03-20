@@ -42,14 +42,9 @@ class Backend extends AbstractBackend
 
     }
 
-    protected static $_isEnabled;
     protected function _isEnabled()
     {
-        if (is_null(self::$_isEnabled)) {
-            $module = $this->_hlp->getScopeConfig('modules/\Unirgy\Dropship', 'default');
-            self::$_isEnabled = $module && $module->is('active');
-        }
-        return self::$_isEnabled;
+        return $this->_hlp->isActive();
     }
 
     public function getDefaultValue()

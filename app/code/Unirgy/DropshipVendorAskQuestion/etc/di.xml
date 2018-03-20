@@ -11,4 +11,12 @@
             <argument name="storage" xsi:type="object">Unirgy\DropshipVendorAskQuestion\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="udqa_vendor" xsi:type="string">/udqa/vendor/</item>
+                <item name="udqa_customer" xsi:type="string">/udqa/customer/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

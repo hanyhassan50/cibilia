@@ -1,12 +1,19 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Controller\Adminhtml\Customfields;
 
 use Magento\Backend\App\Action;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Model\Config;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\AttributeMetadataDataProviderFactory;
@@ -15,59 +22,72 @@ use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
 
 class Save extends \Magento\Backend\App\Action
 {
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    protected $_moduleDataSetup;
-
+   /**
+    * @var \Magento\Eav\Setup\EavSetupFactory
+    */
     protected $_eavSetupFactory;
     /**
-     * @var CustomerSetupFactory
+     * @var \Webkul\CustomRegistration\Model\VendorAttributeFactory
      */
-    protected $_customerSetupFactory;
-
     protected $_customFieldFactory;
-
     /**
      * @var AttributeSetFactory
      */
     private $_attributeSetFactory;
-
-    protected $_eavSetup;
-
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
     protected $_eavConfig;
-
+    /**
+     * @var \Magento\Customer\Model\AttributeFactory
+     */
     protected $_attributeFactory;
     /**
      * @var AttributeMetadataDataProvider
      */
     private $_attributeMetaData;
+
+    private $validationRule = [
+        ' ' => 'None',
+        'validate-number' => 'validate-number',
+        'validate-digits' => 'validate-digits',
+        'validate-alpha' => 'validate-alpha',
+        'validate-email' => 'validate-email',
+        'validate-url'  => 'validate-url',
+        'validate-alphanum' => 'validate-alphanum',
+        'validate-phoneStrict' => 'validate-phoneStrict',
+    ];
     /**
      * @param Action\Context $context
      */
+    /**
+     *
+     * @param Action\Context                                       $context
+     * @param EavSetupFactory                                      $eavSetupFactory
+     * @param AttributeSetFactory                                  $attributeSetFactory
+     * @param \Magento\Customer\Model\AttributeFactory             $attributeFactory
+     * @param \Webkul\CustomRegistration\Model\CustomfieldsFactory $customfieldsFactory
+     * @param AttributeMetadataDataProviderFactory                 $attributeMetaData
+     * @param Config                                               $eavConfig
+     */
     public function __construct(
         Action\Context $context,
-        ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory,
-        CustomerSetupFactory $customerSetupFactory,
         AttributeSetFactory $attributeSetFactory,
         \Magento\Customer\Model\AttributeFactory $attributeFactory,
         \Webkul\CustomRegistration\Model\CustomfieldsFactory $customfieldsFactory,
         AttributeMetadataDataProviderFactory $attributeMetaData,
-        EavSetup $eavSetup,
         Config $eavConfig
     ) {
-        $this->_moduleDataSetup = $moduleDataSetup;
         $this->_eavSetupFactory = $eavSetupFactory;
-        $this->_customerSetupFactory = $customerSetupFactory;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_customFieldFactory = $customfieldsFactory;
         $this->_attributeFactory = $attributeFactory;
         $this->_attributeMetaData = $attributeMetaData;
-        $this->_eavSetup = $eavSetup;
         $this->_eavConfig = $eavConfig;
         parent::__construct($context);
     }
+
 
     /**
      * {@inheritdoc}
@@ -85,13 +105,14 @@ class Save extends \Magento\Backend\App\Action
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
+        // echo "<pre>";
+        // print_r($data);
+        // die;
         $redirectBack = $this->getRequest()->getParam('back', false);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $customerSetup = $this->_customerSetupFactory->create(['setup' => $this->_moduleDataSetup]);
-            $customerEntity = $customerSetup->getEavConfig()->getEntityType('customer');
-            $customer = $this->_eavSetup->getEntityTypeId('customer');
+            $customerEntity = $this->_eavConfig->getEntityType('customer');
             $attributeSetId = $customerEntity->getDefaultAttributeSetId();
             /** @var $attributeSet AttributeSet */
             $attributeSet = $this->_attributeSetFactory->create();
@@ -159,10 +180,19 @@ class Save extends \Magento\Backend\App\Action
                         $childAttributeOptions['option'] = $data['option'];
                         unset($data['option']);
                     }
-                    $data['attribute_code'] = $model->getAttributeCode();
+                    $data['attribute_code']  = $model->getAttributeCode();
                     $data['is_user_defined'] = $model->getIsUserDefined();
-                    $data['frontend_input'] = $model->getFrontendInput();
-
+                    $data['frontend_input']  = $model->getFrontendInput();
+                    if(array_key_exists('frontend_class',$data)){
+                        if($data['frontend_class']){
+                           if(!in_array($data['frontend_class'],$this->validationRule)){
+                             $data['frontend_class'] = $model->getFrontendClass();
+                           }
+                        }
+                    }
+                    else{
+                      $data['frontend_class'] = $model->getFrontendClass();
+                    }
                     $collection = $customFieldModel->
                             getCollection()->
                             addFieldToFilter('attribute_code', $data['attribute_code']);
@@ -179,9 +209,13 @@ class Save extends \Magento\Backend\App\Action
                     if (isset($data['frontend_class']) && $data['frontend_class'] != '') {
                         if (strpos($model->getFrontendClass(), $data['frontend_class']) === false) {
                             $data['frontend_class'] = $data['frontend_class'].' '.$model->getFrontendClass();
+                        } else {
+                            $data['frontend_class'] = $data['frontend_class'].' '.
+                            $this->updateFrontEndClass($model->getFrontendClass());
                         }
                     } elseif (isset($data['frontend_class']) && $data['frontend_class'] == '') {
-                        $data['frontend_class'] = $model->getFrontendClass();
+                        $data['frontend_class'] = $data['frontend_class'].' '.
+                            $this->updateFrontEndClass($model->getFrontendClass());
                     }
                     if (isset($data['is_required'])) {
                         if ($data['is_required'] == 1) {
@@ -199,10 +233,20 @@ class Save extends \Magento\Backend\App\Action
                     if (isset($data['is_visible'])) {
                         $customFieldModel->setStatus((int) $data['is_visible']);
                     }
-                    $data['is_visible'] = 0;
-                    $model->addData($data);
-                    $model->save();
-                    $customFieldModel->save();
+                    try{
+                        $parentVisible = $data['is_visible'];
+                        $data['is_visible'] = 0;
+                        $model->addData($data);
+                        $model->save();
+
+                        if (isset($data['frontend_label'])) {
+                            $customFieldModel->setAttributeLabel($data['frontend_label']);
+                        }
+                        $customFieldModel->save();
+                    } catch (\Exception $e) {
+                        $this->messageManager->addError($e->getMessage());
+                        return $resultRedirect->setPath('*/*/');
+                    }
 
                     /*
                      * If Dpendable Attribute is Present
@@ -232,7 +276,8 @@ class Save extends \Magento\Backend\App\Action
 
                         $collection = $customFieldModel->
                             getCollection()->
-                            addFieldToFilter('attribute_code', $dependableAttributeCode);
+                            addFieldToFilter('attribute_code', $childData['attribute_code']);
+
                         foreach ($collection as $value) {
                             $id = $value->getEntityId();
                         }
@@ -241,32 +286,42 @@ class Save extends \Magento\Backend\App\Action
                          /*
                          * required attribute and validation logic
                          */
-                        $childData['is_visible'] = (int) $data['is_visible'];
+                        $childData['is_visible'] = (int) $parentVisible;
 
                         if (isset($childData['frontend_class']) && $childData['frontend_class'] != '') {
-                            if (strpos($dependableModel->getFrontendClass(), $data['frontend_class']) === false) {
-                                $childData['frontend_class'] = $childData['frontend_class'].' '.$dependableModel->getFrontendClass();
+                            if (strpos($dependableModel->getFrontendClass(), $childData['frontend_class']) === false) {
+                                $childData['frontend_class'] = $childData['frontend_class'].' '.
+                                    $dependableModel->getFrontendClass();
+                            } else {
+                                $childData['frontend_class'] = $childData['frontend_class'].' '.$this->updateFrontEndClass($dependableModel->getFrontendClass());
                             }
                         } elseif (isset($childData['frontend_class']) && $childData['frontend_class'] == '') {
-                            $childData['frontend_class'] = $dependableModel->getFrontendClass();
+                            $childData['frontend_class'] = $childData['frontend_class'].' '.$this->updateFrontEndClass($dependableModel->getFrontendClass());
                         }
                         if (isset($childData['is_required'])) {
                             if ($childData['is_required'] == 1) {
                                 if (strpos($dependableModel->getFrontendClass(), 'required') === false) {
-                                    $data['frontend_class'] = $dependableModel->getFrontendClass().' '.'required';
+                                    $childData['frontend_class'] = $dependableModel->getFrontendClass().' '.'required';
                                 }
                                 $childData['is_required'] = 0;
                             } elseif ($childData['is_required'] == 0) {
+                                if(array_key_exists('frontend_class', $childData))
                                 $childData['frontend_class'] = str_replace('required', '', $childData['frontend_class']);
                             }
                         }
                         if (isset($childData['allowed_extensions'])) {
                             $childData['note'] = rtrim($childData['allowed_extensions']);
                         }
-                        $dependableModel->addData($childData);
-                        $dependableModel->save();
-                        
-                        $customFieldModel->save();
+                        try{
+                            $dependableModel->addData($childData);
+                            $dependableModel->save();
+                            $customFieldModel->setStatus((int) $childData['is_visible']);
+                            $customFieldModel->save();
+                        } catch (\Exception $e) {
+                            $this->messageManager->addError($e->getMessage());
+
+                            return $resultRedirect->setPath('*/*/');
+                        }
                     }
                     /*
                      * END OF DEPENDABLE CHILD ATTRIBUTE UPDATION
@@ -276,21 +331,26 @@ class Save extends \Magento\Backend\App\Action
                 /*
                 * Creating Custom Customer Attribute
                 */
-                $attribute = $this->_eavConfig->getAttribute('customer', $attributeCode);
-                $attribute->addData($this->getDefaultEntities(
-                    $data['frontend_input'],
-                    $attributeSetId,
-                    $attributeGroupId,
-                    0
-                ));
-                $attribute->save();
-                $attribute = $this->_eavConfig->getAttribute('customer', $attributeCode);
+                try{
+                    $attribute = $this->_eavConfig->getAttribute('customer', $attributeCode);
+                    $attribute->addData($this->getDefaultEntities(
+                        $data['frontend_input'],
+                        $attributeSetId,
+                        $attributeGroupId,
+                        0
+                    ));
+                    $attribute->save();
+                    $attribute = $this->_eavConfig->getAttribute('customer', $attributeCode);
 
-                $customFieldModel->setAttributeCode($attributeCode);
-                $customFieldModel->setAttributeLabel($data['frontend_label']);
-                $customFieldModel->setAttributeId($attribute->getId());
-                $customFieldModel->setStatus((int) $data['is_visible']);
-                $customFieldModel->save();
+                    $customFieldModel->setAttributeCode($attributeCode);
+                    $customFieldModel->setAttributeLabel($data['frontend_label']);
+                    $customFieldModel->setAttributeId($attribute->getId());
+                    $customFieldModel->setStatus((int) $data['is_visible']);
+                    $customFieldModel->save();
+                } catch (\Exception $e) {
+                    $this->messageManager->addError($e->getMessage());
+                    return $resultRedirect->setPath('*/*/');
+                }
 
                 $saveAndContinueId = $customFieldModel->getId();
 
@@ -298,27 +358,33 @@ class Save extends \Magento\Backend\App\Action
                  * Create Dependable child Attribute
                  */
                 if ($data['frontend_input'] == 'dependable') {
-                    $inputType = explode('_', $data['dependable_frontend_input']);
-                    $dependableInput = $inputType[1];
-                    $attribute = $this->_eavConfig->getAttribute('customer', $dependableAttributeCode);
-                    $attribute->addData($this->getDefaultEntities(
-                        $dependableInput,
-                        $attributeSetId,
-                        $attributeGroupId,
-                        1
-                    ));
-                    $attribute->save();
-                    $attribute = $this->_eavConfig->getAttribute('customer', $dependableAttributeCode);
-                    $customFieldModel = $this->_customFieldFactory->create();
-                    $customFieldModel->setAttributeCode($dependableAttributeCode);
-                    $customFieldModel->setAttributeLabel($data['dependable_frontend_label']);
-                    $customFieldModel->setAttributeId($attribute->getId());
-                    $customFieldModel->setHasParent(1);
-                    $customFieldModel->setStatus((int) $data['is_visible']);
-                    $customFieldModel->save();
+                    try{
+                        $inputType = explode('_', $data['dependable_frontend_input']);
+                        $dependableInput = $inputType[1];
+                        $attribute = $this->_eavConfig->getAttribute('customer', $dependableAttributeCode);
+                        $attribute->addData($this->getDefaultEntities(
+                            $dependableInput,
+                            $attributeSetId,
+                            $attributeGroupId,
+                            1
+                        ));
+                        $attribute->save();
+                        $attribute = $this->_eavConfig->getAttribute('customer', $dependableAttributeCode);
+                        $customFieldModel = $this->_customFieldFactory->create();
+                        $customFieldModel->setAttributeCode($dependableAttributeCode);
+                        $customFieldModel->setAttributeLabel($data['dependable_frontend_label']);
+                        $customFieldModel->setAttributeId($attribute->getId());
+                        $customFieldModel->setHasParent(1);
+                        $customFieldModel->setStatus((int) $data['is_visible']);
+                        $customFieldModel->save();
+                    } catch (\Exception $e) {
+                        $this->messageManager->addError($e->getMessage());
+                        return $resultRedirect->setPath('*/*/');
+                    }
                 }
             }
             if ($redirectBack) {
+                $this->messageManager->addSuccess(__('You saved the custom attribute.'));
                 return $resultRedirect->setPath(
                     '*/*/edit',
                     ['id' => $saveAndContinueId, '_current' => true]
@@ -326,7 +392,7 @@ class Save extends \Magento\Backend\App\Action
             }
             $this->_getSession()->setFormData($data);
         }
-
+        $this->messageManager->addSuccess(__('You saved the custom attribute.'));
         return $resultRedirect->setPath('*/*/');
     }
     /**
@@ -340,11 +406,7 @@ class Save extends \Magento\Backend\App\Action
         $data = $this->getRequest()->getPostValue();
         $text = ''; //variable will be used if attribute is child.
         $code = ''; // use to define class for child attribute.
-        //$model = $this->_customFieldFactory->create()->getCollection();
-        //$sortOrder = $model->getLastItem()->getAttributeId();
-        /*if ($sortOrder == 0) {
-            $sortOrder = 131;
-        }*/
+
         $sortOrder = isset($data['sort_order']) ? $data['sort_order'] : '';
         if ($isDependable) {
             $text = 'dependable_';
@@ -379,8 +441,8 @@ class Save extends \Magento\Backend\App\Action
         $extensions = '';
         if (isset($data['allowed_extensions'])) {
             $extensions = rtrim($data['allowed_extensions']);
-        } elseif (isset($data['dependable_allowed_extensions'])) {
-            $extensions = trim($data['dependable_allowed_extensions']);
+        } elseif (isset($data['dependableAllowedExtensions'])) {
+            $extensions = trim($data['dependableAllowedExtensions']);
         }
         $entities = [
             'text' => [
@@ -415,8 +477,8 @@ class Save extends \Magento\Backend\App\Action
                 'used_in_forms' => isset($data['used_in_forms']) ? $data['used_in_forms'] : '',
             ],
             'date' => [
-                'frontend_type' => 'date',
-                'backend_type' => 'date',
+                'frontend_type' => 'datetime',
+                'backend_type' => 'datetime',
                 'frontend_label' => $data[$text.'frontend_label'],
                 'frontend_input' => 'date',
                 'frontend_model' => 'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime',
@@ -427,12 +489,11 @@ class Save extends \Magento\Backend\App\Action
                 'is_system' => false,
                 'is_user_defined' => true,
                 'input_filter' => 'date',
-                'validate_rules' => 'a:1:{s:16:"input_validation";s:4:"date";}',
+                'validate_rules' => '{"input_validation":"date"}',
                 'position' => $sortOrder,
                 'attribute_set_id' => $attributeSetId,
                 'attribute_group_id' => $attributeGroupId,
                 'used_in_forms' => isset($data['used_in_forms']) ? $data['used_in_forms'] : '',
-                'date_format' => 'dd-MM-yyyy',
             ],
             'select' => [
                 'frontend_type' => 'varchar',
@@ -454,7 +515,7 @@ class Save extends \Magento\Backend\App\Action
             'multiselect' => [
                 'frontend_type' => 'varchar',
                 'backend_type' => 'varchar',
-                'backend_model' => 'Webkul\CustomRegistration\Model\Customer\Attribute\Backend\Multiselect',
+                'backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',
                 'frontend_label' => $data[$text.'frontend_label'],
                 'frontend_input' => 'multiselect',
                 'frontend_class' => $required.' '.$code,
@@ -490,7 +551,7 @@ class Save extends \Magento\Backend\App\Action
                 'backend_type' => 'varchar',
                 'frontend_label' => $data[$text.'frontend_label'],
                 'frontend_input' => 'image',
-                'backend_model' => 'Webkul\CustomRegistration\Model\Customer\Attribute\Backend\Image',
+                'backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend',
                 'sort_order' => $sortOrder,
                 'position' => $sortOrder,
                 'frontend_class' => $required.' '.$code,
@@ -507,7 +568,7 @@ class Save extends \Magento\Backend\App\Action
                 'backend_type' => 'varchar',
                 'frontend_label' => $data[$text.'frontend_label'],
                 'frontend_input' => 'file',
-                'backend_model' => 'Webkul\CustomRegistration\Model\Customer\Attribute\Backend\File',
+                'backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\Increment',
                 'sort_order' => $sortOrder,
                 'position' => $sortOrder,
                 'frontend_class' => $required.' '.$code,
@@ -559,20 +620,29 @@ class Save extends \Magento\Backend\App\Action
 
         return $options;
     }
-
+    /**
+     * ger validation class
+     * @param  string $key
+     * @return string
+     */
     public function getValidationRule($key)
     {
         $key = rtrim($key);
-        $validationRule = [
-            ' ' => 'None',
-            'validate-number' => 'validate-number',
-            'validate-digits' => 'validate-digits',
-            'validate-alpha' => 'validate-alpha',
-            'validate-email' => 'validate-email',
-            'validate-alphanum' => 'validate-alphanum',
-            'validate-phoneStrict' => 'validate-phoneStrict',
-        ];
+        return $this->validationRule[$key];
+    }
 
-        return $validationRule[$key];
+    public function updateFrontEndClass($frontendClass)
+    {
+        $classArray = $this->validationRule;
+        $attributeClass = explode(' ', $frontendClass);
+        if (count($attributeClass)) {
+            foreach ($attributeClass as $key => $value) {
+                if (in_array($value, $classArray)) {
+                    unset($attributeClass[$key]);
+                }
+            }
+        }
+        $updatedClass = implode(' ', $attributeClass);
+        return $updatedClass;
     }
 }

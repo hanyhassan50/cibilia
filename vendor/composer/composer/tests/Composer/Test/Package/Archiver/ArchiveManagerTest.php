@@ -13,11 +13,16 @@
 namespace Composer\Test\Package\Archiver;
 
 use Composer\Factory;
+use Composer\Package\Archiver\ArchiveManager;
 use Composer\Package\PackageInterface;
 
 class ArchiveManagerTest extends ArchiverTest
 {
+    /**
+     * @var ArchiveManager
+     */
     protected $manager;
+
     protected $targetDir;
 
     public function setUp()
@@ -40,6 +45,8 @@ class ArchiveManagerTest extends ArchiverTest
 
     public function testArchiveTar()
     {
+        $this->skipIfNotExecutable('git');
+
         $this->setupGitRepo();
 
         $package = $this->setupPackage();
@@ -55,9 +62,36 @@ class ArchiveManagerTest extends ArchiverTest
         unlink($target);
     }
 
-    protected function getTargetName(PackageInterface $package, $format)
+    public function testArchiveCustomFileName()
     {
-        $packageName = $this->manager->getPackageFilename($package);
+        $this->skipIfNotExecutable('git');
+
+        $this->setupGitRepo();
+
+        $package = $this->setupPackage();
+
+        $fileName = 'testArchiveName';
+
+        $this->manager->archive($package, 'tar', $this->targetDir, $fileName);
+
+        $target = $this->targetDir . '/' . $fileName . '.tar';
+
+        $this->assertFileExists($target);
+
+        $tmppath = sys_get_temp_dir().'/composer_archiver/'.$this->manager->getPackageFilename($package);
+        $this->assertFileNotExists($tmppath);
+
+        unlink($target);
+    }
+
+    protected function getTargetName(PackageInterface $package, $format, $fileName = null)
+    {
+        if (null === $fileName) {
+            $packageName = $this->manager->getPackageFilename($package);
+        } else {
+            $packageName = $fileName;
+        }
+
         $target = $this->targetDir.'/'.$packageName.'.'.$format;
 
         return $target;

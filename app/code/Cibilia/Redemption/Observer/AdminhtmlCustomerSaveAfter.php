@@ -13,17 +13,23 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class AdminhtmlCustomerSaveAfter implements ObserverInterface
 {
-    
+    /**
+     * @var \Magento\Customer\Model\CustomerFactory
+     */
     protected $customerFactory;
+
+    protected $cibiliaDeniedEmail;
     
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        \Magento\Customer\Model\CustomerFactory $customerFactory
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \StageBit\CustomCode\Model\CibilianDeniedEmail $cibiliaDenied
     ) {
         $this->customerFactory  = $customerFactory;
+        $this->cibiliaDeniedEmail = $cibiliaDenied;
     }
     /**
      * Set gift messages to order from quote address
@@ -53,6 +59,11 @@ class AdminhtmlCustomerSaveAfter implements ObserverInterface
                 
                 $isChanges = true;
             
+            }
+            if($objCustomer->getApprovalStatus() == 10) {
+                $customerData->setCustomAttribute('is_idproof_notified', 0);
+                $this->cibiliaDeniedEmail->sentIdentityNotVerifiedEmailToCibilia($objCustomer);
+                $isChanges = true;
             }
             if($objCustomer->getApprovalStatus() != 9 && $objCustomer->getIsIdproofNotified()) {
                 $customerData->setCustomAttribute('is_idproof_notified', 0);

@@ -1,0 +1,316 @@
+<?php
+    $helper             =   $this->helper('StageBit\CustomCode\Helper\Data');
+    $currencyHelper     =   $this->helper('Magento\Framework\Pricing\Helper\Data');
+    $categories         =   $block->getCategoryCollection();
+    $totalVendorProduct =   $block->getTotalVendorProducts();
+    $orders             =   $block->getVendorOrders(6);
+    $lastOrders         =   $block->getVendorOrders(3);
+
+?>
+
+<div class="dashboard-content">
+    <div class="block-commission-graph block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title block-title m-0">
+                <h5><?php echo __('sales trend'); ?></h5>
+            </div>
+            <div class="foodmaker-block">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="ibox-title">
+                            <h4><?php echo "<i class='fa fa-cart-plus'></i>".__('Total Order Amount'); ?></h4>
+                        </div>
+                        <div class="ibox-content">
+                            <h2><?php echo $currencyHelper->currency($block->getLastMonthTotalOrderAmount(),true,false); ?></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="flot-chart">
+                    <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-referel-product block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title block-title">
+                <h5><?php echo __('Services'); ?></h5>
+            </div>
+            <div class="ibox-content">
+                <?php echo $this->getLayout()
+                    ->createBlock('cms\block')
+                    ->setBlockId('fm-services')
+                    ->toHtml(); ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-referel-product block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title block-title">
+                <a class="add-fm pull-right" href="<?php echo $this->getUrl('udprod/vendor/products'); ?>"><i class="fa fa-plus"></i><?php echo __('add product'); ?></a>
+                <h5><?php echo __('Products for sale'); ?></h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row no-gutters">
+                    <div class="col-sm-3 col-md-3">
+                        <div class="total-product">
+                            <div class="table-cell">
+                                <h5><?php echo __('Online products:'); ?></h5>
+                                <span><?php echo ($totalVendorProduct) ? $totalVendorProduct->getSize():'0'; ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-md-9 no-padding">
+                        <ul class="list-inline">
+                            <?php foreach ($categories as $category) { ?>
+                                <li class="list-inline-item">
+                                    <img title="<?php echo $category->getName(); ?>" src="<?php echo $helper->getMediaUrl(); ?>catalog/category/svg/<?php echo $category->getID(); ?>.svg" alt="<?php echo $category->getName(); ?>" />
+                                    <span class="count"><?php echo $block->getVendorProducts($category); ?></span>
+                                </li>
+                            <?php }  ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="block-product-treand">
+                    <div class="ibox-title">
+                        <h5><?php echo __('Product trend'); ?></h5>
+                    </div>
+                    <div class="wrapper-content">
+                        <div class="row">
+                            <?php foreach ($categories as $category) { ?>
+                                <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="prd-block">
+                                        <div class="col-lg-5 padding-class">
+                                            <div class="prd-img">
+                                                <img title="<?php echo $category->getName(); ?>" src="<?php echo $helper->getMediaUrl(); ?>catalog/category/svg/<?php echo $category->getID(); ?>.svg" alt="<?php echo $category->getName(); ?>" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-7 padding-class">
+                                            <div class="prd-status">
+                                                <span><strong><?php echo __('Pending:');?></strong> <?php echo $block->getVendorProducts($category, 3); ?></span>
+                                                <span><strong><?php echo __('Enable:'); ?></strong> <?php echo $block->getVendorProducts($category, 1); ?></span>
+                                                <span><strong><?php echo __('Disable:'); ?></strong> <?php echo $block->getVendorProducts($category, 2); ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="vendor-order-details block-foodmaker block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title block-title">
+                <a class="add-fm pull-right" href="<?php echo $this->getUrl('udropship/vendor'); ?>"><i class="fa fa-plus"></i><?php echo __('go to the section'); ?></a>
+                <h5><?php echo __('Order'); ?></h5>
+            </div>
+            <div class="wrapper-content ibox-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="table-title">
+                            <p><?php echo __('Last Order') ?></p>
+                        </div>
+                        <table class="table margin bottom">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Date</th>
+                                    <th class="text-center">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php if(!empty($lastOrders->getData())) { ?>
+                                <?php foreach ($lastOrders as $key=>$value) { ?>
+                                    <tr>
+                                        <td class="text-center"><?php echo $value->getOrderIncrementId(); ?></td>
+                                        <td class="text-center"><?php echo $block->formatDate($value->getOrderCreatedAt(), \IntlDateFormatter::SHORT, true) ?></td>
+                                        <td class="text-center"><?php echo $currencyHelper->currency($value->getTotalCost()*1); ?></td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="7">
+                                        <p class="no-fm message info empty"><?php echo __('No order found!'); ?></p>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="world-map" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="block-product-treand">
+                    <div class="ibox-title">
+                        <h5><?php echo __('Elenco Orders'); ?></h5>
+                    </div>
+                    <div class="ibox float-e-margins">
+                        <div class="wrapper-content">
+                            <div class="ibox-content">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th><?php echo __('#'); ?></th>
+                                        <th><?php echo __('Order Date'); ?></th>
+                                        <th><?php echo __('Available On'); ?></th>
+                                        <th><?php echo __('Delivery Method'); ?></th>
+                                        <th><?php echo __('Status'); ?></th>
+                                        <th><?php echo __('Items'); ?></th>
+                                        <th><?php echo __('Download'); ?></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php if(!empty($orders->getData())) { ?>
+                                        <?php foreach ($orders as $key=>$value) { ?>
+                                            <tr>
+                                                <td><?php echo $value->getOrderIncrementId(); ?></td>
+                                                <td><?php echo $block->formatDate($value->getOrderCreatedAt(), \IntlDateFormatter::SHORT, true) ?></td>
+                                                <td><?php echo $block->formatDate($value->getCreatedAt(), \IntlDateFormatter::SHORT, true) ?></td>
+                                                <td><?php echo $value->getUdropshipMethodDescription() ? $value->getUdropshipMethodDescription() : __($block->getVendorShipmentMethod($value->getShippingMethod())) ?></td>
+                                                <td><?php echo __($block->getVendorShippingStatus($value)); ?></td>
+                                                <td><?php echo $value->getTotalQty()*1 ?></td>
+                                                <td>
+                                                    <a style="white-space:nowrap" href="<?php echo $this->getUrl('udropship/vendor/pdf', ['shipment_id'=>$value->getId()])?>" class="slip-download"><strong><?php echo __('Packing Slip')?></strong></a>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <tr>
+                                            <td colspan="7">
+                                                <p class="no-fm message info empty"><?php echo __('No order found!'); ?></p>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                                <div class="view-link">
+                                    <a href="<?php echo $this->getUrl('udropship/vendor'); ?>"><?php echo __('View More'); ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    require(["jquery", "bootstrapMin", "jqueryFlot", "jqueryFlotTooltipMin", "jqueryFlotSpline", "jqueryFlotResize", "jqueryFlotTime"], function($) {
+        $(document).ready(function($){
+            var data2 = [
+                <?php foreach ($block->getFoodmakerGraph() as $key => $val): ?>
+                <?php echo '[gd('.$val["year"].', '.$val["month"].', '.$val["day"].'), '.$val["data"].'],' ?>
+                <?php endforeach; ?>
+            ];
+
+
+            var dataset = [
+                {
+                    label: "<?php echo __('Order Details'); ?>",
+                    data: data2,
+                    color: "#1ab394",
+                    bars: {
+                        show: true,
+                        align: "center",
+                        barWidth: 24 * 60 * 60 * 600,
+                        lineWidth:0
+                    }
+
+                }
+            ];
+
+
+            var options = {
+                xaxis: {
+                    mode: "time",
+                    tickSize: [3, "day"],
+                    tickLength: 0,
+                    axisLabel: "Date",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Arial',
+                    axisLabelPadding: 10,
+                    color: "#d5d5d5"
+                },
+                yaxes: [{
+                    position: "left",
+                    max: 500,
+                    color: "#d5d5d5",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Arial',
+                    axisLabelPadding: 3
+                }, {
+                    position: "right",
+                    clolor: "#d5d5d5",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: ' Arial',
+                    axisLabelPadding: 67
+                }
+                ],
+                legend: {
+                    noColumns: 1,
+                    labelBoxBorderColor: "#000000",
+                    position: "nw"
+                },
+                grid: {
+                    hoverable: false,
+                    borderWidth: 0
+                }
+            };
+
+            function gd(year, month, day) {
+                return new Date(year, month - 1, day).getTime();
+            }
+
+            var previousPoint = null, previousLabel = null;
+
+            $.plot($("#flot-dashboard-chart"), dataset, options);
+
+        });
+    });
+
+    require(["jquery", "jqueryJvectormap", "jvectormapWorldMill"], function($) {
+        var mapData = {
+            <?php if($block->getShippingOrderMapData()) :
+                    foreach($block->getShippingOrderMapData() as $data) : echo $data['country'].":".$data['total'].","; endforeach;
+                  endif;
+            ?>
+            };
+
+        $('#world-map').vectorMap({
+            map: 'world_mill_en',
+            backgroundColor: "transparent",
+
+            regionStyle: {
+                initial: {
+                    fill: '#e4e4e4',
+                    "fill-opacity": 0.9,
+                    stroke: 'none',
+                    "stroke-width": 0,
+                    "stroke-opacity": 0
+                }
+            },
+
+            series: {
+                regions: [{
+                    values: mapData,
+                    scale: ["#ff0000", "#00ffff"],
+                    normalizeFunction: 'polynomial'
+                }]
+            },
+        });
+    });
+</script>

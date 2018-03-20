@@ -1,0 +1,27 @@
+Legend
+
++ Features
+-------------------------------- Version 2.0.2 --------------------------------------
+	- Fixed minor bugs.
+
+-------------------------------- Version 2.0.1 --------------------------------------
+
+	+ Admin can enable Terms & Conditions and	Privacy & cookie Policy on registration page.
+	+ Admin can set animation type for Terms & Conditions and	Privacy & cookie Policy window.
+	+ Admin can change the background color of Terms & Conditions and	Privacy & cookie Policy window.
+	+ Admin can save content store wise for Terms & Conditions and	Privacy & cookie Policy.
+
+-------------------------------- Version 2.0.0 --------------------------------------
+
+	+ Admin can easily extend the sign up form.
+	+ Easy to use from Magento back-end and supported by all html input types.
+	+ Admin can create any type of the input field and insert into the registration form.
+	+ All kind of attribute supported.
+	+ Easy to capture more customer information like Date Of Birth, Hobby etc.
+	+ Custom Field validation for registration form.
+	+ Support all input types including dropdown, dependable field, multi-select and image upload during sign up form.
+	+ Admin can set validation type for all custom registration field. For example valid number, use the number only, avoid spaces, use the valid date, etc.
+	+ Visible on Sales Email.
+	+ Visible on Sale’s order and invoice.
+	+ The code is fully open & you can customize it according to your need.
+	+ Fully dynamic module that means you don’t need any technical knowledge to extend sign-up form fields.

@@ -20,21 +20,22 @@
 
 namespace MSP\TwoFactorAuth\Model;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\User\Api\Data\UserInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use MSP\TwoFactorAuth\Api\ProviderPoolInterface;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Api\TrustedRepositoryInterface;
 use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
-use MSP\TwoFactorAuth\Model\ResourceModel\Trusted as TrustedResourceModel;
 
+/**
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 class Tfa implements TfaInterface
 {
-    protected $forcedProviders = null;
-    protected $allowedUrls = null;
-
-    /**
-     * @var ProviderInterface[]
-     */
-    private $providers;
+    private $forcedProviders = null;
+    private $allowedUrls = null;
+    private $enabledProviders = null;
 
     /**
      * @var ScopeConfigInterface
@@ -42,84 +43,108 @@ class Tfa implements TfaInterface
     private $scopeConfig;
 
     /**
-     * @var TrustedResourceModel\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
      * @var UserConfigManagerInterface
      */
     private $userConfigManager;
 
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var TrustedRepositoryInterface
+     */
+    private $trustedRepository;
+
+    /**
+     * @var ProviderPoolInterface
+     */
+    private $providerPool;
+
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        TrustedResourceModel\CollectionFactory $collectionFactory,
+        TrustedRepositoryInterface $trustedRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         UserConfigManagerInterface $userConfigManager,
-        $providers = []
+        ProviderPoolInterface $providerPool
     ) {
-        $this->providers = $providers;
         $this->scopeConfig = $scopeConfig;
-        $this->collectionFactory = $collectionFactory;
         $this->userConfigManager = $userConfigManager;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->trustedRepository = $trustedRepository;
+        $this->providerPool = $providerPool;
     }
 
     /**
-     * Get a list of providers
-     * @return ProviderInterface[]
+     * @inheritdoc
      */
     public function getAllProviders()
     {
-        return array_values($this->providers);
+        return array_values($this->providerPool->getProviders());
     }
 
     /**
-     * Get a list of providers
-     * @return ProviderInterface[]
+     * @inheritdoc
      */
-    public function getAllEnabledProviders()
+    public function getProviderByCode($code)
     {
-        if (!$this->getIsEnabled()) {
-            return [];
-        }
-
-        $res = [];
-
-        $providers = $this->getAllProviders();
-        foreach ($providers as $provider) {
-            if ($provider->getIsEnabled()) {
-                $res[] = $provider;
+        if ($code) {
+            try {
+                return $this->providerPool->getProviderByCode($code);
+            } catch (NoSuchEntityException $e) {
+                return null;
             }
         }
 
-        return $res;
+        return null;
     }
 
     /**
-     * Get provider by code
-     * @param string $providerCode
-     * @param bool $onlyEnabled = true
-     * @return ProviderInterface|null
+     * @inheritdoc
+     */
+    public function getAllEnabledProviders()
+    {
+        if ($this->enabledProviders === null) {
+            $this->enabledProviders = [];
+
+            if ($this->isEnabled()) {
+                $providers = $this->getAllProviders();
+                foreach ($providers as $provider) {
+                    if ($provider->isEnabled()) {
+                        $this->enabledProviders[] = $provider;
+                    }
+                }
+            }
+        }
+
+        return $this->enabledProviders;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getProvider($providerCode, $onlyEnabled = true)
     {
-        if (!$providerCode || !isset($this->providers[$providerCode])) {
+        $provider = $this->getProviderByCode($providerCode);
+
+        if (!$provider) {
             return null;
         }
 
-        if ($onlyEnabled && !$this->providers[$providerCode]->getIsEnabled()) {
+        if ($onlyEnabled && !$provider->isEnabled()) {
             return null;
         }
 
-        return $this->providers[$providerCode];
+        return $provider;
     }
 
     /**
-     * Retrieve forced providers list
-     * @return ProviderInterface[]
+     * @inheritdoc
      */
     public function getForcedProviders()
     {
-        if (is_null($this->forcedProviders)) {
+        if ($this->forcedProviders === null) {
             $forcedProvidersCodes =
                 preg_split('/\s*,\s*/', $this->scopeConfig->getValue(TfaInterface::XML_PATH_FORCED_PROVIDERS));
 
@@ -137,19 +162,17 @@ class Tfa implements TfaInterface
     }
 
     /**
-     * Get a user provider
-     * @param UserInterface $user
-     * @return ProviderInterface[]
+     * @inheritdoc
      */
-    public function getUserProviders(UserInterface $user)
+    public function getUserProviders($userId)
     {
         $forcedProviders = $this->getForcedProviders();
 
-        if (count($forcedProviders)) {
+        if (!empty($forcedProviders)) {
             return $forcedProviders;
         }
 
-        $providersCodes = $this->userConfigManager->getProvidersCodes($user);
+        $providersCodes = $this->userConfigManager->getProvidersCodes($userId);
 
         $res = [];
         foreach ($providersCodes as $providerCode) {
@@ -163,29 +186,26 @@ class Tfa implements TfaInterface
     }
 
     /**
-     * Return a list of trusted devices for given user id
-     * @param int $userId
-     * @return array
+     * @inheritdoc
      */
     public function getTrustedDevices($userId)
     {
-        /** @var $collection TrustedResourceModel\Collection */
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('user_id', $userId);
+        $criteria = $this->searchCriteriaBuilder->addFilter('user_id', $userId)->create();
+        $results = $this->trustedRepository->getList($criteria);
 
-        return $collection->getItems();
+        return $results->getItems();
     }
 
     /**
-     * Get allowed URLs
-     * @return array
+     * @inheritdoc
      */
     public function getAllowedUrls()
     {
-        if (is_null($this->allowedUrls)) {
+        if ($this->allowedUrls === null) {
             $this->allowedUrls = [
                 'adminhtml_auth_login',
                 'adminhtml_auth_logout',
+                'adminhtml_auth_forgotpassword',
                 'msp_twofactorauth_tfa_index'
             ];
 
@@ -204,17 +224,15 @@ class Tfa implements TfaInterface
     }
 
     /**
-     * Returns a list of providers to activate/enroll
-     * @param UserInterface $user
-     * @return ProviderInterface[]
+     * @inheritdoc
      */
-    public function getProvidersToActivate(UserInterface $user)
+    public function getProvidersToActivate($userId)
     {
-        $providers = $this->getUserProviders($user);
+        $providers = $this->getUserProviders($userId);
 
         $res = [];
         foreach ($providers as $provider) {
-            if (!$provider->getIsActive($user)) {
+            if (!$provider->isActive($userId)) {
                 $res[] = $provider;
             }
         }
@@ -223,14 +241,11 @@ class Tfa implements TfaInterface
     }
 
     /**
-     * Return true if a provider is allowed for a given user
-     * @param UserInterface $user
-     * @param string $providerCode
-     * @return mixed
+     * @inheritdoc
      */
-    public function getProviderIsAllowed(UserInterface $user, $providerCode)
+    public function getProviderIsAllowed($userId, $providerCode)
     {
-        $providers = $this->getUserProviders($user);
+        $providers = $this->getUserProviders($userId);
         foreach ($providers as $provider) {
             if ($provider->getCode() == $providerCode) {
                 return true;
@@ -241,11 +256,82 @@ class Tfa implements TfaInterface
     }
 
     /**
-     * Return true if 2FA is enabled
-     * @return boolean
+     * @inheritdoc
      */
-    public function getIsEnabled()
+    public function isEnabled()
     {
         return !!$this->scopeConfig->getValue(TfaInterface::XML_PATH_ENABLED);
+    }
+
+    /**
+     * Return true if a provider code is allowed
+     * @param int $userId
+     * @param string $providerCode
+     * @return bool
+     * @throws NoSuchEntityException
+     */
+    private function checkAllowedProvider($userId, $providerCode)
+    {
+        if (!$this->getProviderIsAllowed($userId, $providerCode)) {
+            throw new NoSuchEntityException(__('Unknown or not enabled provider %1 for this user', $providerCode));
+        }
+
+        return true;
+    }
+
+    /**
+     * Get default provider code
+     * @param int $userId
+     * @return string
+     */
+    public function getDefaultProviderCode($userId)
+    {
+        return $this->userConfigManager->getDefaultProvider($userId);
+    }
+
+    /**
+     * Set default provider code
+     * @param int $userId
+     * @param string $providerCode
+     * @return boolean
+     * @throws NoSuchEntityException
+     */
+    public function setDefaultProviderCode($userId, $providerCode)
+    {
+        $this->checkAllowedProvider($userId, $providerCode);
+        return $this->userConfigManager->setDefaultProvider($userId, $providerCode);
+    }
+
+    /**
+     * Reset default provider code
+     * @param int $userId
+     * @param string $providerCode
+     * @return boolean
+     * @throws NoSuchEntityException
+     */
+    public function resetProviderConfig($userId, $providerCode)
+    {
+        $this->checkAllowedProvider($userId, $providerCode);
+        return $this->userConfigManager->resetProviderConfig($userId, $providerCode);
+    }
+
+    /**
+     * Set providers
+     * @param int $userId
+     * @param string $providersCodes
+     * @return boolean
+     * @throws NoSuchEntityException
+     */
+    public function setProvidersCodes($userId, $providersCodes)
+    {
+        if (is_string($providersCodes)) {
+            $providersCodes = preg_split('/\s*,\s*/', $providersCodes);
+        }
+
+        foreach ($providersCodes as $providerCode) {
+            $this->checkAllowedProvider($userId, $providerCode);
+        }
+
+        return $this->userConfigManager->setProvidersCodes($userId, $providersCodes);
     }
 }

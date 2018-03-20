@@ -27,7 +27,8 @@ class UdropshipVendorSaveCommitAfter extends AbstractObserver implements Observe
                 \Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID,
                 \Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID,
                 \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID,
-                \Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID
+                \Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID,
+                'udropship_product_vendor_limit'
             ] as $indexerId) {
                 if (!$indexerConfig->getIndexer($indexerId)) continue;
                 $indexer = $indexerRegistry->get($indexerId);

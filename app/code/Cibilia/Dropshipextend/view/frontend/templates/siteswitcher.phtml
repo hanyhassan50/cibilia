@@ -1,43 +1,45 @@
-
-
 <?php
+    $helper =   $this->helper('StageBit\CustomCode\Helper\Data');
+    $url    =   $block->getBaseUrl();
+    list($detail,$isVisible) = $block->getWebsitesData();
 
-	list($detail,$isVisible) = $block->getWebsitesData();
-	//print_r($detail);
-
-	if($isVisible){
-
+    if($isVisible){
 ?>
 
 <script type="text/javascript">
     require([
         'jquery',
-        'jquery/ui'
+        'jquery/ui',
+        'bootstrapMin',
+        'bootstrapSelect'
     ], function ($) {       
         //$(".siteSwitch").customswitch();
 		$(document).ready(function() {
-        $(document.body).on("change",".siteSwitch",function(){
+            $('select.siteSwitch').selectpicker({
+                caretIcon: ''
+            });
 
-    			var $option = $(this).find('option:selected');
+            $(document.body).on("change",".siteSwitch",function(){
 
-    			var value = $option.val();
+                var $option = $(this).find('option:selected');
 
- 					window.location.href = value;
-				});		
+                var value = $option.val();
+
+                window.location.href = value;
+            });
    			return false;
-    	});
+
+        });
     });
 </script>
 
-<select style="width:11%;" name="country" class="siteSwitch">
+<select name="country" class="siteSwitch">
 
-<?php
-foreach($detail as $key => $value):
-	echo '<option value="'.$value['url'].'" class="selectedSite">'.$value['name'].'</option>'; //close your tags!!
-endforeach;
-?>
+<?php foreach($detail as $key => $value): ?>
+	<option data-thumbnail= "<?php echo $helper->getMediaUrl().'flags/'.$value['code'].'.svg' ?>"  value= "<?php echo $value['url']; ?>" class="selectedSite" <?php echo  $url == $value['url'] ? 'selected' : ''; ?>><?php echo $value['name'] ?></option>
+<?php endforeach; ?>
 
 </select>
 <?php
 	}
-
+?>

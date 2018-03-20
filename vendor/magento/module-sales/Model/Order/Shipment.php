@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -13,8 +13,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Sales order shipment model
  *
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment getResource()
+ * @api
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -22,6 +21,7 @@ use Magento\Sales\Model\EntityInterface;
  * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Shipment extends AbstractModel implements EntityInterface, ShipmentInterface
 {
@@ -94,6 +94,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $orderRepository;
 
     /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection|null
+     */
+    private $tracksCollection = null;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -145,7 +150,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment::class);
     }
 
     /**
@@ -257,8 +262,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 if (!$item->getOrderItem()->isDummy(true)) {
                     $totalQty += $item->getQty();
                 }
-            } else {
-                $item->isDeleted(true);
             }
         }
 
@@ -333,16 +336,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getTracksCollection()
     {
-        if (!$this->hasData(ShipmentInterface::TRACKS)) {
-            $this->setTracks($this->_trackCollectionFactory->create()->setShipmentFilter($this->getId()));
-
-            if ($this->getId()) {
-                foreach ($this->getTracks() as $track) {
-                    $track->setShipment($this);
-                }
-            }
+        if ($this->tracksCollection === null) {
+            $this->tracksCollection = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
         }
-        return $this->getTracks();
+
+        return $this->tracksCollection;
     }
 
     /**
@@ -405,7 +403,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * Adds comment to shipment with additional possibility to send it to customer via email
      * and show it in customer account
      *
-     * @param \Magento\Sales\Model\Order\Shipment\Comment $comment
+     * @param \Magento\Sales\Model\Order\Shipment\Comment|string $comment
      * @param bool $notify
      * @param bool $visibleOnFront
      * @return $this
@@ -438,15 +436,10 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function getCommentsCollection($reload = false)
     {
         if (!$this->hasData(ShipmentInterface::COMMENTS) || $reload) {
-            $comments = $this->_commentCollectionFactory->create()->setShipmentFilter($this->getId())
+            $comments = $this->_commentCollectionFactory->create()
+                ->setShipmentFilter($this->getId())
                 ->setCreatedAtOrder();
             $this->setComments($comments);
-
-            /**
-             * When shipment created with adding comment,
-             * comments collection must be loaded before we added this comment.
-             */
-            $this->getComments()->load();
 
             if ($this->getId()) {
                 foreach ($this->getComments() as $comment) {
@@ -578,6 +571,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns tracks
      *
@@ -714,6 +708,19 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getComments()
     {
+        if (!$this->getId()) {
+            return $this->getData(ShipmentInterface::COMMENTS);
+        }
+
+        if ($this->getData(ShipmentInterface::COMMENTS) == null) {
+            $collection = $this->_commentCollectionFactory->create()
+                ->setShipmentFilter($this->getId());
+
+            foreach ($collection as $item) {
+                $item->setShipment($this);
+            }
+            $this->setData(ShipmentInterface::COMMENTS, $collection->getItems());
+        }
         return $this->getData(ShipmentInterface::COMMENTS);
     }
 
@@ -836,5 +843,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -2,7 +2,6 @@
 
 namespace Unirgy\Dropship\Observer;
 
-use \Magento\Checkout\Model\Session;
 use \Magento\Framework\Event\Observer;
 use \Magento\Framework\Event\ObserverInterface;
 use \Unirgy\Dropship\Helper\Item;
@@ -15,11 +14,6 @@ class CheckoutCartAddProductComplete extends AbstractObserver implements Observe
      * @var ProtectedCode
      */
     protected $_hlpPr;
-
-    /**
-     * @var Session
-     */
-    protected $_modelSession;
 
     /**
      * @var Item

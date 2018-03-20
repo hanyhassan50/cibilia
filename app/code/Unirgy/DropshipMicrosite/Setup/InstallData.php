@@ -31,12 +31,18 @@ class InstallData implements InstallDataInterface
     const TEXT_SIZE = 65536;
 
     protected $rulesFactory;
+    protected $encryptor;
+    protected $mathRandom;
 
     public function __construct(
-        \Magento\Authorization\Model\RulesFactory $rulesFactory
+        \Magento\Authorization\Model\RulesFactory $rulesFactory,
+        \Magento\Framework\Encryption\Encryptor $encryptor,
+        \Magento\Framework\Math\Random $mathRandom
     )
     {
         $this->rulesFactory = $rulesFactory;
+        $this->encryptor = $encryptor;
+        $this->mathRandom = $mathRandom;
     }
 
 
@@ -60,12 +66,16 @@ class InstallData implements InstallDataInterface
             if ($conn->fetchOne("select user_id from {$ut} where username=?", $v['email'])) {
                 continue;
             }
+            $passHash = @$v['password_hash'];
+            if (!$passHash) {
+                $passHash = $this->encryptor->getHash($this->mathRandom->getRandomString(8), 2);
+            }
             $conn->insert($ut, array(
                 'firstname' => $v['vendor_name'],
                 'lastname'  => $v['vendor_attn'],
                 'email'     => $v['email'],
                 'username'  => $v['email'],
-                'password'  => $v['password_hash'],
+                'password'  => $passHash,
                 'created'   => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
                 'is_active' => 1,
                 'udropship_vendor' => $v['vendor_id'],

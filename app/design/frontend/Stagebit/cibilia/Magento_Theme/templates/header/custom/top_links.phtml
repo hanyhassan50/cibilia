@@ -1,0 +1,13 @@
+<?php
+
+$html = '';
+if ($block->getLinks()) {
+    $html = '<ul id="svg-icons"' . ($block->hasCssClass() ? ' class="' . $block->escapeHtml($block->getCssClass()) . '"' : ' class="header links"') . '>';
+    foreach ($block->getLinks() as $link) {
+        $html .= $block->renderLink($link);
+    }
+    $html .= '</ul>';
+}
+
+echo $html;
+?>

@@ -236,7 +236,7 @@ class Form extends AbstractHelper
                 $fieldDef['values'] = $attribute->getSource()->getAllOptions(false, false);
                 $fieldDef['can_be_empty'] = true;
             } else if ($inputType == 'date') {
-                $fieldDef['date_format'] = $this->_hlp->getDateFormatWithLongYear();
+                $fieldDef['date_format'] = $this->_hlp->getDefaultDateFormat();
                 if ($attribute->getAttributeCode() == 'special_from_date') {
                     $fieldDef['class']  = 'validate-date validate-date-range date-range-special_date-from';
                 } elseif ($attribute->getAttributeCode() == 'special_to_date') {
@@ -371,7 +371,7 @@ class Form extends AbstractHelper
                 $fieldDef = [
                     'id' => 'udmulti_special_from_date',
                     'type'     => 'date',
-                    'date_format'   => $this->_hlp->getDateFormatWithLongYear(),
+                    'date_format'   => $this->_hlp->getDefaultDateFormat(),
                     'name'     => 'udmulti[special_from_date]',
                     'label'    => __('Vendor Special From Date'),
                     'value'    => @$mvData['special_from_date'],
@@ -384,7 +384,7 @@ class Form extends AbstractHelper
                 $fieldDef = [
                     'id' => 'udmulti_special_to_date',
                     'type'     => 'date',
-                    'date_format'   => $this->_hlp->getDateFormatWithLongYear(),
+                    'date_format'   => $this->_hlp->getDefaultDateFormat(),
                     'name'     => 'udmulti[special_to_date]',
                     'label'    => __('Vendor Special To Date'),
                     'value'    => @$mvData['special_to_date'],

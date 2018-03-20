@@ -63,7 +63,7 @@ Reset,Azzerare,module,Magento_Backend
 "You can't change status of cache type(s) in production mode","Non è possibile modificare lo stato dei tipi di cache nella modalità di produzione",module,Magento_Backend
 Dashboard,Dashboar,module,Magento_Backend
 "Cannot apply unknown condition","Impossibile applicare la condizione sconosciuta",module,Magento_Backend
-Password,"Parola d'ordine",module,Magento_Backend
+Password,"Password",module,Magento_Backend
 password,Password,module,Magento_Backend
 WK,sett,module,Magento_Backend
 "Report a Bug","Segnalare un bug",module,Magento_Backend
@@ -219,7 +219,7 @@ Checkout,Cassa,module,Magento_Checkout
 "Payment Page",Pagamento,module,Magento_Checkout
 "We found an invalid request for adding product to quote.","Abbiamo trovato una richiesta non valida per l'aggiunta del prodotto da citare.",module,Magento_Checkout
 "An error occurred on the server. Please try to place the order again.","Si è verificato un errore sul server. Prova ad effettuare nuovamente l'ordine.",module,Magento_Checkout
-Password,"Parola d'ordine",module,Magento_Checkout
+Password,"Password",module,Magento_Checkout
 Login,Accesso,module,Magento_Checkout
 "View and Edit Cart","Visualizza e modifica il carrello",module,Magento_Checkout
 "Select a new payment method","Seleziona un nuovo metodo di pagamento",module,Magento_Checkout
@@ -312,10 +312,10 @@ Admin,Amministratore,module,Magento_Customer
 "regionId is a required field.","RegionId è un campo obbligatorio.",module,Magento_Customer
 Fax,"Fax ",module,Magento_Customer
 Email,E-mail,module,Magento_Customer
-Password,"parola d'ordine",module,Magento_Customer
+Password,"password",module,Magento_Customer
 "%name,",Nome,module,Magento_Customer
 Email:,E-mail:,module,Magento_Customer
-Password:,"Parola d'ordine:",module,Magento_Customer
+Password:,"Password:",module,Magento_Customer
 "If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.","Se l'installazione di Magento ha più siti web, puoi modificare l'ambito per associare il cliente a un sito specifico.",module,Magento_Customer
 Website,"Sito internet",module,Magento_CustomerBalance
 No,No0000,module,Magento_CustomerBalance
@@ -324,7 +324,7 @@ No,No0000,module,Magento_CustomerCustomAttributes
 "Length Only","Solo lunghezza",module,Magento_CustomerCustomAttributes
 Fax,"Fax ",module,Magento_CustomerCustomAttributes
 Email,E-mail,module,Magento_CustomerCustomAttributes
-Password,"Parola d'ordine",module,Magento_CustomerCustomAttributes
+Password,"Password",module,Magento_CustomerCustomAttributes
 "Are you sure you want to do this?","Vuoi farlo?",module,Magento_CustomerSegment
 Status,Stato,module,Magento_CustomerSegment
 ID,"Documento d'identità",module,Magento_CustomerSegment
@@ -362,7 +362,7 @@ Secureline,SECURELINE,module,Magento_Dhl
 "Express envelope","Busta espressa",module,Magento_Dhl
 "Freight worldwide","Trasporti in tutto il mondo",module,Magento_Dhl
 "Jumbo box","Scatola Jumbo",module,Magento_Dhl
-Password,"Parola d'ordine",module,Magento_Dhl
+Password,"Password",module,Magento_Dhl
 lbs,"< 50.000 lb",module,Magento_Directory
 kgs,kg.,module,Magento_Directory
 No,No0000,module,Magento_Downloadable
@@ -411,7 +411,7 @@ Freight,nolo,module,Magento_Fedex
 "No available tracking items","Nessun elemento di monitoraggio disponibile",module,Magento_Fedex
 status,stato,module,Magento_Fedex
 "Meter Number","Numero del contatore",module,Magento_Fedex
-Password,"Parola d'ordine",module,Magento_Fedex
+Password,"Password",module,Magento_Fedex
 "Web-Services URL (Sandbox)","URL Web Services (Sandbox)",module,Magento_Fedex
 Dropoff,Rientro,module,Magento_Fedex
 "Residential Delivery","Consegna residenziale",module,Magento_Fedex
@@ -549,7 +549,7 @@ Fetch,fetch(),module,Magento_Paypal
 "Home Page","Pagina iniziale",module,Magento_Paypal
 "Shortcut Buttons Flavor","Tasti di scelta rapida Sapore",module,Magento_Paypal
 Login,Accesso,module,Magento_Paypal
-Password,"Parola d'ordine",module,Magento_Paypal
+Password,"Password",module,Magento_Paypal
 "Payments Advanced","Pagamenti Avanzati",module,Magento_Paypal
 "Accept payments with a PCI-compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)","Accetti i pagamenti con una casella compatibile con PCI che mantiene i clienti sul tuo sito. (<U> include checkout espresso </ u>)",module,Magento_Paypal
 Partner,Compagno,module,Magento_Paypal
@@ -665,7 +665,7 @@ Status,Stato,module,Magento_SalesRuleStaging
 "The cart price rule will be removed from the update and all scheduled changes will be lost.","La regola del prezzo del carrello verrà rimossa dall'aggiornamento e tutte le modifiche pianificate verranno perse.",module,Magento_SalesRuleStaging
 Backorders,"ORDINI INEVASI",module,Magento_ScalableInventory
 Status,Stato,module,Magento_ScheduledImportExport
-Password,"Parola d'ordine",module,Magento_ScheduledImportExport
+Password,"Password",module,Magento_ScheduledImportExport
 "We couldn't write file ""%1"" to ""%2"" with the ""%3"" driver.","Non è possibile scrivere il file ""% 1"" in ""% 2"" con il driver ""% 3"".",module,Magento_ScheduledImportExport
 Reset,Risistemare,module,Magento_Search
 No,No0000,module,Magento_Search
@@ -763,7 +763,7 @@ Reset,Ripristina,module,Magento_Tax
 WK,sett,module,Magento_Theme
 "%name,",Nome,module,Magento_Theme
 Email:,E-mail:,module,Magento_Theme
-Password:,"Parola d'ordine:",module,Magento_Theme
+Password:,"Password:",module,Magento_Theme
 "Copyright Â© 2013-2017 Magento, Inc. All rights reserved.","Copyright © 2013-2017 Magento, Inc. Tutti i diritti riservati.",module,Magento_Theme
 Header,Intestazione,module,Magento_Theme
 "Logo Attribute Width","Logo Attributo Larghezza",module,Magento_Theme
@@ -822,7 +822,7 @@ status,stato,module,Magento_Ups
 error_message,"messaggio di errore",module,Magento_Ups
 "Signature Required","Firma richiesta",module,Magento_Ups
 "Enable Free Shipping Threshold","Abilita la soglia di spedizione gratuita",module,Magento_Ups
-Password,"Parola d'ordine",module,Magento_Ups
+Password,"Password",module,Magento_Ups
 "Live Account","Conto Live",module,Magento_Ups
 ID,"Documento d'identità",module,Magento_UrlRewrite
 Status,Stato,module,Magento_UrlRewrite
@@ -836,7 +836,7 @@ No,No0000,module,Magento_UrlRewrite
 Reset,Ripristina,module,Magento_User
 Email,E-mail,module,Magento_User
 Status,Stato,module,Magento_User
-Password,"Parola d'ordine",module,Magento_User
+Password,"Password",module,Magento_User
 password,Password,module,Magento_User
 "Reset Password","Resetta la password",module,Magento_User
 "%name,",Nome,module,Magento_User
@@ -922,7 +922,7 @@ Parcel,pacco,module,Magento_Usps
 "Legal Flat-Rate Envelope","Busta a tasso fisso legale",module,Magento_Usps
 "Padded Flat-Rate Envelope","Busta a tasso imbottita",module,Magento_Usps
 Merchandise,Merce,module,Magento_Usps
-Password,"parola d'ordine",module,Magento_Usps
+Password,"password",module,Magento_Usps
 "Stored Payment Method was successfully removed","Metodo di pagamento memorizzato è stato rimosso con successo",module,Magento_Vault
 "Stored Payment Methods","Metodi di pagamento memorizzati",module,Magento_Vault
 "No available payment tokens for specified order payment.","Nessun token di pagamento disponibile per il pagamento specificato.",module,Magento_Vault
@@ -949,7 +949,7 @@ Menu,Menù,theme,frontend/Magento/blank
 Account,account,theme,frontend/Magento/blank
 "%name,",Nome,theme,frontend/Magento/luma
 Email:,E-mail:,theme,frontend/Magento/luma
-Password:,"Parola d'ordine:",theme,frontend/Magento/luma
+Password:,"Password:",theme,frontend/Magento/luma
 "%customer_name,","Nome cliente",theme,frontend/Magento/luma
 "Default Payout","Payout predefinito",theme,frontend/Magento/luma
 "Name DE","Nome DE",theme,frontend/Magento/luma

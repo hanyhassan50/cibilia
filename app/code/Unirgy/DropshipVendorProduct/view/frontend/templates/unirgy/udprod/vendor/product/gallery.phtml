@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,19 @@
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
 ?>
+<div class="row">
+    <div class="add-video-button-container">
+        <button id="add_video_button"
+                title="<?php echo $block->escapeHtml(__('Add Video'));?>"
+                data-role="add-video-button"
+                type="button"
+                class="action-secondary"
+                data-mage-init='{"openVideoModal" : {}}'
+                data-ui-id="widget-button-1">
+            <span><?php /* @escapeNotVerified */ echo __('Add video') ?></span>
+        </button>
+    </div>
+</div>
 <div id="<?php echo $block->getHtmlId() ?>"
      class='gallery'
      data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
@@ -43,11 +56,28 @@ $elementName = $block->getElement()->getName() . '[images]';
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
              data-role="image">
             <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
+            <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]" value="<%- data.media_type %>"/>
+            <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_provider]" value="<%- data.video_provider %>"/>
             <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][file]" value="<%- data.file %>"/>
             <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
             <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][label]" value="<%- data.label %>"/>
             <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
             <input type="hidden" name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][removed]" value="" class="is-removed"/>
+            <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_url]"
+                   value="<%- data.video_url %>"/>
+            <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_title]"
+                   value="<%- data.video_title %>"/>
+            <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_description]"
+                   value="<%- data.video_description %>"/>
+            <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_metadata]"
+                   value="<%- data.video_metadata %>"/>
+            <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][role]"
+                   value="<%- data.video_description %>"/>
             <ul class="type-labels" style="display: none">
                 <?php foreach ($block->getImageTypes() as $typeData) {
                     ?>
@@ -61,10 +91,26 @@ $elementName = $block->getElement()->getName() . '[images]';
             <img class="spacer" src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
             <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
             <div class="actions" >
-                <button type="button" class="action-delete" data-role="delete-button" title="<?php /* @escapeNotVerified */ echo __('Delete image') ?>">
-                    <span> <?php /* @escapeNotVerified */ echo __('Delete image') ?></span >
+                <button type="button"
+                        class="action-delete"
+                        data-role="delete-button"
+                        title="<% if (data.media_type == 'external-video') {%>
+                            <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                        <%} else {%>
+                            <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                        <%}%>">
+                    <span>
+                        <% if (data.media_type == 'external-video') { %>
+                            <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                        <% } else {%>
+                            <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                        <%} %>
+                    </span >
                 </button>
-                <button type="button" class="action-make-base" data-role="make-base-button" title="<?php /* @escapeNotVerified */ echo __('Make Base') ?>">
+                <button type="button"
+                        class="action-make-base"
+                        data-role="make-base-button"
+                        title="<?php /* @escapeNotVerified */ echo __('Make Base') ?>">
                     <span><?php /* @escapeNotVerified */ echo __('Make Base') ?></span >
                 </button >
                 <div class="draggable-handle" ></div >

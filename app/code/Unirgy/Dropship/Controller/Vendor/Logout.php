@@ -13,9 +13,7 @@ class Logout extends AbstractVendor
 {
     public function execute()
     {
-        
         $this->_getSession()->logout();
-        $this->_getSession()->unsCreatedBy();
         return $this->resultRedirectFactory->create()->setPath('udropship/vendor');
     }
 }

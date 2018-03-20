@@ -20,10 +20,11 @@
 
 namespace MSP\AntiVirus\Controller\Adminhtml\Connection;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use MSP\AntiVirus\Api\AntiVirusInterface;
 
-class Test extends \Magento\Framework\App\Action\Action
+class Test extends Action
 {
     /**
      * @var AntiVirusInterface
@@ -40,7 +41,6 @@ class Test extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-		
         if ($this->antiVirus->testConnection()) {
             $this->messageManager->addSuccessMessage('Connection established');
         } else {

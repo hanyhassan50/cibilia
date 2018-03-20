@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject {{trans "Update to your"}} {{var store.getFrontendName()}} {{trans "order"}} @-->
+<!--@subject {{trans "Update to your %store_name order" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var billing.getName()":"Guest Customer Name",
 "var comment":"Order Comment",
@@ -16,8 +16,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <!--<p class="greeting">{{trans "%name," name=$billing.getName()}}</p>-->
-            <p class="greeting">{{var billing.getName()}}</p>
+            <p class="greeting">{{trans "%name," name=$billing.getName()}}</p>
             <p>
                 {{trans
                     "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."

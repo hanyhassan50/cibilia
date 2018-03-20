@@ -1,0 +1,87 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<style type="text/css">
+	.term-condition .modal-inner-wrap{
+		background: <?php echo $block->getConfigData('model_background'); ?>!important;
+	}
+	.term-condition .modal-footer button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	.term-condition .page-actions-buttons button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	.privacy-condition .modal-inner-wrap{
+		background: <?php echo $block->getConfigData('model_background'); ?>!important;
+	}
+	.privacy-condition .modal-footer button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	.privacy-condition .page-actions-buttons button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	<?php if($block->getConfigData('header_background') != ''): ?>
+	.term-condition .page-main-actions{
+		background: <?php echo $block->getConfigData('header_background'); ?>!important;
+		border-top: none!important;
+		border-bottom: none!important;
+	}
+	<?php endif; ?>
+	<?php if($block->getConfigData('header_background') != ''): ?>
+	.privacy-condition .page-main-actions{
+		background: <?php echo $block->getConfigData('header_background'); ?>!important;
+		border-top: none!important;
+		border-bottom: none!important;
+	}
+	<?php endif; ?>
+
+
+	.news-term-condition .modal-inner-wrap{
+		background: <?php echo $block->getConfigData('model_background'); ?>!important;
+	}
+	.news-term-condition .modal-footer button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	.news-term-condition .page-actions-buttons button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	.news-privacy-condition .modal-inner-wrap{
+		background: <?php echo $block->getConfigData('model_background'); ?>!important;
+	}
+	.news-privacy-condition .modal-footer button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	.news-privacy-condition .page-actions-buttons button{
+		background: <?php echo $block->getConfigData('button_color'); ?>!important;
+		color: <?php echo $block->getConfigData('button_text_color'); ?>!important;
+	}
+	<?php if($block->getConfigData('header_background') != ''): ?>
+	.news-term-condition .page-main-actions{
+		background: <?php echo $block->getConfigData('header_background'); ?>!important;
+		border-top: none!important;
+		border-bottom: none!important;
+	}
+	<?php endif; ?>
+	<?php if($block->getConfigData('header_background') != ''): ?>
+	.news-privacy-condition .page-main-actions{
+		background: <?php echo $block->getConfigData('header_background'); ?>!important;
+		border-top: none!important;
+		border-bottom: none!important;
+	}
+	<?php endif; ?>
+</style>

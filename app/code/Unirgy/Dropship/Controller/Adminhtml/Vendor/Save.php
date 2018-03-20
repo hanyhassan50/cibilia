@@ -17,15 +17,7 @@ class Save extends AbstractVendor
                 $data = $r->getParams();
                 $data['vendor_id'] = $id;
                 $data['status'] = @$data['status1'];
-                /*echo "<pre>";
-                print_r($data);
-                die;*/
 
-                
-
-                if(isset($data['vendor_categories'])){
-                    $data['vendor_categories'] = implode(',', $data['vendor_categories']);
-                }
                 $model = $this->_hlp->createObj('\Unirgy\Dropship\Model\Vendor');
                 if ($id) {
                     $model->load($id);
@@ -44,9 +36,6 @@ class Save extends AbstractVendor
                     $products = \Zend_Json::decode($r->getParam('vendor_products'));
                 }
                 $model->setPostedProducts($products);
-                if($model->getStatus() != 'W' && $model->getStatus() != 'V' && $model->getIsInfoReviewed() == '1'){
-                    $model->setIsInfoReviewed(0);
-                }
 
                 $this->_hlp->getObj('Magento\Backend\Model\Session')->setData('uvendor_edit_data', $model->getData());
                 $model->save();
@@ -68,13 +57,7 @@ class Save extends AbstractVendor
                         $this->messageManager->addNotice(__('This shipping methods were not saved: %1. Try to use overrides.', implode(', ', $nonSavedMethods)));
                     }
                     return $resultRedirect->setPath('*/*/edit', array('id' => $model->getId(), 'tab'=>'shipping_section'));
-                   
                 } else {
-                   
-                    if($model->getStatus() == 'W'){
-                        $this->_hlp->getObj('Cibilia\Idproofs\Model\Idproof')->_sendVendorNotifyEmail($model);
-                    }
-
                     if ($r->getParam('save_continue')) {
                         return $resultRedirect->setPath('*/*/edit', array('id' => $model->getId()));
                     } else {

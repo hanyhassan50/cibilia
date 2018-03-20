@@ -151,7 +151,7 @@ $orderStoreDate = $block->formatDate(
                                         if ($attrAsArray['frontend_input'] == 'date') {
                                             $_fieldValue = $this->formatDate($value, \IntlDateFormatter::SHORT, false);
                                         } elseif ($attrAsArray['frontend_input'] == 'boolean') {
-                                            $_fieldValue = $value;
+                                            $_fieldValue = $value == 1 ? 'Yes' : 'No';
                                         } elseif ($attrAsArray['frontend_input'] == 'select') {
                                             foreach ($attributeData->getSource()->getAllOptions() as $instance) {
                                                 if ($value == $instance['value']) {

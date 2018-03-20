@@ -22,14 +22,17 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Authy;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
 
-class Verify extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Verify extends AbstractAction
 {
     /**
      * @var PageFactory
@@ -56,6 +59,15 @@ class Verify extends Action
      */
     private $registry;
 
+    /**
+     * Verify constructor.
+     * @param Action\Context $context
+     * @param Session $session
+     * @param TfaInterface $tfa
+     * @param Registry $registry
+     * @param UserConfigManagerInterface $userConfigManager
+     * @param PageFactory $pageFactory
+     */
     public function __construct(
         Action\Context $context,
         Session $session,
@@ -76,7 +88,7 @@ class Verify extends Action
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
@@ -84,10 +96,11 @@ class Verify extends Action
     /**
      * Get verify information
      * @return verify payload
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getVerifyInformation()
+    private function getVerifyInformation()
     {
-        $providerConfig = $this->userConfigManager->getProviderConfig($this->getUser(), Authy::CODE);
+        $providerConfig = $this->userConfigManager->getProviderConfig($this->getUser()->getId(), Authy::CODE);
         if (!isset($providerConfig['verify'])) {
             return null;
         }
@@ -96,10 +109,7 @@ class Verify extends Action
     }
 
     /**
-     * Dispatch request
-     *
-     * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @inheritdoc
      */
     public function execute()
     {
@@ -110,17 +120,16 @@ class Verify extends Action
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
         $user = $this->getUser();
 
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
             $this->getVerifyInformation() &&
-            !$this->tfa->getProvider(Authy::CODE)->getIsActive($user);
+            !$this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

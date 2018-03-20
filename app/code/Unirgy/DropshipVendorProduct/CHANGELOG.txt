@@ -1,3 +1,89 @@
+  * Fixed can't use all configurable attributes when there are multiple attribute sets in type of product
+
+===== 3.2.2 =====
+  * Fixed "Unable to unserialize value"
+
+===== 3.2.1 =====
+  * Fixed compatibility with 2.2.0
+
+===== 3.1.27 =====
+  * Fixed price display in vendor portal products grid
+
+===== 3.1.26 =====
+  * Fixed pending/approved/fix notification emails
+  * Fixed new product with custom options when 'Prefix vendor created products' SKUs with vendor id'=Yes
+
+===== 3.1.25 =====
+  * Fixed product custom options modifications in vendor portal
+
+===== 3.1.24 =====
+  * Fixed product custom options save in vendor portal
+  * Fixed inventory default fields not propogated from template product
+  * Fixed Call to a member function getMediaAttributes() on null in Block/Vendor/Product/VideoForm.ph
+  * Fixed stock status column "Not Available" in product manager grid when multivendor add-on used
+
+===== 3.1.23 =====
+  * Added support for custom options and dowloadable products in vendor product manager
+
+===== 3.1.22 =====
+  * Fixed usage of "Use In PreSelect"=Yes in
+    "Template Sku > Product SKUs used as templates (per attribute set) > Default Configurable Attributes"
+
+===== 3.1.21 =====
+  * Fixed MEQP2 compatibility
+
+===== 3.1.20 =====
+  * Added "add video" functionality in vendor product manager
+
+===== 3.1.19 =====
+  * Fixed inconsistent status/qty display in vendor portal product manager
+
+===== 3.1.18 =====
+  * Fixed per vendor default inventory attributes values
+  * Added missing * near required field label
+
+===== 3.1.17 =====
+  * Fixed date from/to validation on some locales fails
+
+===== 3.1.16 =====
+  * Fixed vendor portal product manager stock qty not updated
+  * Fixed cannot delete out of stock products in vendor portal
+  * Fixed vendor portal products delete in EE 2.1.0
+
+===== 3.1.15 =====
+  * Fixed LoadTemplateSku not working with custom admin permissions
+
+===== 3.1.14 =====
+  * Fixed intermittent vendor portal "product not found" error on EE 2.1
+
+===== 3.1.13 =====
+  * Fixed price and stock index filters hide vendor products in products grids in vendor portal
+
+===== 3.1.12 =====
+  * Fixed multiUpdateAttributes call when unpublish products on EE 2.1.
+  * Fixed vendor portal product edit url contains vendor key which sometime lead to 404 pages when microsite installed
+
+===== 3.1.11 =====
+  * Fixed multiselect attributes not saved during initial product add in vendor portal
+
+===== 3.1.10 =====
+  * Fixed hide template product text in input when it's focused by default (vendor portal product edit)
+  * Removed confusing field "product attributes / categories" from "Vendor Product Edit Form > Fieldsets"
+  * Fixed categories field loader image
+
+===== 3.1.9 =====
+  * Fixed qty and stock status display in 2.1
+  * Fixed https links in notification emails
+
+===== 3.1.8 =====
+  * Fixed google optimizer error in vendor portal product save
+
+===== 3.1.7 =====
+  * Fixed save of "Configuration > Vendor Products Edit > Vendor Product Edit Form > Fieldsets" with empty fields
+
+===== 3.1.6 =====
+  * Fixed vendor sku check for configurable in vendor portal product edit
+
 ===== 3.1.5 =====
   * Moved select2 to dropship module
 

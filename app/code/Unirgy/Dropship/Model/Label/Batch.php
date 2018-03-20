@@ -363,6 +363,7 @@ class Batch extends AbstractModel
                 $labelModels[$carrierCode]->unsUdropshipMasterTrackingId();
                 $this->afterShipmentLabel($this->getVendor(), $shipment);
             } catch (\Exception $e) {
+                $this->cleanShipmentEmptyTracks($shipment);
                 $this->afterShipmentLabel($this->getVendor(), $shipment);
             	$this->_eventManager->dispatch('udropship_shipment_label_request_failed', array('shipment'=>$shipment, 'error'=>$e->getMessage()));
                 $this->addError($e->getMessage().' - %s order(s)');
@@ -398,6 +399,9 @@ class Batch extends AbstractModel
         if (!empty($track)) {
             $this->setLastTrack($track);
         }
+        if (!empty($newTracks)) {
+            $this->setNewTracks($newTracks);
+        }
 
         if (!$this->getShipmentCnt()) {
             $this->delete();
@@ -406,6 +410,20 @@ class Batch extends AbstractModel
         }
 
         return $this;
+    }
+
+    public function cleanShipmentEmptyTracks($shipment)
+    {
+        $removeTrackIds = [];
+        $trackCollection = $shipment->getTracksCollection();
+        foreach ($trackCollection->getItems() as $tiIdx=>$tiTrack) {
+            if (!$tiTrack->getTrackNumber()) {
+                $removeTrackIds[] = $tiIdx;
+            }
+        }
+        foreach ($removeTrackIds as $__rmTrackId) {
+            $trackCollection->removeItemByKey($__rmTrackId);
+        }
     }
 
     public function beforeShipmentLabel($vendor, $shipment)

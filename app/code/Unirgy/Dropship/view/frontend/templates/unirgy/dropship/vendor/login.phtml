@@ -18,19 +18,11 @@
 
 <?php $_session = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session') ?>
 
-<div class=""><h1><?php echo __('Vendor Log in') ?></h1></div>
-
-<div class="login-container" >
-    <div class="block block-customer-login">
-
-    <form action="#" method="post" id="login-form" >
-
-    <div class="block-title">
-        <strong id="block-customer-login-heading" role="heading" aria-level="2"><?php echo __("Registered Vendor");  ?></strong>
-    </div>
-    <div class="block-content registered-users">
+<form action="" method="post" id="login-form">
+<div class="login-box generic-box">
+    <div class="box-head"><h3><?php echo __('Vendor Log in') ?></h3></div>
+    <div class="registered-users">
         <div class="content">
-            <div class="field note"><?php echo __("If you have an account, sign in with your email address."); ?></div>
             <ul class="form-list">
                 <li>
                     <label for="email"><?php echo __('Username / Email Address') ?> <span class="required">*</span></label><br />
@@ -48,23 +40,8 @@
             <button class="form-button" type="submit" name="send"><span><?php echo __('Login') ?></span></button>
         </div>
     </div>
-
+</div>
 </form>
-</div>
-    <div class="block block-new-customer">
-    <div class="block-title">
-        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php echo __("New Vendors"); ?></strong>
-    </div>
-    <div class="block-content" aria-labelledby="block-new-customer-heading">
-        <p><?php echo __("Creating an account has many benefits: check out faster, keep more than one address, track orders and more."); ?></p>
-        <div class="actions-toolbar">
-            <div class="primary">
-                <a href="<?php echo $block->getUrl('umicrosite/vendor/register'); ?>" class="action create primary"><span><?php echo __("Create an Account"); ?></span></a>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
 
 <?php if (!$this->getRequest()->getParam('ajax')): ?>
 <script type="text/javascript">

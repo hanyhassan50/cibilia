@@ -8,6 +8,11 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 
 class Samples extends DownloadableSamples
 {
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setTemplate('Unirgy_DropshipVendorProduct::product/edit/downloadable/samples.phtml');
+    }
     public function getConfigJson()
     {
         $this->getConfig()->setUrl(
@@ -26,5 +31,20 @@ class Samples extends DownloadableSamples
         $this->getConfig()->setWidth('32');
         $this->getConfig()->setHideUploadButton(true);
         return $this->_jsonEncoder->encode($this->getConfig()->getData());
+    }
+    public function getAddButtonHtml()
+    {
+        $addButton = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            [
+                'label' => __('Add New Link'),
+                'id' => 'add_sample_item',
+                'class' => 'action-add',
+                'data_attribute' => ['action' => 'add-sample'],
+                'template' => 'Unirgy_DropshipVendorProduct::widget/button.phtml'
+            ]
+        )->setTemplate('Unirgy_DropshipVendorProduct::widget/button.phtml');
+        return $addButton->toHtml();
     }
 }

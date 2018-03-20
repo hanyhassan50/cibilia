@@ -24,15 +24,14 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\JsonFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
 
-class Token extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Token extends AbstractAction
 {
-    /**
-     * @var Authy
-     */
-    private $authy;
-
     /**
      * @var Session
      */
@@ -48,36 +47,52 @@ class Token extends Action
      */
     private $tfa;
 
+    /**
+     * @var Authy\Token
+     */
+    private $token;
+
+    /**
+     * Token constructor.
+     * @param Action\Context $context
+     * @param JsonFactory $jsonFactory
+     * @param TfaInterface $tfa
+     * @param Authy\Token $token
+     * @param Session $session
+     */
     public function __construct(
         Action\Context $context,
         JsonFactory $jsonFactory,
         TfaInterface $tfa,
-        Authy $authy,
+        Authy\Token $token,
         Session $session
     ) {
         parent::__construct($context);
-        $this->authy = $authy;
         $this->session = $session;
         $this->jsonFactory = $jsonFactory;
         $this->tfa = $tfa;
+        $this->token = $token;
     }
 
     /**
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
         $via = $this->getRequest()->getParam('via');
         $result = $this->jsonFactory->create();
 
         try {
-            $this->authy->requestToken($this->getUser(), $via);
+            $this->token->request($this->getUser(), $via);
             $res = ['success' => true];
         } catch (\Exception $e) {
             $result->setHttpResponseCode(500);
@@ -89,14 +104,15 @@ class Token extends Action
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
+        $user = $this->getUser();
+
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            $this->tfa->getProvider(Authy::CODE)->getIsActive($this->getUser());
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            $this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

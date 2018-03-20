@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <type name="Magento\Eav\Model\Entity\Type">
+        <plugin name="stagebit_custom_plugin" type="StageBit\CustomCode\Plugin\Model\Entity\Type" sortOrder="1" />
+    </type>
+    <type name="Unirgy\Dropship\Model\Source">
+        <plugin name="stagebit_vendor_status_options" type="StageBit\CustomCode\Plugin\Model\Source" sortOrder="1" />
+    </type>
+    <type name="Unirgy\DropshipMicrosite\Model\Registration">
+        <plugin name="stagebit_vendor_status_options" type="StageBit\CustomCode\Plugin\Model\Registration" sortOrder="1" />
+    </type>
+    <type name="Magento\Backend\Block\Widget\Grid\Extended">
+        <plugin name="stagebit_vendor_registration_admin_collection_filter" type="StageBit\CustomCode\Plugin\Block\Widget\Grid\Extended" />
+    </type>
+    <type name="Unirgy\DropshipVendorProduct\Helper\Data">
+        <plugin name="stagebit_frontend_vendor_productsave_notify" type="StageBit\CustomCode\Plugin\Unirgy\Helper\Data" />
+    </type>
+    <type name="Unirgy\DropshipMicrosite\Helper\Data">
+        <plugin name="stagebit_select_multiple_field_filter_in_getvendor" type="StageBit\CustomCode\Plugin\Unirgy\Helper\Vendor\Data"/>
+    </type>
+    <preference for="Webkul\CustomRegistration\Controller\Editadditionalinfo\Index" type="StageBit\CustomCode\Controller\Editadditionalinfo\Index" />
+    <preference for="Webkul\CustomRegistration\Block\Adminhtml\Customer\Edit\Tabs" type="StageBit\CustomCode\Block\Adminhtml\Customer\Edit\Tabs" />
+    <preference for="Unirgy\Dropship\Block\Adminhtml\Vendor\Edit\Tabs" type="StageBit\CustomCode\Block\Adminhtml\Vendor\Edit\Tabs" />
+    <preference for="Unirgy\Dropship\Controller\Adminhtml\Vendor\Save" type="StageBit\CustomCode\Controller\Adminhtml\Vendor\Save" />
+    <preference for="Unirgy\DropshipVendorProduct\Block\Vendor\Product" type="StageBit\CustomCode\Block\Vendor\Product" />
+    <preference for="Unirgy\Dropship\Model\Source" type="StageBit\CustomCode\Model\Unirgy\Dropship\Source" />
+    <preference for="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\SimpleUrlProvider" type="StageBit\CustomCode\Model\Provider\Failure\RedirectUrl\SimpleUrlProvider" />
+</config>

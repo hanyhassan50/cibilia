@@ -10,8 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Composer\Repository;
+namespace Composer\Test\Repository;
 
+use Composer\Repository\ArtifactRepository;
 use Composer\TestCase;
 use Composer\IO\NullIO;
 use Composer\Config;
@@ -60,7 +61,7 @@ class ArtifactRepositoryTest extends TestCase
         $repo = new ArtifactRepository($coordinates, new NullIO(), new Config());
 
         foreach ($repo->getPackages() as $package) {
-            $this->assertTrue(strpos($package->getDistUrl(), $absolutePath) === 0);
+            $this->assertTrue(strpos($package->getDistUrl(), strtr($absolutePath, '\\', '/')) === 0);
         }
     }
 

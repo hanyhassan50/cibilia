@@ -2,46 +2,22 @@
 
 namespace Unirgy\DropshipVendorProduct\Helper;
 
-use Magento\CatalogInventory\Helper\Data as HelperData;
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\View\DesignInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Unirgy\DropshipVendorProduct\Helper\Data as DropshipVendorProductHelperData;
 use Unirgy\Dropship\Helper\Catalog;
-use Unirgy\Dropship\Helper\Data as DropshipHelperData;
-use Unirgy\Dropship\Model\ResourceModel\Helper;
 
 class Udcatalog extends Catalog
 {
     /**
-     * @var DropshipVendorProductHelperData
+     * @return \Unirgy\DropshipVendorProduct\Helper\Data
      */
-    protected $_prodHlp;
-
-    public function __construct(
-        DropshipVendorProductHelperData $vendorProductHelper,
-        Context $context,
-        \Magento\CatalogInventory\Model\Configuration $invConfig,
-        \Unirgy\Dropship\Model\ResourceModel\Helper $resourceHelper,
-        StoreManagerInterface $storeManager,
-        Category $modelCategory,
-        DesignInterface $viewDesignInterface,
-        DropshipHelperData $helper,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Model\Indexer\Category\Flat\State $flatState
-    )
+    protected function _prodHlp()
     {
-        $this->_prodHlp = $vendorProductHelper;
-
-        parent::__construct($context, $invConfig, $resourceHelper, $storeManager, $modelCategory, $viewDesignInterface, $helper, $eavConfig, $flatState);
+        return $this->_hlp->getObj('Unirgy\DropshipVendorProduct\Helper\Data');
     }
 
     public function getIdentifyImageAttributes($prod, $isNew)
     {
-        return $this->_prodHlp->getIdentifyImageAttributes($prod, $isNew);
+        return $this->_prodHlp()->getIdentifyImageAttributes($prod, $isNew);
     }
     public function createCfgAttr($cfgProd, $cfgAttrId, $pos)
     {

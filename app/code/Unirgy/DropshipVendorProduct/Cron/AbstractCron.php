@@ -59,7 +59,7 @@ class AbstractCron
                 $descr = $prod->getData($descrAttr);
                 if (!is_array($descr)) {
                     try {
-                        $descr = unserialize($descr);
+                        $descr = $this->_hlp->unserialize($descr);
                     } catch (\Exception $e) {
                         $descr = [];
                     }

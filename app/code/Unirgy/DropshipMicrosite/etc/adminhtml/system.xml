@@ -17,6 +17,11 @@
           <label>Subdomain level to use for vendor</label>
           <source_model>Unirgy\DropshipMicrosite\Model\Source</source_model>
         </field>
+        <field id="url_store_before_vendor" translate="label" sortOrder="11" type="select" showInDefault="1">
+          <label>Use storecode before vendor key in URLs.</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+          <comment>This option have impact when &lt;br&gt; "Subdomain level to use for vendor"="From URL Path" and &lt;br&gt; "Configuration &gt; Web &gt; Url Options &gt; Add Store Code to Urls"="Yes" &lt;br&gt;If Yes selected here urls will look like [base_url]/[store code]/[vendor url key]&gt;If No selected here urls will look like [base_url]/[vendor url key]/[store code]</comment>
+        </field>
         <field id="landing_page_title" translate="label" sortOrder="15" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Landing page title</label>
         </field>

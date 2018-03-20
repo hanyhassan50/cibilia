@@ -25,9 +25,8 @@ use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 
 class CacheType extends TagScope
 {
-    const TYPE_IDENTIFIER = 'msp_shield_ids';
-    const CACHE_TAG = 'MSP_SHIELD_IDS';
-
+    const TYPE_IDENTIFIER = 'msp_shield';
+    const CACHE_TAG = 'MSP_SHIELD_TAG';
     /**
      * @param FrontendPool $cacheFrontendPool
      */

@@ -9,12 +9,8 @@ class Products extends AbstractVendor
 {
     public function execute()
     {
-    	
-    	
-
-
         $session = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
-        $session->setUdprodLastGridUrl($this->_url->getUrl('*/*/*', ['_current'=>true]));
+        $session->setUdprodLastGridUrl($this->_url->getUrl('*/*/*', ['__vp'=>true,'_current'=>true]));
         $this->_renderPage(null, 'udprod');
     }
 }

@@ -112,13 +112,80 @@ abstract class AbstractVendor extends VendorAbstractVendor
             'data' => $productData,
             'vendor' => $v
         ]);
+
         if (isset($productData['options'])) {
-            $product->setProductOptions($productData['options']);
+            $productOptions = $productData['options'];
+            $product->setProductOptions($productOptions);
+            $options = $this->mergeProductOptions(
+                $productOptions,
+                $r->getPost('options_use_default')
+            );
+            $customOptions = [];
+            foreach ($options as $customOptionData) {
+                if (empty($customOptionData['is_delete'])) {
+                    if (isset($customOptionData['values'])) {
+                        $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
+                            return empty($valueData['is_delete']);
+                        });
+                    }
+                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
+                    $customOption->setProductSku($product->getSku());
+                    $customOption->setOptionId(null);
+                    $customOptions[] = $customOption;
+                }
+            }
+            $product->setOptions($customOptions);
         }
         $product->setCanSaveCustomOptions(
             (bool)$this->getRequest()->getPost('affect_product_custom_options')
         );
         return $product;
+    }
+    protected $customOptionFactory;
+    protected function getCustomOptionFactory()
+    {
+        if (null === $this->customOptionFactory) {
+            $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+        }
+        return $this->customOptionFactory;
+    }
+    public function mergeProductOptions($productOptions, $overwriteOptions)
+    {
+        if (!is_array($productOptions)) {
+            return [];
+        }
+
+        if (!is_array($overwriteOptions)) {
+            return $productOptions;
+        }
+
+        foreach ($productOptions as $index => $option) {
+            $optionId = $option['option_id'];
+
+            if (!isset($overwriteOptions[$optionId])) {
+                continue;
+            }
+
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
+                }
+            }
+        }
+
+        return $productOptions;
+    }
+    public function getCustomOptionValues($customOption)
+    {
+        $optValues = $customOption->getData('values');
+        if (!is_array($optValues)) {
+            $optValues = $customOption->getValues();
+        }
+        if (!is_array($optValues)) {
+            $optValues = [];
+        }
+        return $optValues;
     }
     /*
     */

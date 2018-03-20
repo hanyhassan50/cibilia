@@ -17,7 +17,7 @@ class CategoryFlat extends Flat
     /**
      * @var HelperData
      */
-    protected $_helperData;
+    protected $msHlp;
 
     public function __construct(Context $context, 
         StrategyInterface $tableStrategy, 
@@ -28,7 +28,7 @@ class CategoryFlat extends Flat
         ManagerInterface $eventManager, 
         HelperData $helperData)
     {
-        $this->_helperData = $helperData;
+        $this->msHlp = $helperData;
 
         parent::__construct($context, $tableStrategy, $categoryFactory, $categoryCollectionFactory, $storeManager, $catalogConfig, $eventManager);
     }
@@ -38,8 +38,8 @@ class CategoryFlat extends Flat
     public function getNodes($parentId, $recursionLevel = 0, $storeId = 0)
     {
         $uKey = '0';
-        if ($this->_helperData->useVendorCategoriesFilter()) {
-            $uKey = $this->_helperData->getCurrentVendor()->getId();
+        if ($this->msHlp->useVendorCategoriesFilter()) {
+            $uKey = $this->msHlp->getCurrentVendor()->getId();
         }
         if (empty($this->_uLoaded[$uKey])) {
             $selectParent = $this->getConnection()->select()

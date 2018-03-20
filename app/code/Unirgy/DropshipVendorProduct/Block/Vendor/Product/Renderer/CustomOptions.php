@@ -25,13 +25,19 @@ class CustomOptions extends Options implements RendererInterface
         parent::__construct($context, $data);
     }
 
-    protected function _toHtml()
+    protected function _prepareLayout()
     {
-        $this->_helperCatalog->setDesignStore(0, 'adminhtml');
-        $res = Template::_toHtml();
-        $this->_helperCatalog->setDesignStore();
-        return $res;
+        $this->addChild(
+            'add_button',
+            'Magento\Backend\Block\Widget\Button',
+            ['label' => __('Add New Option'), 'class' => 'add', 'id' => 'add_new_defined_option']
+        )->setTemplate('Unirgy_DropshipVendorProduct::widget/button.phtml');
+
+        $this->addChild('options_box', 'Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\CustomOptions\Option');
+
+        return Template::_prepareLayout();
     }
+
     public function render(AbstractElement $element)
     {
         $this->setElement($element);

@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method Module setLastDownloaded(string $date)
  * @method Module setLastChecked(string $date)
  * @method Module setLastVersion(string $version)
+ * @method Module setRemoteVersion(string $version)
  * @method string getModuleName()
  * @method string getDownloadUri()
  * @method string getLicenseKey()

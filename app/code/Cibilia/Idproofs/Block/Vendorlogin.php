@@ -3,7 +3,7 @@ namespace Cibilia\Idproofs\Block;
 
 class Vendorlogin extends \Magento\Framework\View\Element\Html\Link
 {
-    protected function _toHtml()
+   /* protected function _toHtml()
     {
         if (false != $this->getTemplate()) {
             return parent::_toHtml();
@@ -18,5 +18,5 @@ class Vendorlogin extends \Magento\Framework\View\Element\Html\Link
             return '<li><a href="http://tst.foodmakers.cibilia.com"  >' .__($this->escapeHtml($this->getLabel())) . '</a></li>';
         }
         return '';
-    }
+    }*/
 }

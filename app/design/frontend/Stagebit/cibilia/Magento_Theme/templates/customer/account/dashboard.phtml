@@ -1,0 +1,316 @@
+<?php
+    $helper         =   $this->helper('StageBit\CustomCode\Helper\Data');
+    $currencyHelper =   $this->helper('Magento\Framework\Pricing\Helper\Data');
+    $totalProduct   =   $block->getTotalCibilianReferelProduct();
+    $categories     =   $block->getCategoryCollection();
+    $vendors        =   $block->getFoodmakers();
+    $countTotalendor=   $block->getFoodmakers(true);
+    $graphData      =   $block->getGraph();
+    $totalAmounts   =   $block->getTotalLockedAndReceivedAmount();
+    $vendorStatus   =   $block->getVendorStatus($vendors);
+    $vendorCredits  =   $block->getVendorCredit();
+    $defaultEarned  =   $defaultLocked  =   0;
+?>
+
+<div class="dashboard-content">
+    <div class="block-commission-graph block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title block-title m-0">
+                <h5><?php echo __('Progress in Commissions Earned'); ?></h5>
+            </div>
+            <div class="foodmaker-block">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="ibox-title">
+                            <h4><?php echo "<i class='fa fa-lock'></i>".__('Total Locked'); ?></h4>
+                        </div>
+                        <div class="ibox-content">
+                            <h2><?php echo $currencyHelper->currency($totalAmounts['locked'],true,false); ?></h2>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="ibox-title">
+                            <h4><?php echo "<i class='fa fa-money'></i>".__('Total Received'); ?></h4>
+                        </div>
+                        <div class="ibox-content">
+                            <h2><?php echo $currencyHelper->currency($totalAmounts['received'],true,false); ?></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="flot-chart">
+                    <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-referel-product block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title block-title">
+                <a class="add-fm pull-right" href="<?php echo $this->getUrl('cibilians/advertisers') ?>"><i class="fa fa-plus"></i><?php echo __('add product'); ?></a>
+                <h5><?php echo __('Products for sale'); ?></h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row no-gutters">
+                    <div class="col-sm-3 col-md-3">
+                        <div class="total-product">
+                            <div class="table-cell">
+                                <h5><?php echo __('Online products:'); ?></h5>
+                                <span><?php echo ($totalProduct) ? count($totalProduct->getData()) : '0'; ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-md-9 no-padding">
+                        <ul class="list-inline">
+                            <?php foreach ($categories as $category) { ?>
+                                <li class="list-inline-item">
+                                    <img title="<?php echo $category->getName(); ?>" src="<?php echo $helper->getMediaUrl(); ?>catalog/category/svg/<?php echo $category->getID(); ?>.svg" alt="<?php echo $category->getName(); ?>" />
+                                    <span class="count"><?php echo $block->getCibilianReferelProduct($category); ?></span>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="block-product-treand">
+                    <div class="ibox-title">
+                        <h5><?php echo __('Product trend'); ?></h5>
+                    </div>
+                    <div class="wrapper-content">
+                        <div class="row">
+                             <?php foreach ($categories as $category) { ?>
+                                <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="prd-block">
+                                        <div class="col-lg-5 padding-class">
+                                            <div class="prd-img">
+                                                <img title="<?php echo $category->getName(); ?>" src="<?php echo $helper->getMediaUrl(); ?>catalog/category/svg/<?php echo $category->getID(); ?>.svg" alt="<?php echo $category->getName(); ?>" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-7 padding-class">
+                                            <div class="prd-status">
+                                                <span><strong><?php echo __('Pending:');?></strong> <?php echo $block->getCibilianReferelProduct($category, 3); ?></span>
+                                                <span><strong><?php echo __('Enable:'); ?></strong> <?php echo $block->getCibilianReferelProduct($category, 1); ?></span>
+                                                <span><strong><?php echo __('Disable:'); ?></strong> <?php echo $block->getCibilianReferelProduct($category, 2); ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                             <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="block-foodmaker block-box">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <a class="add-fm pull-right" href="<?php echo $this->getUrl('cibilians/advertisers/edit'); ?>"><i class="fa fa-plus"></i><?php echo __('add foodmaker'); ?></a>
+                <h5><?php echo __('Foodmakers'); ?></h5>
+            </div>
+            <div class="ibox-content">
+                <div class="ibox-content">
+                    <!--<div class="row no-gutters">
+                        <div class="col-sm-3 col-md-3">
+                            <div class="total-product">
+                                <div class="table-cell">
+                                    <h5><?php /*echo __('Total foodmakers:'); */?></h5>
+                                    <span><?php /*echo $countTotalendor; */?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-9 col-md-9 no-padding">
+
+                        </div>
+                    </div>-->
+                    <div class="block-product-treand">
+                        <!--<div class="ibox-title">
+                            <h5><?php /*echo __('Elenco foodmakers'); */?></h5>
+                        </div>-->
+                        <div class="wrapper-content">
+                            <div class="ibox-content">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><?php echo __('Reg. Date'); ?></th>
+                                            <th><?php echo __('Name'); ?></th>
+                                            <th><?php echo __('Status'); ?></th>
+                                            <th><?php echo __('Earned'); ?></th>
+                                            <th><?php echo __('Locked'); ?></th>
+                                            <th class="text-center"><?php echo __('Manage'); ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if($vendors && count($vendors) > 0 ) { ?>
+                                            <?php foreach($vendors as $vendor) : ?>
+                                               <tr>
+                                                   <td><?php echo $vendor['reg_id']; ?></td>
+                                                   <td><?php echo $block->formatDate($vendor['registered_at']); ?></td>
+                                                   <td><?php echo $vendor['vendor_name']; ?></td>
+                                                   <td><?php echo __($vendorStatus[$vendor['reg_id']]['status']);  ?></td>
+                                                   <?php if(array_key_exists($vendor['reg_id'], $vendorCredits)){ ?>
+                                                       <?php if($vendorCredits[$vendor['reg_id']]['earn'] != ''){ ?>
+                                                           <td><?php echo $currencyHelper->currency($vendorCredits[$vendor['reg_id']]['earn'],true,false); ?></td>
+                                                       <?php }else{ ?>
+                                                           <td><?php echo $currencyHelper->currency($defaultEarned,true,false); ?></td>
+                                                       <?php } ?>
+                                                       <?php if($vendorCredits[$vendor['reg_id']]['lock'] != ''){ ?>
+                                                           <td><?php echo $currencyHelper->currency($vendorCredits[$vendor['reg_id']]['lock'],true,false); ?></td>
+                                                       <?php }else{ ?>
+                                                           <td><?php echo $currencyHelper->currency($defaultLocked,true,false); ?></td>
+                                                       <?php } ?>
+                                                   <?php }else{ ?>
+                                                       <td><?php echo __('-'); ?></td>
+                                                       <td><?php echo __('-'); ?></td>
+                                                   <?php } ?>
+                                                   <?php if($vendorStatus[$vendor['reg_id']]['link']) { ?>
+                                                       <td class="text-center"><?php echo __($vendorStatus[$vendor['reg_id']]['link']); ?></td>
+                                                   <?php } else { ?>
+                                                       <td class="text-center"><?php echo __('-'); ?></td>
+                                                   <?php } ?>
+                                               </tr>
+                                            <?php endforeach; ?>
+                                        <?php } else { ?>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <p class="no-fm message info empty"><?php echo __('You have not referred any Advertisers'); ?></p>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                                <div class="view-link">
+                                    <a href="<?php echo $this->getUrl('cibilians/advertisers'); ?>"><?php echo __('View All'); ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+require(["jquery", "bootstrapMin", "jqueryFlot", "jqueryFlotTooltipMin", "jqueryFlotSpline", "jqueryFlotResize", "jqueryFlotTime"], function($) {
+    $(document).ready(function($){
+        var data2 = [
+            <?php foreach ($graphData['locked'] as $key => $val): ?>
+            <?php echo '[gd('.$val["year"].', '.$val["month"].', '.$val["day"].'), '.$val["data"].'],' ?>
+            <?php endforeach; ?>
+        ];
+
+
+        var data3 = [
+            <?php foreach ($graphData['received'] as $key => $val): ?>
+            <?php echo '[gd('.$val["year"].', '.$val["month"].', '.$val["day"].'), '.$val["data"].'],' ?>
+            <?php endforeach; ?>
+        ];
+
+        var data4 = [
+            [gd(2012, 1, 1), 467], [gd(2012, 1, 2), 600], [gd(2012, 1, 3), 700], [gd(2012, 1, 4), 820],
+            [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
+            [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
+            [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
+            [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
+            [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
+            [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
+            [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
+        ];
+
+
+        var dataset = [
+            {
+                label: "<?php echo __('Credit Locked'); ?>",
+                data: data2,
+                color: "#1ab394",
+                bars: {
+                    show: true,
+                    align: "center",
+                    barWidth: 24 * 60 * 60 * 600,
+                    lineWidth:0
+                }
+
+            }, {
+                label: "<?php echo __('Credit Received'); ?>",
+                yaxis: 2,
+                data: data3,
+                color: "#1C84C6",
+                lines: {
+                    lineWidth:1,
+                    show: true,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.2
+                        }, {
+                            opacity: 0.4
+                        }]
+                    }
+                },
+                splines: {
+                    show: false,
+                    tension: 0.6,
+                    lineWidth: 1,
+                    fill: 0.1
+                }
+            }
+
+        ];
+
+
+        var options = {
+            xaxis: {
+                mode: "time",
+                tickSize: [3, "day"],
+                tickLength: 0,
+                axisLabel: "Date",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Arial',
+                axisLabelPadding: 10,
+                color: "#d5d5d5"
+            },
+            yaxes: [{
+                position: "left",
+                max: 200,
+                color: "#d5d5d5",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Arial',
+                axisLabelPadding: 3
+            }, {
+                position: "right",
+                max: 50,
+                clolor: "#d5d5d5",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: ' Arial',
+                axisLabelPadding: 67
+            }
+            ],
+            legend: {
+                noColumns: 1,
+                labelBoxBorderColor: "#000000",
+                position: "nw"
+            },
+            grid: {
+                hoverable: false,
+                borderWidth: 0
+            }
+        };
+
+        function gd(year, month, day) {
+            return new Date(year, month - 1, day).getTime();
+        }
+
+        var previousPoint = null, previousLabel = null;
+
+        $.plot($("#flot-dashboard-chart"), dataset, options);
+    });
+});
+</script>

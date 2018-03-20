@@ -1,4 +1,4 @@
-<!--@subject {{var store.getFrontendName()}}: {{trans "Order #"}} {{var order_id}} {{trans "update"}} @-->
+<!--@subject {{var store.getFrontendName()}}: Order # {{var order_id}} update @-->
 
 
 <style type="text/css">
@@ -21,15 +21,15 @@
         <tr>
             <td valign="top">
                 <p>
-                    <strong>{{trans "Dear"}} {{var vendor_name}},</strong><br/>
-                    {{trans "Store administrator added comment for the order #"}} {{var order_id}} ({{var shipment_status}}) <br/>
+                    <strong>Dear {{var vendor_name}},</strong><br/>
+                    Store administrator added comment for the order # {{var order_id}} ({{var shipment_status}}) <br/>
                 </p>
 
                 <p>{{var comment}}</p>
 
-                <p><a href="{{var shipment_url}}">{{trans "Click here to logon to your shipping control panel"}}</a></p>
+                <p><a href="{{var shipment_url}}">Click here to logon to your shipping control panel</a></p>
 
-                <p>{{trans "Thank you for your partnership."}}</p>
+                <p>Thank you for your partnership.</p>
 
                 <p><a href="{{store url=''}}">{{var store_name}}</a></p>
             </td>

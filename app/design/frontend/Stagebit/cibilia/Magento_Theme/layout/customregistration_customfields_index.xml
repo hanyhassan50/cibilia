@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="svg" xsi:type="string">
+                    <![CDATA[<svg version="1.1" id="cibilian-icon-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 75.34 76.341" enable-background="new 0 0 75.34 76.341" xml:space="preserve">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M38.305,74.901C18.563,74.896,2.6,58.99,2.615,39.336
+                                C2.629,19.829,18.861,3.621,38.366,3.637C58.02,3.653,73.884,19.625,73.879,39.389C73.875,59.246,58.188,74.906,38.305,74.901z
+                                 M37.952,62.128c3.881,0.172,7.796-0.846,11.473-2.89c4.095-2.275,5.56-4.545,3.972-6.724c-2.459-3.377-4.861-1.238-7.382,0.247
+                                c-5.625,3.314-13.532,2.623-18.623-1.425c-5.099-4.054-7.135-10.462-5.319-16.739c2.998-10.373,15.593-14.613,25.23-8.387
+                                c2.19,1.415,4.223,2.023,5.865-0.277c1.773-2.482,0.396-4.383-1.79-5.919c-8.001-5.622-19.499-5.426-27.665,0.509
+                                c-8.102,5.891-11.516,16.189-8.453,25.512C18.434,55.701,27.325,62.101,37.952,62.128z" style="stroke-dasharray: 425, 465; stroke-dashoffset: 0;"></path>
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M37.952,62.128c-10.627-0.027-19.519-6.427-22.692-16.093
+                                c-3.063-9.322,0.352-19.621,8.453-25.512c8.166-5.935,19.664-6.131,27.665-0.509c2.187,1.536,3.563,3.437,1.79,5.919
+                                c-1.643,2.301-3.675,1.692-5.865,0.277c-9.638-6.227-22.232-1.986-25.23,8.387c-1.815,6.277,0.221,12.686,5.319,16.739
+                                c5.091,4.048,12.998,4.739,18.623,1.425c2.521-1.485,4.923-3.624,7.382-0.247c1.588,2.179,0.123,4.448-3.972,6.724
+                                C45.748,61.282,41.833,62.3,37.952,62.128z" style="stroke-dasharray: 201, 241; stroke-dashoffset: 0;"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

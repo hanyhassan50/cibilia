@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
-        <route id="udmspro" frontName="authentic_food_makers_mspro">
+        <route id="udmspro" frontName="udmspro">
             <module name="Unirgy_DropshipMicrositePro"/>
         </route>
         <route id="umicrosite">

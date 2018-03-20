@@ -1,0 +1,1618 @@
+  /*
+ * Custom css
+ * added on 29 jan 2018
+ */
+
+$btn-hover-color: #559c69;
+
+.cms-index-index{
+  .page-title-wrapper{
+    display: none;
+  }
+}
+.page-banner{
+  background: url("../images/banner-back.jpg") no-repeat top center;
+  background-size: 100% 100%;
+}
+.foodmaker-home-page{
+  .page-banner{
+    background: url("../images/fmpage1.jpg") no-repeat center;
+    background-size: 100%;
+  }
+}
+.cms-home-page-foodmaker-it, .cms-home-page-foodmaker{
+  .bootstrap-select.siteSwitch{
+    display: none;
+  }
+}
+
+.header-primary.header.container{
+  width: 100%;
+  max-width: inherit;
+  .inner-container{
+    width: 100%;
+  }
+}
+.nav.container.clearer{
+  .inner-container{
+    width: 100%;
+  }
+}
+
+.banner-block{
+  background-color: rgba(0, 0, 0, 0.4);
+  display: table;
+  width: 100%;
+  height: 650px;
+  .text-block {
+    color: $white;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 20%;
+    h2 {
+      font-size: 42px;
+    }
+    p {
+      font-family: Quicksand;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 10px 0 45px;
+    }
+    a{
+      background-color: #020202;
+      color: $white;
+      padding: 12px 42px;
+      font-size: 18px;
+      text-transform: uppercase;
+      font-weight: 700;
+      border-radius: 10px;
+      &:hover{
+        text-decoration: none;
+        background-color: $btn-hover-color;
+      }
+    }
+    h3{
+      font-size: 20px;
+    }
+  }
+  &.form-block{
+    background-color: rgba(0,0,0,0.8);
+    .text-block {
+      padding: 0 8%;
+    }
+  }
+  .form-content{
+    .form.create.account{
+      min-width: 100%;
+      width: 100%;
+      .fieldset{
+        .field{
+          margin-bottom: 15px;
+          &.field-name-firstname{
+            display: inline-block;
+            width: 42%;
+          }
+          &.field-name-lastname{
+            display: inline-block;
+            width: 43%;
+          }
+          label{
+            text-align: left;
+            float: none;
+            margin-bottom: 5px;
+            width: 100%;
+            span{
+              opacity: 0.7;
+              text-transform: capitalize;
+            }
+          }
+          .control{
+            float: none;
+            input{
+              height: 40px;
+            }
+          }
+        }
+      }
+    }
+    .legend, .choice.newsletter, #password-strength-meter-container{
+      display: none;
+    }
+    .create.info{
+      margin-bottom: -18px;
+    }
+    .actions-toolbar{
+      margin-left: 0 !important;
+      .primary{
+        .submit.primary{
+          font-size: 22px;
+          text-transform: uppercase;
+          padding: 20px 36px;
+          border-radius: 15px;
+          background-color: #559c69;
+          width: 100%;
+        }
+      }
+      .secondary{
+        display: none;
+      }
+    }
+  }
+}
+
+.foodmaker-home-page{
+  .banner-block {
+    background: none;
+    display: table;
+    width: 100%;
+    height: 670px;
+    .text-block {
+      color: #333333;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0 23%;
+      h2 {
+        font-size: 50px;
+        margin-bottom: 40px;
+      }
+      a{
+        background-color: #333333;
+        color: $white;
+        padding: 20px 42px;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: 700;
+        border-radius: 10px;
+        &:hover{
+          text-decoration: none;
+          background-color: $btn-hover-color;
+        }
+      }
+    }
+  }
+  .subscribe-block{
+    background: #2e6170;
+    .subscribe-inner{
+      color: $white;
+    }
+  }
+  .product-section{
+    padding: 55px 0;
+    background-color: #2e6170;
+    .product-list {
+      border: 3px dotted $white;
+      span.list-title {
+        background-color: #2e6170;
+        color: $white;
+      }
+      ul.list-inline{
+        li.list-inline-item{
+          span.item-name{
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+}
+
+.cms-home-page-foodmaker, .cms-home-page-foodmaker-it{
+  .columns{
+    .column.main{
+      padding-bottom: 0;
+    }
+  }
+  .main.container{
+    padding-bottom: 0px;
+  }
+}
+
+
+.subscribe-block{
+  padding: 22px 11% 18px;
+  background: #bfcca2;
+  .subscribe-inner{
+    margin: 10px auto 0;
+    h2{
+      font-size: 34px;
+    }
+    p{
+      font-size: 17px;
+    }
+  }
+  .subscribe-form-block{
+    display: table;
+    width: 100%;
+    height: 100%;
+  }
+  .block.newsletter{
+    display: table-cell;
+    vertical-align: middle;
+    .field{
+      margin-right: 0;
+      .control {
+        &:before {
+          content: '';
+        }
+        input{
+          height: 50px;
+          padding-left: 10px;
+        }
+      }
+    }
+    .action.subscribe{
+      height: 50px;
+      padding: 0 32px;
+    }
+  }
+}
+
+.main-content-block{
+  padding: 20px 0 40px;
+  .content-header{
+    margin: 10px 0 22px;
+    text-align: center;
+    h2{
+      font-size: 40px;
+    }
+  }
+  .blocks{
+    padding: 10px 0;
+    .block-table{
+      display: table;
+      width: 100%;
+      height: 200px;
+      .blocks-text{
+        display: table-cell;
+        vertical-align: middle;
+        h3{
+          font-size: 24px
+        }
+        p{
+          font-size: 16px
+        }
+      }
+    }
+  }
+}
+
+.product-section{
+  padding: 55px 0;
+  background-color: #f5f5ec;
+  .product-list{
+    padding: 10px 15px;
+    border: 3px dotted #333;
+    text-align: center;
+    span.list-title{
+      background-color: #f5f5ec;
+      padding: 5px 20px;
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 700;
+      text-align: center;
+      top: -30px;
+      position: relative;
+    }
+    ul.list-inline{
+      li.list-inline-item{
+        margin: 0px 10px 5px;
+        padding: 10px 10px 0px;
+        overflow: hidden;
+        width: 20%;
+        a{
+          .svg-icon{
+            svg {
+              height: 100px !important;
+              width: 100px !important;
+            }
+          }
+          &:hover{
+            text-decoration: none;
+            color: #333;
+          }
+        }
+        span.item-name{
+          font-size: 15px;
+          font-weight: 700;
+          margin: 22px 0 0;
+          display: inline-block;
+          text-transform: uppercase;
+          vertical-align: text-top;
+        }
+      }
+    }
+  }
+}
+.bottom-section{
+  text-align: center;
+  padding: 36px 0 0px;
+  h2{
+    color: #2e6170;
+    font-size: 40px;
+  }
+  p{
+    font-size: 24px;
+    margin: 16px 0 5%;
+  }
+  a{
+    background-color: #2e6170;
+    color: $white;
+    display: inline-block;
+    font-size: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 26px 34px;
+    &:hover{
+      background-color: $btn-hover-color;
+      color: $white;
+      text-decoration: none;
+    }
+  }
+}
+
+.footer.container{
+  .open{
+    .dropdown-menu {
+      display: block;
+    }
+  }
+  .dropup{
+    .dropdown-menu {
+      top: auto;
+      bottom: 100%;
+      margin-bottom: 2px;
+    }
+  }
+  .dropdown-toggle::after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+    position: relative;
+    top: 6px;
+  }
+  .item-right{
+    .btn-group.bootstrap-select{
+      .dropdown-toggle.btn-default{
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        &:focus{
+          box-shadow: none;
+          border: none;
+          outline: 0 !important;
+        }
+        span.filter-option{
+          overflow: visible;
+          span.media-left{
+            width: 25px;
+            height: 25px;
+            display: inline-block !important;
+            margin-right: 18px !important;
+            position: relative;
+            top: 2px;
+            img{
+              width: 100%;
+            }
+          }
+          span.titlehead{
+            position: relative;
+            top: 3px;
+          }
+        }
+      }
+    }
+    .bootstrap-select.siteSwitch{
+      width: 160px;
+      .dropdown-menu.open{
+        background-color: #202020;
+        ul.dropdown-menu.inner{
+          background-color: #202020;
+          padding: 8px 0 2px;
+          li{
+            padding: 4px 15px;
+            a{
+              display: block;
+              width: 100%;
+              span.media{
+                span.media-left{
+                  width: 25px;
+                  height: 25px;
+                  display: inline-block !important;
+                  margin-right: 14px !important;
+                  img{
+                    width: 100%;
+                  }
+                }
+                span.media-body{
+                  font-size: 14px;
+                  color: #fff;
+                  font-weight: 700;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .f-links{
+      margin-top: 5px;
+      ul{
+        margin: 0;
+        overflow: hidden;
+        li.list-inline-item{
+          padding: 3px 30px;
+          border-right: 1px solid $white;
+          margin: 0;
+          a{
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}
+
+.header-primary{
+  .right-column{
+    .custom-page-link{
+      display: inline-block;
+      ul.list-inline{
+        margin: 0;
+        li{
+          padding: 0 36px;
+          a{
+            font-weight: 700;
+            text-transform: uppercase;
+            &:hover{
+              text-decoration: none;
+            }
+          }
+          &.myaccount-link{
+            padding-right: 0;
+            margin-right: -26px;
+            &.user-logedin{
+              margin-right: 0px;
+            }
+          }
+        }
+      }
+    }
+    .item{
+      display: inline-block;
+      vertical-align: middle;
+      #user-menu{
+        .header.links{
+          li{
+            margin-top: 4px;
+            a{
+              color: #333333;
+              font-weight: 700;
+              &:hover{
+                background: none;
+                color: #2e6170 !important;
+                text-decoration: none;
+              }
+            }
+          }
+          li.authorization-link{
+            margin-top: 0px;
+            margin-left: 10px;
+            a{
+              background-color: #333333;
+              color: $white;
+              padding: 6px 20px 4px 10px;
+              border-radius: 10px;
+              line-height: normal;
+              font-weight: 700;
+              text-transform: uppercase;
+              &:hover{
+                background-color: $btn-hover-color;
+                color: $white !important;
+                text-decoration: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.sidebar.sidebar-main{
+  .account-nav-content{
+    .nav{
+      display: block;
+    }
+  }
+}
+.idproofs-index-vendor{
+  .form-address-edit{
+    .legend{
+      margin-left: 0;
+    }
+    .field{
+      label{
+        text-align: left !important;
+      }
+      .control{
+        input, select, textarea{
+          width: 50%;
+        }
+      }
+    }
+    .fieldset:nth-child(3){
+      float: none;
+    }
+  }
+}
+
+.udropship-vendor-index{
+  .col-main{
+    .generic-box{
+      .col3-set.row{
+        background: none;
+        padding: 0;
+        overflow: hidden;
+        .col-md-4{
+          border-right: 1px solid #ccc;
+          right: -3px;
+          ul.form-list{
+            padding: 24px 20px 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.udropship-vendor{
+  .nav.container{
+    .inner-container{
+      width: 100%;
+    }
+  }
+}
+#svg-icons, #svg-icons-menu{
+  .ai-icon{
+    margin-top: 4px;
+    svg{
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      vertical-align: middle;
+      polyline,polygon,rect,circle,line,path{
+        stroke-linecap: "square";
+        stroke-linejoin: "miter";
+        stroke-width: 3; /* changeable */
+        stroke-miterlimit: 4;
+        stroke: #333;
+        fill: none;
+      }
+    }
+    &.authorization-link{
+      margin-top: 0px;
+      svg{
+        position: relative;
+        top: -3px;
+        polyline,polygon,rect,circle,line,path{
+          stroke-linecap: "square";
+          stroke-linejoin: "miter";
+          stroke-width: 3; /* changeable */
+          stroke-miterlimit: 4;
+          stroke: #fff;
+          fill: none;
+        }
+      }
+    }
+  }
+  .nav.item {
+    .ai-icon {
+      svg {
+        position: absolute;
+        left: 8px;
+        top: -4px;
+        &#cibilian-icon{
+          width: 30px;
+          height: 30px;
+          top: 3px;
+          left: 14px;
+        }
+        polyline, polygon, rect, circle, line, path {
+          stroke-linecap: "square";
+          stroke-linejoin: "miter";
+          stroke-width: 3; /* changeable */
+          stroke-miterlimit: 4;
+          stroke: #fff;
+          fill: none;
+          &.adv {
+            stroke-dasharray: 280;
+            stroke-dashoffset: 0;
+            -webkit-animation: draw 2.5s linear alternate;
+            animation: draw 2.5s linear alternate;
+          }
+
+        }
+      }
+    }
+  }
+  .nav.item.ai-icon {
+    &:hover{
+      svg#si-cart-fifteen {
+        path {
+          stroke-dasharray: 280;
+          stroke-dashoffset: 0;
+          -webkit-animation: drawrev 2.5s linear alternate;
+          animation: drawrev 2.5s linear alternate;
+        }
+      }
+    }
+  }
+}
+
+@-webkit-keyframes draw {
+  0% {
+    stroke-dashoffset: 280;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@-webkit-keyframes drawrev {
+  0% {
+    stroke-dashoffset: 280;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.sidebar.sidebar-main{
+  .account-nav{
+    .account-nav-content{
+      background: #333333;
+      ul.nav{
+        li{
+          margin: 0px !important;
+          strong{
+            border-color: $btn-hover-color;
+            color: $white;
+            font-weight: 700;
+            padding: 7px 15px 7px 50px;
+            position: relative;
+          }
+          a{
+            color: $white;
+            padding: 7px 15px 7px 50px;
+            position: relative;
+            &:hover{
+              background: $btn-hover-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.udropship-vendor{
+  #svg-icons.myheader{
+    display: inline-block;
+    li{
+      display: inline-block;
+      padding: 0 6px;
+      text-transform: uppercase;
+      font-weight: 700;
+      strong{
+        svg {
+          margin-right: -10px;
+          position: relative;
+          top: -2px;
+          polyline, polygon, rect, circle, line, path {
+            stroke-linecap: "square";
+            stroke-linejoin: "miter";
+            stroke-width: 3; /* changeable */
+            stroke-miterlimit: 4;
+            stroke: #333 !important;
+            fill: none;
+          }
+        }
+      }
+      a{
+        background-color: #333333;
+        color: #fff;
+        padding: 6px 20px 4px 10px;
+        border-radius: 10px;
+        line-height: normal;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: block;
+        &:hover{
+          background-color: $btn-hover-color;
+          text-transform: uppercase;
+        }
+        svg {
+          position: relative;
+          top: -2px;
+          polyline, polygon, rect, circle, line, path {
+            stroke-linecap: "square";
+            stroke-linejoin: "miter";
+            stroke-width: 3; /* changeable */
+            stroke-miterlimit: 4;
+            stroke: #fff !important;
+            fill: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.udropship-vendor{
+  .col-1{
+    max-width: 100%;
+  }
+}
+
+.udropship-vendor{
+  &.page-layout-2columns-left{
+    .sidebar-main{
+      width: 22.3%;
+    }
+    .column.main {
+      width: 77.7%;
+    }
+  }
+  #maincontent{
+    margin-top: 0 !important;
+  }
+  .sidebar-main{
+    .vendor-account-nv{
+      background-color: #2e6170;
+      padding: 15px 0;
+      #svg-icons-menu{
+        margin: 0;
+        li{
+          margin: 0;
+          &.active{
+            border-left: 5px solid #333333;
+            a{
+              font-weight: 700;
+            }
+          }
+          a{
+            color: $white;
+            display: block;
+            margin: 0;
+            padding: 15px 64px;
+            position: relative;
+            width: 100%;
+            &:hover{
+              background-color: #333333;
+            }
+          }
+          svg{
+            position: absolute;
+            left: 18px;
+            top: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.page-title-wrapper{
+  .page-title{
+    span.ai-icon{
+      display: inline-block;
+      margin-right: 10px;
+      svg{
+        width: 60px;
+        height: 60px;
+        vertical-align: middle;
+        position: relative;
+        top: -4px;
+        polyline, polygon, rect, circle, line, path {
+          stroke-linecap: "square";
+          stroke-linejoin: "miter";
+          stroke-width: 3; /* changeable */
+          stroke-miterlimit: 4;
+          stroke: #333;
+          fill: none;
+        }
+      }
+    }
+  }
+}
+.dashboard-content{
+  .block-box{
+    background: #fdfdfd;
+    padding: 10px 15px 5px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 7px 0px #e7e7e7;
+    margin-bottom: 42px;
+  }
+  .ibox {
+    clear: both;
+    margin-bottom: 25px;
+    margin-top: 0;
+    padding: 0;
+    .ibox-title {
+      border-bottom: 2px solid #e7eaec;
+      padding: 15px 2px 0px;
+      min-height: 42px;
+      &.block-title{
+        border-bottom: 2px solid #666666;
+        margin-bottom: 10px;
+      }
+      h5 {
+        color: #666666;
+        display: inline-block;
+        font-size: 14px;
+        margin: 0 0 7px;
+        padding: 0;
+        text-overflow: ellipsis;
+        float: left;
+        text-transform: uppercase;
+      }
+    }
+    .foodmaker-block{
+      .ibox-title{
+        padding: 10px 15px 0;
+        min-height: 44px;
+        h4{
+          font-size: 18px;
+          font-weight: normal;
+          .fa{
+            margin-right: 10px;
+            font-size: 22px;
+            &.fa-lock,&.fa-cart-plus{
+              color: #1ab394;
+            }
+            &.fa-money{
+              color: #1C84C6;
+            }
+          }
+        }
+      }
+      .ibox-content{
+        margin: 3px 0;
+        padding: 0 8px;
+        h2{
+          margin: 0 10px;
+          color: #3da6c3;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+  .flot-chart {
+    display: block;
+    height: 250px;
+    .flot-chart-content {
+      width: 100%;
+      height: 100%;
+      .legend{
+        div{
+          background: none !important;
+        }
+      }
+      table{
+        width: auto !important;
+        tr{
+          td{
+            padding: 0px 3px !important;
+          }
+        }
+      }
+    }
+  }
+
+  .block-referel-product, .block-foodmaker{
+    .ibox-title{
+      a.add-fm{
+        background-color: $btn-hover-color;
+        border-radius: 6px;
+        color: $white !important;
+        font-size: 12px;
+        font-weight: 700;
+        margin: 0;
+        padding: 5px 28px;
+        position: relative;
+        text-transform: uppercase;
+        top: -10px;
+        &:hover{
+          text-decoration: none;
+          background-color: #333333;
+        }
+        .fa{
+          color: $white;
+          font-size: 16px;
+          position: relative;
+          left: -9px;
+          top: 2px;
+        }
+      }
+    }
+    .ibox-content{
+      .total-product{
+        border-right: 1px solid #ccc;
+        color: #666666;
+        display: table;
+        width: 100%;
+        height: 100%;
+        .table-cell{
+          color: #666666;
+          vertical-align: middle;
+          display: table-cell;
+          padding: 0 12px;
+          h5{
+            font-size: 12px;
+            font-weight: normal;
+            font-style: italic;
+            text-transform: uppercase;
+          }
+          span{
+            font-size: 30px;
+          }
+        }
+      }
+      ul.list-inline{
+        margin-bottom: 0;
+        overflow: hidden;
+        display: table;
+        width: 100%;
+        li{
+          border-right: 1px solid #ccc;
+          margin: 0;
+          margin-left: -1px;
+          padding: 14px 12px 8px;
+          text-align: center;
+          display: table-cell;
+          &:last-child {
+            border-right: 0 none;
+          }
+          img{
+            width: 45px;
+            height: 45px;
+          }
+          span{
+            color: #666666;
+            display: inline-block;
+            font-size: 20px;
+            margin: 10px 0 0;
+            width: 100%;
+          }
+        }
+      }
+      .block-product-treand{
+        margin-top: 16px;
+        .ibox-title{
+          min-height: 25px;
+          padding-left: 0;
+          margin-bottom: 30px;
+          h5{
+            background: #fdfdfd;
+            margin-top: 2px;
+            padding: 0 10px;
+            font-weight: normal;
+            font-size: 13px;
+          }
+        }
+        .wrapper-content{
+          padding-left: 12px;
+          .prd-block{
+            border-bottom: 5px solid #94cede;
+            display: flex;
+            margin-bottom: 26px;
+            padding-bottom: 16px;
+            .padding-class{
+              padding-right: 5px;
+              padding-left: 5px;
+            }
+            .prd-img{
+              text-align: center;
+              img{
+                width: 60px;
+                height: 60px;
+              }
+            }
+            .prd-status{
+              span{
+                display: block;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.editcustomer{
+  .form-button{
+    background: #333333;
+    color: $white;
+    &:hover{
+      background: $btn-hover-color;
+    }
+    a{
+      color: $white;
+      &:hover{
+        color: $white;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+
+.idproofs-index-vendor{
+  .img-block{
+    width: 50px;
+    display: inline-block;
+    vertical-align: top;
+    input{
+      width: 100% !important;
+    }
+  }
+  .block-input{
+    display: inline-block;
+    margin-left: 10px;
+    input{
+      width: 100% !important;
+    }
+  }
+}
+
+.block-foodmaker{
+  .ibox.float-e-margins{
+    .wrapper-content{
+      table{
+        thead{
+          tr{
+            th{
+              line-height: 1.42857;
+              padding: 8px;
+              vertical-align: top;
+            }
+          }
+        }
+        tbody{
+          tr{
+            td{
+              border-bottom: 1px solid #efefef;
+              line-height: 1.42857;
+              padding: 12px;
+              vertical-align: top;
+            }
+          }
+        }
+        p.no-fm{
+          text-align: center;
+          &:before{
+            font-size: 28px;
+            line-height: 28px;
+            color: inherit;
+            content: '\e602';
+            font-family: 'icons-blank-theme';
+            margin: -14px 0 0;
+            vertical-align: middle;
+            display: inline-block;
+            font-weight: normal;
+            overflow: hidden;
+            speak: none;
+            left: 0;
+            top: 18px;
+            width: 40px;
+            position: absolute;
+            text-align: center;
+          }
+        }
+        a.manage-vendor{
+          background-color: $btn-hover-color;
+          border-radius: 6px;
+          color: $white;
+          font-size: 12px;
+          font-weight: 700;
+          margin: 0;
+          padding: 5px 28px;
+          text-transform: uppercase;
+          &:hover{
+            text-decoration: none;
+            background-color: #333333;
+          }
+        }
+      }
+      .view-link{
+        text-align: left;
+        a{
+          color: $btn-hover-color;
+          font-weight: 700;
+          text-decoration: underline;
+          &:hover{
+            color: #333333;
+          }
+        }
+      }
+    }
+  }
+}
+
+.vendor-order-details{
+  .table-title{
+    text-align: center;
+    padding: 12px 0 6px;
+    p{
+      color: #2e6170;
+      font-weight: 700;
+      margin: 0 !important;
+    }
+  }
+  .block-product-treand{
+    .wrapper-content{
+      .view-link{
+        text-align: left;
+        a{
+          color: #2e6170 !important;
+          font-weight: 700;
+          text-decoration: underline !important;
+          &:hover{
+            color: $btn-hover-color !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.foodmaker-dashboard-index{
+  .dashboard-content{
+    .block-referel-product, .vendor-order-details{
+      .ibox-title{
+        a.add-fm{
+          background-color: #2e6170 !important;
+          &:hover{
+            background-color: $btn-hover-color !important;
+          }
+        }
+      }
+      .ibox-content{
+        .slip-download{
+          background-color: #2e6170;
+          color: #fff !important;
+          padding: 5px 10px;
+          border-radius: 5px;
+          font-size: 12px;
+          text-transform: uppercase;
+          &:hover{
+            background-color: $btn-hover-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/*@media css*/
+@media all and (max-width: 1440px) {
+  .page-banner{
+    background-size: auto 100%;
+  }
+  .foodmaker-home-page{
+    .page-banner{
+      background: url(../images/fmpage1.jpg) no-repeat center;
+      background-size: auto auto;
+    }
+    .banner-block{
+      .text-block {
+        padding: 0 12%;
+      }
+    }
+  }
+}
+
+@media all and (max-width: 575px) {
+  .dashboard-content{
+    .block-referel-product{
+      .ibox-content{
+        .total-product{
+          border-right: none;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+@media all and (max-width: 343px) {
+  .dashboard-content{
+    .block-commission-graph{
+      .ibox.float-e-margins{
+        .ibox-title{
+          min-height: 56px;
+        }
+      }
+    }
+  }
+}
+
+@media all and (max-width: 1100px){
+  .product-section{
+    .product-list {
+      ul.list-inline {
+        li.list-inline-item {
+          margin: 0px 8px 30px;
+          padding: 10px 8px 0px;
+        }
+      }
+    }
+  }
+}
+
+@media all and (max-width: 1024px) {
+  .banner-block {
+    .text-block {
+      padding: 0 8%;
+    }
+  }
+  .block-foodmaker{
+    .ibox.float-e-margins{
+      .wrapper-content{
+        table{
+          a.manage-vendor{
+            padding: 5px 8px;
+            display: block;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media all and (min-width: 768px) {
+  .product-section{
+    .product-list{
+      ul.list-inline{
+        li.list-inline-item{
+          span.item-name{
+            height: 70px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media all and (max-width: 992px) {
+  .header-primary{
+    .right-column{
+      .custom-page-link{
+        ul.list-inline{
+          li{
+            padding: 0 6px;
+            margin: 10px 0;
+          }
+        }
+      }
+    }
+  }
+}
+@media all and (max-width: 768px) {
+  .header-primary{
+    .right-column{
+      .custom-page-link{
+        display: block;
+        ul.list-inline{
+          text-align: center;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+  .udropship-vendor{
+    .myheader{
+      text-align: center;
+      width: 100%;
+    }
+  }
+  .udropship-vendor-login{
+    .col-1{
+      width: 100% !important;
+      .registered-users{
+        .form-list{
+          input{
+            width: 100% !important;
+          }
+        }
+      }
+    }
+  }
+  .foodmaker-home-page{
+    .banner-block{
+      height: 440px;
+    }
+  }
+}
+@media all and (max-width: 992px) {
+  .idproofs-index-vendor{
+    .form-address-edit{
+      .field{
+        .control{
+          input, select, textarea{
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 991px) and (min-width: 768px) {
+  .main-content-block .blocks .block-table {
+    height: 175px;
+  }
+  .subscribe-inner{
+    .col-md-6.col-sm-12{
+      flex: 0 0 100%;
+      max-width: 100% !important;
+    }
+  }
+}
+
+@media all and (max-width: 767px) {
+  .page-banner{
+    background: none;
+    .col-md-7.col-sm-12, .col-md-5.col-sm-12 {
+      background: url("../images/banner-back.jpg") no-repeat top center;
+    }
+  }
+
+  .blocks-image{
+    text-align: center !important;
+  }
+  .blocks-text{
+    text-align: left !important;
+  }
+  .blocks.row-sm{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  .main-content-block .blocks .block-table {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 22px 0;
+  }
+  .cms-index-index{
+    .main.container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  .banner-block{
+    .form-content{
+      .form.create.account{
+        .fieldset{
+          .field.field-name-firstname, .field.field-name-lastname {
+            display: block;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  .udropship-vendor-index{
+    .col-main{
+      .generic-box{
+        .col3-set.row{
+          .col-md-4{
+            border-bottom: 1px solid #ccc;
+            ul.form-list{
+              padding: 24px 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 638px) and (min-width: 500px){
+  .product-section{
+    .product-list{
+      span.list-title{
+        font-size: 18px;
+        top: -26px;
+        padding: 5px 10px;
+      }
+    }
+  }
+}
+
+@media (max-width: 499px) {
+  .product-section{
+    .product-list{
+      border-top: none;
+      span.list-title {
+        font-size: 18px;
+        padding: 0px;
+      }
+    }
+  }
+  .foodmaker-home-page{
+    .product-section{
+      .product-list{
+        border-top: none;
+        span.list-title {
+          font-size: 18px;
+          padding: 0px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) and (min-width: 425px){
+  .product-section{
+    .product-list {
+      ul.list-inline {
+        li.list-inline-item {
+          width: 45%;
+        }
+      }
+    }
+  }
+}
+
+@media all and (max-width: 425px){
+  .subscribe-block {
+    padding: 22px 5% 18px;
+    .subscribe-inner{
+      h2 {
+        font-size: 28px;
+      }
+    }
+    .block.newsletter{
+      .actions {
+        display: block;
+        width: 100%;
+        margin-top: 12px;
+        .action.subscribe {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .banner-block{
+    .text-block{
+      h2 {
+        font-size: 38px;
+      }
+    }
+  }
+  .main-content-block{
+    .content-header{
+      h2 {
+        font-size: 30px;
+      }
+    }
+  }
+  .bottom-section{
+    h2 {
+      color: #2e6170;
+      font-size: 30px;
+    }
+    p {
+      font-size: 20px;
+      margin: 16px 0 5%;
+    }
+    a{
+      font-size: 22px;
+      padding: 16px 20px;
+    }
+  }
+  .f-links{
+    ul{
+      li.list-inline-item{
+        right: -1px;
+        position: relative;
+      }
+    }
+  }
+  .product-section{
+    .product-list {
+      ul.list-inline {
+        li.list-inline-item {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .idproofs-index-vendor{
+    .block-input{
+      margin-left: 0;
+    }
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .banner-block{
+    .form-content{
+      .form.create.account{
+        .fieldset{
+          .field{
+            .control{
+              width: 90%;
+            }
+          }
+          .field.field-name-firstname, .field.field-name-lastname {
+            width: 47%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .foodmaker-home-page{
+    .banner-block{
+      .text-block{
+        h2{
+          font-size: 40px;
+        }
+        a{
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) and (min-width: 426px) {
+  .foodmaker-home-page{
+    .banner-block{
+      .text-block{
+        padding: 0 5%;
+        h2{
+          font-size: 32px;
+        }
+        a{
+          font-size: 16px;
+          padding: 14px 26px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 425px){
+  .foodmaker-home-page{
+    .banner-block{
+      .text-block{
+        padding: 0 5%;
+        h2{
+          font-size: 26px;
+        }
+        a{
+          font-size: 14px;
+          padding: 12px 12px;
+        }
+      }
+    }
+  }
+}
+

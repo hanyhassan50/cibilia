@@ -25,8 +25,11 @@ class PasswordPost extends AbstractVendor
                 $this->messageManager->addSuccess(__('Your password has been reset.'));
                 return $this->resultRedirectFactory->create()->setPath('*/*');
             } elseif (($email = $r->getParam('email'))) {
-                $hlp->sendPasswordResetEmail($email);
-                $this->messageManager->addSuccess(__('Thank you, password reset instructions have been sent to the email you have provided, if a vendor with such email exists.'));
+                if ($hlp->sendPasswordResetEmail($email)) {
+                    $this->messageManager->addSuccess(__('Thank you, password reset instructions have been sent to the email you have provided, if a vendor with such email exists.'));
+                } else {
+                    $this->messageManager->addSuccess(__('No records found in the system that match the email'));
+                }
                 return $this->resultRedirectFactory->create()->setPath('*/*/login');
             } else {
                 $this->messageManager->addError(__('Invalid form data'));

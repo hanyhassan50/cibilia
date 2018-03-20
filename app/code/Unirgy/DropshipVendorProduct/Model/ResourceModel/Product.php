@@ -5,7 +5,6 @@ namespace Unirgy\DropshipVendorProduct\Model\ResourceModel;
 use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Product\Attribute\DefaultAttributes;
 use Magento\Catalog\Model\ResourceModel\AbstractResource;
-use Magento\Catalog\Model\ResourceModel\AbstractResourceModel;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModelProduct;
@@ -106,6 +105,11 @@ class Product extends ResourceModelProduct
         }
         if ($this->_helperCatalog->getPidBySku($object->getSku(), $object->getId())) {
             throw new \Exception(__('SKU "%1" is already used', $object->getSku()));
+        }
+        if ($object->getOptions()) {
+            foreach ($object->getOptions() as $option) {
+                $option->setProductSku($object->getSku());
+            }
         }
 
         return AbstractResource::_beforeSave($object);

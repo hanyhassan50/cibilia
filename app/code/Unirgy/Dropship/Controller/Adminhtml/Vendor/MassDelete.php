@@ -17,12 +17,7 @@ class MassDelete extends AbstractVendor
                 /** @var \Unirgy\Dropship\Model\Vendor $cert */
                 $cert = $this->_hlp->createObj('\Unirgy\Dropship\Model\Vendor');
                 foreach ($certIds as $certId) {
-                    $cert->load($certId);
-                    $vendorEmail = $cert->getEmail();
-                    $cert->delete();
-                    $this->_removeRegistration($vendorEmail);
-                    $this->_removeReferer($vendorEmail);
-                    //$cert->setId($certId)->delete();
+                    $cert->setId($certId)->delete();
                 }
                 $this->messageManager->addSuccess(
                     __('Total of %1 record(s) were successfully deleted', count($certIds))
@@ -32,22 +27,5 @@ class MassDelete extends AbstractVendor
             }
         }
         return $resultRedirect->setPath('*/*/index');
-    }
-    public function _removeRegistration($email)
-    {
-        $objVendorReg = $this->_hlp->createObj('Unirgy\DropshipMicrosite\Model\Registration');
-        $objVendorReg->load($email,'email');
-        if($objVendorReg && $objVendorReg->getId()){
-            $objVendorReg->delete();    
-        }
-    }
-    public function _removeReferer($email)
-    {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        
-        $connection = $objectManager->get('Magento\Framework\App\ResourceConnection')->getConnection('\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION'); 
-        
-        $connection->query("DELETE FROM cibilian_referrals where email_id='".$email."'");
-
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Setup;
@@ -9,13 +9,15 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class EavSetup
 {
@@ -59,7 +61,7 @@ class EavSetup
      *
      * @var array
      */
-    private $defaultGroupIdAssociations = ['General' => 1];
+    private $defaultGroupIdAssociations = ['general' => 1];
 
     /**
      * Default attribute group name
@@ -134,12 +136,12 @@ class EavSetup
     public function installDefaultGroupIds()
     {
         $setIds = $this->getAllAttributeSetIds();
-        foreach ($this->defaultGroupIdAssociations as $defaultGroupName => $defaultGroupId) {
+        foreach ($this->defaultGroupIdAssociations as $defaultGroupCode => $defaultGroupId) {
             foreach ($setIds as $set) {
                 $groupId = $this->setup->getTableRow(
                     'eav_attribute_group',
-                    'attribute_group_name',
-                    $defaultGroupName,
+                    'attribute_group_code',
+                    $defaultGroupCode,
                     'attribute_group_id',
                     'attribute_set_id',
                     $set
@@ -523,16 +525,17 @@ class EavSetup
     {
         $setId = $this->getAttributeSetId($entityTypeId, $setId);
         $data = ['attribute_set_id' => $setId, 'attribute_group_name' => $name];
+        $attributeGroupCode = $this->convertToAttributeGroupCode($name);
 
-        if (isset($this->defaultGroupIdAssociations[$name])) {
-            $data['default_id'] = $this->defaultGroupIdAssociations[$name];
+        if (isset($this->defaultGroupIdAssociations[$attributeGroupCode])) {
+            $data['default_id'] = $this->defaultGroupIdAssociations[$attributeGroupCode];
         }
 
         if ($sortOrder !== null) {
             $data['sort_order'] = $sortOrder;
         }
 
-        $groupId = $this->getAttributeGroup($entityTypeId, $setId, $name, 'attribute_group_id');
+        $groupId = $this->getAttributeGroup($entityTypeId, $setId, $attributeGroupCode, 'attribute_group_id');
         if ($groupId) {
             $this->updateAttributeGroup($entityTypeId, $setId, $groupId, $data);
         } else {
@@ -540,7 +543,6 @@ class EavSetup
                 $data['sort_order'] = $this->getAttributeGroupSortOrder($entityTypeId, $setId, $sortOrder);
             }
             if (empty($data['attribute_group_code'])) {
-                $attributeGroupCode = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($name)), '-');
                 if (empty($attributeGroupCode)) {
                     // in the following code md5 is not used for security purposes
                     $attributeGroupCode = md5($name);
@@ -551,6 +553,16 @@ class EavSetup
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $groupName
+     * @return string
+     * @since 100.1.0
+     */
+    public function convertToAttributeGroupCode($groupName)
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-');
     }
 
     /**
@@ -589,22 +601,44 @@ class EavSetup
      */
     public function getAttributeGroup($entityTypeId, $setId, $id, $field = null)
     {
-        $searchId = $id;
         if (is_numeric($id)) {
             $searchField = 'attribute_group_id';
         } else {
+            $id = $this->convertToAttributeGroupCode($id);
             if (isset($this->defaultGroupIdAssociations[$id])) {
                 $searchField = 'default_id';
-                $searchId = $this->defaultGroupIdAssociations[$id];
+                $id = $this->defaultGroupIdAssociations[$id];
             } else {
-                $searchField = 'attribute_group_name';
+                $searchField = 'attribute_group_code';
             }
         }
 
         return $this->setup->getTableRow(
             'eav_attribute_group',
             $searchField,
-            $searchId,
+            $id,
+            $field,
+            'attribute_set_id',
+            $this->getAttributeSetId($entityTypeId, $setId)
+        );
+    }
+
+    /**
+     * Retrieve Attribute Group Data by Code
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param string $code
+     * @param string $field
+     * @return mixed
+     * @since 100.1.0
+     */
+    public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
+    {
+        return $this->setup->getTableRow(
+            'eav_attribute_group',
+            'attribute_group_code',
+            $code,
             $field,
             'attribute_set_id',
             $this->getAttributeSetId($entityTypeId, $setId)
@@ -737,19 +771,24 @@ class EavSetup
      */
     private function _validateAttributeData($data)
     {
-        $attributeCodeMaxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
+        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
 
-        if (isset(
-                $data['attribute_code']
-            ) && !\Zend_Validate::is(
-                $data['attribute_code'],
-                'StringLength',
-                ['max' => $attributeCodeMaxLength]
-            )
-        ) {
-            throw new LocalizedException(
-                __('An attribute code must not be more than %1 characters.', $attributeCodeMaxLength)
+        $isAllowedLength = \Zend_Validate::is(
+            trim($attributeCode),
+            'StringLength',
+            ['min' => $minLength, 'max' => $maxLength]
+        );
+
+        if (!$isAllowedLength) {
+            $errorMessage = __(
+                'An attribute code must not be less than %1 and more than %2 characters.',
+                $minLength,
+                $maxLength
             );
+
+            throw new LocalizedException($errorMessage);
         }
 
         return true;
@@ -891,7 +930,7 @@ class EavSetup
      *
      * @param int|string $entityTypeId
      * @param int|string $id
-     * @param string $field
+     * @param string|array $field
      * @param mixed $value
      * @param int $sortOrder
      * @return $this
@@ -912,6 +951,7 @@ class EavSetup
      * @param mixed $value
      * @param int $sortOrder
      * @return $this
+     * @throws LocalizedException
      */
     private function _updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {
@@ -942,11 +982,15 @@ class EavSetup
                 return $this;
             }
         }
+        $attributeId = $this->getAttributeId($entityTypeId, $id);
+        if (false === $attributeId) {
+            throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
+        }
 
         $this->setup->updateTableRow(
             'eav_attribute',
             'attribute_id',
-            $this->getAttributeId($entityTypeId, $id),
+            $attributeId,
             $field,
             $value,
             'entity_type_id',
@@ -964,6 +1008,7 @@ class EavSetup
      * @param string|array $field
      * @param mixed $value
      * @return $this
+     * @throws LocalizedException
      */
     private function _updateAttributeAdditionalData($entityTypeId, $id, $field, $value = null)
     {
@@ -972,35 +1017,41 @@ class EavSetup
             return $this;
         }
         $additionalTableExists = $this->setup->getConnection()->isTableExists($this->setup->getTable($additionalTable));
-        if ($additionalTable && $additionalTableExists) {
-            $attributeFields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
-            if (is_array($field)) {
-                $bind = [];
-                foreach ($field as $k => $v) {
-                    if (isset($attributeFields[$k])) {
-                        $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
-                    }
-                }
-                if (!$bind) {
-                    return $this;
-                }
-                $field = $bind;
-            } else {
-                if (!isset($attributeFields[$field])) {
-                    return $this;
+        if (!$additionalTableExists) {
+            return $this;
+        }
+        $attributeFields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
+        if (is_array($field)) {
+            $bind = [];
+            foreach ($field as $k => $v) {
+                if (isset($attributeFields[$k])) {
+                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
                 }
             }
-            $this->setup->updateTableRow(
-                $this->setup->getTable($additionalTable),
-                'attribute_id',
-                $this->getAttributeId($entityTypeId, $id),
-                $field,
-                $value
-            );
-
-            $attribute = $this->getAttribute($entityTypeId, $id);
-            $this->updateCachedRow($field, $value, $attribute);
+            if (!$bind) {
+                return $this;
+            }
+            $field = $bind;
+        } else {
+            if (!isset($attributeFields[$field])) {
+                return $this;
+            }
         }
+      
+        $attributeId = $this->getAttributeId($entityTypeId, $id);
+        if (false === $attributeId) {
+            throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
+        }
+        $this->setup->updateTableRow(
+            $this->setup->getTable($additionalTable),
+            'attribute_id',
+            $this->getAttributeId($entityTypeId, $id),
+            $field,
+            $value
+        );
+
+        $attribute = $this->getAttribute($entityTypeId, $id);
+        $this->updateCachedRow($field, $value, $attribute);
 
         return $this;
     }

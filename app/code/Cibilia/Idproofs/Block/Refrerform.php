@@ -1,15 +1,39 @@
 <?php
 namespace Cibilia\Idproofs\Block;
+use Magento\Framework\View\Element\Template;
+
 /**
 * Baz block
 */
 class Refrerform extends \Magento\Framework\View\Element\Template
 {
-    
+    /**
+     * @var \Cibilia\Idproofs\Model\Idproof
+     */
+    protected $_idProof;
+
+    /**
+     * @var \Unirgy\Dropship\Model\Vendor
+     */
+    protected $_vendor;
+
+    /**
+     * Refrerform constructor.
+     *
+     * @param \Cibilia\Idproofs\Model\Idproof $idproof
+     * @param \Unirgy\Dropship\Model\Vendor $vendor
+     * @param Template\Context $context
+     * @param array $data
+     */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
+        \Cibilia\Idproofs\Model\Idproof $idproof,
+        \Unirgy\Dropship\Model\Vendor $vendor,
+        Template\Context $context,
         array $data = []
-    ) {
+    )
+    {
+        $this->_idProof = $idproof;
+        $this->_vendor = $vendor;
         parent::__construct($context, $data);
     }
 
@@ -22,39 +46,53 @@ class Refrerform extends \Magento\Framework\View\Element\Template
         $this->pageConfig->getTitle()->set(__('Review Your Information'));
     }
 
-    /**
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-        return $this;
-    }
     public function getVenodorwork()
     {
-        $arrCollection = array();
-        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-        $arrCollection = $objectManager->create('Cibilia\Idproofs\Model\Idproof')->getVendorwork();
-
-        return $arrCollection;
+        return $this->_idProof->getVendorwork();
     }
+
     public function getVendorcat()
     {
-        $arrCollection = array();
-        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-        $arrCollection = $objectManager->create('Cibilia\Idproofs\Model\Idproof')->getVendorcat();
-
-        return $arrCollection;
+        return $this->_idProof->getVendorcat();
     }
+
     public function getVendortype()
     {
-        $arrCollection = array();
-        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-        $arrCollection = $objectManager->create('Cibilia\Idproofs\Model\Idproof')->getVendortype();
-
-        return $arrCollection;
+        return $this->_idProof->getVendortype();
     }
-    
 
-    
+    public function getVendorRole()
+    {
+        return $this->_idProof->getVendorRole();
+    }
+
+    public function getCompanyEmployee()
+    {
+        return $this->_idProof->getcompanyemployee();
+    }
+
+
+    public function getCompanyType()
+    {
+        return $this->_idProof->getcompanytype();
+    }
+
+    public function productCategories()
+    {
+        return $this->_idProof->productcategories();
+    }
+
+    public function productSellPlace()
+    {
+        return $this->_idProof->productsellplace();
+    }
+
+    public function bestTimeToCall()
+    {
+        return $this->_idProof->bestTimetocall();
+    }
+
+    public function getVendor($id) {
+        return $this->_vendor->load($id);
+    }
 }

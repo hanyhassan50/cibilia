@@ -2,15 +2,16 @@
 /**
  * Catalog Configurable Product Attribute Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * @method Attribute _getResource()
- * @method Attribute getResource()
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
@@ -28,6 +29,41 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_PRODUCT_ID = 'product_id';
     /**#@-*/
 
+    /**#@-*/
+    private $metadataPool;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param MetadataPool $metadataPool
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        MetadataPool $metadataPool,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->metadataPool = $metadataPool;
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+    }
+
     /**
      * Initialize resource model
      *
@@ -35,7 +71,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     protected function _construct()
     {
-        $this->_init('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute');
+        $this->_init(\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class);
     }
 
     /**
@@ -47,6 +83,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->getData('options');
     }
+
     /**
      * {@inheritdoc}
      */
@@ -82,7 +119,12 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
-        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $id = $this->_getResource()->getIdByProductIdAndAttributeId(
+            $this,
+            $product->getData($metadata->getLinkField()),
+            $attribute->getId()
+        );
         if ($id) {
             $this->load($id);
         }
@@ -96,7 +138,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function deleteByProduct($product)
     {
-        $this->_getResource()->deleteAttributesByProductId($product->getId());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $this->_getResource()->deleteAttributesByProductId($product->getData($metadata->getLinkField()));
     }
 
     /**
@@ -136,6 +179,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param string $attributeId
      * @return $this
@@ -218,5 +262,27 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->setData(self::KEY_PRODUCT_ID, $value);
     }
+
     //@codeCoverageIgnoreEnd
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['metadataPool']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->metadataPool = $objectManager->get(MetadataPool::class);
+    }
 }

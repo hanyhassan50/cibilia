@@ -43,6 +43,8 @@ class Edit extends Container
      */
     protected $_directoryHelperData;
 
+    protected $_template = 'Unirgy_Dropship::widget/vendor/form/container.phtml';
+
     public function __construct(
         Registry $registry,
         HelperData $helperData,
@@ -99,55 +101,8 @@ class Edit extends Container
         }
     }
 
-    public function getFormScripts()
+    public function getRegionJson()
     {
-        ob_start();
-?>
-<script type="text/javascript">
-
-var deps = [];
-deps.push('prototype');
-deps.push('mage/adminhtml/grid');
-deps.push("domReady!");
-
-require(deps, function() {
-
-    var updater = new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->_directoryHelperData->getRegionJson() ?>, 'disable');
-    var bUpdater = new RegionUpdater('billing_country_id', 'billing_region', 'billing_region_id', <?php echo $this->_directoryHelperData->getRegionJson() ?>, 'disable');
-
-    function udSyncRegField(countrySel) {
-        var regionIdRow = countrySel.up(1).next();
-        var regionRow = countrySel.up(1).next(1);
-        var regionIdSel = regionIdRow.select('select[name=region_id],select[name=billing_region_id]')
-        if (regionIdSel && (regionIdSel = regionIdSel[0])) {
-            if (regionIdSel.disabled) {
-                regionIdRow.hide();//.select('select,input').invoke('disable');
-                regionRow.show();//.select('select,input').invoke('enable');
-            } else {
-                regionIdRow.show();//.select('select,input').invoke('enable');
-                regionRow.hide();//.select('select,input').invoke('disable');
-            }
-        }
-    }
-
-    udSyncRegField($('country_id'));
-    if (!$F('billing_use_shipping')) {
-        udSyncRegField($('billing_country_id'));
-    }
-    varienGlobalEvents.attachEventHandler("address_country_changed", udSyncRegField);
-
-    $('save_continue_btn').observe('click', function () {
-        $('save_continue').value=1;
-        $('edit_form').submit();
-    });
-
-    if (typeof udropship_vendor_productsJsObject != "undefined") {
-
-    }
-});
-
-</script>
-<?php
-        return ob_get_clean();
+        return $this->_directoryHelperData->getRegionJson();
     }
 }

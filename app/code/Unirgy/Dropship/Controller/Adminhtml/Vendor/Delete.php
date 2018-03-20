@@ -14,12 +14,7 @@ class Delete extends AbstractVendor
             try {
                 $model = $this->_hlp->createObj('\Unirgy\Dropship\Model\Vendor');
                 /* @var $model Vendor */
-                $model->load($id);
-                $vendorEmail = $model->getEmail();
-                ///$model->setId($id)->delete();
-                $model->delete();
-                $this->_removeRegistration($vendorEmail);
-                $this->_removeReferer($vendorEmail);
+                $model->setId($id)->delete();
                 $this->messageManager->addSuccess(__('Vendor was successfully deleted'));
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
@@ -28,23 +23,5 @@ class Delete extends AbstractVendor
             }
         }
         return $resultRedirect->setPath('*/*/');
-    }
-    public function _removeRegistration($email)
-    {
-        $objVendorReg = $this->_hlp->createObj('Unirgy\DropshipMicrosite\Model\Registration');
-        /* @var $model Vendor */
-        $objVendorReg->load($email,'email');
-        if($objVendorReg && $objVendorReg->getId()){
-            $objVendorReg->delete();    
-        }
-    }
-    public function _removeReferer($email)
-    {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        
-        $connection = $objectManager->get('Magento\Framework\App\ResourceConnection')->getConnection('\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION'); 
-        
-        $connection->query("DELETE FROM cibilian_referrals where email_id='".$email."'");
-
     }
 }

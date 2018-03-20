@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<page layout="2columns-left"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="catalog.topnav.new" remove="true"/>
+        <referenceBlock name="catalog.topnav.navigation" remove="true">
+            <!--<action method="setTemplate">
+                <argument name="custom.shipment.grid" xsi:type="string">Magento_Theme::unirgy/dropship/vendor/header.phtml</argument>
+            </action>-->
+        </referenceBlock>
+        <referenceBlock name="container_header_primary_right_1">
+            <block class="Unirgy\Dropship\Block\Vendor\HtmlHeader" name="catalog.topnav.new.link" as="catalog.topnav.new.link" template="Unirgy_Dropship::unirgy/dropship/vendor/headertop.phtml"/>
+        </referenceBlock>
+
+        <referenceContainer name="sidebar.main">
+            <referenceBlock name="catalog.compare.sidebar" remove="true"/>
+            <referenceBlock name="wishlist_sidebar" remove="true" />
+            <referenceBlock name="sale.reorder.sidebar" remove="true"/>
+            <block name="vedor.nav.sidebar" class="Unirgy\Dropship\Block\Vendor\HtmlHeader" template="Unirgy_Dropship::unirgy/dropship/vendor/header.phtml" />
+        </referenceContainer>
+    </body>
+</page>

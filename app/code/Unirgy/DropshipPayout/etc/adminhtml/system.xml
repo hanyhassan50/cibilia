@@ -3,7 +3,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="udropship">
-            <resource>Unirgy_DropshipPayout::system_config</resource>
             <group id="payout" translate="label" sortOrder="104" type="text" showInDefault="1" showInWebsite="1">
                 <label>Payout Options</label>
                 <field id="payout_schedules" translate="label" sortOrder="10" type="select" showInDefault="1">

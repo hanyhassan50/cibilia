@@ -172,15 +172,15 @@ class CompletePackage extends Package implements CompletePackageInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isAbandoned()
     {
-        return (boolean) $this->abandoned;
+        return (bool) $this->abandoned;
     }
 
     /**
-     * @param boolean|string $abandoned
+     * @param bool|string $abandoned
      */
     public function setAbandoned($abandoned)
     {

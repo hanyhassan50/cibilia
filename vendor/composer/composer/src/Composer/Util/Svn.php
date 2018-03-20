@@ -54,7 +54,7 @@ class Svn
     protected $process;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $qtyAuthTries = 0;
 
@@ -72,7 +72,7 @@ class Svn
     public function __construct($url, IOInterface $io, Config $config, ProcessExecutor $process = null)
     {
         $this->url = $url;
-        $this->io  = $io;
+        $this->io = $io;
         $this->config = $config;
         $this->process = $process ?: new ProcessExecutor;
     }
@@ -94,12 +94,14 @@ class Svn
      * @param string $path    Target for a checkout
      * @param bool   $verbose Output all output to the user
      *
-     * @return string
-     *
      * @throws \RuntimeException
+     * @return string
      */
     public function execute($command, $url, $cwd = null, $path = null, $verbose = false)
     {
+        // Ensure we are allowed to use this URL by config
+        $this->config->prohibitUrlByConfig($url, $this->io);
+
         $svnCommand = $this->getCommand($command, $url, $path);
         $output = null;
         $io = $this->io;
@@ -120,16 +122,15 @@ class Svn
             return $output;
         }
 
-        if (empty($output)) {
-            $output = $this->process->getErrorOutput();
-        }
+        $errorOutput = $this->process->getErrorOutput();
+        $fullOutput = implode("\n", array($output, $errorOutput));
 
         // the error is not auth-related
-        if (false === stripos($output, 'Could not authenticate to server:')
-            && false === stripos($output, 'authorization failed')
-            && false === stripos($output, 'svn: E170001:')
-            && false === stripos($output, 'svn: E215004:')) {
-            throw new \RuntimeException($output);
+        if (false === stripos($fullOutput, 'Could not authenticate to server:')
+            && false === stripos($fullOutput, 'authorization failed')
+            && false === stripos($fullOutput, 'svn: E170001:')
+            && false === stripos($fullOutput, 'svn: E215004:')) {
+            throw new \RuntimeException($fullOutput);
         }
 
         if (!$this->hasAuth()) {
@@ -143,12 +144,12 @@ class Svn
         }
 
         throw new \RuntimeException(
-            'wrong credentials provided ('.$output.')'
+            'wrong credentials provided ('.$fullOutput.')'
         );
     }
 
     /**
-     * @param boolean $cacheCredentials
+     * @param bool $cacheCredentials
      */
     public function setCacheCredentials($cacheCredentials)
     {
@@ -158,8 +159,8 @@ class Svn
     /**
      * Repositories requests credentials, let's put them in.
      *
-     * @return \Composer\Util\Svn
      * @throws \RuntimeException
+     * @return \Composer\Util\Svn
      */
     protected function doAuthDance()
     {
@@ -230,8 +231,8 @@ class Svn
     /**
      * Get the password for the svn command. Can be empty.
      *
-     * @return string
      * @throws \LogicException
+     * @return string
      */
     protected function getPassword()
     {
@@ -245,8 +246,8 @@ class Svn
     /**
      * Get the username for the svn command.
      *
-     * @return string
      * @throws \LogicException
+     * @return string
      */
     protected function getUsername()
     {

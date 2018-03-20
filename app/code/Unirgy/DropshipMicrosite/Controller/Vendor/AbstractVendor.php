@@ -26,6 +26,7 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Store\Model\ScopeInterface;
 use Unirgy\Dropship\Helper\Data as HelperData;
+use Magento\Framework\Exception\LocalizedException;
 
 abstract class AbstractVendor extends Action
 {
@@ -121,14 +122,13 @@ abstract class AbstractVendor extends Action
 
     public function checkCaptcha()
     {
-        return $this;
         if (!$this->_hlp->isModuleActive('Magento_Captcha')) return $this;
         ObjectManager::getInstance()->get('Magento\Customer\Model\Session')->setData('umicrosite_registration_form_show_captcha',1);
         $formId = 'umicrosite_registration_form';
         $captchaModel = $this->_captchaHelperData->getCaptcha($formId);
         if ($captchaModel->isRequired()) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->getRequest(), $formId))) {
-                throw new \Exception(__('Incorrect CAPTCHA.'));
+                throw new LocalizedException(__('Incorrect CAPTCHA.'));
             }
         }
         return $this;

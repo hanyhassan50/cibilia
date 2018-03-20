@@ -26,7 +26,10 @@ class Registration extends BlockData
 
     protected $_formFactory;
 
+    protected $_hlp;
+
     public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
         Context $context,
         HelperData $directoryHelper, 
         EncoderInterface $jsonEncoder, 
@@ -38,6 +41,7 @@ class Registration extends BlockData
         array $data = []
     )
     {
+        $this->_hlp = $udropshipHelper;
         $this->_modelVendorFactory = $modelVendorFactory;
         $this->_formFactory = $formFactory;
 
@@ -53,7 +57,7 @@ class Registration extends BlockData
         }
         $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_'.$this->_storeManager->getStore()->getCode();
         if ($this->_cacheState->isEnabled('config') && $cache = $this->_cache->load($cacheKey)) {
-            $options = unserialize($cache);
+            $options = $this->_hlp->unserialize($cache);
         } else {
             $options = $this->getCountryCollection()->toOptionArray();
             if ($this->_cacheState->isEnabled('config')) {

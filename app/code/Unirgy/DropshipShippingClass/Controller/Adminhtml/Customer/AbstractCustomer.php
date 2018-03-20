@@ -10,7 +10,7 @@ abstract class AbstractCustomer extends Action
 {
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Unirgy_DropshipShippingClass::sales_udropship_udshipclass_customer');
+        return $this->_authorization->isAllowed('Unirgy_DropshipShippingClass::shipclass_customer');
     }
 
     /**

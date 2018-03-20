@@ -41,14 +41,16 @@ class Pdf
      */
     protected $_helperLabel;
 
-    public function __construct(array $data = [], 
-        HelperData $helperData = null, 
-        DirectoryList $filesystemDirectoryList = null, 
-        Label $helperLabel = null)
+    public function __construct(
+        HelperData $helperData,
+        DirectoryList $filesystemDirectoryList,
+        Label $helperLabel,
+        array $data = []
+    )
     {
         $this->_helperLabel = $helperLabel;
 
-        parent::__construct($data, $helperData, $filesystemDirectoryList);
+        parent::__construct($helperData, $filesystemDirectoryList, $data);
     }
 
     protected function _construct()
@@ -66,7 +68,11 @@ class Pdf
     public function updateTrack($track, $labelImages)
     {
         $fileNames = array();
-        $labelDir = $this->_filesystemDirectoryList->getPath('var') . ('label').'/';
+        $baseDir = $this->_fsDirList->getPath('var');
+        $labelDir = $this->_fsDirList->getPath('var') . "/label/";
+        /* @var \Magento\Framework\Filesystem\Directory\Write $dirWrite */
+        $dirWrite = $this->_hlp->createObj('\Magento\Framework\Filesystem\Directory\WriteFactory')->create($baseDir);
+        $dirWrite->create('label');
 
         foreach ((array)$labelImages as $i=>$label) {
            $fn = $track->getNumber().'-'.$i.'.png';
@@ -99,7 +105,11 @@ class Pdf
             throw new \Exception('Vendor is not set');
         }
 
-        $labelDir = $this->_filesystemDirectoryList->getPath('var') . ('label').'/';
+        $baseDir = $this->_fsDirList->getPath('var');
+        $labelDir = $this->_fsDirList->getPath('var') . "/label/";
+        /* @var \Magento\Framework\Filesystem\Directory\Write $dirWrite */
+        $dirWrite = $this->_hlp->createObj('\Magento\Framework\Filesystem\Directory\WriteFactory')->create($baseDir);
+        $dirWrite->create('label');
 
         $pdf = new \Zend_Pdf();
         foreach ($tracks as $track) {
@@ -111,7 +121,7 @@ class Pdf
 
             $data = null;
             if (($serialized = $track->getLabelRenderOptions())) {
-                $data = unserialize($serialized);
+                $data = $this->_hlp->unserialize($serialized);
             }
 
             $this->setTrack($track);
@@ -156,6 +166,18 @@ class Pdf
     */
     protected function _renderPage(\Zend_Pdf $pdf, $fileName, $data=null)
     {
+        $lblContents = file_get_contents($fileName);
+        if (stripos($lblContents, '%PDF')===0) {
+            $existingPdf = \Zend_Pdf::load($fileName);
+            foreach ($existingPdf->pages as $existingPage) {
+                $page = clone $existingPage;
+                break;
+            }
+            if (!is_null($data)) {
+                extract($data);
+            }
+            return $page;
+        }
         $v = $this->getVendor();
         $image = \Zend_Pdf_Image::imageWithPath($fileName);
 
@@ -175,21 +197,25 @@ class Pdf
 
         if (!is_null($data)) {
             extract($data);
-            if (!empty($data['w'])) {
+            if (!empty($data['w']) && !empty($data['l']) && !empty($data['t'])) {
                 if ($r==90 || $r==270) {
                     $pdfPW = $h+$t*2;
                 } else {
                     $pdfPW = $w+$l*2;
                 }
                 $wp = $page->getWidth()/$pdfPW;
+            } elseif (!empty($data['w'])) {
+                $l = ($pdfPW-$w)/2;
             }
-            if (!empty($data['h'])) {
+            if (!empty($data['h']) && !empty($data['l']) && !empty($data['t'])) {
                 if ($r==90 || $r==270) {
                     $pdfPH = $w+$l*2;
                 } else {
                     $pdfPH = $h+$t*2;
                 }
                 $hp = $page->getHeight()/$pdfPH;
+            } elseif (!empty($data['h'])) {
+                $t = ($pdfPH-$h)/2;
             }
         }
 
@@ -198,6 +224,10 @@ class Pdf
         }
         $b = $pdfPH-$t-$h;
         $page->drawImage($image, $l*$wp, $b*$hp, ($l+$w)*$wp, ($b+$h)*$hp);
+        if (isset($reference)) {
+            $this->_setFontRegular($page);
+            $page->drawText('Reference: '.$reference, $l*$wp, $b*$hp-20, 'UTF-8');
+        }
 
         return $page;
     }
@@ -239,5 +269,26 @@ class Pdf
     public function getBatchFileName($batch)
     {
         return 'label_batch-'.$batch->getId().'.pdf';
+    }
+
+    protected function _setFontRegular($object, $size = 12)
+    {
+        $font = \Zend_Pdf_Font::fontWithName(\Zend_Pdf_Font::FONT_HELVETICA);
+        $object->setFont($font, $size);
+        return $font;
+    }
+
+    protected function _setFontBold($object, $size = 12)
+    {
+        $font = \Zend_Pdf_Font::fontWithName(\Zend_Pdf_Font::FONT_HELVETICA);
+        $object->setFont($font, $size);
+        return $font;
+    }
+
+    protected function _setFontItalic($object, $size = 12)
+    {
+        $font = \Zend_Pdf_Font::fontWithName(\Zend_Pdf_Font::FONT_HELVETICA);
+        $object->setFont($font, $size);
+        return $font;
     }
 }

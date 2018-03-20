@@ -152,6 +152,7 @@ class Rule extends Template
     }
     protected function _addGeneralFieldset($rule, &$values)
     {
+        $_useDates = !($this->_hlp->isEE() && $this->_hlp->compareMageVer('2.1.2','2.1.2'));
         $fieldset = $this->_form->addFieldset('general_fieldset',
             [
                 'legend'=>__('General'),
@@ -219,24 +220,26 @@ class Rule extends Template
             'label' => __('Uses per Customer'),
             'note' => __('Usage limit enforced for logged in customers only'),
         ]);
-        $fieldset->addField('from_date', 'date', [
-            'name'   => 'from_date',
-            'label'  => __('From Date'),
-            'title'  => __('From Date'),
-            'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-            'format'       => $dateFormatIso,
-            'date_format'  => $this->_hlp->getDateFormatWithLongYear(),
-            'class' => 'validate-date validate-date-range date-range-ruledate-from'
-        ]);
-        $fieldset->addField('to_date', 'date', [
-            'name'   => 'to_date',
-            'label'  => __('To Date'),
-            'title'  => __('To Date'),
-            'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-            'format'       => $dateFormatIso,
-            'date_format'  => $this->_hlp->getDateFormatWithLongYear(),
-            'class' => 'validate-date validate-date-range date-range-ruledate-to'
-        ]);
+        if ($_useDates) {
+            $fieldset->addField('from_date', 'date', [
+                'name' => 'from_date',
+                'label' => __('From Date'),
+                'title' => __('From Date'),
+                'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                'format' => $dateFormatIso,
+                'date_format' => $this->_hlp->getDateFormatWithLongYear(),
+                'class' => 'validate-date validate-date-range date-range-ruledate-from'
+            ]);
+            $fieldset->addField('to_date', 'date', [
+                'name' => 'to_date',
+                'label' => __('To Date'),
+                'title' => __('To Date'),
+                'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                'format' => $dateFormatIso,
+                'date_format' => $this->_hlp->getDateFormatWithLongYear(),
+                'class' => 'validate-date validate-date-range date-range-ruledate-to'
+            ]);
+        }
 
         /*
         $couponTypeFiled = $fieldset->addField('coupon_type', 'select', array(
@@ -583,7 +586,7 @@ class Rule extends Template
     public function addAdditionalElementType($code, $class)
     {
         $this->_initAdditionalElementTypes();
-        $this->_additionalElementTypes[$code] = Mage::getConfig()->getBlockClassName($class);
+        $this->_additionalElementTypes[$code] = $class;
         return $this;
     }
 

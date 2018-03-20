@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- 
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
@@ -71,20 +81,6 @@
                 </item>
             </argument>
         </exportButton>
-        <filterSearch name="fulltext">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="provider" xsi:type="string">customregistration_allfields_listing.customregistration_allfields_listing</item>
-                    <item name="chipsProvider" xsi:type="string">customregistration_allfields_listing.customregistration_allfields_listing.listing_top.listing_filters_chips</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customregistration_allfields_listing.customregistration_allfields_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.search</item>
-                    </item>
-                </item>
-            </argument>
-        </filterSearch>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

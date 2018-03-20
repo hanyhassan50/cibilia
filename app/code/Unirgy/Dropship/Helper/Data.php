@@ -82,7 +82,7 @@ class Data extends AbstractHelper
     protected $_stockRegistry;
     protected $_stockState;
 
-    protected $scopePool;
+    protected $appProductMeta;
 
     public function __construct(
         \Unirgy\Dropship\Model\EmailTransportBuilder $transportBuilder,
@@ -99,7 +99,6 @@ class Data extends AbstractHelper
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        \Magento\Framework\App\Config\ScopePool $scopePool,
         \Magento\Framework\App\ProductMetadataInterface $appProductMeta
     )
     {
@@ -116,7 +115,6 @@ class Data extends AbstractHelper
         $this->_moduleList = $moduleList;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
-        $this->scopePool = $scopePool;
         $this->appProductMeta = $appProductMeta;
 
         parent::__construct($context);
@@ -166,7 +164,14 @@ class Data extends AbstractHelper
     public function getVersion()
     {
         if (!$this->_version) {
-            $this->_version = (string)$this->getScopeConfig('modules/\Unirgy\Dropship/version', 'default');
+            $moduleName = 'Unirgy_Dropship';
+            $curVer = null;
+            if ($this->_moduleList->has($moduleName)) {
+                $moduleData = $this->_moduleList->getOne($moduleName);
+                if($moduleData){
+                    $this->_version = $moduleData['setup_version'];
+                }
+            }
         }
         return $this->_version;
     }
@@ -236,8 +241,19 @@ class Data extends AbstractHelper
         return $this->isModuleActive('Unirgy_DropshipPo') && $this->udpoHlp()->isActive();
     }
 
-    protected $_ustockpoHlp;
+    protected $_hlpPr;
+    /**
+     * @return \Unirgy\Dropship\Helper\ProtectedCode
+     */
+    public function hlpPr()
+    {
+        if ($this->_hlpPr === null) {
+            $this->_hlpPr = $this->_objMng->get('\Unirgy\Dropship\Helper\ProtectedCode');
+        }
+        return $this->_hlpPr;
+    }
 
+    protected $_ustockpoHlp;
     /**
      */
     public function ustockpoHlp()
@@ -249,7 +265,6 @@ class Data extends AbstractHelper
     }
 
     protected $_udpoHlp;
-
     /**
      * @return \Unirgy\DropshipPo\Helper\Data
      */
@@ -262,7 +277,6 @@ class Data extends AbstractHelper
     }
 
     protected $_udpoHlpPr;
-
     /**
      * @return \Unirgy\DropshipPo\Helper\ProtectedCode
      */
@@ -344,7 +358,7 @@ class Data extends AbstractHelper
 
     public function hasUdmulti()
     {
-        return ($multi = $this->getScopeConfig('modules/\Unirgy\DropshipMulti', 'default')) && $multi->is('active');
+        return $this->isUdmultiActive();
     }
 
     public function isUdpoMpsAvailable($carrierCode)
@@ -572,7 +586,7 @@ class Data extends AbstractHelper
         $vendor = $this->createObj('\Unirgy\Dropship\Model\Vendor');
         $vendor->load($email, 'email');
         if (!$vendor->getId()) {
-            return $this;
+            return false;
         }
         $vendor->setRandomHash(sha1(rand()))->save();
 
@@ -606,7 +620,7 @@ class Data extends AbstractHelper
 
         $this->inlineTranslation->resume();
 
-        return $this;
+        return true;
     }
 
     /**
@@ -615,6 +629,14 @@ class Data extends AbstractHelper
      * @param Shipment $shipment
      */
     public function sendVendorNotification($shipment)
+    {
+        try {
+            $this->_sendVendorNotification($shipment);
+        } catch (\Exception $e) {
+            $this->_logger->error($e->getMessage());
+        }
+    }
+    protected function _sendVendorNotification($shipment)
     {
         $vendor = $this->getVendor($shipment->getUdropshipVendor());
         $method = $vendor->getNewOrderNotifications();
@@ -730,16 +752,16 @@ class Data extends AbstractHelper
                 'shipment_id' => $shipment->getIncrementId(),
                 'vendor_url' => $ahlp->getUrl('udropship/vendor/edit', array(
                     'id' => $vendor->getId(),
-                    '_store' => 0
+                    '_scope' => 0
                 )),
                 'order_url' => $ahlp->getUrl('sales/order/view', array(
                     'order_id' => $order->getId(),
-                    '_store' => 0
+                    '_scope' => 0
                 )),
                 'shipment_url' => $ahlp->getUrl('sales/order_shipment/view', array(
                     'shipment_id' => $shipment->getId(),
                     'order_id' => $order->getId(),
-                    '_store' => 0
+                    '_scope' => 0
                 )),
                 'comment' => $comment,
             );
@@ -748,7 +770,7 @@ class Data extends AbstractHelper
                 $data['po_url'] = $ahlp->getUrl('udpo/order_po/view', array(
                     'udpo_id' => $po->getId(),
                     'order_id' => $order->getId(),
-                    '_store' => 0
+                    '_scope' => 0
                 ));
                 $template = preg_replace('/{{isPoAvailable}}(.*?){{\/isPoAvailable}}/s', '\1', $template);
             } else {
@@ -765,7 +787,7 @@ class Data extends AbstractHelper
                 ->setFrom($vendor->getEmail(), $vendor->getVendorName())
                 ->addTo($toEmail, $toName)
                 ->setSubject($subject)
-                ->setBodyText($template);
+                ->setBody($template);
             $transport = $this->createObj('Magento\Framework\Mail\TransportInterface', ['message' => $message]);
             $transport->sendMessage();
         }
@@ -816,7 +838,7 @@ class Data extends AbstractHelper
     {
         $allIds = $collection->getAllIds();
         $res = $this->rHlp();
-        $read = $res->getConnection();
+        $read = $collection->getResource()->getConnection();
         if ($collection instanceof \Unirgy\DropshipPo\Model\ResourceModel\Po\Collection) {
             return $read->fetchCol(
                 $read->select()->distinct(true)
@@ -844,8 +866,7 @@ class Data extends AbstractHelper
             /* @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection $collection */
             $collection = $this->createObj('\Magento\Sales\Model\Order\Shipment')->getCollection();
             $orderTableQted = $collection->getResource()->getConnection()->quoteIdentifier('sales_order');
-            $collection->addFilterToMap('ordertbl_increment_id', "$orderTableQted.increment_id");
-            $collection->addFilterToMap('ordertbl_created_at', "$orderTableQted.created_at");
+
             $collection->join('sales_order', "$orderTableQted.entity_id=main_table.order_id", array(
                 'order_increment_id' => 'increment_id',
                 'order_created_at' => 'created_at',
@@ -857,17 +878,17 @@ class Data extends AbstractHelper
 
             $r = $this->_request;
             if (($v = $r->getParam('filter_order_id_from'))) {
-                $collection->addAttributeToFilter('ordertbl_increment_id', array('gteq' => $v));
+                $collection->addAttributeToFilter('sales_order.increment_id', array('gteq' => $v));
             }
             if (($v = $r->getParam('filter_order_id_to'))) {
-                $collection->addAttributeToFilter('ordertbl_increment_id', array('lteq' => $v));
+                $collection->addAttributeToFilter('sales_order.increment_id', array('lteq' => $v));
             }
 
             if (($v = $r->getParam('filter_order_date_from'))) {
                 $_filterDate = $this->dateLocaleToInternal($v, $dateFormat, true);
                 $_filterDate = $localeDate->date($_filterDate, null, false);
                 $_filterDate = datefmt_format_object($_filterDate, $datetimeFormatInt);
-                $collection->addAttributeToFilter('ordertbl_created_at', ['gteq' => $_filterDate]);
+                $collection->addAttributeToFilter('sales_order.created_at', ['gteq' => $_filterDate]);
             }
             if (($v = $r->getParam('filter_order_date_to'))) {
                 $_filterDate = $this->dateLocaleToInternal($v, $dateFormat, true);
@@ -875,7 +896,7 @@ class Data extends AbstractHelper
                 $_filterDate->add(new \DateInterval('P1D'));
                 $_filterDate->sub(new \DateInterval('PT1S'));
                 $_filterDate = datefmt_format_object($_filterDate, $datetimeFormatInt);
-                $collection->addAttributeToFilter('ordertbl_created_at', ['lteq' => $_filterDate]);
+                $collection->addAttributeToFilter('sales_order.created_at', ['lteq' => $_filterDate]);
 
             }
 
@@ -1092,7 +1113,7 @@ class Data extends AbstractHelper
 
         //check for error
         if (($error = curl_error($ch))) {
-            throw new Exception(__('Error connecting to API: %1', $error));
+            throw new \Exception(__('Error connecting to API: %1', $error));
         }
         curl_close($ch);
 
@@ -1113,7 +1134,6 @@ class Data extends AbstractHelper
             ->setHeader('Last-Modified', date('r'))
             ->setBody($content)
             ->sendResponse();
-
         exit;
     }
 
@@ -1240,7 +1260,7 @@ class Data extends AbstractHelper
 
     protected $_isEmulating = false;
 
-    public function setDesignStore($store = null, $area = null, $theme = null)
+    public function setDesignStore($store = null, $area = \Magento\Framework\App\Area::AREA_FRONTEND, $theme = null)
     {
         /** @var \Magento\Store\Model\App\Emulation $appEmulation */
         $appEmulation = $this->getObj('\Magento\Store\Model\App\Emulation');
@@ -1257,7 +1277,7 @@ class Data extends AbstractHelper
                 try {
                     $viewDesign->setDesignTheme($theme, $area);
                 } catch (\Exception $e) {
-
+                    $this->_logger->error("$e");
                 }
             }
         } else {
@@ -1274,12 +1294,14 @@ class Data extends AbstractHelper
     public function addAdminhtmlVersion($module = 'Unirgy_Dropship')
     {
         return;
+        /*
         $layout = Mage::app()->getLayout();
         $version = (string)$this->getScopeConfig("modules/{$module}/version", 'default');
 
         $layout->getBlock('before_body_end')->append($layout->createBlock('Magento\Framework\Block\Text')->setText('
         <script type="text/javascript">$$(".legality")[0].insert({after:"' . $module . ' ver. ' . $version . ', "});</script>
     '));
+        */
 
         return $this;
     }
@@ -1461,6 +1483,7 @@ class Data extends AbstractHelper
 
         foreach ($this->config()->getField() as $code => $node) {
             $_key = @$node['name'] ? (string)@$node['name'] : $code;
+            if (@$node['customvars_exclude']) continue;
             switch ((string)@$node['type']) {
                 case 'disabled':
                     continue;
@@ -1497,16 +1520,17 @@ class Data extends AbstractHelper
 
     public function addMessageOnce($message, $module = 'checkout', $method = 'addError')
     {
-        $session = $this->getObj($module . '\Model\Session');
+        /** @var \Magento\Framework\Message\ManagerInterface $messageManager */
+        $messageManager = $this->getObj('Magento\Framework\Message\ManagerInterface');
         $found = false;
-        foreach ($session->getMessages(false) as $m) {
-            if ($m->getCode() == $message) {
+        foreach ($messageManager->getMessages(false) as $m) {
+            if ($m->getText() == $message) {
                 $found = true;
                 break;
             }
         }
         if (!$found) {
-            $session->$method($message);
+            $messageManager->$method($message);
         }
         return $this;
     }
@@ -1817,7 +1841,7 @@ class Data extends AbstractHelper
                 if (!$track->getUdropshipStatus()) {
                     $vendorId = $shipment->getUdropshipVendor();
                     $pollTracking = $this->getScopeConfig('udropship/customer/poll_tracking', $storeId);
-                    $trackApi = $this->getVendor($vendorId)->getTrackApi();
+                    $trackApi = $this->getVendor($vendorId)->getTrackApi($track->getCarrierCode());
                     if ($pollTracking && $trackApi) {
                         $track->setUdropshipStatus(Source::TRACK_STATUS_PENDING);
                         $repeatIn = $this->getScopeConfig('udropship/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
@@ -2169,8 +2193,11 @@ class Data extends AbstractHelper
         $this->_storeManager->setCurrentStore(0);
 
         /* @var \Magento\Catalog\Model\ResourceModel\Product\Collection $products */
-        $products = $this->createObj('\Magento\Catalog\Model\Product')->getCollection();
-        $products->addAttributeToSelect('cost')
+        $ptAlias = \Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS;
+        $products = $this->createObj('\Unirgy\Dropship\Model\ResourceModel\ProductCollection')
+            ->setFlag('udskip_price_index',1)
+            ->setFlag('has_stock_status_filter', 1)
+            ->addAttributeToSelect('cost')
             ->addIdFilter(array_keys($data));
 
         $vsAttrCode = $this->getScopeConfig('udropship/vendor/vendor_sku_attribute');
@@ -2183,7 +2210,7 @@ class Data extends AbstractHelper
             $attr = $this->_eavConfig->getAttribute('catalog_product', 'udropship_vendor');
             $products->getSelect()->joinLeft(
                 array('_udv' => $attr->getBackend()->getTable()),
-                '_udv.'.$this->rowIdField().'='.$this->rowIdField().' and _udv.store_id=0 and _udv.attribute_id=' . $attr->getId() . ' and _udv.value=' . $v->getId(),
+                '_udv.'.$this->rowIdField().'='.$ptAlias.'.'.$this->rowIdField().' and _udv.store_id=0 and _udv.attribute_id=' . $attr->getId() . ' and _udv.value=' . $v->getId(),
                 array('udropship_vendor' => 'value')
             );
         } else {
@@ -2265,11 +2292,24 @@ class Data extends AbstractHelper
         if (!isset($this->_hasMageFeature[$feature])) {
             $flag = false;
             switch ($feature) {
+                case 'scope_code_resolver':
+                    $flag = $this->compareMageVer('2.1.3');
+                    break;
                 case 'row_id':
                     $flag = $this->isEE() && $this->compareMageVer('2.1', '2.1');
                     break;
                 case 'stock_website':
                     $flag = $this->compareMageVer('2.1');
+                    break;
+                case 'batch_stock_indexer':
+                case 'index_price_replica':
+                case 'sales_refund_observer':
+                case 'customer_group_id_int':
+                    $flag = $this->compareMageVer('2.2');
+                    break;
+                case 'serialize':
+                case 'scope_pool':
+                    $flag = !$this->compareMageVer('2.2');
                     break;
             }
             $this->_hasMageFeature[$feature] = $flag;
@@ -2313,7 +2353,7 @@ class Data extends AbstractHelper
                 }
             }
             $pOpts = $item->getOrderItem()->getProductOptions();
-            $pOpts = is_string($pOpts) ? unserialize($pOpts) : $pOpts;
+            $pOpts = is_string($pOpts) ? $this->unserialize($pOpts) : $pOpts;
             if (is_array($pOpts) && !empty($pOpts['simple_sku']) && $item->getVendorSimpleSku()) {
                 $item->setData('__orig_simple_sku', $pOpts['simple_sku']);
                 $pOpts['simple_sku'] = $item->getVendorSimpleSku();
@@ -2574,7 +2614,7 @@ class Data extends AbstractHelper
         ) {
             $oShipping = $shipping->getItemByColumnValue('shipping_code', $oShippingMethod[1]);
         }
-        $oShippingDetails = \Zend_Json::decode($order->getUdropshipShippingDetails());
+        $oShippingDetails = $this->hlpPr()->getOrderVendorRates($order);
         foreach ($vMethods as $vId => &$vMethod) {
             if ($vMethod === false) continue;
             $v = $this->getVendor($vId);
@@ -2607,18 +2647,14 @@ class Data extends AbstractHelper
                             }
                             foreach ($ccMcKeys as $ccMcKey) {
                                 if ($oShippingMethod[0] == 'udropship' && !empty($oShippingMethod[1])
-                                    && $sc == $oShippingMethod[1]
-                                    && is_array($oShippingDetails)
-                                    && !empty($oShippingDetails['methods'][$vId]['code'])
-                                    && $oShippingDetails['methods'][$vId]['code'] == $ccMcKey
+                                    && $sc==$oShippingMethod[1]
+                                    && @$oShippingDetails[$vId]['code'] == $ccMcKey
                                 ) {
                                     if (empty($oShippingMethod[2]) || $oShippingMethod[2] == $ccMcKey) {
                                         $vMethod[$sc][$ccMcKey]['__selected'] = true;
                                     }
                                 } elseif ($oShippingMethod[0] == 'udsplit'
-                                    && is_array($oShippingDetails)
-                                    && !empty($oShippingDetails['methods'][$vId]['code'])
-                                    && $oShippingDetails['methods'][$vId]['code'] == $ccMcKey
+                                    && @$oShippingDetails[$vId]['code'] == $ccMcKey
                                 ) {
                                     $vMethod[$sc][$ccMcKey]['__selected'] = true;
                                 }
@@ -2944,13 +2980,21 @@ class Data extends AbstractHelper
         foreach ($entity->getAllItems() as $si) {
             $products[$si->getProductId()][] = $si;
         }
+        $rowIdField = $this->rowIdField();
         $read = $this->rHlp()->getConnection();
         $attr = $this->_eavConfig->getAttribute('catalog_product', 'udropship_vendor');
         $table = $attr->getBackend()->getTable();
+        $rHlp = $this->rHlp();
         $select = $read->select()
-            ->from($table, array('entity_id', 'value'))
-            ->where('attribute_id=?', $attr->getId())
-            ->where('entity_id in (?)', array_keys($products));
+            ->from(array('vid'=>$table), array())
+            ->join(
+                ['pid'=>$rHlp->getTableName('catalog_product_entity')],
+                "pid.$rowIdField=vid.$rowIdField",
+                []
+            )
+            ->columns(['pid.entity_id', 'vid.value'])
+            ->where('vid.attribute_id=?', $attr->getId())
+            ->where('pid.entity_id in (?)', array_keys($products));
         $rows = $read->fetchPairs($select);
         $result = array();
         foreach ($products as $pId => $siArr) {
@@ -3046,7 +3090,7 @@ class Data extends AbstractHelper
             $shipment->getCommentsCollection()->save();
             $this->_eventManager->dispatch(
                 'udropship_shipment_status_save_after',
-                array('shipment' => $shipment, 'old_status' => $oldStatus, 'new_status' => $status)
+                ['shipment' => $shipment, 'old_status' => $oldStatus, 'new_status' => $status, 'object'=>$shipment]
             );
         }
         return $this;
@@ -3114,7 +3158,14 @@ class Data extends AbstractHelper
     {
         /** @var \Magento\Framework\App\Route\Config $routeConfig */
         $routeConfig = $this->getObj('\Magento\Framework\App\Route\Config');
-        return $routeConfig->getRouteByFrontName($urlKey);;
+        return $routeConfig->getRouteByFrontName($urlKey);
+    }
+
+    public function getRouteFrontName($routeId)
+    {
+        /** @var \Magento\Framework\App\Route\Config $routeConfig */
+        $routeConfig = $this->getObj('\Magento\Framework\App\Route\Config');
+        return $routeConfig->getRouteFrontName($routeId);
     }
 
     public function hasExtraChargeMethod($vendor, $vMethod)
@@ -3434,7 +3485,7 @@ class Data extends AbstractHelper
                     }
                 }
                 if (preg_match($zcReg . '$/', trim($zipCode))) return true;
-            } elseif (strpos($zc, '-')) {
+            } elseif (strpos($zc, '-')!==false) {
                 $result = false;
                 list($zcFrom, $zcTo) = explode('-', $zc, 2);
                 if (trim($zcFrom) <= trim($zipCode) && trim($zipCode) <= trim($zcTo)) return true;
@@ -3717,6 +3768,15 @@ class Data extends AbstractHelper
         $localeDate = $this->getObj('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         return $localeDate->getDateFormat($format);
     }
+    public function getDefaultDateFormat($format = \IntlDateFormatter::SHORT)
+    {
+        $result = (new \IntlDateFormatter(
+            'en_US',
+            $format,
+            \IntlDateFormatter::NONE
+        ))->getPattern();
+        return $result;
+    }
 
     public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
@@ -3751,10 +3811,12 @@ class Data extends AbstractHelper
 
     public function disableJrdEmptyCatEvent()
     {
+        /*
         if ($this->isModuleActive('JRD_DisableEmptyCategories')) {
             Mage::getConfig()->setNode('frontend/events/catalog_category_collection_load_after/observers/disable_empty_categories/class', 'udropship/observer');
             Mage::getConfig()->setNode('frontend/events/catalog_category_collection_load_after/observers/disable_empty_categories/method', 'dummy');
         }
+        */
     }
 
     public function now()
@@ -3820,7 +3882,7 @@ class Data extends AbstractHelper
         if ($this->_registry->registry('uvp_url_store')) {
             $store = $this->_registry->registry('uvp_url_store');
         }
-        $params['_store'] = $store;
+        $params['_scope'] = $store;
         return $this->_getUrl($url, $params);
     }
 
@@ -3845,7 +3907,7 @@ class Data extends AbstractHelper
 
     public function getAdminhtmlFrontName()
     {
-        return Mage::app()->getFrontController()->getRouterByRoute('adminhtml')->getFrontNameByRoute('adminhtml');
+        return $this->getRouteFrontName('adminhtml');
     }
 
     public function createObj($class, array $arguments = [])
@@ -3860,18 +3922,64 @@ class Data extends AbstractHelper
 
     public function getScopeConfig($path, $scopeCode = null, $scopeType = \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
     {
-        return $this->scopeConfig->getValue($path, $scopeType, $scopeCode);
+        if ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+            $scopeCode = $scopeCode->getCode();
+        }
+        return $this->_getScopeValue($scopeType, $scopeCode, $path);
+    }
+
+    protected function _scopePool()
+    {
+        return $this->getObj('Magento\Framework\App\Config\ScopePool');
+    }
+    protected function _scopeConfig()
+    {
+        return $this->getObj('Magento\Framework\App\Config\ScopeConfigInterface');
+    }
+
+    protected function _getScopeValue($scopeType, $scopeCode, $path)
+    {
+        if ($this->hasMageFeature('scope_pool')) {
+            return $this->_scopePool()->getScope($scopeType, $scopeCode)->getValue($path);
+        } else {
+            return $this->_scopeConfig()->getValue($path, $scopeType, $scopeCode);
+        }
     }
 
     public function getScopeFlag($path, $scopeCode = null, $scopeType = \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
     {
-        return $this->scopeConfig->isSetFlag($path, $scopeType, $scopeCode);
+        if ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+            $scopeCode = $scopeCode->getCode();
+        }
+        return !!$this->_getScopeValue($scopeType, $scopeCode, $path);
+    }
+
+    /**
+     * @return \Unirgy\Dropship\Plugin\Config
+     */
+    public function configPlugin()
+    {
+        return $this->getObj('\Unirgy\Dropship\Plugin\Config');
     }
 
     public function setScopeConfig($path, $value, $scopeCode = null, $scopeType = \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
     {
-        $this->scopePool->getScope($scopeType, $scopeCode)->setValue($path, $value);
+        if ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+            $scopeCode = $scopeCode->getCode();
+        }
+        if (!$this->hasMageFeature('scope_code_resolver')) {
+            $this->_scopePool()->getScope($scopeType, $scopeCode)->setValue($path, $value);
+        }
+        $this->configPlugin()->setModifiedConfig($value, $path, $scopeType, $scopeCode);
         return $this;
+    }
+    public function hasModifiedConfig($path = null, $scope = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
+    {
+        return $this->configPlugin()->hasModifiedConfig($path, $scope, $scopeCode);
+    }
+    public function getModifiedConfig($path = null, $scope = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
+    {
+        return $this->configPlugin()->getModifiedConfig($path, $scope, $scopeCode);
     }
 
     /**
@@ -3890,6 +3998,21 @@ class Data extends AbstractHelper
             $stockItem = $stockRegistry->getStockItem($product);
         }
         return $stockItem;
+    }
+
+    public function createFileUploader($fileId)
+    {
+        try {
+            /**@var \Magento\MediaStorage\Model\File\Uploader $ioUpload */
+            $ioUpload = $this->createObj(
+                '\Unirgy\Dropship\Model\FileUploader',
+                ['fileId' => $fileId]
+            );
+            $ioUpload->skipDbProcessing(true);
+        } catch (\Exception $e) {
+            $ioUpload = false;
+        }
+        return $ioUpload;
     }
 
     /**
@@ -3948,13 +4071,13 @@ class Data extends AbstractHelper
             $result = array();
             foreach ($data as $k => $v) {
                 if ($v instanceof \Magento\Framework\DataObject) {
-                    $_v = filterObjectsInDump($v->getData());
+                    $_v = $this->filterObjectsInDump($v->getData());
                     array_unshift($_v, spl_object_hash($v));
                     array_unshift($_v, get_class($v));
                 } elseif ($v instanceof \Magento\Framework\Data\Collection) {
-                    $_v = filterObjectsInDump($v);
+                    $_v = $this->filterObjectsInDump($v);
                 } elseif (is_array($v)) {
-                    $_v = filterObjectsInDump($v);
+                    $_v = $this->filterObjectsInDump($v);
                 } elseif (is_object($v)) {
                     if (method_exists($v, '__toString')) {
                         $_v = get_class($v) . " - " . spl_object_hash($v);
@@ -3976,7 +4099,7 @@ class Data extends AbstractHelper
                 array_unshift($result, get_class($data));
             }
         } elseif ($data instanceof \Magento\Framework\DataObject) {
-            $result = filterObjectsInDump($data->getData());
+            $result = $this->filterObjectsInDump($data->getData());
             array_unshift($result, spl_object_hash($data));
             array_unshift($result, get_class($data));
         } elseif (is_object($data)) {
@@ -3997,7 +4120,7 @@ class Data extends AbstractHelper
 
     public function dump($data, $file, $simple = false)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], self::$_dtlIps) && !in_array(@$_SERVER['HTTP_X_FORWARDED_FOR'], self::$_dtlIps)) return;
+        //if (!in_array(@$_SERVER['REMOTE_ADDR'], self::$_dtlIps) && !in_array(@$_SERVER['HTTP_X_FORWARDED_FOR'], self::$_dtlIps)) return;
         ob_start();
         $filtered = $this->filterObjectsInDump($data, $simple);
         is_array($filtered) ? print_r($filtered) : var_dump($filtered);
@@ -4012,13 +4135,13 @@ namespace {
 if (!function_exists('udDump')) {
     function udDump($data, $file)
     {
-        \Magento\Framework\App\ObjectManager::getInstance()->get('\Unirgy\Dropship\Helper\Data')->dump($data, $file, false);
+        \Magento\Framework\App\ObjectManager::getInstance()->get('\Unirgy\Dropship\Helper\Data')->dump($data, $file, 0);
     }
 }
 if (!function_exists('udLog')) {
     function udLog($data, $file)
     {
-        \Magento\Framework\App\ObjectManager::getInstance()->get('\Unirgy\Dropship\Helper\Data')->dump($data, $file, true);
+        \Magento\Framework\App\ObjectManager::getInstance()->get('\Unirgy\Dropship\Helper\Data')->dump($data, $file, 1);
     }
 }
 }

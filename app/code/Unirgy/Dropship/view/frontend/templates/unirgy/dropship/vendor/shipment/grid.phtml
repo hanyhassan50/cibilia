@@ -329,7 +329,7 @@ function ieDownloadSubmitWrapper(ifrId) {
     }
 }
 
-function afterDownloadSubmit(ifrId) {
+window.afterDownloadSubmit = function (ifrId) {
     var response
     try {
         response = $(ifrId).contentDocument.body.innerHTML.evalJSON()

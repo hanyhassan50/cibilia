@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="StageBit_CustomCode::css/custom-udropship.css"/>
+    </head>
+    <body>
+        <referenceBlock name="custom_form_additional12_info_customer">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">StageBit_CustomCode::editcustomer.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">5 Easy steps to become cibilian</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

@@ -134,7 +134,7 @@ class Source extends AbstractSource
         case 'udprod/general/allowed_types':
             $at = $this->_scopeConfig->getValue('udprod/general/type_of_product', ScopeInterface::SCOPE_STORE);
             if (is_string($at)) {
-                $at = unserialize($at);
+                $at = $this->_hlp->unserialize($at);
             }
             $options = [
                 '*none*' => __('* None *'),
@@ -159,14 +159,18 @@ class Source extends AbstractSource
                 3 => __('Under Review'),
                 4 => __('Fix'),
                 5 => __('Discard'),
+                6 => __('Vacation'),
             ];
+            if ($this->_hlp->isModuleActive('Unirgy_DropshipVendorMembership')) {
+                $options[7] = __('Suspended');
+            }
             break;
 
         case 'udprod/template_sku/type_of_product':
             $selector = true;
             $_options = $this->_scopeConfig->getValue('udprod/general/type_of_product', ScopeInterface::SCOPE_STORE);
             if (!is_array($_options)) {
-                $_options = unserialize($_options);
+                $_options = $this->_hlp->unserialize($_options);
             }
             $options = [];
             if (!empty($_options) && is_array($_options)) {

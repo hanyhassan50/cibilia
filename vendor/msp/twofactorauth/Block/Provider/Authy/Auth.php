@@ -21,46 +21,32 @@
 namespace MSP\TwoFactorAuth\Block\Provider\Authy;
 
 use Magento\Backend\Block\Template;
-use MSP\TwoFactorAuth\Api\TfaInterface;
 
 class Auth extends Template
 {
-    /**
-     * @var TfaInterface
-     */
-    private $tfa;
-
-    public function __construct(
-        Template\Context $context,
-        TfaInterface $tfa,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->tfa = $tfa;
-    }
-
-    public function getPostUrl()
+    public function getJsLayout()
     {
-        return $this->getUrl('*/*/authpost');
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['postUrl'] =
+            $this->getUrl('*/*/authpost');
 
-    public function getTokenRequestUrl()
-    {
-        return $this->getUrl('*/*/token');
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['tokenRequestUrl'] =
+            $this->getUrl('*/*/token');
 
-    public function getOneTouchUrl()
-    {
-        return $this->getUrl('*/*/onetouch');
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['oneTouchUrl'] =
+            $this->getUrl('*/*/onetouch');
 
-    public function getOneTouchVerifyUrl()
-    {
-        return $this->getUrl('*/*/verifyonetouch');
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['verifyOneTouchUrl'] =
+            $this->getUrl('*/*/verifyonetouch');
 
-    public function getSuccessUrl()
-    {
-        return $this->getUrl('/');
+        $this->jsLayout['components']['msp-twofactorauth-auth']['successUrl'] =
+            $this->getUrl('/');
+
+        $this->jsLayout['components']['msp-twofactorauth-auth']['loadingImageUrl'] =
+            $this->getViewFileUrl('MSP_TwoFactorAuth::images/loading.gif');
+
+        $this->jsLayout['components']['msp-twofactorauth-auth']['loggingImageUrl'] =
+            $this->getViewFileUrl('MSP_TwoFactorAuth::images/logging.gif');
+
+        return parent::getJsLayout();
     }
 }

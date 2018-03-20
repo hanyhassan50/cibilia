@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -130,7 +130,8 @@ class Csv implements ReportProcessorInterface
         return $this->sourceCsvFactory->create(
             [
                 'file' => $sourceFile,
-                'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)
+                'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR),
+                'delimiter' => $this->reportHelper->getDelimiter(),
             ]
         );
     }

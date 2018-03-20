@@ -22,15 +22,19 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Authy;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
-use Magento\Framework\View\Result\PageFactory;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Api\TfaSessionInterface;
 use MSP\TwoFactorAuth\Api\TrustedManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 
-class Authpost extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Authpost extends AbstractAction
 {
     /**
      * @var TfaInterface
@@ -43,9 +47,9 @@ class Authpost extends Action
     private $session;
 
     /**
-     * @var PageFactory
+     * @var JsonFactory
      */
-    private $pageFactory;
+    private $jsonFactory;
 
     /**
      * @var TfaSessionInterface
@@ -58,79 +62,104 @@ class Authpost extends Action
     private $trustedManager;
 
     /**
-     * @var EventInterface
-     */
-    private $event;
-
-    /**
      * @var Authy
      */
     private $authy;
 
+    /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
+     * @var AlertInterface
+     */
+    private $alert;
+
+    /**
+     * Authpost constructor.
+     * @param Action\Context $context
+     * @param Session $session
+     * @param JsonFactory $jsonFactory
+     * @param Authy $authy
+     * @param TfaSessionInterface $tfaSession
+     * @param TrustedManagerInterface $trustedManager
+     * @param TfaInterface $tfa
+     * @param AlertInterface $alert
+     * @param DataObjectFactory $dataObjectFactory
+     */
     public function __construct(
         Action\Context $context,
         Session $session,
-        PageFactory $pageFactory,
+        JsonFactory $jsonFactory,
         Authy $authy,
         TfaSessionInterface $tfaSession,
         TrustedManagerInterface $trustedManager,
-        EventInterface $event,
-        TfaInterface $tfa
+        TfaInterface $tfa,
+        AlertInterface $alert,
+        DataObjectFactory $dataObjectFactory
     ) {
         parent::__construct($context);
         $this->tfa = $tfa;
         $this->session = $session;
-        $this->pageFactory = $pageFactory;
+        $this->jsonFactory = $jsonFactory;
         $this->tfaSession = $tfaSession;
         $this->trustedManager = $trustedManager;
-        $this->event = $event;
         $this->authy = $authy;
+        $this->dataObjectFactory = $dataObjectFactory;
+        $this->alert = $alert;
     }
 
     /**
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
         $user = $this->getUser();
+        $result = $this->jsonFactory->create();
 
         try {
-            $this->authy->verify($user, $this->getRequest());
+            $this->authy->verify($user, $this->dataObjectFactory->create([
+                'data' => $this->getRequest()->getParams(),
+            ]));
             $this->trustedManager->handleTrustDeviceRequest(Authy::CODE, $this->getRequest());
             $this->tfaSession->grantAccess();
+            $result->setData(['success' => true]);
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->alert->event(
+                'MSP_TwoFactorAuth',
+                'Authy error',
+                AlertInterface::LEVEL_ERROR,
+                $this->getUser()->getUserName(),
+                AlertInterface::ACTION_LOG,
+                $e->getMessage()
+            );
 
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_TwoFactorAuth',
-                'message' => 'Authy error',
-                'username' => $this->getUser()->getUserName(),
-                'additional' => $e->getMessage(),
-            ]);
-
-            return $this->_redirect('*/*/auth');
+            $result->setData(['success' => false, 'message' => $e->getMessage()]);
         }
 
-        return $this->_redirect('/');
+        return $result;
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
         $user = $this->getUser();
 
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            $this->tfa->getProvider(Authy::CODE)->getIsActive($user);
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            $this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

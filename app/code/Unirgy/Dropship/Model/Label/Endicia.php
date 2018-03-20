@@ -30,7 +30,7 @@ class Endicia
     /**
      * @var HelperData
      */
-    protected $_helperData;
+    protected $_hlp;
 
     /**
      * @var Config
@@ -42,12 +42,14 @@ class Endicia
      */
     protected $_logLoggerInterface;
 
-    public function __construct(array $data = [], 
-        HelperData $helperData = null, 
-        Config $modelConfig = null, 
-        LoggerInterface $logLoggerInterface = null)
+    public function __construct(
+        HelperData $helperData,
+        Config $modelConfig,
+        LoggerInterface $logLoggerInterface,
+        array $data = []
+    )
     {
-        $this->_helperData = $helperData;
+        $this->_hlp = $helperData;
         $this->_modelConfig = $modelConfig;
         $this->_logLoggerInterface = $logLoggerInterface;
 
@@ -104,7 +106,7 @@ class Endicia
         $wsdlOptions = array(
             'trace' => !!$v->getEndiciaTestMode(),
         );
-        $client = new SoapClient($v->getEndiciaApiUrl().'?wsdl', $wsdlOptions);
+        $client = new \SoapClient($v->getEndiciaApiUrl().'?wsdl', $wsdlOptions);
         return $client;
     }
 
@@ -133,7 +135,7 @@ class Endicia
 
     public function requestLabel($track)
     {
-        $hlp = $this->_helperData;
+        $hlp = $this->_hlp;
 
         $v = $this->getVendor();
 
@@ -317,10 +319,10 @@ class Endicia
             'PartnerTransactionID' => $order->getIncrementId(),
             'ToName' =>  $address->getName(),
             'ToCompany' => $address->getCompany(),
-            'ToAddress1' => $address->getStreet(1),
-            'ToAddress2' => $address->getStreet(2),
-            'ToAddress3' => $address->getStreet(3),
-            'ToAddress4' => $address->getStreet(4),
+            'ToAddress1' => $address->getStreetLine(1),
+            'ToAddress2' => $address->getStreetLine(2),
+            'ToAddress3' => $address->getStreetLine(3),
+            'ToAddress4' => $address->getStreetLine(4),
             'ToCity' => $address->getCity(),
             'ToState' => $address->getRegionCode(),
             'ToPostalCode' => $toPostalCode,
@@ -392,12 +394,12 @@ EPL2 and ZPLII are supported for:
 
         $result = $client->GetPostageLabel(array('LabelRequest'=>$data));
 
-        $this->_helperData->dump('REQUEST', 'endicia_label');
-        $this->_helperData->dump($client->__getLastRequestHeaders(), 'endicia_label');
-        $this->_helperData->dump($client->__getLastRequest(), 'endicia_label');
-        $this->_helperData->dump('RESPONSE', 'endicia_label');
-        $this->_helperData->dump($client->__getLastResponseHeaders(), 'endicia_label');
-        $this->_helperData->dump($client->__getLastResponse(), 'endicia_label');
+        $this->_hlp->dump('REQUEST', 'endicia_label');
+        $this->_hlp->dump($client->__getLastRequestHeaders(), 'endicia_label');
+        $this->_hlp->dump($client->__getLastRequest(), 'endicia_label');
+        $this->_hlp->dump('RESPONSE', 'endicia_label');
+        $this->_hlp->dump($client->__getLastResponseHeaders(), 'endicia_label');
+        $this->_hlp->dump($client->__getLastResponse(), 'endicia_label');
 
         if (!$result || empty($result->LabelRequestResponse)) {
             throw new \Exception('Invalid API response');
@@ -466,7 +468,7 @@ EPL2 and ZPLII are supported for:
             }
         }
 
-        $labelModel = $this->_helperData->getLabelTypeInstance($v->getLabelType());
+        $labelModel = $this->_hlp->getLabelTypeInstance($v->getLabelType());
         $labelModel->setVendor($v)->updateTrack($track, $labelImages);
         if ($v->getLabelType()=='PDF' && $labelType=='International') {
             // for customs forms - renders on the whole page
@@ -625,7 +627,7 @@ EOT;
     public function getLabelDescr($data)
     {
         $format = "n".'Item No: %items$s';
-        return $this->_helperData->vnsprintf($format, $data);
+        return $this->_hlp->vnsprintf($format, $data);
     }
 
     public function getLabelDocTab($data)
@@ -643,7 +645,7 @@ SHIPPING SERVICE %svc$7.2f    TOTAL CHARGE   %svcpub$7.2f
 
 ITEMS: %items$s';
 
-        $doctab = $this->_helperData->vnsprintf($format, $data);
+        $doctab = $this->_hlp->vnsprintf($format, $data);
 #echo "<xmp>"; print_r($doctab); exit;
         return $doctab;
     }
@@ -652,7 +654,7 @@ ITEMS: %items$s';
     {
         $url = strpos($cmd, 'http')===0 ? $cmd : ($this->getVendor()->getEndiciaApiUrl().'/'.$cmd);
 
-        $response = $this->_helperData->curlCall($url, $request);
+        $response = $this->_hlp->curlCall($url, $request);
         $response = preg_replace('#<'.$responseTag.'[^>]*>#', '<'.$responseTag.'>', $response);
         $xml = @simplexml_load_string($response);
 

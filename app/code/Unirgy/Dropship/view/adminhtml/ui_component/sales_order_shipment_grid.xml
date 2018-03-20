@@ -7,7 +7,7 @@
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
 
-    <container name="listing_top">
+    <!--container name="listing_top">
         <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -24,7 +24,7 @@
                 </item>
             </argument>
         </bookmark>
-    </container>
+    </container-->
 
     <columns name="sales_order_shipment_columns">
         <column name="udropship_vendor">

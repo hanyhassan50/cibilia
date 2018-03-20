@@ -150,7 +150,10 @@ $addAnotherLabel = $cfgColumnsCount==1
 <script type="text/javascript">
 require(["jquery", "prototype"], function(jQuery) {
     var lastRowNum = 0;
-    var tbody = $$('#cfg_quick_create<?php echo $cfgSuf?> tbody')[0]
+    var tbody = $$('#cfg_quick_create<?php echo $cfgSuf?> tbody')[0];
+    console.log('#cfg_quick_create<?php echo $cfgSuf?> tbody');
+    console.log($$('#cfg_quick_create<?php echo $cfgSuf?> tbody'));
+    console.log(tbody);
 
     $('cfg_quick_create<?php echo $cfgSuf?>_row_template').select('input,select,textarea').each(function(el) {
         el.className = $w(el.className).collect(function(s){ return 'udorg--'+s;}).join(' ');
@@ -176,7 +179,7 @@ require(["jquery", "prototype"], function(jQuery) {
             <?php echo $cfgAttr->getAttributeCode() ?>: '',
             <?php endforeach ?>
             simple_id: ''
-        }
+        };
         udmData= {
             <?php if ($_hlp->isUdmultiActive()): ?>
             vendor_sku: '',
@@ -198,23 +201,23 @@ require(["jquery", "prototype"], function(jQuery) {
             <?php endif ?>
             status: <?php echo (int)$_hlp->getObj('Unirgy\DropshipMulti\Helper\Data')->getDefaultMvStatus()?>
             <?php endif ?>
-        }
+        };
         sdData= {
             <?php if (!$_hlp->isUdmultiActive()): ?>
             qty: 0,
             is_in_stock: 0
             <?php endif ?>
-        }
+        };
         Object.extend(sdData, sdInData);
         Object.extend(udmData, udmInData);
         Object.extend(data, inData);
         if (!window.cfgQcLastRowNum) {
             window.cfgQcLastRowNum = 1;
-        }
+        };
         sdData.row = udmData.row = data.row = window.cfgQcLastRowNum++;
         lastRowNum++;
 
-        var numericVars, forcedNumericVars, selectFields
+        var numericVars, forcedNumericVars, selectFields;
 
         numericVars = <?php echo \Zend_Json::encode($_prodHlp->getQCNumericAttributes())?>;
         forcedNumericVars = <?php echo \Zend_Json::encode($_prodHlp->getQCForcedNumericAttributes())?>;

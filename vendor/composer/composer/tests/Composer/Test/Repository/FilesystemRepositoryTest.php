@@ -10,8 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Composer\Repository;
+namespace Composer\Test\Repository;
 
+use Composer\Repository\FilesystemRepository;
 use Composer\TestCase;
 
 class FilesystemRepositoryTest extends TestCase
@@ -26,7 +27,7 @@ class FilesystemRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('read')
             ->will($this->returnValue(array(
-                array('name' => 'package1', 'version' => '1.0.0-beta', 'type' => 'vendor')
+                array('name' => 'package1', 'version' => '1.0.0-beta', 'type' => 'vendor'),
             )));
         $json
             ->expects($this->once())
@@ -42,7 +43,7 @@ class FilesystemRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException Composer\Repository\InvalidRepositoryException
+     * @expectedException \Composer\Repository\InvalidRepositoryException
      */
     public function testCorruptedRepositoryFile()
     {
@@ -94,7 +95,7 @@ class FilesystemRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('write')
             ->with(array(
-                array('name' => 'mypkg', 'type' => 'library', 'version' => '0.1.10', 'version_normalized' => '0.1.10.0')
+                array('name' => 'mypkg', 'type' => 'library', 'version' => '0.1.10', 'version_normalized' => '0.1.10.0'),
             ));
 
         $repository->addPackage($this->getPackage('mypkg', '0.1.10'));

@@ -22,19 +22,23 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Authy;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 
-class Configurepost extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Configurepost extends AbstractAction
 {
     /**
      * @var PageFactory
      */
-    private $pageFactory;
+    private $jsonFactory;
 
     /**
      * @var Session
@@ -47,90 +51,111 @@ class Configurepost extends Action
     private $tfa;
 
     /**
-     * @var Authy
+     * @var AlertInterface
      */
-    private $authy;
+    private $alert;
 
     /**
-     * @var EventInterface
+     * @var Authy\Verification
      */
-    private $event;
+    private $verification;
 
+    /**
+     * @var UserConfigManagerInterface
+     */
+    private $userConfigManager;
+
+    /**
+     * Configurepost constructor.
+     * @param Action\Context $context
+     * @param Session $session
+     * @param Authy\Verification $verification
+     * @param UserConfigManagerInterface $userConfigManager
+     * @param TfaInterface $tfa
+     * @param AlertInterface $alert
+     * @param JsonFactory $jsonFactory
+     */
     public function __construct(
         Action\Context $context,
         Session $session,
-        Authy $authy,
+        Authy\Verification $verification,
+        UserConfigManagerInterface $userConfigManager,
         TfaInterface $tfa,
-        EventInterface $event,
-        PageFactory $pageFactory
+        AlertInterface $alert,
+        JsonFactory $jsonFactory
     ) {
         parent::__construct($context);
-        $this->pageFactory = $pageFactory;
+        $this->jsonFactory = $jsonFactory;
         $this->session = $session;
         $this->tfa = $tfa;
-        $this->authy = $authy;
-        $this->event = $event;
+        $this->alert = $alert;
+        $this->verification = $verification;
+        $this->userConfigManager = $userConfigManager;
     }
 
     /**
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
     /**
-     * Dispatch request
-     *
-     * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @inheritdoc
      */
     public function execute()
     {
         $request = $this->getRequest();
+        $response = $this->jsonFactory->create();
 
         try {
-            $this->authy->requestPhoneNumberVerification(
+            $this->verification->request(
                 $this->getUser(),
                 $request->getParam('tfa_country'),
                 $request->getParam('tfa_phone'),
-                $request->getParam('tfa_method')
+                $request->getParam('tfa_method'),
+                $res
             );
 
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_TwoFactorAuth',
-                'message' => 'New authy verification request via ' . $request->getParam('tfa_method'),
-                'username' => $this->getUser()->getUserName(),
-            ]);
+            $this->alert->event(
+                'MSP_TwoFactorAuth',
+                'New authy verification request via ' . $request->getParam('tfa_method'),
+                AlertInterface::LEVEL_INFO,
+                $this->getUser()->getUserName()
+            );
 
+            $response->setData([
+                'success' => true,
+                'message' => $res['message'],
+                'seconds_to_expire' => (int) $res['seconds_to_expire'],
+            ]);
         } catch (\Exception $e) {
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_TwoFactorAuth',
-                'message' => 'Authy verification request failure via ' . $request->getParam('tfa_method'),
-                'username' => $this->getUser()->getUserName(),
-                'additional' => $e->getMessage(),
-            ]);
-
-            $this->messageManager->addErrorMessage($e->getMessage());
-            return $this->_redirect('*/*/configure');
+            $this->alert->event(
+                'MSP_TwoFactorAuth',
+                'Authy verification request failure via ' . $request->getParam('tfa_method'),
+                AlertInterface::LEVEL_ERROR,
+                $this->getUser()->getUserName(),
+                AlertInterface::ACTION_LOG,
+                $e->getMessage()
+            );
+            $response->setData(['success' => false, 'message' => $e->getMessage()]);
         }
 
-        return $this->_redirect('*/*/verify');
+        return $response;
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
         $user = $this->getUser();
 
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            !$this->tfa->getProvider(Authy::CODE)->getIsActive($user);
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            !$this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

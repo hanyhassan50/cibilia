@@ -1,0 +1,253 @@
+.udropship-vendor #maincontent  img           { border:0; vertical-align:top; }
+
+.udropship-vendor #maincontent  a             { color:#263056; text-decoration:underline; text-decoration:none; }
+.udropship-vendor #maincontent  a:hover       { text-decoration:none; }
+.udropship-vendor #maincontent  :focus        { outline: 0; }
+
+.udropship-vendor #maincontent  h1 {
+    font-size: 40px;
+    font-weight: 300;
+    margin-bottom: 40px;
+    line-height: 1.1;
+    color: #333;
+}
+
+.udropship-vendor #maincontent  form          { display:inline; }
+.udropship-vendor #maincontent  fieldset      { border:0; }
+.udropship-vendor #maincontent  legend        { display:none; }
+
+/* Table */
+.udropship-vendor #maincontent  table         { border:0; /*border-collapse:collapse;*/ border-spacing:0; empty-cells:show; font-size:100%; }
+.udropship-vendor #maincontent  caption,.udropship-vendor #maincontent  th,.udropship-vendor #maincontent  td { vertical-align:top; text-align:left; font-weight:normal; }
+
+/* Content */
+.udropship-vendor #maincontent  p             { margin:0 0 10px; }
+.udropship-vendor #maincontent  strong        { font-weight:bold; }
+.udropship-vendor #maincontent  address       { font-style:normal; line-height:1.35; }
+.udropship-vendor #maincontent  cite          { font-style:normal; }
+.udropship-vendor #maincontent  q,
+.udropship-vendor #maincontent  blockquote    { quotes:none; }
+.udropship-vendor #maincontent  q:before,
+.udropship-vendor #maincontent  q:after       { content:''; }
+.udropship-vendor #maincontent  small, .udropship-vendor #maincontent  big     { font-size:1em; }
+
+.udropship-vendor #maincontent  ul,.udropship-vendor #maincontent  ol         { list-style:none; }
+
+.udropship-vendor #maincontent  .col2-set .col-1 { float:left; width:48.5%; }
+.udropship-vendor #maincontent  .col2-set .col-2 { float:right; width:48.5%; }
+
+.udropship-vendor #maincontent  .col3-set .col-2 { float:left; width:32%; margin-left:2%; }
+.udropship-vendor #maincontent  .col3-set .col-3 { float:right; width:32%; }
+
+.udropship-vendor #maincontent  .col4-set .col-1 { float:left; width:23.5%; }
+.udropship-vendor #maincontent  .col4-set .col-2 { float:left; width:23.5%; margin:0 2%; }
+.udropship-vendor #maincontent  .col4-set .col-3 { float:left; width:23.5%; }
+.udropship-vendor #maincontent  .col4-set .col-4 { float:right; width:23.5%; }
+
+
+/* Global Styles ========================================================================= */
+/* Form Elements */
+.udropship-vendor #maincontent  input,.udropship-vendor #maincontent  select,.udropship-vendor #maincontent  textarea,.udropship-vendor #maincontent  button {  color:#2f2f2f; }
+.udropship-vendor #maincontent  input.input-text, .udropship-vendor #maincontent   select,.udropship-vendor #maincontent   textarea { background:#fff; border:1px solid #b6b6b6; }
+.udropship-vendor #maincontent  input.input-text,.udropship-vendor #maincontent  textarea { padding:3px; }
+.udropship-vendor #maincontent  select { padding:1px; width: auto; }
+.udropship-vendor #maincontent  select option { padding-right:10px; }
+.udropship-vendor #maincontent  select.multiselect option { border-bottom:1px solid #b6b6b6; padding:2px 5px; }
+.udropship-vendor #maincontent  select.multiselect option:last-child { border-bottom:0; }
+.udropship-vendor #maincontent  textarea { overflow:auto; width:300px; height:200px; }
+.udropship-vendor #maincontent  input.radio { margin-right:3px; width: auto; }
+.udropship-vendor #maincontent  input.checkbox { margin-right:3px; width: auto; }
+.udropship-vendor #maincontent  input.checkbox.input-text { margin-right:3px; width: auto; }
+.udropship-vendor #maincontent  input.qty { width:2.5em !important; }
+.udropship-vendor #maincontent  .buttons-set a,
+.udropship-vendor #maincontent  .buttons-set a:hover { color:#394e9c; text-decoration:underline; }
+
+.udropship-vendor #maincontent  button.button::-moz-focus-inner { padding:0; border:0; } /* FF Fix */
+.udropship-vendor #maincontent  button.button { -webkit-border-fit:lines; } /* <- Safari & Google Chrome Fix */
+.udropship-vendor #maincontent  button.button { overflow:visible; width:auto; border:0; padding:0; margin:0; background:transparent; cursor:pointer; }
+.udropship-vendor #maincontent  button.button span { display:block; height:19px; border:1px solid #de5400; background:#f18200; padding:0 8px;  text-align:center; white-space:nowrap; color:#fff; }
+.udropship-vendor #maincontent  button.button span span { border:0; padding:0; }
+.udropship-vendor #maincontent  button.disabled span { border-color:#bbb !important; background:#bbb !important; }
+
+.udropship-vendor #maincontent  button.btn-checkout span { height:40px; border:0; background:url(../images/btn_checkout.gif) 0 0 no-repeat; padding:0 0 0 9px;  color:#fff; }
+.udropship-vendor #maincontent  button.btn-checkout span span { background-position:100% 0; padding:0 25px 0 16px; }
+.udropship-vendor #maincontent  button.btn-checkout.no-checkout span { background-position:0 100%; color:#b8baba; }
+.udropship-vendor #maincontent  button.btn-checkout.no-checkout span span { background-position:100% 100%; }
+
+.udropship-vendor #maincontent  p.control input.checkbox,
+.udropship-vendor #maincontent  p.control input.radio { margin-right:6px; }
+.udropship-vendor #maincontent  input.input-text:focus,.udropship-vendor #maincontent  select:focus,.udropship-vendor #maincontent  textarea:focus { background-color:#edf7fd; }
+
+.udropship-vendor #maincontent  .breadcrumbs { font-size:11px; line-height:1.25; margin:0 0 13px; }
+.udropship-vendor #maincontent  .breadcrumbs li { display:inline; }
+.udropship-vendor #maincontent  .breadcrumbs li strong { font-weight:bold; }
+
+.udropship-vendor #maincontent  .wrapper { text-align:left; }
+.udropship-vendor #maincontent  .header { margin-bottom:20px; }
+.udropship-vendor #maincontent  #header-logo { float:left; font-size:26px; font-weight:bold; }
+.udropship-vendor #maincontent  .utility-nav { float:right; margin-top:15px; text-align:right; }
+.udropship-vendor #maincontent  .main-nav { margin-top:5px; padding:0 12px; background:#263056; -moz-border-radius: 3px; -webkit-border-radius: 3px; line-height:1; font-weight:bold; margin-bottom: 5px; }
+.udropship-vendor #maincontent  .main-nav li { float:left; }
+.udropship-vendor #maincontent  .main-nav li a { display:block; color:#c9cdde; padding:10px 16px; font-size:13px; text-transform:uppercase; }
+.udropship-vendor #maincontent  .main-nav li.active a { color:#eaecf0; background:#454f77; }
+
+.udropship-vendor #maincontent  .files .row:after,
+.udropship-vendor #maincontent  .files-wide .row:after,
+.udropship-vendor #maincontent  .clear:after,
+.udropship-vendor #maincontent  .main-nav:after,
+.udropship-vendor #maincontent  .header:after,
+.udropship-vendor #maincontent  .main:after,
+.udropship-vendor #maincontent  .footer:after,
+.udropship-vendor #maincontent  .col3-set:after,
+.udropship-vendor #maincontent  .col2-set:after,
+.udropship-vendor #maincontent  .pager:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+
+/* Content Header */
+.udropship-vendor #maincontent  .content-header {
+    margin-bottom:18px;
+    border-bottom:4px solid #dfdfdf;
+    padding-bottom:.25em;
+}
+.udropship-vendor #maincontent  .content-header table           { width:100%; }
+.udropship-vendor #maincontent  .content-header h3              { float:left; margin:.3em .5em 0 0; color:#eb5e00; font-size:1.25em; line-height:1.2em; }
+.udropship-vendor #maincontent  .content-header .head h3        { float:none; }
+.udropship-vendor #maincontent  .content-header .button-set     { white-space:nowrap; text-align:right; }
+.udropship-vendor #maincontent  .content-header .content-buttons  { white-space:nowrap!important; margin:0; }
+.udropship-vendor #maincontent  .content-header td.content-buttons  { width:13%;white-space:nowrap!important; margin:0; }
+.udropship-vendor #maincontent  .content-buttons button,
+.udropship-vendor #maincontent  .content-header button,
+.udropship-vendor #maincontent  .filter-actions button          { margin:0 0 0 5px; }
+.udropship-vendor #maincontent  .side-col .content-header       { border-bottom:0; margin-right:12px; margin-bottom:.6em; }
+.udropship-vendor #maincontent  .catalog-categories .side-col .content-header { margin-right:0; }  /* Catalog/Categories */
+
+.udropship-vendor #maincontent  .left-col-block { width:200px; }
+
+/** addional things to hide */
+
+.udropship-vendor .panel ul.header.links {
+    display:none;
+}
+
+
+.udropship-vendor .panel div.myheader {
+    margin: 0;
+    padding: 0;
+    list-style: none none;
+    float: right;
+    margin-left: auto;
+}
+
+div.myheader .utility-nav a {
+    color:#fff;
+}
+
+div.myheader .utility-nav a:hover {
+    color:#f0f0f0;
+}
+
+.udropship-vendor  #maincontent .page-title-wrapper {
+    display: none;
+}
+
+.udropship-vendor #maincontent {
+    margin-top: 25px;
+}
+
+.udropship-vendor #maincontent button {
+    color: #fff;
+    background: #1979c3;
+    border: 1px solid #1979c3;
+    box-shadow: none;
+}
+
+.udropship-vendor #maincontent  .block-customer-login ul {
+    padding: 0px;
+    margin-top:20px;
+}
+
+.udropship-vendor #maincontent  a.action.primary {
+    background-image: none;
+    background: #1979c3;
+    border: 1px solid #1979c3;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    padding: 7px 15px;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+.col-main .messages {
+    display: none;
+}
+
+
+/* stagebit*/
+
+.udropship-vendor .wrapper {
+    width: 100%;
+    margin: 0;
+}
+
+.udropship-vendor .page-header{
+    padding: 0;
+}
+.udropship-vendor .page-wrapper {
+    width: 100%;
+}
+
+.udropship-vendor .page-header .header{
+    margin-bottom: 0;
+}
+
+.udropship-vendor .utility-nav {
+    float: none;
+    margin-top: auto;
+    text-align: right;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.4rem;
+}
+
+.udropship-vendor .options.switcher-options {
+    margin-top: 3px;
+}
+
+body.udropship-vendor {
+    background: #fff;
+    text-align: left;
+    font-size: 1.4rem;
+}
+
+.udropship-vendor #search{
+    padding-left: 9px ;
+    padding-right: 35px;
+}
+.udropship-vendor #search:focus {
+    background-color: #fff;
+}
+
+.udropship-vendor .ui-menu-item {
+    font-size: 1.4rem;
+}
+
+.customregistration-customfields-index .disable-class {
+    position: relative;
+    display: block;
+    opacity: 0.5;
+    padding: 10px;
+}
+.customregistration-customfields-index .disable-class .disable-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.05);
+    width: 100%;
+    height: 100%;
+}
+p.status-info {
+    font-size: 16px;
+}
+

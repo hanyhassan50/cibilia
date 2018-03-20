@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Block\Adminhtml\Attribute;
 
 /**
@@ -122,14 +130,17 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
      /**
-     * Getter of url for "Save and Continue" button
-     * tab_id will be replaced by desired by JS later
-     *
-     * @return string
-     */
+      * Getter of url for "Save and Continue" button
+      * tab_id will be replaced by desired by JS later
+      *
+      * @return string
+      */
     protected function _getSaveAndContinueUrl()
     {
-        return $this->getUrl('customregistration/*/save', ['_current' => true, 'back' => 'edit', 'active_tab' => '{{tab_id}}']);
+        return $this->getUrl(
+            'customregistration/*/save',
+            ['_current' => true, 'back' => 'edit', 'active_tab' => '{{tab_id}}']
+        );
     }
 
     /**

@@ -14,5 +14,16 @@ class Current extends \Magento\Framework\View\Element\Html\Link\Current{
             return parent::toHtml();
         }	
         return '';
-    }  
+    }
+
+    public function isCibilian(){
+
+        $blockObj = $this->getLayout()->createBlock('Webkul\CustomRegistration\Block\Customfields');
+        $customerDataArr = $blockObj->getCurrentCustomer()->toArray();
+        if($customerDataArr['approval_status'] == 9){
+            return true;
+        }
+        return false;
+    }
+
 }

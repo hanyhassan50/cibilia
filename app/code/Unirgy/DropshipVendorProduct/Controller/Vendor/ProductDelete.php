@@ -37,11 +37,17 @@ class ProductDelete extends AbstractVendor
                 $this->_checkProduct();
                 $pId = $this->_request->getParam('id');
                 $simplePids = $this->_helperCatalog->getCfgSimplePids($pId);
-                $this->_modelProductFactory->create()->setId($pId)->delete();
+                $delPids = [];
                 if (!empty($simplePids) && is_array($simplePids)) {
-                    foreach ($simplePids as $simplePid) {
-                        $this->_modelProductFactory->create()->setId($simplePid)->delete();
-                    }
+                    $delPids = $simplePids;
+                }
+                $delPids[] = $pId;
+                $delProducts = $this->_modelProductFactory->create()->getCollection()->addIdFilter($delPids)
+                    ->setFlag('udskip_price_index',1)
+                    ->setFlag('has_group_entity', 1)
+                    ->setFlag('has_stock_status_filter', 1);
+                foreach ($delProducts as $_delProd) {
+                    $_delProd->delete();
                 }
                 $this->messageManager->addSuccess(__('Product was deleted'));
                 $this->_storeManager->setCurrentStore($oldStoreId);

@@ -10,11 +10,12 @@ class CatalogProductSaveCommitAfter extends AbstractObserver implements Observer
 {
     public function execute(Observer $observer)
     {
+        $rowIdField = $this->_hlp->rowIdField();
         $prod = $observer->getProduct();
         if (in_array($prod->getOrigData('status'), [ProductStatus::STATUS_PENDING, ProductStatus::STATUS_FIX])
             && $prod->getData('status') == ProductStatus::STATUS_ENABLED
         ) {
-            $multiUpdateAttributes[$prod->getId()] = [
+            $multiUpdateAttributes[$prod->getData($rowIdField)] = [
                 'udprod_fix_notify' => 0,
                 'udprod_pending_notify' => 0,
                 'udprod_approved_notify' => 1,
@@ -32,7 +33,7 @@ class CatalogProductSaveCommitAfter extends AbstractObserver implements Observer
         } elseif ($prod->getOrigData('status') != ProductStatus::STATUS_FIX
             && $prod->getData('status') == ProductStatus::STATUS_FIX
         ) {
-            $multiUpdateAttributes[$prod->getId()] = [
+            $multiUpdateAttributes[$prod->getData($rowIdField)] = [
                 'udprod_fix_notify' => 1,
                 'udprod_pending_notify' => 0,
                 'udprod_approved_notify' => 0,
@@ -44,7 +45,7 @@ class CatalogProductSaveCommitAfter extends AbstractObserver implements Observer
                 'udprod_approved_admin_notified' => 1,
             ];
             if ($prod->getData('udprod_pending_notify')) {
-                $multiUpdateAttributes[$prod->getId()]['udprod_fix_notify'] = $prod->getData('udprod_pending_notify');
+                $multiUpdateAttributes[$prod->getData($rowIdField)]['udprod_fix_notify'] = $prod->getData('udprod_pending_notify');
             }
         }
         if (!empty($multiUpdateAttributes)) {

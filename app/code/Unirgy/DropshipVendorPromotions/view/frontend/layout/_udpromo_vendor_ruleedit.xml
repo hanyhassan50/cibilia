@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Unirgy_DropshipVendorPromotions::css/promo.css"/>
+        <css src="Unirgy_DropshipVendorPromotions::extjs/resources/css/ext-all.css"/>
+        <css src="Unirgy_DropshipVendorPromotions::extjs/resources/css/ytheme-magento.css"/>
+    </head>
     <body>
         <referenceContainer name="udropship.content">
             <block class="Unirgy\DropshipVendorPromotions\Block\Vendor\Rule"

@@ -49,6 +49,7 @@ class QuestionPost extends AbstractVendor
 
         if ($data = $this->getRequest()->getPost('question')) {
             $id = $this->getRequest()->getParam('id');
+            $updateData = array_intersect_key($data, array_flip(array('answer_text','visibility')));
 
             try {
                 $question = $this->_questionFactory->create()->load($id);
@@ -61,7 +62,7 @@ class QuestionPost extends AbstractVendor
                     $question->setIsCustomerNotified(0);
                 }
 
-                $question->addData($data)->save();
+                $question->addData($updateData)->save();
 
                 $this->messageManager->addSuccess(__('Question was successfully saved'));
                 $session->setUdqaData(false);

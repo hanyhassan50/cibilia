@@ -10,6 +10,7 @@ class ControllerActionPredispatchCheckoutCartAdd extends AbstractObserver implem
 {
     public function execute(Observer $observer)
     {
+        $this->setIsThrowOnQuoteError(true);
         $this->setIsCartUpdateActionFlag(true);
     }
 }

@@ -12,33 +12,63 @@ class Referred extends \Magento\Framework\View\Element\Template
      * @var Cibilia\Summary\Model\ResourceModel\Summary\Collection
      */
     protected $_summaryCollection = null;
-    
-
-    protected $_productCollection = null;
-
-
-    protected $productCollectionFactory;
 
     /**
-     * Summary factory
-     *
+     * @var null
+     */
+    protected $_productCollection = null;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
+    protected $_productCollectionFactory;
+
+    /**
      * @var \Cibilia\Summary\Model\SummaryFactory
      */
     protected $_summaryCollectionFactory;
 
-    protected $_commissionCollectionFactory;
-    
-    /** @var \Cibilia\Summary\Helper\Data */
-    protected $_dataHelper;
-    
     /**
+     * @var \Cibilia\Commission\Model\ResourceModel\Commissions\CollectionFactory
+     */
+    protected $_commissionCollectionFactory;
+
+    /**
+     * @var \Cibilia\Summary\Helper\Data
+     */
+    protected $_dataHelper;
+
+    /**
+     * @var \Unirgy\Dropship\Model\VendorFactory
+     */
+    protected $_vendorFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
+    protected $_productFactory;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
+     * Referred constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Cibilia\Summary\Model\ResourceModel\Summary\CollectionFactory $summaryCollectionFactory
+     * @param \Cibilia\Commission\Model\ResourceModel\Commissions\CollectionFactory $commissionCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Cibilia\Summary\Helper\Data $dataHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
          \Magento\Customer\Model\Session $customerSession,
+        \Unirgy\Dropship\Model\VendorFactory $vendorFactory,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Cibilia\Summary\Model\ResourceModel\Summary\CollectionFactory $summaryCollectionFactory,
         \Cibilia\Commission\Model\ResourceModel\Commissions\CollectionFactory $commissionCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
@@ -54,6 +84,8 @@ class Referred extends \Magento\Framework\View\Element\Template
             $data
         );
         $this->customerSession = $customerSession;
+        $this->_vendorFactory = $vendorFactory;
+        $this->_productFactory = $productFactory;
     }
     
     /**
@@ -165,9 +197,7 @@ class Referred extends \Magento\Framework\View\Element\Template
 		}   
     }
     public function getCibilianVendors(){
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $arrVendors = array();
-        $arrVendorRegCollection = $objectManager->create('Unirgy\Dropship\Model\Vendor')->getCollection()->addFieldToFilter('status','V')->addFieldToFilter('vendor_type',1);
+        $arrVendorRegCollection = $this->_vendorFactory->create()->getCollection()->addFieldToFilter('status','V')->addFieldToFilter('vendor_type',1);
         $arrVendorRegCollection->getSelect()->joinleft(
             ['vendor_reg' => 'udropship_vendor_registration'],
             'main_table.email = vendor_reg.email')->where("vendor_reg.referred_by = '".$this->customerSession->getCustomer()->getId()."'");;
@@ -184,16 +214,14 @@ class Referred extends \Magento\Framework\View\Element\Template
         $arrCommissionCollection = $this->_commissionCollectionFactory->create();
         $arrCommissionCollection->addFieldToFilter('cibilian_id',$this->customerSession->getCustomer()->getId());
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-
         if($arrCommissionCollection->getData() != ""){
 			$arrRefrredProducts = array();
 			foreach ($arrCommissionCollection as $commission) {
 				$arrEarned = json_decode($commission->getData('cibilia_commision_rate'),true);
 				foreach ($arrEarned as $key => $rates) {
-					$objProduct = $objectManager->create('Magento\Catalog\Model\Product')->load($rates['pid']);
+					$objProduct = $this->_productFactory->create()->load($rates['pid']);
 					if($objProduct && $objProduct->getId() && $objProduct->getCreatedBy() == 2){
-						$objVendor = $objectManager->create('Unirgy\Dropship\Model\Vendor')->load($objProduct->getUdropshipVendor());
+						$objVendor = $this->_vendorFactory->create()->load($objProduct->getUdropshipVendor());
 						if($objVendor && $objVendor->getId() && $objVendor->getVendorType() == 1){
 							if($commission->getStatus() == 3){
 								if(array_key_exists($objProduct->getId(), $arrRefrredProducts)){

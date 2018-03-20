@@ -261,25 +261,15 @@ class Data extends AbstractHelper
 
     public function sendVendorSignupEmail($registration)
     {
-
-        // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/vendor_regis.log');
-        // $logger = new \Zend\Log\Logger();
-        // $logger->addWriter($writer);    
-        // $logger->info(print_r($registration, true));
-
         $store = $this->_storeManager->getDefaultStoreView();
-
         $this->inlineTranslation->suspend();
-
-        $storeId = $this->getVendorsStoreId($registration);
 
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_hlp->getScopeConfig('udropship/microsite/signup_template', $store)
         )->setTemplateOptions(
             [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                //'store' => $store->getId(),
-                'store' => $storeId,    
+                'store' => $store->getId(),
             ]
         )->setTemplateVars(
             [
@@ -307,15 +297,12 @@ class Data extends AbstractHelper
 
         $this->inlineTranslation->suspend();
 
-        $storeId = $this->getVendorsStoreId($vendor);
-
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_hlp->getScopeConfig('udropship/microsite/welcome_template', $store)
         )->setTemplateOptions(
             [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                //'store' => $store->getId(),
-                'store' => $storeId,
+                'store' => $store->getId(),
             ]
         )->setTemplateVars(
             [
@@ -335,33 +322,6 @@ class Data extends AbstractHelper
         $this->inlineTranslation->resume();
 
         return $this;
-    }
-
-    // bharat 
-    public function getVendorsStoreId($vendor)
-    {
-
-         $vendorsEmail = $vendor->getEmail();
-
-         $store = $this->_storeManager->getDefaultStoreView();
-
-         $storeId = $store->getId();
-
-         {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $resource   = $objectManager->get('Magento\Framework\App\ResourceConnection');
-            $connection = $resource->getConnection();
-            
-            $select_qry = "SELECT store_id FROM `" . $resource->getTableName('udropship_vendor_registration') . "` WHERE email = '" .$vendorsEmail. "'";
-            $rows       = $connection->fetchAll($select_qry);
-
-            if(isset($rows[0]['store_id'])){
-                $storeId = $rows[0]['store_id'];
-            }
-
-        }
-        return $storeId;
-
     }
 
     public function getDomainName()
@@ -395,11 +355,11 @@ class Data extends AbstractHelper
             $data['registration_url'] = $this->_backendUrl->getUrl('umicrosite/registration/edit', [
                 'reg_id' => $registration->getId(),
                 'key' => null,
-                '_store'    => 0
+                '_scope'    => 0
             ]);
             $data['all_registrations_url'] = $this->_backendUrl->getUrl('umicrosite/registration', [
                 'key' => null,
-                '_store'    => 0
+                '_scope'    => 0
             ]);
 
             foreach ($data as $k=>$v) {
@@ -415,7 +375,7 @@ class Data extends AbstractHelper
                     ->setFrom($registration->getEmail(), $registration->getVendorName())
                     ->addTo($toEmail, '')
                     ->setSubject($subject)
-                    ->setBodyText($template);
+                    ->setBody($template);
                 $transport = $this->_hlp->createObj('Magento\Framework\Mail\TransportInterface', ['message' => $message]);
                 $transport->sendMessage();
             }

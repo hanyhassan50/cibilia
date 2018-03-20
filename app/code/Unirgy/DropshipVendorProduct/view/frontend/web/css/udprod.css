@@ -4388,6 +4388,13 @@ body._has-modal {
     right: auto;
     top: 2.2rem
 }
+.fieldset-wrapper{
+    background: #fff;
+    border: 0;
+    margin: 0;
+    padding: 5px 0 38px;
+    position: relative;
+}
 
 .admin__collapsible-block .comment {
     margin-bottom: .5em;
@@ -5362,13 +5369,14 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
     margin: 2rem 0
 }
 
+/*
 .nav {
     background-color: #f8f8f8;
     border-bottom: 1px solid #e3e3e3;
     border-top: 1px solid #e3e3e3;
-    display: none;
     padding: 2.2rem 1.5rem 0 0
 }
+*/
 
 .nav-bar-outer-actions {
     float: right;
@@ -6126,6 +6134,22 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
     color: #858585
 }
 
+.fieldset-wrapper .draggable-handle, .fieldset .draggable-handle {
+    width: 8px;
+    height: 14px;
+    line-height: 14px;
+    background: url(../images/draggable-handle-vertical.png) no-repeat 0 0;
+    cursor: ns-resize;
+    color: #b2b0ad
+}
+
+#product_options_container input, #product_options_container select {
+    width: auto;
+}
+#_downloadable_options-container input, #_downloadable_options-container select {
+    width: auto;
+}
+
 .image .image-fade {
     font-size: 1.8rem;
     background: rgba(255, 255, 255, 0.8);
@@ -6790,7 +6814,7 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
     margin: auto;
     width: 93px;
     height: 60px;
-    background: url(../Magento_ProductVideo/images/camera.png) no-repeat center;
+    background: url(../images/camera.png) no-repeat center;
     z-index: 1
 }
 
@@ -6909,7 +6933,7 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
 }
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7297,7 +7321,7 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
 }
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7414,10 +7438,7 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
 }
 
 .mage-suggest-search-field input.mage-suggest-state-loading {
-    background: #fff url('../images/spinner.gif') no-repeat 100%;
-    padding-right: 22px;
-    position: relative;
-    z-index: 1;
+    background: #ffffff url("../images/ajax-loader-small.gif") no-repeat 190px 50%;
 }
 
 .admin__scope-old .mage-suggest-choice {
@@ -7449,7 +7470,7 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
     text-align: center;
     top: 0;
     width: 20px;
-   !important
+!important
 }
 
 .mage-suggest-choice-close:hover {
@@ -7705,7 +7726,7 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
 }
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7819,13 +7840,6 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
     line-height: 22px;
     padding: 0 3px;
     width: 100%;
-}
-
-.mage-suggest-search-field input.mage-suggest-state-loading {
-    background: #fff url('images/spinner.gif') no-repeat 100%;
-    padding-right: 22px;
-    position: relative;
-    z-index: 1;
 }
 
 .mage-suggest-choice {
@@ -7957,4 +7971,486 @@ input[type="checkbox"].banner-content-checkbox + .addafter {
 .jstree-default .jstree-unchecked a .jstree-checkbox { _background-position:-2px -19px; }
 /* IE6 END */
 
+.admin__field-tooltip .admin__field-tooltip-action span, .admin__control-fields .admin__field:nth-child(n+2):not(.admin__field-option) > .admin__field-label, .selectmenu .action-save > span, .selectmenu .action-edit > span, .selectmenu .action-delete > span, .selectmenu-toggle span, .abs-action-delete > span, .dashboard-diagram-switcher .label, .order-discounts .admin__field .action-default > span, .order-discounts .action-remove > span, .order-sidebar .admin__table-primary .icon > span, .order-sidebar .action-refresh > span, .add-by-sku-wrapper .action-reset > span, .rma-items .col-actions .item_delete_line > span {
+    border: 0 none;
+    clip: rect(0px, 0px, 0px, 0px);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.abs-clearfix:before, .abs-clearfix:after, .admin__fieldset-wrapper-title:before, .admin__fieldset-wrapper-title:after, .actions-split:before, .actions-split:after, .action-multicheck-wrap:before, .action-multicheck-wrap:after, .tabs-horiz:before, .tabs-horiz:after, .page-content:before, .page-content:after, .ui-dialog .ui-dialog-buttonset:before, .ui-dialog .ui-dialog-buttonset:after, .ui-dialog .main-col .insert-title-inner:before, .ui-dialog .main-col .insert-title-inner:after, .ui-dialog .magento_message .insert-title-inner:before, .ui-dialog .magento_message .insert-title-inner:after, .ui-dialog .main-col #contents-uploader:before, .ui-dialog .main-col #contents-uploader:after, .ui-dialog .magento_message #contents-uploader:before, .ui-dialog .magento_message #contents-uploader:after, .attribute-popup-actions:before, .attribute-popup-actions:after, .popup-window .magento_buttons:before, .popup-window .magento_buttons:after, .fade .popup-content:before, .fade .popup-content:after, .fade .actions:before, .fade .actions:after, .modal-slide .main-col .insert-title-inner:before, .modal-slide .main-col .insert-title-inner:after, .modal-slide .magento_message .insert-title-inner:before, .modal-slide .magento_message .insert-title-inner:after, .message-system-inner:before, .message-system-inner:after, .page-header-actions:before, .page-header-actions:after, .page-main-actions:not(._hidden):before, .page-main-actions:not(._hidden):after, .page-actions._fixed:before, .page-actions._fixed:after, .dashboard-totals-list:before, .dashboard-totals-list:after, .dashboard-store-stats .ui-tabs:before, .dashboard-store-stats .ui-tabs:after, .product-create-configuration:before, .product-create-configuration:after, .product-create-configuration .product-create-configuration-actions:before, .product-create-configuration .product-create-configuration-actions:after, .steps-wizard .steps-wizard-navigation:before, .steps-wizard .steps-wizard-navigation:after, .nav:before, .nav:after, .steps-wizard .select-attributes-block:before, .steps-wizard .select-attributes-block:after, .steps-wizard .attribute-entity-top:before, .steps-wizard .attribute-entity-top:after, .gallery:before, .gallery:after, .image-panel:before, .image-panel:after, .order-create-gift-wrapping .gift-wrapping-design:before, .order-create-gift-wrapping .gift-wrapping-design:after, .gift_options-popup .gift-wrapping-design:before, .gift_options-popup .gift-wrapping-design:after, .adminhtml-reward-rate-edit .field-rate .admin__field-control:before, .adminhtml-reward-rate-edit .field-rate .admin__field-control:after, .order-discounts:before, .order-discounts:after, .order-gift-options:before, .order-gift-options:after, .abs-order-tables .item-options:before, .abs-order-tables .item-options:after, .order-account-information .admin__fieldset:before, .order-account-information .admin__fieldset:after, .admin__page-section-title:before, .admin__page-section-title:after, .admin__page-section-content:before, .admin__page-section-content:after, .admin__data-grid-filters:before, .admin__data-grid-filters:after, .admin__data-grid-filters-footer:before, .admin__data-grid-filters-footer:after, .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-content:before, .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-content:after, .admin__data-grid-header-row:before, .admin__data-grid-header-row:after, .cms-hierarchy:before, .cms-hierarchy:after, .merchandiser-app:before, .merchandiser-app:after, .merchandiser-app .tabs:before, .merchandiser-app .tabs:after, .regular-category-settings:before, .regular-category-settings:after, .smart-category-switcher:before, .smart-category-switcher:after, .merchandiser-tabs:before, .merchandiser-tabs:after, .order-creditmemo-tables .item-options:before, .order-creditmemo-tables .item-options:after, .order-tables .item-options:before, .order-tables .item-options:after, .order-invoice-tables .item-options:before, .order-invoice-tables .item-options:after, .edit-order-table .item-options:before, .edit-order-table .item-options:after, .order-shipment-table .item-options:before, .order-shipment-table .item-options:after {
+    content: '';
+    display: table
+}
+
+.abs-clearfix:after, .admin__fieldset-wrapper-title:after, .actions-split:after, .action-multicheck-wrap:after, .tabs-horiz:after, .page-content:after, .ui-dialog .ui-dialog-buttonset:after, .ui-dialog .main-col .insert-title-inner:after, .ui-dialog .magento_message .insert-title-inner:after, .ui-dialog .main-col #contents-uploader:after, .ui-dialog .magento_message #contents-uploader:after, .attribute-popup-actions:after, .popup-window .magento_buttons:after, .fade .popup-content:after, .fade .actions:after, .modal-slide .main-col .insert-title-inner:after, .modal-slide .magento_message .insert-title-inner:after, .message-system-inner:after, .page-header-actions:after, .page-main-actions:not(._hidden):after, .page-actions._fixed:after, .dashboard-totals-list:after, .dashboard-store-stats .ui-tabs:after, .product-create-configuration:after, .product-create-configuration .product-create-configuration-actions:after, .steps-wizard .steps-wizard-navigation:after, .nav:after, .steps-wizard .select-attributes-block:after, .steps-wizard .attribute-entity-top:after, .gallery:after, .image-panel:after, .order-create-gift-wrapping .gift-wrapping-design:after, .gift_options-popup .gift-wrapping-design:after, .adminhtml-reward-rate-edit .field-rate .admin__field-control:after, .order-discounts:after, .order-gift-options:after, .abs-order-tables .item-options:after, .order-account-information .admin__fieldset:after, .admin__page-section-title:after, .admin__page-section-content:after, .admin__data-grid-filters:after, .admin__data-grid-filters-footer:after, .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-content:after, .admin__data-grid-header-row:after, .cms-hierarchy:after, .merchandiser-app:after, .merchandiser-app .tabs:after, .regular-category-settings:after, .smart-category-switcher:after, .merchandiser-tabs:after, .order-creditmemo-tables .item-options:after, .order-tables .item-options:after, .order-invoice-tables .item-options:after, .edit-order-table .item-options:after, .order-shipment-table .item-options:after {
+    clear: both
+}
+
+.admin__fieldset > .admin__field.admin__field-wide[class] > .admin__field-control, .address-item-edit-content .admin__field[class] > .admin__field-control, .page-layout-admin-login .admin__field[class] > .admin__field-control, .affected-attribute-set .admin__fieldset .admin__field[class] > .admin__field-control, .gift_options-popup .admin__field[class] > .admin__field-control, .admin__page-section .admin__field[class] > .admin__field-control {
+    float: none;
+    clear: left;
+    text-align: left;
+    width: auto
+}
+
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option) > .admin__field-label, .address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label, .page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label, .affected-attribute-set .admin__fieldset .admin__field[class]:not(.admin__field-option) > .admin__field-label, .gift_options-popup .admin__field[class]:not(.admin__field-option) > .admin__field-label, .admin__page-section .admin__field[class]:not(.admin__field-option) > .admin__field-label {
+    display: block;
+    line-height: 1.4rem;
+    margin-bottom: .86rem;
+    margin-top: -0.14rem;
+    text-align: left;
+    width: auto
+}
+
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option) > .admin__field-label:before, .address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label:before, .page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label:before, .affected-attribute-set .admin__fieldset .admin__field[class]:not(.admin__field-option) > .admin__field-label:before, .gift_options-popup .admin__field[class]:not(.admin__field-option) > .admin__field-label:before, .admin__page-section .admin__field[class]:not(.admin__field-option) > .admin__field-label:before {
+    display: none
+}
+
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option)._required > .admin__field-label span, .address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span, .page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span, .affected-attribute-set .admin__fieldset .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span, .gift_options-popup .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span, .admin__page-section .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span {
+    padding-left: 1.5rem
+}
+
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option)._required > .admin__field-label span:after, .address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after, .page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after, .affected-attribute-set .admin__fieldset .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after, .gift_options-popup .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after, .admin__page-section .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after {
+    left: 0;
+    margin-left: 30px;
+    top: .2rem
+}
+
+.admin__field-tooltip {
+    display: inline-block;
+    margin-top: 5px;
+    overflow: visible;
+    vertical-align: top;
+    width: 0
+}
+
+.admin__field-tooltip:hover {
+    position: relative;
+    z-index: 500
+}
+
+.admin__field-option .admin__field-tooltip {
+    margin-top: 10px
+}
+
+.admin__field-tooltip .admin__field-tooltip-action {
+    margin-left: 20px;
+    display: inline-block;
+    text-decoration: none
+}
+
+.admin__field-tooltip .admin__field-tooltip-action:before {
+    -webkit-font-smoothing: antialiased;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: #514943;
+    content: '\e633';
+    font-family: 'Admin Icons';
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center
+}
+
+.admin__field-tooltip .admin__control-text:focus + .admin__field-tooltip-content, .admin__field-tooltip:hover .admin__field-tooltip-content {
+    display: block
+}
+
+.admin__field-tooltip .admin__field-tooltip-content {
+    bottom: 42px;
+    display: none;
+    right: -70px
+}
+
+.admin__field-tooltip .admin__field-tooltip-content:after, .admin__field-tooltip .admin__field-tooltip-content:before {
+    border: 16px solid transparent;
+    height: 0;
+    width: 0;
+    border-top-color: #afadac;
+    content: "";
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 100%;
+    z-index: 3
+}
+
+.admin__field-tooltip .admin__field-tooltip-content:after {
+    border-top-color: #fffbbb;
+    margin-top: -1px;
+    z-index: 4
+}
+
+.abs-admin__field-tooltip-content, .admin__field-tooltip .admin__field-tooltip-content, .gift-options-tooltip {
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+    background: #fffbbb;
+    border-radius: 1px;
+    border: 1px solid #afadac;
+    padding: 15px 25px;
+    position: absolute;
+    width: 320px;
+    z-index: 1
+}
+
+.admin__fieldset {
+    border: 0;
+    margin: 0;
+    min-width: 0;
+    padding: 0
+}
+
+.admin__fieldset > .admin__field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    margin-left: -30px
+}
+
+.admin__fieldset > .admin__field:after {
+    clear: both;
+    content: '';
+    display: table
+}
+
+.admin__fieldset > .admin__field > .admin__field-control {
+    width: calc((100%) * .44444444 - 30px);
+    float: left;
+    margin-left: 30px
+}
+
+.admin__fieldset > .admin__field > .admin__field-label {
+    width: calc((100%) * .33333333 - 30px);
+    float: left;
+    margin-left: 30px
+}
+
+.admin__form-field {
+    border: 0;
+    margin: 0;
+    padding: 0
+}
+
+.admin__form-field-control .admin__control-text, .admin__field-control .admin__control-text, .admin__form-field-control .admin__control-textarea, .admin__field-control .admin__control-textarea {
+    width: 100%
+}
+
+.admin__field-label {
+    color: #303030;
+    margin: 0;
+    text-align: right
+}
+
+.admin__field-label + br {
+    display: none
+}
+
+.admin__field:not(.admin__field-option) > .admin__field-label {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 3.2rem;
+    padding: 0;
+    white-space: nowrap;
+    word-wrap: break-word
+}
+
+.admin__field:not(.admin__field-option) > .admin__field-label:before {
+    opacity: 0;
+    visibility: hidden;
+    content: '.';
+    margin-left: -7px;
+    overflow: hidden
+}
+
+.admin__field:not(.admin__field-option) > .admin__field-label span {
+    display: inline-block;
+    line-height: 1.2;
+    vertical-align: middle;
+    white-space: normal
+}
+
+._required > .admin__field-label span:after {
+    color: #eb5202;
+    content: '*';
+    display: inline-block;
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1;
+    margin-left: 10px;
+    position: absolute;
+    top: 1.2rem;
+    z-index: 1
+}
+
+._disabled > .admin__field-label {
+    color: #999
+}
+
+.admin__field {
+    margin-bottom: 0
+}
+
+.admin__field + .admin__field {
+    margin-top: 1.5rem
+}
+
+.admin__field:not(.admin__field-option) ~ .admin__field-option {
+    margin-top: .5rem
+}
+
+.admin__field.admin__field-option ~ .admin__field-option {
+    margin-top: .9rem
+}
+
+.admin__field ~ .admin__field-option:last-child {
+    margin-bottom: .8rem
+}
+
+.admin__fieldset > .admin__field {
+    margin-bottom: 3rem;
+    position: relative
+}
+
+.admin__field[data-config-scope]:before {
+    color: #808080;
+    content: attr(data-config-scope);
+    display: inline-block;
+    font-size: 1.2rem;
+    left: calc((100%) * .77777778 - 30px);
+    line-height: 3.2rem;
+    margin-left: 60px;
+    position: absolute;
+    width: calc((100%) * .22222222 - 30px)
+}
+
+.admin__field-control .admin__field[data-config-scope]:nth-child(n+2):before {
+    content: ''
+}
+
+.admin__field._error .admin__field-control [class*='admin__addon-']:before, .admin__field._error .admin__field-control > [class*='admin__control-'] {
+    border-color: #e22626
+}
+
+.admin__field-control + .admin__field-control {
+    margin-top: 1.5rem
+}
+
+.admin__field-error, label.mage-error {
+    background: #fffbbb;
+    border: 1px solid #ee7d7d;
+    box-sizing: border-box;
+    color: #555;
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: .2rem 0 0;
+    padding: .8rem 1rem .9rem
+}
+
+.admin__field-note {
+    color: #303030;
+    font-size: 1.2rem;
+    margin: 10px 0 0;
+    padding: 0
+}
+
+.admin__field-option {
+    padding-top: .8rem
+}
+
+.admin__field-option .admin__field-label {
+    text-align: left
+}
+
+.admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2), .admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) {
+    display: inline-block
+}
+
+.admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2) + .admin__field-option, .admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) + .admin__field-option {
+    display: inline-block;
+    margin-left: 41px;
+    margin-top: 0
+}
+
+.admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2) + .admin__field-option:before, .admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) + .admin__field-option:before {
+    background: #cacaca;
+    content: '';
+    display: inline-block;
+    height: 20px;
+    margin-left: -20px;
+    position: absolute;
+    width: 1px
+}
+
+.admin__field-value {
+    padding-top: .8rem
+}
+
+[class*='admin__control-grouped'] > .admin__field:first-child, .admin__control-fields > .admin__field:first-child {
+    position: static
+}
+
+[class*='admin__control-grouped'] > .admin__field:first-child > .admin__field-label, .admin__control-fields > .admin__field:first-child > .admin__field-label {
+    width: calc((100%) * .33333333 - 30px);
+    float: left;
+    margin-left: 30px;
+    cursor: pointer;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0
+}
+
+.admin__control-fields .admin__field-label ~ .admin__field-control {
+    width: 100%
+}
+
+[class*='admin__control-grouped'] {
+    box-sizing: border-box;
+    display: table;
+    table-layout: fixed;
+    width: 100%
+}
+
+[class*='admin__control-grouped'] > .admin__field {
+    display: table-cell;
+    vertical-align: top;
+    width: 50%
+}
+
+[class*='admin__control-grouped'] > .admin__field > .admin__field-control {
+    float: none;
+    width: 100%
+}
+
+[class*='admin__control-grouped'] > .admin__field:nth-child(n+2) {
+    padding-left: 20px
+}
+
+[class*='admin__control-grouped'] > .admin__field:nth-child(n+2):not(.admin__field-option) .admin__field-label {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+
+.admin__field-control-group {
+    margin-top: .8rem
+}
+
+.admin__field-control-group > .admin__field {
+    padding: 0
+}
+
+.admin__legend {
+    float: left;
+    position: static;
+    width: 100%
+}
+
+.admin__legend + br {
+    display: block;
+    height: 0;
+    overflow: hidden;
+    clear: left
+}
+
+.admin__fieldset-wrapper-title {
+    border-bottom: 1px solid #ccc;
+    font-size: 1.7rem;
+    margin-bottom: 30px;
+    padding: 14px 0 16px
+}
+
+.admin__fieldset-wrapper-title .title {
+    font-weight: 600
+}
+
+.admin__fieldset-wrapper-title .title.active ~ .actions {
+    display: none
+}
+
+.admin__fieldset-wrapper-title .actions {
+    display: block;
+    float: right
+}
+
+.admin__field.field-video_image .admin__field-control, .admin__field.field-video_small_image .admin__field-control, .admin__field.field-video_thumbnail .admin__field-control, .admin__field.field-video_swatch_image .admin__field-control, .admin__field.field-new_video_disabled .admin__field-control {
+    width: calc((100%) * .33333333 - 30px);
+    margin-left: 30px;
+    float: left;
+    margin-left: 80px;
+    position: relative
+}
+
+.admin__field.field-video_image .admin__field-control input, .admin__field.field-video_small_image .admin__field-control input, .admin__field.field-video_thumbnail .admin__field-control input, .admin__field.field-video_swatch_image .admin__field-control input, .admin__field.field-new_video_disabled .admin__field-control input {
+    float: right
+}
+
+.admin__field.field-video_image .admin__field-label, .admin__field.field-video_small_image .admin__field-label, .admin__field.field-video_thumbnail .admin__field-label, .admin__field.field-video_swatch_image .admin__field-label, .admin__field.field-new_video_disabled .admin__field-label {
+    left: 0;
+    margin-left: 35%;
+    padding-left: 45px;
+    position: absolute;
+    width: 250px
+}
+
+.admin__field.field-video_image .admin__field-label:before, .admin__field.field-video_small_image .admin__field-label:before, .admin__field.field-video_thumbnail .admin__field-label:before, .admin__field.field-video_swatch_image .admin__field-label:before, .admin__field.field-new_video_disabled .admin__field-label:before {
+    content: none
+}
+
+.admin__field.field-video_image .admin__field-label span, .admin__field.field-video_small_image .admin__field-label span, .admin__field.field-video_thumbnail .admin__field-label span, .admin__field.field-video_swatch_image .admin__field-label span, .admin__field.field-new_video_disabled .admin__field-label span {
+    float: left
+}
+
+.admin__field.field-new_video_disabled {
+    margin-top: 32px
+}
+
+.admin__field.field.field-new_video_screenshot {
+    margin-bottom: 5px
+}
+
+.admin__field.field.field-new_video_screenshot_preview {
+    margin-bottom: 50px
+}
+
+.admin__field.field-roleLabel {
+    height: 0
+}
+
+.admin__field.field-roleLabel .admin__field-control {
+    width: calc((100%) * .33333333 - 30px);
+    margin-left: 30px;
+    float: left;
+    margin-left: 80px;
+    position: relative
+}
+
+.admin__field.field-roleLabel .admin__field-control .control-value {
+    color: #000;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    float: right;
+    position: relative;
+    right: 50px;
+    top: 21px
+}
+
+.admin__scope-old .fieldset .admin__field.field-video_image, .admin__scope-old .fieldset .admin__field.field-video_small_image, .admin__scope-old .fieldset .admin__field.field-video_thumbnail, .admin__scope-old .fieldset .admin__field.field-video_swatch_image {
+    margin-bottom: 20px
+}
 

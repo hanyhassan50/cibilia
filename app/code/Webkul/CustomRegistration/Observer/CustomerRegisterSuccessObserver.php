@@ -1,10 +1,12 @@
 <?php
 /**
- * Webkul Marketplace CustomerRegisterSuccessObserver Observer.
+ * Webkul Software.
  *
- * @category    Webkul
- *
- * @author      Webkul Software
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
  */
 namespace Webkul\CustomRegistration\Observer;
 
@@ -13,6 +15,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
 
 class CustomerRegisterSuccessObserver implements ObserverInterface
 {
@@ -94,13 +97,28 @@ class CustomerRegisterSuccessObserver implements ObserverInterface
         $customData = $paramData->getPostValue();
 
         $savedCustomerData = $this->_customerRepository->getById($customerId);
+        if ($customer->getAddresses() !== null) {
+            if ($customer->getId()) {
+                $existingAddresses = $this->_customerRepository->getById($customer->getId())->getAddresses();
+                $getIdFunc = function ($address) {
+                    return $address->getId();
+                };
+                $existingAddressIds = array_map($getIdFunc, $existingAddresses);
+            } else {
+                $existingAddressIds = [];
+            }
+        }
         $customer = $this->_customerDataFactory->create();
         $customData = array_merge(
             $this->_customerMapper->toFlatArray($savedCustomerData),
             $customData
         );
         $customData['id'] = $customerId;
-        $customData['approval_status'] = 8;
+        if (count($existingAddressIds) && array_key_exists(0, $existingAddressIds)) {
+            $customData[CustomerInterface::DEFAULT_BILLING] = $existingAddressIds[0];
+            $customData[CustomerInterface::DEFAULT_SHIPPING] = $existingAddressIds[0];
+        }
+        
         $this->_dataObjectHelper->populateWithArray(
             $customer,
             $customData,

@@ -37,11 +37,6 @@ class NotifyLowstock extends AbstractModel
     protected $_vendorCollection;
 
     /**
-     * @var NotifylowstockCollection
-     */
-    protected $_notifylowstockCollection;
-
-    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -73,7 +68,6 @@ class NotifyLowstock extends AbstractModel
         \Unirgy\Dropship\Model\EmailTransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         Collection $vendorCollection,
-        NotifylowstockCollection $notifylowstockCollection,
         ScopeConfigInterface $scopeConfig,
         HelperData $helper,
         StoreManagerInterface $storeManager,
@@ -89,7 +83,6 @@ class NotifyLowstock extends AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         $this->_vendorCollection = $vendorCollection;
-        $this->_notifylowstockCollection = $notifylowstockCollection;
         $this->scopeConfig = $scopeConfig;
         $this->_hlp = $helper;
         $this->_storeManager = $storeManager;
@@ -110,7 +103,7 @@ class NotifyLowstock extends AbstractModel
         $vendors = $this->_vendorCollection->addFieldToFilter('notify_lowstock',1);
         $hasEmail = false;
         foreach ($vendors as $vendor) {
-            $lsCollection = $this->_notifylowstockCollection->initLowstockSelect($vendor);
+            $lsCollection = $this->_hlp->createObj('\Unirgy\Dropship\Model\ResourceModel\Vendor\NotifyLowstock\Collection')->initLowstockSelect($vendor);
             if ($lsCollection->count()>0) {
                 $vsAttr = $this->_hlp->getScopeConfig('udropship/vendor/vendor_sku_attribute');
                 if (!$this->_hlp->isUdmultiAvailable()) {

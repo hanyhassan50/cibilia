@@ -23,20 +23,18 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Authy;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\JsonFactory;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Api\TfaSessionInterface;
 use MSP\TwoFactorAuth\Api\TrustedManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 
-class Verifyonetouch extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Verifyonetouch extends AbstractAction
 {
-    /**
-     * @var Authy
-     */
-    private $authy;
-
     /**
      * @var Session
      */
@@ -63,45 +61,64 @@ class Verifyonetouch extends Action
     private $tfaSession;
 
     /**
-     * @var EventInterface
+     * @var AlertInterface
      */
-    private $event;
+    private $alert;
 
+    /**
+     * @var Authy\OneTouch
+     */
+    private $oneTouch;
+
+    /**
+     * Verifyonetouch constructor.
+     * @param Action\Context $context
+     * @param JsonFactory $jsonFactory
+     * @param TrustedManagerInterface $trustedManager
+     * @param TfaSessionInterface $tfaSession
+     * @param TfaInterface $tfa
+     * @param AlertInterface $alert
+     * @param Authy\OneTouch $oneTouch
+     * @param Session $session
+     */
     public function __construct(
         Action\Context $context,
         JsonFactory $jsonFactory,
         TrustedManagerInterface $trustedManager,
         TfaSessionInterface $tfaSession,
         TfaInterface $tfa,
-        EventInterface $event,
-        Authy $authy,
+        AlertInterface $alert,
+        Authy\OneTouch $oneTouch,
         Session $session
     ) {
         parent::__construct($context);
-        $this->authy = $authy;
         $this->session = $session;
         $this->jsonFactory = $jsonFactory;
         $this->tfa = $tfa;
         $this->trustedManager = $trustedManager;
         $this->tfaSession = $tfaSession;
-        $this->event = $event;
+        $this->alert = $alert;
+        $this->oneTouch = $oneTouch;
     }
 
     /**
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
         $result = $this->jsonFactory->create();
 
         try {
-            $res = $this->authy->verifyOneTouch($this->getUser());
+            $res = $this->oneTouch->verify($this->getUser());
             if ($res == 'approved') {
                 $this->trustedManager->handleTrustDeviceRequest(Authy::CODE, $this->getRequest());
                 $this->tfaSession->grantAccess();
@@ -110,23 +127,26 @@ class Verifyonetouch extends Action
                 $res = ['success' => false, 'status' => $res];
 
                 if ($res == 'denied') {
-                    $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                        'module' => 'MSP_TwoFactorAuth',
-                        'message' => 'Authy onetouch auth denied',
-                        'username' => $this->getUser()->getUserName(),
-                    ]);
+                    $this->alert->event(
+                        'MSP_TwoFactorAuth',
+                        'Authy onetouch auth denied',
+                        AlertInterface::LEVEL_WARNING,
+                        $this->getUser()->getUserName()
+                    );
                 }
             }
         } catch (\Exception $e) {
             $result->setHttpResponseCode(500);
             $res = ['success' => false, 'message' => $e->getMessage()];
 
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_TwoFactorAuth',
-                'message' => 'Authy onetouch error',
-                'username' => $this->getUser()->getUserName(),
-                'additional' => $e->getMessage(),
-            ]);
+            $this->alert->event(
+                'MSP_TwoFactorAuth',
+                'Authy onetouch error',
+                AlertInterface::LEVEL_ERROR,
+                $this->getUser()->getUserName(),
+                AlertInterface::ACTION_LOG,
+                $e->getMessage()
+            );
         }
 
         $result->setData($res);
@@ -134,14 +154,15 @@ class Verifyonetouch extends Action
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
+        $user = $this->getUser();
+
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            $this->tfa->getProvider(Authy::CODE)->getIsActive($this->getUser());
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            $this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

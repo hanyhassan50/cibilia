@@ -157,9 +157,10 @@ abstract class VendorAbstract extends Action
                 }
                 if (!preg_match('#^(login|logout|password)#i', $action)) {
                     $forward = $this->_resultForwardFactory->create();
-                    $forward->setModule('udropship');
+                    $forward->setModule($this->_hlp->getRouteFrontName('udropship'));
                     $forward->setController('vendor');
-                    return $forward->forward('login');
+                    //return $forward->forward('login');
+                    return $this->_forward('login','vendor','udropship');
                 }
             } else {
                 /*
@@ -177,6 +178,13 @@ abstract class VendorAbstract extends Action
     protected function _loginPostRedirect()
     {
         $this->_getSession()->loginPostRedirect($this);
+    }
+    protected function _forward($action, $controller = null, $module = null, array $params = null)
+    {
+        if (!is_null($module)) {
+            $module = $this->_hlp->getRouteFrontName($module);
+        }
+        return parent::_forward($action, $controller, $module, $params);
     }
 
 }

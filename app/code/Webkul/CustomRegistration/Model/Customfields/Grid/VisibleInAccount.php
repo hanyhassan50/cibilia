@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Model\Customfields\Grid;
 
 class VisibleInAccount implements \Magento\Framework\Option\ArrayInterface

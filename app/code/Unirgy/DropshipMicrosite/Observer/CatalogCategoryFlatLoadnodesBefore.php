@@ -9,7 +9,7 @@ class CatalogCategoryFlatLoadnodesBefore extends AbstractObserver implements Obs
 {
     public function execute(Observer $observer)
     {
-        if ($this->_hlp->useVendorCategoriesFilter()) {
+        if ($this->_msHlp->useVendorCategoriesFilter()) {
             $table = $this->_hlp->rHlp()->getTableName('catalog_category_entity');
             $table = 'main_table';
             if (($enableCatIds = $this->_hlp->getVendorEnableCategories())) {

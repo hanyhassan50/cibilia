@@ -53,6 +53,8 @@ class Fedex
      */
     protected $_src;
 
+    protected $_dirReader;
+
     public function __construct(ScopeConfigInterface $scopeConfig, 
         ErrorFactory $rateErrorFactory, 
         LoggerInterface $logger, 
@@ -70,13 +72,16 @@ class Fedex
         StockRegistryInterface $stockRegistry, 
         StoreManagerInterface $storeManager, 
         Reader $configReader, 
-        CollectionFactory $productCollectionFactory, 
-        array $data = [], 
-        DropshipHelperData $helperData = null, 
-        Source $modelSource = null)
+        CollectionFactory $productCollectionFactory,
+        DropshipHelperData $helperData,
+        Source $modelSource,
+        Reader $dirReader,
+        array $data = []
+        )
     {
         $this->_hlp = $helperData;
         $this->_src = $modelSource;
+        $this->_dirReader = $dirReader;
 
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $xmlSecurity, $xmlElFactory, $rateFactory, $rateMethodFactory, $trackFactory, $trackErrorFactory, $trackStatusFactory, $regionFactory, $countryFactory, $currencyFactory, $directoryData, $stockRegistry, $storeManager, $configReader, $productCollectionFactory, $data);
     }
@@ -245,7 +250,7 @@ class Fedex
                 'Contact' => array(
                     'PersonName' => $v->getVendorAttn(),
                     'CompanyName' => $v->getVendorName(),
-                    'PhoneNumber' => $v->getTelephone(),
+                    'PhoneNumber' => $v->getTelephone()?$v->getTelephone():'000-000-0000',
                 ),
                 'Address' => array(
                     'StreetLines' => array($v->getStreet(1), $v->getStreet(2)),
@@ -259,10 +264,10 @@ class Fedex
                 'Contact' => array(
                     'PersonName' => $a->getName(),
                     'CompanyName' => $a->getCompany(),
-                    'PhoneNumber' => $a->getTelephone(),
+                    'PhoneNumber' => $a->getTelephone()?$a->getTelephone():'000-000-0000',
                 ),
                 'Address' => array(
-                    'StreetLines' => array($a->getStreet(1), $a->getStreet(2)),
+                    'StreetLines' => array($a->getStreetLine(1), $a->getStreetLine(2)),
                     'City' => $a->getCity(),
                     'StateOrProvinceCode' => $a->getRegionCode(),
                     'PostalCode' => $a->getPostcode(),
@@ -724,13 +729,19 @@ class Fedex
         }
         return $result;
     }
-    public function getShipServiceVersion($element)
+    public function getShipServiceVersion($element,$testMode=false)
     {
         $v = $this->getVendor();
         $useV12 = $this->useV12();
         switch ($element) {
+            case 'url':
+                $result = $useV12 ? 'https://wsbeta.fedex.com:443/web-services/' : 'https://gatewaybeta.fedex.com:443/web-services/';
+                if (!$testMode) {
+                    $result = $useV12 ? 'https://ws.fedex.com:443/web-services/' : 'https://gateway.fedex.com:443/web-services/';
+                }
+                break;
             case 'filename':
-                $result = $useV12 ? 'Ship\Service\v12' : 'Ship\Service\v6';
+                $result = $useV12 ? 'ShipService_v12' : 'ShipService_v6';
                 break;
             case 'Intermediate':
                 $result = $useV12 ? '1' : '0';
@@ -797,7 +808,6 @@ class Fedex
         if ($v->getFedexTestMode()) {
             $wsdlOptions = array(
                 'trace' => !!$v->getFedexTestMode(),
-                'location' => "https://gatewaybeta.fedex.com/web-services/$service",
 
             );
         } else {
@@ -807,10 +817,17 @@ class Fedex
             );
         }
 
-        $wsdlFile = $this->_dirReader->getModuleDir('etc', 'Unirgy\Dropship').'/'.'fedex'
-            .'/'.($service=='track' ? 'Track\Service\v4' : $this->getShipServiceVersion('filename')).'.wsdl';
+        $wsdlFile = $this->_dirReader->getModuleDir('etc', 'Unirgy_Dropship').'/'.'fedex'
+            .'/'.($service=='track' ? 'TrackService_v4' : $this->getShipServiceVersion('filename')).'.wsdl';
 
-        $client = new SoapClient($wsdlFile, $wsdlOptions);
+        if ($service!='track') {
+            $wsdlOptions['location'] = $this->getShipServiceVersion("url",$v->getFedexTestMode());
+        }
+
+        $client = new \SoapClient($wsdlFile, $wsdlOptions);
+if ($v->getFedexTestMode()) {
+$client->__setLocation("https://gatewaybeta.fedex.com/web-services/$service");
+}
 
         return $client;
     }

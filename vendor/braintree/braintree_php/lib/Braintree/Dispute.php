@@ -1,10 +1,11 @@
 <?php
+namespace Braintree;
+
 /**
  * Creates an instance of Dispute as returned from a transaction
  *
  *
  * @package    Braintree
- * @copyright  2014 Braintree, a division of PayPal, Inc.
  *
  * @property-read string $amount
  * @property-read string $currencyIsoCode
@@ -14,11 +15,14 @@
  * @property-read string $disbursementDate
  * @property-read object $transactionDetails
  */
-final class Braintree_Dispute extends Braintree
+class Dispute extends Base
 {
-    protected $_attributes = array();
+    protected $_attributes = [];
 
     /* Dispute Status */
+    const ACCEPTED = 'accepted';
+    const DISPUTED = 'disputed';
+    const EXPIRED = 'expired';
     const OPEN  = 'open';
     const WON  = 'won';
     const LOST = 'lost';
@@ -39,14 +43,38 @@ final class Braintree_Dispute extends Braintree
     const TRANSACTION_AMOUNT_DIFFERS      = "transaction_amount_differs";
     const RETRIEVAL                       = "retrieval";
 
+    /* Dispute Kind */
+    const CHARGEBACK      = 'chargeback';
+    const PRE_ARBITRATION = 'pre_arbitration';
+    // RETRIEVAL for kind already defined under Dispute Reason
 
     protected function _initialize($disputeAttribs)
     {
         $this->_attributes = $disputeAttribs;
 
         if (isset($disputeAttribs['transaction'])) {
-            $this->_set('transactionDetails',
-                new Braintree_Dispute_TransactionDetails($disputeAttribs['transaction'])
+            $transactionDetails = new Dispute\TransactionDetails($disputeAttribs['transaction']);
+            $this->_set('transactionDetails', $transactionDetails);
+            $this->_set('transaction', $transactionDetails);
+        }
+
+        if (isset($disputeAttribs['evidence'])) {
+            $evidenceArray = array_map(function($evidence) {
+                return new Dispute\EvidenceDetails($evidence);
+            }, $disputeAttribs['evidence']);
+            $this->_set('evidence', $evidenceArray);
+        }
+
+        if (isset($disputeAttribs['statusHistory'])) {
+            $statusHistoryArray = array_map(function($statusHistory) {
+                return new Dispute\StatusHistoryDetails($statusHistory);
+            }, $disputeAttribs['statusHistory']);
+            $this->_set('statusHistory', $statusHistoryArray);
+        }
+
+        if (isset($disputeAttribs['transaction'])) {
+            $this->_set('transaction',
+                new Dispute\TransactionDetails($disputeAttribs['transaction'])
             );
         }
     }
@@ -60,16 +88,90 @@ final class Braintree_Dispute extends Braintree
 
     public function  __toString()
     {
-        $display = array(
+        $display = [
             'amount', 'reason', 'status',
             'replyByDate', 'receivedDate', 'currencyIsoCode'
-            );
+            ];
 
-        $displayAttributes = array();
+        $displayAttributes = [];
         foreach ($display AS $attrib) {
             $displayAttributes[$attrib] = $this->$attrib;
         }
         return __CLASS__ . '[' .
-                Braintree_Util::attributesToString($displayAttributes) .']';
+                Util::attributesToString($displayAttributes) .']';
+    }
+
+    /**
+     * Accepts a dispute, given a dispute ID
+     *
+     * @param string $id
+     */
+    public static function accept($id)
+    {
+        return Configuration::gateway()->dispute()->accept($id);
+    }
+
+    /**
+     * Adds file evidence to a dispute, given a dispute ID and a document ID
+     *
+     * @param string $disputeId
+     * @param string $documentId
+     */
+    public static function addFileEvidence($disputeId, $documentId)
+    {
+        return Configuration::gateway()->dispute()->addFileEvidence($disputeId, $documentId);
+    }
+
+    /**
+     * Adds text evidence to a dispute, given a dispute ID and content
+     *
+     * @param string $id
+     * @param string $content
+     */
+    public static function addTextEvidence($id, $content)
+    {
+        return Configuration::gateway()->dispute()->addTextEvidence($id, $content);
+    }
+
+    /**
+     * Finalize a dispute, given a dispute ID
+     *
+     * @param string $id
+     */
+    public static function finalize($id)
+    {
+        return Configuration::gateway()->dispute()->finalize($id);
+    }
+
+    /**
+     * Find a dispute, given a dispute ID
+     *
+     * @param string $id
+     */
+    public static function find($id)
+    {
+        return Configuration::gateway()->dispute()->find($id);
+    }
+
+    /**
+     * Remove evidence from a dispute, given a dispute ID and evidence ID
+     *
+     * @param string $disputeId
+     * @param string $evidenceId
+     */
+    public static function removeEvidence($disputeId, $evidenceId)
+    {
+        return Configuration::gateway()->dispute()->removeEvidence($disputeId, $evidenceId);
+    }
+
+    /**
+     * Search for Disputes, given a DisputeSearch query
+     *
+     * @param DisputeSearch $query
+     */
+    public static function search($query)
+    {
+        return Configuration::gateway()->dispute()->search($query);
     }
 }
+class_alias('Braintree\Dispute', 'Braintree_Dispute');

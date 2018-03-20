@@ -18,15 +18,23 @@ class SimpleRates extends Template
      */
     protected $_vendorSession;
 
+    protected $_hlp;
+
     /**
      * SimpleRates constructor.
      * @param Template\Context $context
      * @param Session $vendorSession
      * @param array $data
      */
-    public function __construct(Template\Context $context, Session $vendorSession, array $data)
+    public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
+        Template\Context $context,
+        Session $vendorSession,
+        array $data = []
+    )
     {
         parent::__construct($context, $data);
+        $this->_hlp = $udropshipHelper;
         $this->_vendorSession = $vendorSession;
     }
 
@@ -37,7 +45,7 @@ class SimpleRates extends Template
     {
         $value = $this->getVendor()->getTiershipSimpleRates();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -53,7 +61,7 @@ class SimpleRates extends Template
         $value = $this->_scopeConfig->getValue('carriers/udtiership/simple_rates',
                                                ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }

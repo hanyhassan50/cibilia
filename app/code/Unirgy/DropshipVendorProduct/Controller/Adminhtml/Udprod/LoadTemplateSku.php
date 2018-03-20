@@ -17,12 +17,16 @@ class LoadTemplateSku extends AbstractUdprod
 
     protected $_formFactory;
 
+    protected $_hlp;
+
     public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
         Context $context,
         ScopeConfigInterface $configScopeConfigInterface,
         \Magento\Framework\Data\FormFactory $formFactory
     )
     {
+        $this->_hlp = $udropshipHelper;
         $this->_scopeConfig = $configScopeConfigInterface;
         $this->_formFactory = $formFactory;
 
@@ -36,7 +40,7 @@ class LoadTemplateSku extends AbstractUdprod
         $tplSku = $this->_scopeConfig->getValue('udprod/template_sku/value', ScopeInterface::SCOPE_STORE);
         $tplSku = empty($tplSku) ? [] : $tplSku;
         if (!is_array($tplSku)) {
-            $tplSku = unserialize($tplSku);
+            $tplSku = $this->_hlp->unserialize($tplSku);
         }
         $tplSkuEl = $_form->addField('udprod_template_sku_value', 'select', [
             'name'=>'groups[template_sku][fields][value][value]',
@@ -46,5 +50,9 @@ class LoadTemplateSku extends AbstractUdprod
         $renderer = $this->_view->getLayout()->createBlock('\Unirgy\DropshipVendorProduct\Block\Adminhtml\SystemConfigField\TemplateSku');
         $renderer->setTypeOfProduct($typeOfProduct);
         return $this->_response->setBody($renderer->getElementHtml($tplSkuEl));
+    }
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Unirgy_DropshipVendorProduct::system_config');
     }
 }

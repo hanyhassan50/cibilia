@@ -3,16 +3,14 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="login_links">
-            <!--
             <block class="Magento\Framework\View\Element\Html\Link" name="umicrosite.register.link">
                 <arguments>
                     <argument name="label" xsi:type="string" translate="true">Register New Account</argument>
                     <argument name="path" xsi:type="string">umicrosite/vendor/register</argument>
                 </arguments>
-            </block> -->
+            </block>
         </referenceBlock>
         <referenceBlock name="login-wrapper">
-
             <block class="Magento\Framework\View\Element\Template"
                    template="Unirgy_DropshipMicrosite::unirgy/microsite/vendor/login/register.phtml" as="right"
                    name="udropship_login_right"/>

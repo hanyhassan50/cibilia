@@ -1,4 +1,13 @@
 <?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Model\ResourceModel;
  
 class Customfields extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -9,7 +18,7 @@ class Customfields extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
      */
-   public function __construct(
+    public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         $resourcePrefix = null
     ) {
@@ -25,5 +34,4 @@ class Customfields extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->_init('wk_customfields', 'entity_id');
     }
-  
 }

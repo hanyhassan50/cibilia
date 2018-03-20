@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Helper;
 
 use Magento\Framework\UrlInterface;
@@ -74,13 +82,21 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
     public function attributeCollectionFilter()
     {
         $typeId = $this->_eavEntity->setType('customer')->getTypeId();
-        $custom_field = $this->_objectManager->create('Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection')->getTable('wk_customfields');
+        $customField = $this->_objectManager->create(
+            'Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection'
+        )->getTable('wk_customfields');
         $collection = $this->_attributeCollection->create()
                 ->setEntityTypeFilter($typeId)
                 ->addFilter('is_user_defined', 1)
                 ->setOrder('sort_order', 'ASC');
+                
         $collection->getSelect()
-        ->join(array("ccp" => "wk_customfields"), "ccp.attribute_id = main_table.attribute_id", array("status" => "status"))->where("ccp.status = 1");
+        ->join(
+            ["ccp" => $customField],
+            "ccp.attribute_id = main_table.attribute_id",
+            ["status" => "status"]
+        )->where("ccp.status = 1");
+
         return $collection;
     }
     /**

@@ -13,19 +13,19 @@ class Index extends AbstractVendor
         switch ($this->getRequest()->getParam('submit_action')) {
         case 'labelBatch':
         case __('Create and Download Labels Batch'):
-            return $this->_resultForwardFactory->create()->forward('labelBatch');
+            return $this->_forward('labelBatch');
 
         case 'existingLabelBatch':
-            return $this->_resultForwardFactory->create()->forward('existingLabelBatch');
+            return $this->_forward('existingLabelBatch');
 
         case 'packingSlips':
         case __('Download Packing Slips'):
-            return $this->_resultForwardFactory->create()->forward('packingSlips');
+            return $this->_forward('packingSlips');
 
         case 'updateShipmentsStatus':
-            return $this->_resultForwardFactory->create()->forward('updateShipmentsStatus');
+            return $this->_forward('updateShipmentsStatus');
         case 'udbatchExport':
-            return $this->_resultForwardFactory->create()->setModule('udbatch')->setController('vendor_batch')->forward('exportShipments');
+            return $this->_forward('exportShipments', 'vendor_batch', 'udbatch');
         }
 
         return $this->_renderPage(null, 'dashboard');

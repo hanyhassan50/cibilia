@@ -10,4 +10,9 @@ class Po extends Shipment
     {
         $this->_init('Unirgy\Dropship\Model\ResourceModel\Po');
     }
+    public function unserializeFields()
+    {
+        $this->getResource()->unserializeFields($this);
+        return $this;
+    }
 }

@@ -19,4 +19,7 @@
     <event name="catalog_product_attribute_update_before">
         <observer name="udprod" instance="Unirgy\DropshipVendorProduct\Observer\CatalogProductAttributeUpdateBefore"/>
     </event>
+    <event name="catalog_product_save_after">
+        <observer name="googleoptimizer_observer" instance="Unirgy\DropshipVendorProduct\Observer\SaveGoogleExperimentScriptObserver" />
+    </event>
 </config>

@@ -105,13 +105,13 @@ class Source extends AbstractSource
         $collection->getSelect()
             ->joinLeft(
                 array($valueTable1 => $this->getAttribute()->getBackend()->getTable()),
-                "e.entity_id={$valueTable1}.entity_id"
+                "e.".$this->_hlp->rowIdField()."={$valueTable1}.".$this->_hlp->rowIdField()
                 . " AND {$valueTable1}.attribute_id='{$this->getAttribute()->getId()}'"
                 . " AND {$valueTable1}.store_id=0",
                 array())
             ->joinLeft(
                 array($valueTable2 => $this->getAttribute()->getBackend()->getTable()),
-                "e.entity_id={$valueTable2}.entity_id"
+                "e.".$this->_hlp->rowIdField()."={$valueTable2}.".$this->_hlp->rowIdField()
                 . " AND {$valueTable2}.attribute_id='{$this->getAttribute()->getId()}'"
                 . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
                 array()
@@ -139,20 +139,24 @@ class Source extends AbstractSource
         return $this;
     }
 
+    public function getFlatColumns()
+    {
+        return $this->getFlatColums();
+    }
     public function getFlatColums()
     {
         $columns = array();
         $attributeCode = $this->getAttribute()->getAttributeCode();
 
         $columns[$attributeCode] = array(
-            'type'      => 'int',
+            'type'      => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             'unsigned'  => false,
             'is_null'   => true,
             'default'   => null,
             'extra'     => null
         );
         $columns[$attributeCode . '_value'] = array(
-            'type'      => 'varchar(255)',
+            'type'      => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             'unsigned'  => false,
             'is_null'   => true,
             'default'   => null,
@@ -184,7 +188,7 @@ class Source extends AbstractSource
 
         return $indexes;
     }
-    
+
     public function getFlatUpdateSelect($store)
     {
         /* @var \Unirgy\Dropship\Model\ResourceModel\Helper $rHlp */
@@ -195,7 +199,7 @@ class Source extends AbstractSource
         $attributeTable = $attribute->getBackend()->getTable();
         $attributeCode  = $attribute->getAttributeCode();
 
-        $joinConditionTemplate = "%s.entity_id = %s.entity_id"
+        $joinConditionTemplate = "%s.".$this->_hlp->rowIdField()." = %s.".$this->_hlp->rowIdField()
             . " AND %s.attribute_id = " . $attribute->getId()
             . " AND %s.store_id = %d";
         $joinCondition = sprintf($joinConditionTemplate, 'e', 't1', 't1', 't1', 't1', 0);

@@ -123,11 +123,11 @@ class Data extends AbstractHelper
         $tiercomRates = $vendor->getData('tiercom_rates');
         if ($serialize) {
             if (is_array($tiercomRates)) {
-                $tiercomRates = serialize($tiercomRates);
+                $tiercomRates = $this->_hlp->serialize($tiercomRates);
             }
         } else {
             if (is_string($tiercomRates)) {
-                $tiercomRates = unserialize($tiercomRates);
+                $tiercomRates = $this->_hlp->unserialize($tiercomRates);
             }
             if (!is_array($tiercomRates)) {
                 $tiercomRates = [];
@@ -144,7 +144,7 @@ class Data extends AbstractHelper
     {
         $tiercomRates = $vendor->getData('tiercom_fixed_rates');
         if (is_string($tiercomRates)) {
-            $tiercomRates = unserialize($tiercomRates);
+            $tiercomRates = $this->_hlp->unserialize($tiercomRates);
         }
         if (!is_array($tiercomRates)) {
             $tiercomRates = [];
@@ -180,11 +180,11 @@ class Data extends AbstractHelper
         }
         if ($serialize) {
             if (is_array($tiercomRates)) {
-                $tiercomRates = serialize($tiercomRates);
+                $tiercomRates = $this->_hlp->serialize($tiercomRates);
             }
         } else {
             if (is_string($tiercomRates)) {
-                $tiercomRates = unserialize($tiercomRates);
+                $tiercomRates = $this->_hlp->unserialize($tiercomRates);
             }
             if (!is_array($tiercomRates)) {
                 $tiercomRates = [];
@@ -514,7 +514,7 @@ class Data extends AbstractHelper
         $vendor = $this->_hlp->getVendor($vendor);
         $value = $vendor->getTiercomRates();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -531,7 +531,7 @@ class Data extends AbstractHelper
         $vendor = $this->_hlp->getVendor($vendor);
         $value = $vendor->getTiercomFixedRates();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -600,7 +600,7 @@ class Data extends AbstractHelper
     {
         $value = $this->scopeConfig->getValue('udropship/tiercom/rates', ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }
@@ -622,7 +622,7 @@ class Data extends AbstractHelper
         $value = $this->scopeConfig->getValue('udropship/tiercom/fixed_rates',
                                                ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }

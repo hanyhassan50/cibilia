@@ -149,6 +149,8 @@ class Shipment extends PdfShipment
             $page = $pdf->newPage(\Zend_Pdf_Page::SIZE_A4);
             $pdf->pages[] = $page;
 
+            $this->y = null;
+
             $this->_currentShipment = $shipment;
 
             $order = $shipment->getOrder();
@@ -257,6 +259,7 @@ class Shipment extends PdfShipment
         $paymentHelper = $this->_hlp->getObj('\Magento\Payment\Helper\Data');
         $paymentInfo = $paymentHelper->getInfoBlock($order->getPayment())
             ->setIsSecureMode(true)
+            ->setArea(\Magento\Framework\App\Area::AREA_ADMINHTML)
             ->toPdf();
         $payment = explode('{{pdf_row_separator}}', $paymentInfo);
         foreach ($payment as $key=>$value){

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="StageBit_CustomCode::css/custom-udropship.css"/>
+    </head>
+
+    <update handle="default"/>
+
+    <body>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+        </referenceContainer>
+        <referenceContainer name="header.container">
+            <referenceContainer name="header.panel">
+                <block class="Unirgy\Dropship\Block\Vendor\HtmlHeader" name="catalog.topnav.new.link"
+                       as="catalog.topnav.new.link"
+                       template="Unirgy_Dropship::unirgy/dropship/vendor/headertop.phtml"/>
+            </referenceContainer>
+            <referenceContainer name="header-wrapper">
+                <referenceBlock name="top.links" remove="true"/>
+            </referenceContainer>
+        </referenceContainer>
+
+        <referenceBlock name="top.links" remove="true"/>
+
+        <referenceContainer name="page.top">
+            <referenceBlock name="catalog.topnav" remove="true"/>
+            <referenceBlock name="udropship.header" remove="true"/>
+            <block class="Unirgy\Dropship\Block\Vendor\HtmlHeader" name="catalog.topnav.new" as="catalog.topnav.new"
+                   template="StageBit_CustomCode::unirgy/dropship/vendor/header.phtml">
+            </block>
+
+        </referenceContainer>
+
+        <referenceContainer name="content">
+
+            <container name="udropship.col.main" htmlTag="div" htmlClass="col-main">
+                <container name="udropship.content" />
+            </container>
+
+        </referenceContainer>
+
+    </body>
+</page>

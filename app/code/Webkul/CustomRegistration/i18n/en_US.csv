@@ -1,0 +1,43 @@
+New Customer Attribute,New Customer Attribute
+"This attribute no longer exists.","This attribute no longer exists."
+"This attribute cannot be edited.","This attribute cannot be edited."
+"Manage Fields","Manage Fields"
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"Attribute name '%1' is invalid. Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.","Attribute name '%1' is invalid. Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter."
+"Attribute code '%1' is already exists.","Attribute code '%1' is already exists."
+"This attribute no longer exists.","This attribute no longer exists."
+"You saved the custom attribute.","You saved the custom attribute."
+"An attribute with this code already exists.","An attribute with this code already exists."
+"An attribute with the same code (%1) already exists.","An attribute with the same code (%1) already exists."
+"An dependable attribute with this code already exists.","An dependable attribute with this code already exists."
+"An dependable attribute with the same code (%1) already exists.","An dependable attribute with the same code (%1) already exists."
+"A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
+"Additional Information","Additional Information"
+"Customer additional information saved successfully.","Customer additional information saved successfully."
+Edit,Edit
+Disable,Disable
+Enable,Enable
+"Are you sure you wan't to disable?","Are you sure you wan't to disable?"
+"Are you sure you wan't to delete?","Are you sure you wan't to delete?"
+Manage Display Fields,Manage Display Fields
+Display In Order,Display In Order
+Hide From Order,Hide From Order
+Display In Email,Display In Email
+Hide From Email,Hide From Email
+Attribute Id,Attribute Id
+Attribute Code,Attribute Code
+Attribute Label,Attribute Label
+Show in Order,Show in Order
+Show in Email,Show in Email
+Status,Status
+Allowed Extension,Allowed Extension
+Dependable Allowed Extension,Dependable Allowed Extension
+"Manage Options (values of your attribute)","Manage Options (values of your attribute)"
+"Add Option","Add Option"
+Delete,Delete
+"* Required Fields","* Required Fields"
+"Additional Information","Additional Information"
+
+
+
+

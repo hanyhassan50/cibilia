@@ -24,9 +24,13 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Google;
 
-class Configure extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Configure extends AbstractAction
 {
     /**
      * @var TfaInterface
@@ -59,7 +63,7 @@ class Configure extends Action
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
@@ -79,7 +83,8 @@ class Configure extends Action
         $user = $this->getUser();
 
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Google::CODE) &&
-            !$this->tfa->getProvider(Google::CODE)->getIsActive($user);
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Google::CODE) &&
+            !$this->tfa->getProvider(Google::CODE)->isActive($user->getId());
     }
 }

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Data\CustomerSecure;
+use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer repository.
@@ -87,6 +85,16 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * @var NotificationStorage
+     */
+    private $notificationStorage;
+
+    /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\Data\CustomerSecureFactory $customerSecureFactory
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
@@ -100,6 +108,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param DataObjectHelper $dataObjectHelper
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param NotificationStorage $notificationStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,7 +125,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         DataObjectHelper $dataObjectHelper,
         ImageProcessorInterface $imageProcessor,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        CollectionProcessorInterface $collectionProcessor,
+        NotificationStorage $notificationStorage
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -130,6 +142,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->dataObjectHelper = $dataObjectHelper;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->collectionProcessor = $collectionProcessor;
+        $this->notificationStorage = $notificationStorage;
     }
 
     /**
@@ -139,12 +153,14 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
-        $this->validate($customer);
-
         $prevCustomerData = null;
+        $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
+            $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
+        /** @var $customer \Magento\Customer\Model\Data\Customer */
+        $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -156,7 +172,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         $customer->setAddresses($origAddresses);
@@ -173,17 +189,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
             );
         }
-        // Populate model with secure data
-        if ($customer->getId()) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerModel->setRpToken($customerSecure->getRpToken());
-            $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
-            $customerModel->setPasswordHash($customerSecure->getPasswordHash());
-        } else {
-            if ($passwordHash) {
-                $customerModel->setPasswordHash($passwordHash);
-            }
-        }
+        $this->populateCustomerWithSecureData($customerModel, $passwordHash);
 
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData
@@ -192,6 +198,20 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
+        if (!array_key_exists('default_billing', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_billing', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
+        }
+
+        if (!array_key_exists('default_shipping', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_shipping', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
+        }
+
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -222,13 +242,42 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $this->addressRepository->deleteById($addressId);
             }
         }
-
+        $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
-            ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $customer]
+            ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $prevCustomerData]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * Set secure data to customer model
+     *
+     * @param \Magento\Customer\Model\Customer $customerModel
+     * @param string|null $passwordHash
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return void
+     */
+    private function populateCustomerWithSecureData($customerModel, $passwordHash = null)
+    {
+        if ($customerModel->getId()) {
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customerModel->getId());
+
+            $customerModel->setRpToken($passwordHash ? null : $customerSecure->getRpToken());
+            $customerModel->setRpTokenCreatedAt($passwordHash ? null : $customerSecure->getRpTokenCreatedAt());
+            $customerModel->setPasswordHash($passwordHash ?: $customerSecure->getPasswordHash());
+
+            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
+            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
+            $customerModel->setLockExpires($customerSecure->getLockExpires());
+        } elseif ($passwordHash) {
+            $customerModel->setPasswordHash($passwordHash);
+        }
+
+        if ($passwordHash && $customerModel->getId()) {
+            $this->customerRegistry->remove($customerModel->getId());
+        }
     }
 
     /**
@@ -258,7 +307,10 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $searchResults->setSearchCriteria($searchCriteria);
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $collection = $this->customerFactory->create()->getCollection();
-        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\CustomerInterface');
+        $this->extensionAttributesJoinProcessor->process(
+            $collection,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         // This is needed to make sure all the attributes are properly loaded
         foreach ($this->customerMetadata->getAllAttributesMetadata() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());
@@ -272,23 +324,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             ->joinAttribute('billing_region', 'customer_address/region', 'default_billing', null, 'left')
             ->joinAttribute('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left')
             ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left');
-        //Add filters from root filter group to the collection
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
+
+        $this->collectionProcessor->process($searchCriteria, $collection);
+
         $searchResults->setTotalCount($collection->getSize());
-        $sortOrders = $searchCriteria->getSortOrders();
-        if ($sortOrders) {
-            /** @var SortOrder $sortOrder */
-            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
-                $collection->addOrder(
-                    $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
+
         $customers = [];
         /** @var \Magento\Customer\Model\Customer $customerModel */
         foreach ($collection as $customerModel) {
@@ -314,81 +354,15 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerModel = $this->customerRegistry->retrieve($customerId);
         $customerModel->delete();
         $this->customerRegistry->remove($customerId);
+        $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
+
         return true;
-    }
-
-    /**
-     * Validate customer attribute values.
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @throws InputException
-     * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    private function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
-    {
-        $exception = new InputException();
-        if (!\Zend_Validate::is(trim($customer->getFirstname()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']));
-        }
-
-        if (!\Zend_Validate::is(trim($customer->getLastname()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']));
-        }
-
-        $isEmailAddress = \Zend_Validate::is(
-            $customer->getEmail(),
-            'EmailAddress'
-        );
-
-        if (!$isEmailAddress) {
-            $exception->addError(
-                __(
-                    InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => 'email', 'value' => $customer->getEmail()]
-                )
-            );
-        }
-
-        $dob = $this->getAttributeMetadata('dob');
-        if ($dob !== null && $dob->isRequired() && '' == trim($customer->getDob())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']));
-        }
-
-        $taxvat = $this->getAttributeMetadata('taxvat');
-        if ($taxvat !== null && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']));
-        }
-
-        $gender = $this->getAttributeMetadata('gender');
-        if ($gender !== null && $gender->isRequired() && '' == trim($customer->getGender())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']));
-        }
-
-        if ($exception->wasErrorAdded()) {
-            throw $exception;
-        }
-    }
-
-    /**
-     * Get attribute metadata.
-     *
-     * @param string $attributeCode
-     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface|null
-     */
-    private function getAttributeMetadata($attributeCode)
-    {
-        try {
-            return $this->customerMetadata->getAttributeMetadata($attributeCode);
-        } catch (NoSuchEntityException $e) {
-            return null;
-        }
     }
 
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
      * @return void
@@ -399,13 +373,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
     ) {
         $fields = [];
-        $conditions = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
         }
         if ($fields) {
-            $collection->addFieldToFilter($fields, $conditions);
+            $collection->addFieldToFilter($fields);
         }
     }
 }

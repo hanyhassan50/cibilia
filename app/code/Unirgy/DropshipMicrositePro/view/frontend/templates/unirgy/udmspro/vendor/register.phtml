@@ -1,18 +1,15 @@
 <?php echo $this->getLayout()->getMessagesBlock()->toHtml();?>
 
 <?php
-$_hlp = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Helper\Data');
-$_sHlp = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\DropshipMicrositePro\Helper\Data');
-$_session = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
+$_objMng = \Magento\Framework\App\ObjectManager::getInstance();
+$_hlp = $_objMng->get('Unirgy\Dropship\Helper\Data');
+$_sHlp = $_objMng->get('Unirgy\DropshipMicrositePro\Helper\Data');
+$_session = $_objMng->get('Unirgy\Dropship\Model\Session');
+$dirHlp = $_objMng->get('Magento\Directory\Helper\Data');
+$hasBillingCountry = in_array('billing_country_id', array_keys($_sHlp->getRegFields()));
 ?>
-<div id="alertsuccessmsg"></div>
-<div id="alerterrormsg"></div>
-<div class="loading-mask" data-role="loader" style="display: none;">
-	<div class="loader">
-		<img alt="Loading..." src="http://tst.foodmakers.cibilia.com/pub/static/frontend/Magento/luma/en_GB/images/loader-2.gif">
-		<p>Please wait...</p>
-	</div>
-</div>
+
+
 <div class="page-title">
     <h2><?php echo __('Become a Vendor') ?></h2>
     <span class="required"><?php echo __('* Indicated Required Fields') ?></span>
@@ -26,14 +23,10 @@ $_session = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dro
 <ul class="form-list">
     <?php echo $this->getChildHtml('form.additional.info'); ?>
 </ul>
-<div class="step1">
-    <button class="form-button" type="button" name="save" id="save"><span><?php echo __('Save') ?></span></button>
-    <button class="form-button" type="button" name="cancel"><a href="<?php echo $this->getUrl('udropship/vendor')?>"><span><?php echo __('Cancel') ?></span></a></button>
-    <input type="hidden" value="" name="is_ajax" id="is_ajax" />
-</div>
 
 <div class="buttons-set">
-    <button class="form-button" type="button" name="send" id="register"><?php echo __('Register') ?></button>
+    <span class="product-edit-form-loader" style="display:none" id="registration-form-loader"><?php echo __('Please wait, submitting...')?></span>
+    <button class="form-button" type="button" onclick="udRegFormSubmit(this)" name="send"><span><?php echo __('Register') ?></span></button>
     <div class="clearer"></div>
     <ul class="links">
     	<li><a href="<?php echo $this->getUrl('udropship/vendor')?>">&laquo; <?php echo __('Return to log in')?></a></li>
@@ -43,90 +36,7 @@ $_session = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dro
 
 <script type="text/javascript">
 require(["jquery", "prototype", "varien/form"], function(jQuery) {
-	
-	jQuery(document).ready(function($){
-		$('#udmember_membership_3').attr('checked',true);
-		$(".buttons-set").hide();
-	
-		$('#save').on('click', function() {			
-			$("#is_ajax").val("1");
-			$("#umicrosite-registration-form").valid();
-			if($("#umicrosite-registration-form").valid()){
-				var employee = $("#company_employee").val();
-				var type = $("#company_type").val();
-				if((employee == "more_than_50" && type =="yes") || (employee == "more_than_50" || type =="yes")){
-					new Ajax.Request('<?php echo $this->getUrl('umicrosite/vendor/registerPost')?>', {
-						asynchronous: true,
-						method: 'post',
-						parameters: $('#umicrosite-registration-form').serialize(),
-						onFailure: function(transport){
-							alert('Error during form submission');
-						},
-						onSuccess: function (transport) {
-							var responseText = transport.responseText;
-							if(responseText == "success"){
-								$("#alertsuccessmsg").html("Sorry, we regret to inform you that we are looking for small companies with no more than 50 employees. Thank you for your interest in cibilia.com.").css("color","red");
-								setTimeout(function(){
-									$("#alertsuccessmsg").html('');
-								}, 6000);
-								$('#vendor_name').val("");
-								$('#owner_name').val("");
-								$('#your_role').val("owner");
-								$('#company_address').val("");
-								$('#email').val("");
-								$('#company_employee').val(1);
-								$('#company_type').val("yes");
-							} else if(responseText == "error"){
-								$("#alerterrormsg").html("Error occured while saving your details, please try again.").css("color","red");
-								setTimeout(function(){
-									$("#alerterrormsg").html('');
-								}, 6000);
-							}
-						}
-					});
-				}else{
-					$(".loading-mask").css("display","block");
-					setTimeout(function(){		
-						$("#step1").hide();
-						$(".step1").hide();
-					}, 6000);
-					
-					setTimeout(function(){
-						$("#step2").show();
-						$(".buttons-set").show();
-						$(".loading-mask").css("display","none");
-					}, 6000);
-				}
-			}
-		});
-		
-		$("#register").click(function(){
-			$("#is_ajax").val("0");
-			$("select[name='product_sell_place[]'] option:selected").each(function(){
-				console.log($(this).val());
-				if($(this).val() == "other"){
-					$("#product_sell_place_other").prop('required',true);
-				}
-			});
-			$("select[name='product_categories[]']").prop('required',true);
-			$("select[name='product_sell_place[]']").prop('required',true);
-				
-			$("#logo").prop('required',true);
-			$("#vat_number").prop('required',true);
-			$("#foundation_year").prop('required',true);
-			$("#telephone").prop('required',true);
-			$("#umicrosite-registration-form").valid();
-			
-			if($("#umicrosite-registration-form").valid()){
-				$(".loading-mask").css("display","block");
-				setTimeout(function(){
-					udRegForm.submit();
-					$(".loading-mask").css("display","none");
-				}, 6000);
-			}
-		});
-	});
-	
+
     var udNumberValidate = function (cmp, v, elm) {
         var checkVal, val = parseNumber(v);
         var checkElId = elm.id+'-'+cmp;
@@ -304,14 +214,29 @@ require(["jquery", "prototype", "varien/form"], function(jQuery) {
                     options.push(__el);
                 }
             });
-            console.log(options)
             return options.any(function(elm) {
                 return $F(elm);
             });
         }]
     ]);
     window['udRegForm'] = new VarienForm('umicrosite-registration-form', true);
-    new RegionUpdater('country_id', 'region', 'region_id', <?php echo \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Directory\Helper\Data')->getRegionJson() ?>);
+    window['udRegFormSubmit'] = function (elem) {
+        $(elem).up().select('button').invoke('hide');
+        $('registration-form-loader').show();
+        var res = false;
+        if (window['udRegForm'].validator && window['udRegForm'].validator.validate()) {
+            res = true;
+            window['udRegForm'].form.submit();
+        } else {
+            $(elem).up().select('button').invoke('show');
+            $('registration-form-loader').hide();
+        }
+        return res;
+    };
+    new RegionUpdater('country_id', 'region', 'region_id', <?php echo $dirHlp->getRegionJson() ?>);
+    <?php if ($hasBillingCountry): ?>
+    new RegionUpdater('billing_country_id', 'billing_region', 'billing_region_id', <?php echo $dirHlp->getRegionJson() ?>);
+<?php endif ?>
 
     Event.observe(window, 'load', function(e){
         var payout_selector = $('payout_method');

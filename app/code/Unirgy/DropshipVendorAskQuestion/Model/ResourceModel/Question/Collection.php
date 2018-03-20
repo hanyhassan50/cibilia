@@ -66,6 +66,7 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init('Unirgy\DropshipVendorAskQuestion\Model\Question', 'Unirgy\DropshipVendorAskQuestion\Model\ResourceModel\Question');
+        $this->_map['fields']['answer_text_length'] = new \Zend_Db_Expr('LENGTH(answer_text)');
     }
 
     public function setDateOrder($dir='DESC')

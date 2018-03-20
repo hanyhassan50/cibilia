@@ -10,11 +10,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Composer\Repository\Pear;
+namespace Composer\Test\Repository\Pear;
 
+use Composer\Repository\Pear\ChannelInfo;
+use Composer\Repository\Pear\DependencyConstraint;
+use Composer\Repository\Pear\DependencyInfo;
+use Composer\Repository\Pear\PackageInfo;
+use Composer\Repository\Pear\ReleaseInfo;
 use Composer\TestCase;
-use Composer\Package\Version\VersionParser;
-use Composer\Package\LinkConstraint\VersionConstraint;
+use Composer\Semver\VersionParser;
+use Composer\Semver\Constraint\Constraint;
 use Composer\Package\Link;
 use Composer\Package\CompletePackage;
 use Composer\Test\Mock\RemoteFilesystemMock;
@@ -106,18 +111,18 @@ class ChannelReaderTest extends TestCase
                                             'ext',
                                             'xml'
                                         ),
-                                    )
+                                    ),
                                 )
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             )
         );
 
         $packages = $ref->invoke($reader, $channelInfo, new VersionParser());
 
-        $expectedPackage = new CompletePackage('pear-test.loc/sample', '1.0.0.1' , '1.0.0.1');
+        $expectedPackage = new CompletePackage('pear-test.loc/sample', '1.0.0.1', '1.0.0.1');
         $expectedPackage->setType('pear-library');
         $expectedPackage->setDistType('file');
         $expectedPackage->setDescription('description');
@@ -135,7 +140,7 @@ class ChannelReaderTest extends TestCase
             '*-ext-xml' => '*',
         ));
         $expectedPackage->setReplaces(array(
-            new Link('pear-test.loc/sample', 'pear-test/sample', new VersionConstraint('==', '1.0.0.1'), 'replaces', '== 1.0.0.1'),
+            new Link('pear-test.loc/sample', 'pear-test/sample', new Constraint('==', '1.0.0.1'), 'replaces', '== 1.0.0.1'),
         ));
 
         $this->assertCount(1, $packages);
@@ -144,7 +149,7 @@ class ChannelReaderTest extends TestCase
 
     private function createConstraint($operator, $version)
     {
-        $constraint = new VersionConstraint($operator, $version);
+        $constraint = new Constraint($operator, $version);
         $constraint->setPrettyString($operator.' '.$version);
 
         return $constraint;

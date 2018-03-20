@@ -45,7 +45,10 @@ class Store extends ModelStore
             $cacheKey .= 'false';
         } else {
             $__uvu = $this->useVendorUrl();
-            $cacheKey .= ($__uvu === null ? 'null' : ($__uvu ? 'true' : 'false'));
+            if ($__uvu instanceof \Unirgy\Dropship\Model\Vendor) {
+                $__uvu = $__uvu->getId();
+            }
+            $cacheKey .= ($__uvu === null ? 'null' : $__uvu);
         }
         if (!isset($this->_baseUrlCache[$cacheKey])) {
             $secure = $secure === null ? $this->isCurrentlySecure() : (bool)$secure;
@@ -104,9 +107,9 @@ class Store extends ModelStore
 
         return $this->_baseUrlCache[$cacheKey];
     }
-    protected function _updatePathUseStoreView($url)
+    protected function _updateUrlUseVendor($url)
     {
-        $baseCheck = !$this->_curMySecure;
+        $baseCheck = !$this->_curMySecure || $this->_udSkipBaseCheck;
         if ($baseCheck && $this->useVendorUrl() !== false || $this->useVendorUrl()===true) {
             $msHlp = ObjectManager::getInstance()->get('\Unirgy\DropshipMicrosite\Helper\Data');
             if ($this->useVendorUrl() === true
@@ -121,15 +124,47 @@ class Store extends ModelStore
                 && $vendor->getId()
             ) {
                 if (1 == $msHlp->getCurSubdomainLevel($vendor)) {
-                    $url .= $vendor->getUrlKey().'/';
+                    return $this->_updatePathUseVendorKey($url, $vendor);
                 } elseif (!$msHlp->getUpdateStoreBaseUrl($vendor)
                     || !$msHlp->getCurrentVendor()
                     || !$msHlp->getCurrentVendor()->getId()==$vendor->getId()
                 ) {
                     $url = $msHlp->getVendorBaseUrl($vendor);
+                    return parent::_updatePathUseStoreView($url);
                 }
             }
         }
-        return parent::_updatePathUseStoreView($url);
+        return $url;
+    }
+    protected function _updatePathUseStoreView($url)
+    {
+        return $this->_updateUrlUseVendor($url);
+    }
+    protected function _updatePathUseVendorKey($url, $vendor)
+    {
+        $storeBeforeVendor = $this->_config->isSetFlag('udropship/microsite/url_store_before_vendor', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->getId());
+        if ($storeBeforeVendor) {
+            $url = parent::_updatePathUseStoreView($url);
+            $url .= $vendor->getUrlKey().'/';
+        } else {
+            $url .= $vendor->getUrlKey().'/';
+            $url = parent::_updatePathUseStoreView($url);
+        }
+        return $url;
+    }
+    public function getCurrentUrl($fromStore = true)
+    {
+        $this->udSkipBaseCheck(true);
+        $this->useVendorUrl(true);
+        $url = parent::getCurrentUrl($fromStore);
+        $this->resetUseVendorUrl();
+        $this->udSkipBaseCheck(false);
+        return $url;
+    }
+    protected $_udSkipBaseCheck=false;
+    public function udSkipBaseCheck($flag)
+    {
+        $this->_udSkipBaseCheck = $flag;
+        return $this;
     }
 }

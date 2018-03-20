@@ -16,7 +16,7 @@ specific logic.
 
 ## Creating a Plugin
 
-A plugin is a regular composer package which ships its code as part of the
+A plugin is a regular Composer package which ships its code as part of the
 package and may also depend on further packages.
 
 ### Plugin Package
@@ -24,23 +24,30 @@ package and may also depend on further packages.
 The package file is the same as any other package file but with the following
 requirements:
 
-1. the [type][1] attribute must be `composer-plugin`.
-2. the [extra][2] attribute must contain an element `class` defining the
+1. The [type][1] attribute must be `composer-plugin`.
+2. The [extra][2] attribute must contain an element `class` defining the
    class name of the plugin (including namespace). If a package contains
-   multiple plugins this can be array of class names.
+   multiple plugins, this can be array of class names.
+3. You must require the special package called `composer-plugin-api`
+   to define which Plugin API versions your plugin is compatible with.
 
-Additionally you must require the special package called `composer-plugin-api`
-to define which composer API versions your plugin is compatible with. The
-current composer plugin API version is 1.0.0.
+The required version of the `composer-plugin-api` follows the same [rules][7]
+as a normal package's.
 
-For example
+The current composer plugin API version is 1.1.0.
+
+An example of a valid plugin `composer.json` file (with the autoloading
+part omitted):
 
 ```json
 {
     "name": "my/plugin-package",
     "type": "composer-plugin",
     "require": {
-        "composer-plugin-api": "1.0.0"
+        "composer-plugin-api": "^1.1"
+    },
+    "extra": {
+        "class": "My\\Plugin"
     }
 }
 ```
@@ -82,9 +89,54 @@ Furthermore plugins may implement the
 event handlers automatically registered with the `EventDispatcher` when the
 plugin is loaded.
 
-Plugin can subscribe to any of the available [script events](scripts.md#event-names).
+To register a method to an event, implement the method `getSubscribedEvents()`
+and have it return an array. The array key must be the
+[event name](https://getcomposer.org/doc/articles/scripts.md#event-names)
+and the value is the name of the method in this class to be called.
 
-Example:
+```php
+public static function getSubscribedEvents()
+{
+    return array(
+        'post-autoload-dump' => 'methodToBeCalled',
+        // ^ event name ^         ^ method name ^
+    );
+}
+```
+
+By default, the priority of an event handler is set to 0. The priority can be
+changed by attaching a tuple where the first value is the method name, as
+before, and the second value is an integer representing the priority.
+Higher integers represent higher priorities. Priority 2 is called before
+priority 1, etc.
+
+```php
+public static function getSubscribedEvents()
+{
+    return array(
+        // Will be called before events with priority 0
+        'post-autoload-dump' => array('methodToBeCalled', 1)
+    );
+}
+```
+
+If multiple methods should be called, then an array of tuples can be attached
+to each event. The tuples do not need to include the priority. If it is
+omitted, it will default to 0.
+
+```php
+public static function getSubscribedEvents()
+{
+    return array(
+        'post-autoload-dump' => array(
+            array('methodToBeCalled'      ), // Priority defaults to 0
+            array('someOtherMethodName', 1), // This fires first
+        )
+    );
+}
+```
+
+Here's a complete example:
 
 ```php
 <?php
@@ -131,6 +183,84 @@ class AwsPlugin implements PluginInterface, EventSubscriberInterface
 }
 ```
 
+## Plugin capabilities
+
+Composer defines a standard set of capabilities which may be implemented by plugins.
+Their goal is to make the plugin ecosystem more stable as it reduces the need to mess
+with [`Composer\Composer`][4]'s internal state, by providing explicit extension points
+for common plugin requirements.
+
+Capable Plugins classes must implement the [`Composer\Plugin\Capable`][8] interface
+and declare their capabilities in the `getCapabilities()` method. 
+This method must return an array, with the _key_ as a Composer Capability class name, 
+and the _value_ as the Plugin's own implementation class name of said Capability:
+
+```php
+<?php
+
+namespace My\Composer;
+
+use Composer\Composer;
+use Composer\IO\IOInterface;
+use Composer\Plugin\PluginInterface;
+use Composer\Plugin\Capable;
+
+class Plugin implements PluginInterface, Capable
+{
+    public function activate(Composer $composer, IOInterface $io)
+    {
+    }
+
+    public function getCapabilities()
+    {
+        return array(
+            'Composer\Plugin\Capability\CommandProvider' => 'My\Composer\CommandProvider',
+        );
+    }
+}
+```
+
+### Command provider
+
+The [`Composer\Plugin\Capability\CommandProvider`][9] capability allows to register
+additional commands for Composer :
+
+```php
+<?php
+
+namespace My\Composer;
+
+use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Composer\Command\BaseCommand;
+
+class CommandProvider implements CommandProviderCapability
+{
+    public function getCommands()
+    {
+        return array(new Command);
+    }
+}
+
+class Command extends BaseCommand
+{
+    protected function configure()
+    {
+        $this->setName('custom-plugin-command');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln('Executing');
+    }
+}
+```
+
+Now the `custom-plugin-command` is available alongside Composer commands.
+
+> _Composer commands are based on the [Symfony Console Component][10]._
+
 ## Using Plugins
 
 Plugin packages are automatically loaded as soon as they are installed and will
@@ -149,3 +279,7 @@ local project plugins are loaded.
 [4]: https://github.com/composer/composer/blob/master/src/Composer/Composer.php
 [5]: https://github.com/composer/composer/blob/master/src/Composer/IO/IOInterface.php
 [6]: https://github.com/composer/composer/blob/master/src/Composer/EventDispatcher/EventSubscriberInterface.php
+[7]: ../01-basic-usage.md#package-versions
+[8]: https://github.com/composer/composer/blob/master/src/Composer/Plugin/Capable.php
+[9]: https://github.com/composer/composer/blob/master/src/Composer/Plugin/Capability/CommandProvider.php
+[10]: http://symfony.com/doc/current/components/console/introduction.html

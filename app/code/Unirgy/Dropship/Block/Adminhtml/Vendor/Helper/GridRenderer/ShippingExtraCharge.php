@@ -13,20 +13,15 @@ class ShippingExtraCharge extends AbstractRenderer
     /**
      * @var HelperData
      */
-    protected $_helperData;
+    protected $_hlp;
 
-    /**
-     * @var Source
-     */
-    protected $_modelSource;
-
-    public function __construct(Context $context, 
-        array $data = [], 
-        HelperData $helperData = null, 
-        Source $modelSource = null)
+    public function __construct(
+        HelperData $udropshipHelper,
+        Context $context,
+        array $data = []
+    )
     {
-        $this->_helperData = $helperData;
-        $this->_modelSource = $modelSource;
+        $this->_hlp = $udropshipHelper;
 
         parent::__construct($context, $data);
     }
@@ -34,7 +29,7 @@ class ShippingExtraCharge extends AbstractRenderer
     public function render(DataObject $row)
     {
         $html = '';
-        $hlp = $this->_helperData;
+        $hlp = $this->_hlp;
         $v = $this->getColumn()->getVendor();
         $fieldIdTpl = $this->getColumn()->getData('field_id_tpl');
         $fields = array(
@@ -70,7 +65,7 @@ class ShippingExtraCharge extends AbstractRenderer
             if (!empty($fieldHtml['select'])) {
                 $options = array();
                 if (!empty($fieldHtml['options_path'])) {
-                    $options = $this->_modelSource->setPath($fieldHtml['options_path'])->toOptionHash();
+                    $options = $this->_hlp->src()->setPath($fieldHtml['options_path'])->toOptionHash();
                 }
                 $fieldHtml['html'] .= "{$fieldHtml['html_label']}  <select id='{$htmlId}{$fieldHtml['id']}' name='{$fieldHtml['id']}' {$fieldHtml['disabled_html']}>";
                 foreach ($options as $value => $label) {

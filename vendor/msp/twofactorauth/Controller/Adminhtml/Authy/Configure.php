@@ -22,12 +22,15 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Authy;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\PageFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
 
-class Configure extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Configure extends AbstractAction
 {
     /**
      * @var PageFactory
@@ -44,6 +47,13 @@ class Configure extends Action
      */
     private $tfa;
 
+    /**
+     * Configure constructor.
+     * @param Action\Context $context
+     * @param Session $session
+     * @param TfaInterface $tfa
+     * @param PageFactory $pageFactory
+     */
     public function __construct(
         Action\Context $context,
         Session $session,
@@ -60,16 +70,13 @@ class Configure extends Action
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
     /**
-     * Dispatch request
-     *
-     * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @inheritdoc
      */
     public function execute()
     {
@@ -77,16 +84,15 @@ class Configure extends Action
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
         $user = $this->getUser();
 
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            !$this->tfa->getProvider(Authy::CODE)->getIsActive($user);
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            !$this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

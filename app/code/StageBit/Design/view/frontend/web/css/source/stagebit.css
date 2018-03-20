@@ -1,0 +1,80 @@
+.multiselect-native-select .btn-group{ display: inline-block !important; margin-bottom: 8px;position: relative;vertical-align: middle; }
+.cibilians-advertisers-edit .page-header{margin: 0;}
+.cibilians-advertisers-edit .page-header .panel.header{background-color: transparent; margin-bottom: 0px;}
+.umicrosite-vendor-register .page-header{margin: 0;}
+.umicrosite-vendor-register .page-header .panel.header{background-color: transparent; margin-bottom: 0px;}
+.btn-group.open .multiselect-container.dropdown-menu{display: block;}
+.buttons-set button.form-button {background: #333 !important;color: #fff !important; margin-right: 5px}
+.buttons-set button.form-button a{color: #fff;}
+.buttons-set button.form-button a:hover{color: #fff;text-decoration: none;}
+legend{width: auto;}
+.buttons-set button.form-button:hover{background: #559c69 !important;}
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.dropdown-toggle::after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+.multiselect-container {
+    position: absolute;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 280px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    background-clip: padding-box;
+}
+.multiselect-container>li>a>label {padding: 3px 20px 3px 16px;}
+.message-error.error.message{display: none}
+.idproofs-index-vendor .form-address-edit .field .multiselect-native-select li input {
+    margin-left: -5px;
+    width: 13%;
+}

@@ -105,12 +105,15 @@ class Carrier
     {
         $qty = $item->getTotalQty();
         $address = $this->_iHlp->getAddress($item);
-        if ($item->getFreeShipping() === true
-            || $address instanceof DataObject && $address->getFreeShipping() === true
-        ) {
-            $qty = 0;
-        } elseif ($item->getFreeShipping()) {
-            $qty = max(0,$qty-$item->getFreeShipping());
+        $freeMethods = explode(',', $this->getConfigData('free_method'));
+        if (in_array($this->_currentDeliveryType, $freeMethods)) {
+            if ($item->getFreeShipping() === true
+                || $address instanceof DataObject && $address->getFreeShipping() === true
+            ) {
+                $qty = 0;
+            } elseif ($item->getFreeShipping()) {
+                $qty = max(0, $qty - $item->getFreeShipping());
+            }
         }
         return $qty;
     }
@@ -127,6 +130,7 @@ class Carrier
 
     protected $_quote;
     protected $_address;
+    protected $_currentDeliveryType;
     public function collectRates(RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
@@ -138,6 +142,7 @@ class Carrier
         $result = $this->_rateResultFactory->create();
         $deliveryTypes = $this->_deliveryTypeCollection->setDeliverySort()->toOptionHash();
         foreach ($deliveryTypes as $deliveryType=>$deliveryTypeLabel) {
+            $this->_currentDeliveryType = $deliveryType;
             if ($this->_tsHlp->isV2SimpleRates()) {
                 $method = $this->_getSimpleRate($request, $deliveryType);
             } elseif ($this->_tsHlp->isV2SimpleConditionalRates()) {
@@ -148,6 +153,7 @@ class Carrier
             if ($method) {
                 $result->append($method);
             }
+            $this->_currentDeliveryType = null;
         }
         $this->_quote = null;
         $this->_address = null;
@@ -219,7 +225,7 @@ class Carrier
         $costUsed = false;
         $costUsedByPid = [];
         foreach ($request->getAllItems() as $item) {
-            if ($item->getParentItem()) continue;
+            if ($this->_isSkipItemFromRequest($item)) continue;
             $product = $item->getProduct();
             $pId = $product->getId();
             $_qty = $this->getItemCalculationQty($item);
@@ -324,7 +330,7 @@ class Carrier
         $costUsed = false;
         $costUsedByPid = [];
         foreach ($request->getAllItems() as $item) {
-            if ($item->getParentItem()) continue;
+            if ($this->_isSkipItemFromRequest($item)) continue;
             $product = $item->getProduct();
             $pId = $product->getId();
             $_qtyTotal = $item->getTotalQty();
@@ -506,7 +512,7 @@ class Carrier
         $topCats = $tsHlp->getTopCategories();
         $catIdsToLoad = $catIds = [];
         foreach ($request->getAllItems() as $item) {
-            if ($item->getParentItem()) continue;
+            if ($this->_isSkipItemFromRequest($item)) continue;
             $product = $item->getProduct();
             $_catIds = $product->getCategoryIds();
             if (empty($_catIds)) continue;
@@ -519,7 +525,7 @@ class Carrier
         $subcatMatchFlag = $this->_scopeConfig->isSetFlag('carriers/udtiership/match_subcategories', ScopeInterface::SCOPE_STORE);
         $ratesToUse = $ratesByHandling = $ratesByCost = [];
         foreach ($request->getAllItems() as $item) {
-            if ($item->getParentItem()) continue;
+            if ($this->_isSkipItemFromRequest($item)) continue;
             $product = $item->getProduct();
             $pId = $product->getId();
             $rateReq->setProduct($product);
@@ -685,6 +691,13 @@ class Carrier
         $result->append($method);
 
         return $result;
+    }
+
+    protected function _isSkipItemFromRequest($item)
+    {
+        return $item->getParentItem() && !$item->isShipSeparately()
+        || $item->getHasChildren() && $item->isShipSeparately()
+        || $item->getProduct()->getTypeInstance()->isVirtual($item->getProduct());
     }
 
     /**

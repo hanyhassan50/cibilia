@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\App\Action\Action;
@@ -12,7 +12,7 @@ $_vLogoHeight = 135;
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
 <?php if (!$_vendorCollection->count()): ?>
-    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></div></div>
+    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('We can\'t find vendors matching the selection.') ?></div></div>
 <?php else: ?>
     <?php echo $block->getToolbarHtml() ?>
     <?php

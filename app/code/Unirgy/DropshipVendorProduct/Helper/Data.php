@@ -96,6 +96,7 @@ class Data extends AbstractHelper
      * @var Action
      */
     protected $_productAction;
+    protected $_coreRegistry;
 
     protected $inlineTranslation;
     protected $_transportBuilder;
@@ -116,7 +117,8 @@ class Data extends AbstractHelper
         StoreManagerInterface $modelStoreManagerInterface, 
         Config $modelConfig, 
         ProductAlertHelperData $productAlertHelperData,
-        Action $productAction
+        Action $productAction,
+        \Magento\Framework\Registry $coreRegistry
     )
     {
         $this->_transportBuilder = $transportBuilder;
@@ -134,10 +136,9 @@ class Data extends AbstractHelper
         $this->_eavConfig = $modelConfig;
         $this->_productAlertHelper = $productAlertHelperData;
         $this->_productAction = $productAction;
-
+        $this->_coreRegistry = $coreRegistry;
 
         parent::__construct($context);
-
     }
 
     public function isIE6()
@@ -157,12 +158,9 @@ class Data extends AbstractHelper
 
     public function getUdprodTemplateSku($vendor)
     {
-        // @bharatB
-        
         $value = $vendor->getUdprodTemplateSku();
-
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -174,7 +172,7 @@ class Data extends AbstractHelper
     {
         $value = $this->scopeConfig->getValue('udprod/template_sku/value', ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }
@@ -195,14 +193,12 @@ class Data extends AbstractHelper
     {
         $value = $this->scopeConfig->getValue('udprod/general/type_of_product', ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         $setIds = $this->_setCollection
             ->setEntityTypeFilter($this->_modelProductFactory->create()->getResource()->getEntityType()->getId())
             ->load()
             ->toOptionHash();
-     
-
         $config = [];
         if (is_array($value)) {
             foreach ($value as $val) {
@@ -239,8 +235,6 @@ class Data extends AbstractHelper
 
     public function getTplProdBySetId($vendor, $setId=null)
     {
-        //@bharatA
-
         if (null === $setId) {
             $setId = $this->_request->getParam('set_id');
         }
@@ -250,8 +244,6 @@ class Data extends AbstractHelper
         list($_setId) = explode('-', $setId);
         $prTpl = $this->_uProductFactory->create();
         $vTplSku = $this->getUdprodTemplateSku($vendor);
-
-
         if (isset($vTplSku[$setId]) && isset($vTplSku[$setId]['value'])
             && ($pId=$this->_helperCatalog->getPidBySku($vTplSku[$setId]['value']))
         ) {
@@ -276,13 +268,11 @@ class Data extends AbstractHelper
         } else {
             $prTpl->setAttributeSetId($_setId);
         }
-
         return $prTpl;
     }
 
     public function prepareTplProd($prTpl)
     {
-
         $prTpl->getWebsiteIds();
         $prTpl->getCategoryIds();
         $prTpl->setId(null);
@@ -310,19 +300,24 @@ class Data extends AbstractHelper
         return $this;
     }
 
+    protected $_productToEdit;
+    public function getProductToEdit()
+    {
+        if (null === $this->_productToEdit) {
+            $this->_productToEdit = $this->initProductEdit([
+                'id' => $this->_request->getParam('id'),
+                'vendor' => $this->getVendor()
+            ]);
+            $this->_coreRegistry->register('current_product', $this->_productToEdit);
+            $this->_coreRegistry->register('product', $this->_productToEdit);
+        }
+        return $this->_productToEdit;
+    }
+
     public function initProductEdit($config)
     {
-        // @debug web_id CONFIG
-        // {
-        //       $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mytestProductAdd.log');
-        //         $logger = new \Zend\Log\Logger();
-        //         $logger->addWriter($writer);
-
-        // }
-
         $r = $this->_request;
         $udSess = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
-
 
         $pId         = array_key_exists('id', $config) ? $config['id'] : $r->getParam('id');
         $prTpl       = !empty($config['template_id']) ? $config['template_id'] : null;
@@ -333,9 +328,7 @@ class Data extends AbstractHelper
         $vendor      = !empty($config['vendor']) ? $config['vendor'] : $udSess->getVendor();
         $productData = !empty($config['data']) ? $config['data'] : [];
 
-
         list($_setId) = explode('-', $setId);
-
 
         $vendor = $this->_hlp->getVendor($vendor);
 
@@ -379,15 +372,6 @@ class Data extends AbstractHelper
             }
             $this->prepareTplProd($prTpl);
             $product->setData($prTpl->getData());
-
-              // @todo1 - check all data here
-            {
-                $datas =$prTpl->getData();
-                
-                //$logger->info(print_r($datas, true));
-            }
-
-
             $product->setData('__tpl_product', $prTpl);
             if (!$product->getAttributeSetId()) {
                 $product->setAttributeSetId(
@@ -406,6 +390,14 @@ class Data extends AbstractHelper
                 $product->setData('visibility', Visibility::VISIBILITY_BOTH);
             }
         }
+        if (isset($productData['stock_data'])) {
+            $qtyAndStockStatusFields = ['qty', 'is_in_stock'];
+            foreach ($qtyAndStockStatusFields as $__qssf) {
+                if (array_key_exists($__qssf, $productData['stock_data'])) {
+                    $productData['quantity_and_stock_status'][$__qssf] = $productData['stock_data'][$__qssf];
+                }
+            }
+        }
         $product->setData('_edit_in_vendor', true);
         $product->setData('_edit_mode', true);
         if (is_array($productData)) {
@@ -419,8 +411,8 @@ class Data extends AbstractHelper
         if (!$product->getId()) {
             $product->setUdropshipVendor($vendor->getId());
         }
-
         $product->setStoreId(0);
+        $product->getAttributes();
         return $product;
     }
 
@@ -443,7 +435,7 @@ class Data extends AbstractHelper
         $attrChanged = $product->getData('udprod_attributes_changed');
         if (!is_array($attrChanged)) {
             try {
-                $attrChanged = unserialize($attrChanged);
+                $attrChanged = $this->_hlp->unserialize($attrChanged);
             } catch (\Exception $e) {
                 $attrChanged = [];
             }
@@ -474,7 +466,7 @@ class Data extends AbstractHelper
             $this->setNeedToUnpublish($product, 'new_product');
         }
 
-        $product->setData('udprod_attributes_changed', serialize($attrChanged));
+        $product->setData('udprod_attributes_changed', $this->_hlp->serialize($attrChanged));
         $product->getResource()->saveAttribute($product, 'udprod_attributes_changed');
         $product->setData('udprod_attributes_changed', $attrChanged);
     }
@@ -526,21 +518,14 @@ class Data extends AbstractHelper
 
     public function processQuickCreate($prod, $isNew)
     {
-        // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/processQuickCreate.log');
-        // $logger = new \Zend\Log\Logger();
-        // $logger->addWriter($writer);
-        
-
         if ('configurable' != $prod->getTypeId()) return $this;
         
         $session = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
         $v = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session')->getVendor();
-
         $hlp = $this->_hlp;
         $prHlp = $this;
         $newPids = [];
         if ('configurable' == $prod->getTypeId()) {
-
             $cfgFirstAttrs = $this->getCfgFirstAttributes($prod, $isNew);
             $cfgFirstAttr = $this->getCfgFirstAttribute($prod, $isNew);
             $cfgFirstAttrId = $cfgFirstAttr->getId();
@@ -627,7 +612,6 @@ class Data extends AbstractHelper
                         $qcProdData['options'] = [];
                         $qcProdData['has_options'] = false;
                         $qcProdData['required_options'] = false;
-
                         $qcProd = $prHlp->initProductEdit([
                             'id' => $pId,
                             'type_id' => 'simple',
@@ -638,10 +622,8 @@ class Data extends AbstractHelper
                         $qcProd->setProductOptions([]);
                         $qcProd->setCanSaveCustomOptions(false);
                     } else {
-
-                        $qcProdData['website_ids'] = $prod->getWebsiteIds(); // not coming here
+                        $qcProdData['website_ids'] = $prod->getWebsiteIds();
                         $qcProdData['category_ids'] = $prod->getCategoryIds();
-
                         $qcProdData['options'] = [];
                         $qcProdData['has_options'] = false;
                         $qcProdData['required_options'] = false;
@@ -655,7 +637,6 @@ class Data extends AbstractHelper
                         $qcProd->setProductOptions([]);
                         $qcProd->setCanSaveCustomOptions(false);
                     }
-
 
                     if ($prHlp->isMyProduct($qcProd)) {
                         foreach ($this->getQuickCreateAllowedAttributes() as $_k) {
@@ -691,7 +672,7 @@ class Data extends AbstractHelper
 
                     if ($this->_hlp->isUdmultiActive()) {
                         $qcMP['vendor_sku'] = trim(@$qcMP['vendor_sku']);
-                        if (!empty($qcMP['vendor_sku_auto'])) {
+                        if (empty($qcMP['vendor_sku'])) {
                             $qcVsku = $qcMP['vendor_sku'] = $this->_helperCatalog->getVendorSkuByPid($prod->getId(), $v->getId()).'-'.implode('-', $autogenerateOptions);
                             $qcVskuIdx = 0;
                             while ($this->_helperCatalog->getPidByVendorSku($qcVsku, $v->getId(), $pId)) {
@@ -700,7 +681,7 @@ class Data extends AbstractHelper
                             $qcMP['vendor_sku'] = $qcVsku;
                         }
                         if ($this->scopeConfig->isSetFlag('udprod/general/unique_vendor_sku', ScopeInterface::SCOPE_STORE)) {
-                            if (empty($qc['vendor_sku'])) {
+                            if (empty($qcMP['vendor_sku'])) {
                                 throw new \Exception('Vendor SKU is empty');
                             } elseif ($this->_helperCatalog->getPidByVendorSku($qcMP['vendor_sku'], $v->getId(), $pId)) {
                                 throw new \Exception(__('Vendor SKU "%1" is already used', $qcMP['vendor_sku']));
@@ -739,7 +720,8 @@ class Data extends AbstractHelper
                         $udmultiUpdate['isNewFlag'] = $isNew;
                         $this->_hlp->processDateLocaleToInternal(
                             $udmultiUpdate,
-                            ['special_from_date','special_to_date']
+                            ['special_from_date','special_to_date'],
+                            $this->_hlp->getDefaultDateFormat()
                         );
                         $this->_hlp->getObj('Unirgy\DropshipMulti\Helper\Data')->saveThisVendorProductsPidKeys(
                             [$qcProd->getId()=>$udmultiUpdate], $v
@@ -813,7 +795,7 @@ class Data extends AbstractHelper
         $exisSimplesDescr = $prod->getData($descrAttr);
         if (!is_array($exisSimplesDescr)) {
             try {
-                $exisSimplesDescr = unserialize($exisSimplesDescr);
+                $exisSimplesDescr = $this->_hlp->unserialize($exisSimplesDescr);
             } catch (\Exception $e) {
                 $exisSimplesDescr = [];
             }
@@ -822,7 +804,7 @@ class Data extends AbstractHelper
             $exisSimplesDescr = [];
         }
         $exisSimplesDescr = array_merge($exisSimplesDescr, $simplesDescrData);
-        $prod->setData($descrAttr, serialize($exisSimplesDescr));
+        $prod->setData($descrAttr, $this->_hlp->serialize($exisSimplesDescr));
         $prod->getResource()->saveAttribute($prod, $descrAttr);
         $prod->setData($descrAttr, $exisSimplesDescr);
     }
@@ -953,7 +935,6 @@ class Data extends AbstractHelper
 
     public function processUdmultiPost($product, $vendor)
     {
-        
         if ($this->_hlp->isUdmultiActive()) {
             $udmulti = $product->getData('udmulti');
             $this->_hlp->rHlp()->insertIgnore(
@@ -964,7 +945,8 @@ class Data extends AbstractHelper
             if (is_array($udmulti) && !empty($udmulti) ) {
                 $this->_hlp->processDateLocaleToInternal(
                     $udmulti,
-                    ['special_from_date','special_to_date']
+                    ['special_from_date','special_to_date'],
+                    $this->_hlp->getDefaultDateFormat()
                 );
                 $this->_hlp->getObj('Unirgy\DropshipMulti\Helper\Data')->saveThisVendorProductsPidKeys([$product->getId()=>$udmulti], $vendor);
             }
@@ -985,7 +967,9 @@ class Data extends AbstractHelper
         }
         $oldStoreId = $this->_storeManager->getStore()->getId();
         $this->_storeManager->setCurrentStore(0);
-        $collection = $this->_modelProductFactory->create()->getCollection()
+        $collection = $this->_hlp->createObj('\Unirgy\Dropship\Model\ResourceModel\ProductCollection')
+            ->setFlag('udskip_price_index',1)
+            ->setFlag('has_stock_status_filter', 1)
             ->addIdFilter($productId);
         if (0&&$this->_hlp->isUdmultiActive()) {
             $collection->addAttributeToFilter('entity_id', ['in'=>$vendor->getAssociatedProductIds()]);
@@ -999,7 +983,6 @@ class Data extends AbstractHelper
         }
         return $this;
     }
-
 
     protected function _processTplCfgAttrs(&$templateSku)
     {
@@ -1021,19 +1004,17 @@ class Data extends AbstractHelper
         if ($serialize) {
             if (is_array($templateSku)) {
                 $this->_processTplCfgAttrs($templateSku);
-                $templateSku = serialize($templateSku);
+                $templateSku = $this->_hlp->serialize($templateSku);
             }
         } else {
             if (is_string($templateSku)) {
-                $templateSku = unserialize($templateSku);
+                $templateSku = $this->_hlp->unserialize($templateSku);
             }
             if (!is_array($templateSku)) {
                 $templateSku = [];
             }
             $this->_processTplCfgAttrs($templateSku);
         }
-
-
         $vendor->setData('udprod_template_sku', $templateSku);
     }
 
@@ -1096,6 +1077,11 @@ class Data extends AbstractHelper
             if ($isUdmulti) {
                 $udmulti = $simpleProd->getAllMultiVendorData();
                 $myUdmulti = @$udmulti[$v->getId()];
+                $this->_hlp->processDateInternalToLocale(
+                    $myUdmulti,
+                    ['special_from_date','special_to_date'],
+                    $this->_hlp->getDefaultDateFormat()
+                );
                 $_result['udmulti'] = $myUdmulti;
                 /*
                 $_result['vendor_sku'] = @$myUdmulti['vendor_sku'];
@@ -1532,7 +1518,6 @@ class Data extends AbstractHelper
 
     public function getUseTplProdWebsiteBySetId($setId)
     {
-        
         $_setId = $setId;
         if ($setId instanceof Product) {
             if (!($_setId = $setId->getUdprodAttributeSetKey())) {
@@ -1541,18 +1526,14 @@ class Data extends AbstractHelper
         }
         list($__setId) = explode('-', $_setId);
         $gTplSku = $this->getGlobalTemplateSkuConfig();
-
         $result = @$gTplSku[$_setId]['use_product_website'];
         if (!isset($gTplSku[$_setId])) {
             $result = @$gTplSku[$__setId]['use_product_website'];
         }
-
-        
         return $result;
     }
     public function getUseTplProdCategoryBySetId($setId)
     {
-
         $_setId = $setId;
         if ($setId instanceof Product) {
             if (!($_setId = $setId->getUdprodAttributeSetKey())) {
@@ -1630,6 +1611,7 @@ class Data extends AbstractHelper
         $hideFields[] = 'thumbnail';
         $hideFields[] = 'image';
         $hideFields[] = 'recurring_profile';
+        $hideFields[] = 'category_ids';
         $hideFields[] = '';
         return $hideFields;
     }
@@ -1854,7 +1836,7 @@ class Data extends AbstractHelper
 
     public function isApprovedNotifyVendor()
     {
-        return 1;
+        return $this->scopeConfig->isSetFlag('udprod/notification/send_approved_notifications', ScopeInterface::SCOPE_STORE);
     }
     public function isApprovedNotifyAdmin()
     {
@@ -1872,12 +1854,6 @@ class Data extends AbstractHelper
     public function sendPendingNotificationEmail($products, $vendor)
     {
         $store = $this->_storeManager->getDefaultStoreView();
-
-        // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test1.log');
-        // $logger = new \Zend\Log\Logger();
-        // $logger->addWriter($writer);
-        // $logger->info('test1');
-
         if ($this->isPendingNotifyVendor() && !empty($products)) {
 
             $this->inlineTranslation->suspend();
@@ -1890,12 +1866,10 @@ class Data extends AbstractHelper
                 'vendor_email' => $vendor->getEmail(),
             ];
             $data['notification_grid'] = $this->_productAlertHelper->createBlock('Magento\Framework\View\Element\Template')
-                ->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/notification/pending.phtml')
+                ->setModuleName('Unirgy_DropshipVendorProduct')
+                ->setTemplate('unirgy/udprod/notification/pending.phtml')
                 ->setProducts($products)
                 ->toHtml();
-
-            //$storeId = $this->getVendorsStoreId($vendor); // bharat
-
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_hlp->getScopeConfig('udprod/notification/pending_vendor_email_template', $store)
@@ -1903,7 +1877,6 @@ class Data extends AbstractHelper
                 [
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $store->getId(),
-                    //'store' => $storeId,
                 ]
             )->setTemplateVars(
                 $data
@@ -1926,19 +1899,7 @@ class Data extends AbstractHelper
     }
     public function sendApprovedNotificationEmail($products, $vendor)
     {
-
-        
         $store = $this->_storeManager->getDefaultStoreView();
-
-        $storeId = $this->getVendorsStoreId($vendor);
-
-        // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test2.log');
-        // $logger = new \Zend\Log\Logger();
-        // $logger->addWriter($writer);
-        // $logger->info('test2');
-        // $logger->info(print_r($storeId,true));
-
-
         if ($this->isApprovedNotifyVendor() && !empty($products)) {
 
             $this->inlineTranslation->suspend();
@@ -1951,20 +1912,17 @@ class Data extends AbstractHelper
                 'vendor_email' => $vendor->getEmail(),
             ];
             $data['notification_grid'] = $this->_productAlertHelper->createBlock('Magento\Framework\View\Element\Template')
-                ->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/notification/approved.phtml')
+                ->setModuleName('Unirgy_DropshipVendorProduct')
+                ->setTemplate('unirgy/udprod/notification/approved.phtml')
                 ->setProducts($products)
-                
                 ->toHtml();
-
-            
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_hlp->getScopeConfig('udprod/notification/approved_vendor_email_template', $store)
             )->setTemplateOptions(
                 [
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                    //'store' => $store->getId(),
-                    'store' => $storeId,
+                    'store' => $store->getId(),
                 ]
             )->setTemplateVars(
                 $data
@@ -1984,84 +1942,9 @@ class Data extends AbstractHelper
                 ->updateAttributes(array_keys($products), ['udprod_approved_notified' => 1], 0);
         }
     }
-
-    // bharat
-    public function getVendorsStoreId($vendor)
-    {
-
-         $vendorsEmail = $vendor->getEmail();
-
-         $store = $this->_storeManager->getDefaultStoreView();
-
-         $storeId = $store->getId();
-
-         {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $resource   = $objectManager->get('Magento\Framework\App\ResourceConnection');
-            $connection = $resource->getConnection();
-            
-            $select_qry = "SELECT store_id FROM `" . $resource->getTableName('udropship_vendor_registration') . "` WHERE email = '" .$vendorsEmail. "'";
-            $rows       = $connection->fetchAll($select_qry);
-
-            if(isset($rows[0]['store_id'])){
-                $storeId = $rows[0]['store_id'];
-            }
-
-        }
-
-
-    
-        return $storeId;
-
-    }
-
-    public function getVendorsStoreIdByProduct($vednor_mail)
-    {
-
-         $vendorsEmail = $vednor_mail;
-
-         $store = $this->_storeManager->getDefaultStoreView();
-
-         //$storeId = $store->getId();
-
-         {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $resource   = $objectManager->get('Magento\Framework\App\ResourceConnection');
-            $connection = $resource->getConnection();
-            
-            $select_qry = "SELECT store_id FROM `" . $resource->getTableName('udropship_vendor_registration') . "` WHERE email = '" .$vendorsEmail. "'";
-            $rows       = $connection->fetchAll($select_qry);
-
-            if(isset($rows[0]['store_id'])){
-                $storeId = $rows[0]['store_id'];
-            }
-
-
-        }
-
-        // {
-        //     $select_qry = "SELECT name FROM `" . $resource->getTableName('store') . "` WHERE store_id = '" .$storeId. "'";
-        //     $rows       = $connection->fetchAll($select_qry);            
-
-        //     if(isset($rows[0]['name'])){
-        //         $name = $rows[0]['name'];
-        //     }
-        // }
-
-
-    
-        return $storeId;
-
-    }
-
-
-    // bharat
-
     public function sendFixNotificationEmail($products, $vendor)
     {
-
         $store = $this->_storeManager->getDefaultStoreView();
-
         if ($this->isFixNotifyVendor() && !empty($products)) {
 
             $this->inlineTranslation->suspend();
@@ -2074,11 +1957,10 @@ class Data extends AbstractHelper
                 'vendor_email' => $vendor->getEmail(),
             ];
             $data['notification_grid'] = $this->_productAlertHelper->createBlock('Magento\Framework\View\Element\Template')
-                ->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/notification/fix.phtml')
+                ->setModuleName('Unirgy_DropshipVendorProduct')
+                ->setTemplate('unirgy/udprod/notification/fix.phtml')
                 ->setProducts($products)
                 ->toHtml();
-            
-            //$storeId = $this->getVendorsStoreId($vendor);
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_hlp->getScopeConfig('udprod/notification/fix_vendor_email_template', $store)
@@ -2086,7 +1968,6 @@ class Data extends AbstractHelper
                 [
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $store->getId(),
-                    //'store' => $storeId,
                 ]
             )->setTemplateVars(
                 $data
@@ -2109,10 +1990,7 @@ class Data extends AbstractHelper
 
     public function sendPendingAdminNotificationEmail($products, $vendor)
     {
-    
         $store = $this->_storeManager->getDefaultStoreView();
-
-  
         if ($this->isPendingNotifyAdmin() && !empty($products)) {
 
             $this->inlineTranslation->suspend();
@@ -2125,12 +2003,12 @@ class Data extends AbstractHelper
                 'vendor_email' => $vendor->getEmail(),
             ];
             $data['notification_grid'] = $this->_productAlertHelper->createBlock('Magento\Framework\View\Element\Template')
-                ->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/notification/pending.phtml')
+                ->setModuleName('Unirgy_DropshipVendorProduct')
+                ->setTemplate('unirgy/udprod/notification/pending.phtml')
                 ->setProducts($products)
                 ->toHtml();
 
             $adminIdent = $this->_hlp->getScopeConfig('udprod/notification/admin_email_identity', $store);
-
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_hlp->getScopeConfig('udprod/notification/pending_admin_email_template', $store)
@@ -2138,7 +2016,6 @@ class Data extends AbstractHelper
                 [
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $store->getId(),
-                    //'store' => $storeId,
                 ]
             )->setTemplateVars(
                 $data
@@ -2160,15 +2037,9 @@ class Data extends AbstractHelper
     }
     public function sendApprovedAdminNotificationEmail($products, $vendor)
     {
-         
-
         $store = $this->_storeManager->getDefaultStoreView();
-
-     
-
         if ($this->isApprovedNotifyAdmin() && !empty($products)) {
 
-                //$logger->info(print_r($this->isApprovedNotifyAdmin(), true));
             $this->inlineTranslation->suspend();
 
             $data = [
@@ -2179,20 +2050,19 @@ class Data extends AbstractHelper
                 'vendor_email' => $vendor->getEmail(),
             ];
             $data['notification_grid'] = $this->_productAlertHelper->createBlock('Magento\Framework\View\Element\Template')
-                ->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/notification/approved.phtml')
+                ->setModuleName('Unirgy_DropshipVendorProduct')
+                ->setTemplate('unirgy/udprod/notification/approved.phtml')
                 ->setProducts($products)
-                ->toHtml();             
-            
-       
-            $adminIdent = $this->_hlp->getScopeConfig('udprod/notification/admin_email_identity', $store);
+                ->toHtml();
 
+            $adminIdent = $this->_hlp->getScopeConfig('udprod/notification/admin_email_identity', $store);
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_hlp->getScopeConfig('udprod/notification/approved_vendor_email_template', $store)
             )->setTemplateOptions(
                 [
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                    'store' => $store->getId(),            
+                    'store' => $store->getId(),
                 ]
             )->setTemplateVars(
                 $data
@@ -2202,7 +2072,6 @@ class Data extends AbstractHelper
                 $this->scopeConfig->getValue('trans_email/ident_' . $adminIdent . '/email', ScopeInterface::SCOPE_STORE, $store),
                 $this->scopeConfig->getValue('trans_email/ident_' . $adminIdent . '/name', ScopeInterface::SCOPE_STORE, $store)
             );
-
 
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
@@ -2216,13 +2085,6 @@ class Data extends AbstractHelper
     public function sendFixAdminNotificationEmail($products, $vendor)
     {
         $store = $this->_storeManager->getDefaultStoreView();
-
-
-        // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test6.log');
-        // $logger = new \Zend\Log\Logger();
-        // $logger->addWriter($writer);
-        // $logger->info('test6');
-
         if ($this->isFixNotifyAdmin() && !empty($products)) {
 
             $this->inlineTranslation->suspend();
@@ -2235,13 +2097,12 @@ class Data extends AbstractHelper
                 'vendor_email' => $vendor->getEmail(),
             ];
             $data['notification_grid'] = $this->_productAlertHelper->createBlock('Magento\Framework\View\Element\Template')
-                ->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/notification/fix.phtml')
+                ->setModuleName('Unirgy_DropshipVendorProduct')
+                ->setTemplate('unirgy/udprod/notification/fix.phtml')
                 ->setProducts($products)
                 ->toHtml();
 
             $adminIdent = $this->_hlp->getScopeConfig('udprod/notification/admin_email_identity', $store);
-
-        
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_hlp->getScopeConfig('udprod/notification/fix_vendor_email_template', $store)
@@ -2267,6 +2128,21 @@ class Data extends AbstractHelper
             $this->_productAction
                 ->updateAttributes(array_keys($products), ['udprod_fix_admin_notified' => 1], 0);
         }
+    }
+
+    protected $_customOptionsRenderer = [
+        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Text' => '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\CustomOptions\Type\Text',
+        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\File' => '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\CustomOptions\Type\File',
+        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select' => '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\CustomOptions\Type\Select',
+        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Date' => '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\CustomOptions\Type\Date',
+
+    ];
+    public function mapCustomOptionsRenderer($renderer)
+    {
+        $renderer = trim($renderer, '\\');
+        return isset($this->_customOptionsRenderer[$renderer])
+            ? $this->_customOptionsRenderer[$renderer]
+            : $renderer;
     }
 
 }

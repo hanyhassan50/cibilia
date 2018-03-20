@@ -21,11 +21,10 @@ use \Magento\Framework\DataObject;
 use \Magento\Sales\Model\Order\Shipment\Track;
 use \Magento\Shipping\Model\Config;
 use \Unirgy\Dropship\Helper\Data as HelperData;
-use \Unirgy\Dropship\Model\Label\CarrierInterface;
 
 class Endicia
     extends DataObject
-    implements Carrier
+    implements CarrierInterface
 {
     /**
      * @var HelperData
@@ -335,7 +334,7 @@ EOT;
         $xml = $this->_call('BuyPostageXML', 'RecreditRequestResponse', $request);
 
         if ((int)$xml->Status != 0) {
-            echo "ERROR: ".$xml->ErrorMessage;
+            throw new \Exception("ERROR: ".$xml->ErrorMessage);
         }
 
         return true;
@@ -357,7 +356,7 @@ EOT;
         $xml = $this->_call('ChangePassPhraseXML', 'ChangePassPhraseRequestResponse', $request);
 
         if ((int)$xml->Status != 0) {
-            echo "ERROR: ".$xml->ErrorMessage;
+            throw new \Exception("ERROR: ".$xml->ErrorMessage);
         }
 
         return true;
@@ -365,6 +364,7 @@ EOT;
 
     public function refundLabel($track)
     {
+        $trackIds = $track;
         if ($trackIds instanceof Track) {
             $trackIds = $trackIds->getLabelPic() ? $trackIds->getLabelPic() : $trackIds->getNumber();
         }

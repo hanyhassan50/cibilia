@@ -73,11 +73,10 @@ class Advertisers
         if (!($customerId = $this->_customerSession->getCustomerId())) {
             return false;
         }
-	
+
 		$objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
 		$connection = $objectManager->get('Magento\Framework\App\ResourceConnection')->getConnection('\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION'); 
-		$result1 = $connection->fetchAll("SELECT email_id FROM cibilian_referrals where referred_by=".$customerId);
-
+		//$result1 = $connection->fetchAll("SELECT email_id FROM cibilian_referrals where referred_by=".$customerId);
         if (!$this->orders) {
             $this->orders = $this->_registrationFactory->create()->getCollection()
             ->addFieldToFilter('referred_by',$customerId);
@@ -188,7 +187,7 @@ class Advertisers
                     }
                 }
                 if($objVendor->getStatus() == 'V' && $objVendor->getVendorType() == '1' && $objVendor->getIsInfoReviewed() == '1'){
-                    $arrGridData[$_vendor->getId()]['link'] = '<a href='.$this->getUrl('idproofs/index/vendorlogin',array('id' => $objVendor->getId())).' Title="'.__('Manage Vendor').'" target="_blank">'.__('Manage Vendor').'</a>';
+                    $arrGridData[$_vendor->getId()]['link'] = '<a class="manage-vendor" href='.$this->getUrl('idproofs/index/vendorlogin',array('id' => $objVendor->getId())).' Title="'.__('Manage Vendor').'" target="_blank">'.__('Manage Vendor').'</a>';
                     if(!$manageStore){
                         $manageStore = 1;
                     }

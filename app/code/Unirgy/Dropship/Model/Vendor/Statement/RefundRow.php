@@ -21,11 +21,11 @@ use \Magento\Framework\Model\AbstractModel;
 
 class RefundRow extends AbstractModel
 {
-    protected $_eventPrefix = 'vendor_statement_refund)row';
+    protected $_eventPrefix = 'vendor_statement_refund_row';
     protected $_eventObject = 'statement_refund_row';
 
     protected function _construct()
     {
-        $this->_init('Unirgy\Dropship\Model\ResourceModel\Vendor\Statement\Refundrow');
+        $this->_init('Unirgy\Dropship\Model\ResourceModel\Vendor\Statement\RefundRow');
     }
 }

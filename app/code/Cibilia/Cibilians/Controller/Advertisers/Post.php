@@ -17,10 +17,10 @@ class Post extends AbstractVendor
      */
     // protected $_objectManager;
 	// protected $_scopeConfig;
-    // public function __construct(\Magento\Framework\App\Action\Context $context, ScopeConfigInterface $_scopeConfig) 
+    // public function __construct(\Magento\Framework\App\Action\Context $context, ScopeConfigInterface $_scopeConfig)
     // {
         // // $this->_objectManager = $objectManager;
-        // parent::__construct($context,$_scopeConfig);    
+        // parent::__construct($context,$_scopeConfig);
     // }
 
     public function execute()
@@ -87,8 +87,10 @@ class Post extends AbstractVendor
 
             $session->unsRegistrationFormData();
             $customerSession->unsRefererFormData();
-            
-			if ($this->_scopeConfig->getValue('udropship/microsite/auto_approve', ScopeInterface::SCOPE_STORE)) {
+
+
+
+            if ($this->_scopeConfig->getValue('udropship/microsite/auto_approve', ScopeInterface::SCOPE_STORE)) {
                 $vendor = $reg->toVendor();
                 $vendor->setStatus(Source::VENDOR_STATUS_INACTIVE);
                 if ($this->_scopeConfig->getValue('udropship/microsite/auto_approve', ScopeInterface::SCOPE_STORE)==ModelSource::AUTO_APPROVE_YES_ACTIVE
@@ -156,14 +158,13 @@ class Post extends AbstractVendor
 	
 	
         $post = $this->getRequest()->getParams();
-		// echo "post:";
-		$post['vendor_attn'] = $post['vendor_fname'].' '.$post['vendor_lname'];
-		// print_r($post);die;
-        $currenttime = date('Y-m-d H:i:s');
+
+        $post['vendor_attn'] = $post['vendor_name'].' '.$post['owner_name'];
+		$currenttime = date('Y-m-d H:i:s');
         $model = $this->_objectManager->create('Cibilia\Cibilians\Model\Advertisers');
         $model->setData('referred_by', $customerSession->getCustomerId());
         $model->setData('company_name', $post['vendor_name']);
-        $model->setData('website', $post['website']);
+        $model->setData('website', $post['company_website']);
         $model->setData('contact_person', $post['vendor_attn']);
         $model->setData('email_id', $post['email']);
         $model->setData('mobile', $post['telephone']);
@@ -183,7 +184,7 @@ class Post extends AbstractVendor
 			return $this->_redirect('*/*/');
 		}
     }
-    
+
     
     public function _checkVendor($email)
     {

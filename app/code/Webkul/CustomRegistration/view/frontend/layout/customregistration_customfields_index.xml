@@ -1,12 +1,21 @@
 <?xml version="1.0"?>
+<!-- 
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+        <css src="Webkul_CustomRegistration::css/style.css"/>
+    </head>
 	<update handle="customer_account"/>
     <body>
-		<referenceBlock name="page.main.title">
-			<action method="setPageTitle">
-				<argument translate="true" name="title" xsi:type="string">5 Easy steps to become cibilian</argument>
-			</action>
-		</referenceBlock>
         <referenceContainer name="content">
             <block class="Webkul\CustomRegistration\Block\Customfields" name="custom_form_additional12_info_customer" template="Webkul_CustomRegistration::editcustomer.phtml" cacheable="false"/>
         </referenceContainer>

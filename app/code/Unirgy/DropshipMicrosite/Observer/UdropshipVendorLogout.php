@@ -34,7 +34,7 @@ class UdropshipVendorLogout extends AbstractObserver implements ObserverInterfac
         $user = $this->_userFactory->create()->load($vendor->getId(), 'udropship_vendor');
 
         if ($user->getId() && !empty($_COOKIE['adminhtml'])) {
-            $coreSession = ObjectManager::getInstance()->get('Magento\Framework\Model\Session');
+            $coreSession = ObjectManager::getInstance()->get('Magento\Framework\Session\SessionManager');
             $oId = $coreSession->getSessionId();
             $sId = $_COOKIE['adminhtml'];
             $this->_switchSession(\Magento\Framework\App\Area::AREA_ADMINHTML, $sId);

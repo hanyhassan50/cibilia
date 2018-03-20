@@ -1,75 +1,17 @@
-      $bar->finish();
+#!/usr/bin/env sh
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput(' 50/50 [============================] 100%'),
-            stream_get_contents($output->getStream())
-        );
-    }
+dir=$(d=${0%[/\\]*}; cd "$d" > /dev/null; cd "../seld/jsonlint/bin" && pwd)
 
-    public function testPercent()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-        $bar->advance();
+# See if we are running in Cygwin by checking for cygpath program
+if command -v 'cygpath' >/dev/null 2>&1; then
+	# Cygwin paths start with /cygdrive/ which will break windows PHP,
+	# so we need to translate the dir path to windows format. However
+	# we could be using cygwin PHP which does not require this, so we
+	# test if the path to PHP starts with /cygdrive/ rather than /usr/bin
+	if [[ $(which php) == /cygdrive/* ]]; then
+		dir=$(cygpath -m "$dir");
+	fi
+fi
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  1/50 [>---------------------------]   2%').
-            $this->generateOutput('  2/50 [=>--------------------------]   4%'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testOverwriteWithShorterLine()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%%');
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-
-        // set shorter format
-        $bar->setFormat(' %current%/%max% [%bar%]');
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  1/50 [>---------------------------]   2%').
-            $this->generateOutput('  2/50 [=>--------------------------]     '),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testStartWithMax()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream());
-        $bar->setFormat('%current%/%max% [%bar%]');
-        $bar->start(50);
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput(' 0/50 [>---------------------------]').
-            $this->generateOutput(' 1/50 [>---------------------------]'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testSetCurrentProgress()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-        $bar->setProgress(15);
-        $bar->setProgress(25);
-
-        rewind($output->getStream());
-        $this->assertEq
+dir=$(echo $dir | sed 's/ /\ /g')
+"${dir}/jsonlint" "$@"

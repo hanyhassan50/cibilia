@@ -131,12 +131,12 @@ class UdropshipVendorSaveAfter extends AbstractObserver implements ObserverInter
                 ) && !in_array($vendor->getStatus(), [Source::VENDOR_STATUS_REJECTED, Source::VENDOR_STATUS_PENDINGMEMBER])
             ) {
                 $vendor->setPassword($vendorPassword);
-                //$this->_msHlp->sendVendorWelcomeEmail($vendor);
+                $this->_msHlp->sendVendorWelcomeEmail($vendor);
                 $vendor->setPassword('');
                 $vendor->setPasswordEnc('');
                 $this->_hlp->rHlp()->updateModelFields($vendor, ['password', 'password_enc']);
             }
-            //$this->_registrationFactory->create()->load($vendor->getRegId())->delete();
+            $this->_registrationFactory->create()->load($vendor->getRegId())->delete();
         }
         if ($this->_hlp->isModuleActive('Unirgy_DropshipMicrositePro')) {
             if ($vendor->getSendConfirmationEmail()) {

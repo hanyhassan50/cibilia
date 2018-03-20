@@ -67,7 +67,6 @@ class Source extends AbstractSource
     }
 
     const VENDOR_STATUS_ACTIVE    = 'A';
-    const VENDOR_STATUS_PENDING    = 'Z';
     const VENDOR_STATUS_INACTIVE  = 'I';
     const VENDOR_STATUS_DISABLED  = 'D';
     const VENDOR_STATUS_REJECTED  = 'R';
@@ -75,10 +74,6 @@ class Source extends AbstractSource
     const VENDOR_STATUS_SUSPENDEDMEMBER  = 'S';
     const VENDOR_STATUS_CANCELEDMEMBER  = 'C';
     const VENDOR_STATUS_EXPIREDMEMBER  = 'e';
-    const VENDOR_STATUS_REJECTED_BY_VENDOR  = 'X';
-    const VENDOR_STATUS_APPROVED_BY_VENDOR  = 'V';
-    const VENDOR_STATUS_WAITING_BY_VENDOR  = 'W';
-
 
     const ORDER_STATUS_PENDING  = 0;
     const ORDER_STATUS_NOTIFIED = 1;
@@ -313,14 +308,9 @@ class Source extends AbstractSource
 
         case 'vendor_statuses':
             $options = array(
-                self::VENDOR_STATUS_PENDING => __('Pending'),
-                self::VENDOR_STATUS_INACTIVE => __('Inactive'),
                 self::VENDOR_STATUS_ACTIVE   => __('Active'),
-                self::VENDOR_STATUS_DISABLED  => __('Disabled'), 
-                self::VENDOR_STATUS_REJECTED_BY_VENDOR => __('Vendor rejected'),
-                self::VENDOR_STATUS_APPROVED_BY_VENDOR  => __('Vendor approved'),
-                self::VENDOR_STATUS_WAITING_BY_VENDOR  => __('Sent email for approval'),
-               
+                self::VENDOR_STATUS_INACTIVE => __('Inactive'),
+                self::VENDOR_STATUS_DISABLED  => __('Disabled'),
             );
             if ($this->_hlp->isModuleActive('Unirgy_DropshipMicrositePro')) {
                 $options[self::VENDOR_STATUS_REJECTED] = __('Rejected');
@@ -818,7 +808,7 @@ class Source extends AbstractSource
                 'delete' => __('Delete vendor products'),
             );
             break;
-            
+
         case 'allowed_countries':
             /* @var \Magento\Directory\Model\ResourceModel\Country\Collection $countries */
             $countries = $this->_hlp->createObj('\Magento\Directory\Model\ResourceModel\Country\Collection');
@@ -826,98 +816,27 @@ class Source extends AbstractSource
             array_unshift($options, array('value'=>'*', 'label'=> __('* All Countries')));
             break;
 
-        case 'billing_region_id':
-        case 'region_id':
-            $selectorLabel = 'Please select region, state or province';
-            $options = array(
-            );
-            break;
-        case 'billing_country_id':
-        case 'country_id':
-            $selectorLabel = 'Please select region, state or province';
-            $options = array(
-            );
-            break;
-        case 'carrier_code':
-        case 'registration_carriers':
-            $options = array();
-            break;
-        case 'agree_terms_conditions':
-            $options = array(
-                '1' => __('Yes Agree')
-            );
-            break;
-            
-	    case 'udropship_label/custom/your_role':
-        case 'your_role':
-            $options = array(
-				'' => 'Please select',
-                'owner'  => 'Owner',
-                'vp_director' => 'VP-Director',
-                'sales'  => 'Sales',
-                'admin'  => 'Admin'
-            );
-            break;
-
-		case 'udropship_label/custom/company_employee':
-        case 'company_employee':
-            $options = array(
-				'' => 'Please select',
-                '1'  => '1',
-                '2-5' => '2 - 5',
-                '6-10'  => '6 - 10',
-                '11-20'  => '11 - 20',
-                '21-35'  => '21 - 35',
-                '36-50' => '36 - 50',
-                'more_than_50' => 'More than 50'
-            );
-            break;
-            
-		case 'udropship_label/custom/company_type':
-        case 'company_type':
-            $options = array(
-				'' => 'Please select',
-                'yes'  => 'Yes',
-                'no' => 'No'
-            );
-            break;
-            
-		case 'udropship_label/custom_step2/product_categories':
-        case 'product_categories':
-			$category =  $this->_hlp->createObj('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')->create();
-			$category->addAttributeToFilter('level', 2);
-			$category_data = $category->getData();
-			
-			$options_array = array();
-			$options_array[""] = 'Pick relevant categories:';
-			foreach($category_data as $cat_data){
-				$cat = $this->_hlp->createObj('\Magento\Catalog\Model\CategoryFactory')->create()->load($cat_data["entity_id"])->getData();
-				$options_array[$cat["name"]] = $cat["name"];
-			}
-            $options = $options_array;
-            break;
-            
-		case 'udropship_label/custom_step2/product_sell_place':
-        case 'product_sell_place':
-            $options = array(
-				'' => 'Please select',
-                'Independent retailers'  => 'Independent retailers',
-                'Farmers markets / festivals ' => 'Farmers markets / festivals ',
-                'Supermarkets' => 'Supermarkets',
-                'Your own website' => 'Your own website',
-                'Other'=>'Other'     
-            );
-            break;
-            
-		case 'udropship_label/custom_step2/best_time_to_call':
-        case 'best_time_to_call':
-            $options = array(
-				'' => 'Please select',
-                'Morning'  => 'Morning',
-                'Afternoon ' => 'Afternoon',
-                'Evening' => 'Evening' 
-            );
-            break;
+            case 'billing_region_id':
+            case 'region_id':
+                $selectorLabel = 'Please select region, state or province';
+                $options = array(
+                );
+                break;
+            case 'billing_country_id':
+            case 'country_id':
+                $selectorLabel = 'Please select region, state or province';
+                $options = array(
+                );
+                break;
+            case 'carrier_code':
+            case 'registration_carriers':
+                $options = array();
+                break;
+            case 'agree_terms_conditions':
+                $options = array(
+                    '1' => __('Yes Agree')
+                );
+                break;
 
         default:
             throw new \Exception(__('Invalid request for source options: '.$this->getPath()));

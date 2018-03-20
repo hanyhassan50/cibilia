@@ -59,22 +59,32 @@ class LayoutGenerateBlocksAfterObserver implements ObserverInterface
 		$om = \Magento\Framework\App\ObjectManager::getInstance();
 		$storeManager = $om->get('Magento\Store\Model\StoreManagerInterface');
 		
-		$stores = $storeManager->getWebsite()->getStores(); 
-		$currentStoreId = $storeManager->getStore()->getId();
-		
+		$websites = $storeManager->getWebsites();
 		 if ($headBlock != false) {
-			foreach ($stores as $store) {       
-				$lang = $store->getConfig('general/locale/code');
-			    $cleanUrl = preg_replace('/\?.*/', '', $store->getCurrentUrl());
-				$lang = preg_replace("/[\s_]/", "-", $lang);	
+			foreach ($websites as $website) {
+                foreach($website->getStores() as $store) {
 
-				$this->page->addRemotePageAsset(
-					$cleanUrl,
-					$contentType = 'canonical',
-					$properties = ['attributes' =>['rel' => 'alternate','hreflang' => $lang]
-					],
-					$name = 'Custom added'
-				);
+                    $name = $website->getName();
+                    $url = $store->getBaseUrl();
+                    if($url != "http://foodmakers.cibilia-dev.com/")
+                    {
+                        if($name == 'foodmakers.cibilia.com') {
+                            continue;
+                        }
+                    }
+
+                    $lang = substr($store->getConfig('general/locale/code'), 0, 2);
+                    $cleanUrl = preg_replace('/\?.*/', '', $store->getCurrentUrl());
+                    $lang = preg_replace("/[\s_]/", "-", $lang);
+
+                    $this->page->addRemotePageAsset(
+                        $cleanUrl,
+                        $contentType = 'canonical',
+                        $properties = ['attributes' => ['rel' => 'alternate', 'hreflang' => $lang]
+                        ],
+                        $name = 'Custom added'
+                    );
+                }
 			}
 		}
 		return $this;

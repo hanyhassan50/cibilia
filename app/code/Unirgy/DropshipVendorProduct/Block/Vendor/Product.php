@@ -17,8 +17,6 @@ use Unirgy\DropshipVendorProduct\Helper\Form;
 use Unirgy\Dropship\Helper\Catalog;
 use Unirgy\Dropship\Helper\Data as HelperData;
 
-use Unirgy\Dropship\Model\VendorFactory;
-
 class Product extends Template
 {
     /**
@@ -46,11 +44,6 @@ class Product extends Template
      */
     protected $_prodHlpForm;
 
-    /**
-     * @var VendorFactory
-     */
-    protected $_vendorFactory;
-
     public function __construct(
         Context $context,
         Registry $frameworkRegistry, 
@@ -63,11 +56,8 @@ class Product extends Template
         $this->_coreRegistry = $frameworkRegistry;
         $this->_helperCatalog = $helperCatalog;
         $this->_hlp = $helperData;
-        //$this->_prodSession = $prodSession;
         $this->_prodHlp = $dropshipVendorProductHelperData;
         $this->_prodHlpForm = $helperForm;
-
-        $this->_vendorFactory = $vendorFactory; //bharat
 
         parent::__construct($context, $data);
     }
@@ -110,8 +100,8 @@ class Product extends Template
     }
     public function getUrl($route = '', $params = [])
     {
-        if (!isset($params['_store']) && $this->_oldStoreId) {
-            $params['_store'] = $this->_oldStoreId;
+        if (!isset($params['_scope']) && $this->_oldStoreId) {
+            $params['_scope'] = $this->_oldStoreId;
         }
         return parent::getUrl($route, $params);
     }
@@ -163,12 +153,7 @@ class Product extends Template
     public function getProduct()
     {
         if (null === $this->_product) {
-            $this->_product = $this->_prodHlp->initProductEdit([
-                'id' => $this->_request->getParam('id'),
-                'vendor' => $this->getVendor()
-            ]);
-            $this->_coreRegistry->register('current_product', $this->_product);
-            $this->_coreRegistry->register('product', $this->_product);
+            $this->_product = $this->_prodHlp->getProductToEdit();
         }
         return $this->_product;
     }
@@ -233,7 +218,7 @@ class Product extends Template
             ]);
         $this->addAdditionalElementType(
             'grouped_assoc_products',
-            Mage::getConfig()->getBlockClassName('udprod/vendor_product_form_groupedAssocProducts')
+            'Unirgy\DropshipVendorProduct\Block\Vendor\Product\Form\GroupedAssocProducts'
         );
         $this->_addElementTypes($coFieldset);
 
@@ -260,7 +245,7 @@ class Product extends Template
             ]);
         $this->addAdditionalElementType(
             'custom_options',
-            Mage::getConfig()->getBlockClassName('udprod/vendor_product_form_customOptions')
+            'Unirgy\DropshipVendorProduct\Block\Vendor\Product\Form\CustomOptions'
         );
         $this->_addElementTypes($coFieldset);
 
@@ -334,20 +319,6 @@ class Product extends Template
 
     public function getForm()
     {
-
-            // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/getForm.log');
-            // $logger = new \Zend\Log\Logger();
-            // $logger->addWriter($writer);
-
-        //Bharat Get vendor
-        { 
-            $vendorSess = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
-
-            $vendor_username = $vendorSess->getusername();
-            //$logger->info(print_r($vendorSess->getusername(),true));
-        }   
-         
-
         if (null === $this->_form) {
             $prod = $this->getProduct();
             
@@ -360,7 +331,7 @@ class Product extends Template
 
             $values = $prod->getData();
 
-            if ($this->_hlp->getStockItem($prod)) {
+            if ($prod->getId() && $this->_hlp->getStockItem($prod)) {
                 $values = array_merge($values, ['stock_data'=>$this->_hlp->getStockItem($prod)->getData()]);
             }
             if (($udFormData = $this->_hlp->session()->getUdprodFormData(true))
@@ -389,22 +360,10 @@ class Product extends Template
             $values['product_categories'] = @implode(',', (array)$cId);
 
             $wId = $prod->getWebsiteIds();
-
-            // bharat
-            //$wId_name = $this->_prodHlp->getVendorsStoreIdByProduct($vendor_username);
-            //bharat
-
-
-            if (empty($wId) && !$this->_prodHlp->getUseTplProdWebsiteBySetId($prod)) 
-            {            
+            if (empty($wId) && !$this->_prodHlp->getUseTplProdWebsiteBySetId($prod)) {
                 $wId = $this->_prodHlp->getDefaultWebsiteBySetId($prod);
-
             }
-
-
             $values['product_websites'] = @implode(',', (array)$wId);
-
-             //$values['product_websites'] = "7";  //bharat
 
             $fsIdx = 0;
             $skipInputType = ['media_image'];
@@ -416,50 +375,9 @@ class Product extends Template
                 $fieldsetsConfig = $this->_hlp->unserialize($fieldsetsConfig);
             }
 
-            // customizations
-            if(false){
-
-                if(false){
-                    echo "<pre>";
-                    print_r($values['product_categories']);    
-                    
-                }
-
-                $fieldsetsConfig[0]['top_columns_def'][] = 
-                        array(
-                            "column_field" => "product.altitude",
-                            "is_required" => 1,
-                            "sort_order" => 30
-                            );
-                $fieldsetsConfig[0]['top_columns'][] = 'product.altitude';
-
-                /**
-                $fieldsetsConfig[0]['top_columns_def'][] = 
-                        array(
-                            "column_field" => "product.custom",
-                            "is_required" => 1,
-                            "sort_order" => 30
-                            );
-                $fieldsetsConfig[0]['top_columns'][] = 'product.custom';
-                **/
-                
-            }
-
-            // echo "<pre>";
-            // print_r($fieldsetsConfig);
-            // die;
-            
-
             $_attributes = $prod->getAttributes();
-            $hideStatus = false;
-            if(!$prod->getId() || $this->_hlp->session()->getCreatedBy() == 2 || !$prod->getIsApproved()) { 
-                $hideStatus = true;
-            }
             $attributes = [];
             foreach ($_attributes as $_attr) {
-                if($hideStatus && $_attr->getAttributeCode() == 'status'){
-                    continue;
-                }
                 $attributes[$_attr->getAttributeCode()] = $_attr;
             }
             $includedFields = [];
@@ -596,22 +514,19 @@ class Product extends Template
                     }
                 }
                 if ($this->_hlp->getScopeFlag('udprod/general/allow_custom_options')) {
-                    //$this->_addCustomOptions($prod, $values);
+                    $this->_addCustomOptions($prod, $values);
                 }
                 if ('downloadable' == $prod->getTypeId()) {
-                    //$this->_addDownloadableOptions($prod, $values);
+                    $this->_addDownloadableOptions($prod, $values);
                 }
                 if ('grouped' == $prod->getTypeId()) {
                     //$this->_addGroupedAssocProducts($prod, $values);
                 }
             }
-            if(isset($values['description'])){
-                $values['description'] = strip_tags($values['description']);
-            }
-           
+
             $this->_form->addValues($values);
 
-            $this->_form->setFieldNameSuffix('product');    
+            $this->_form->setFieldNameSuffix('product');
         }
         return $this->_form;
     }

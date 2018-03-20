@@ -1,7 +1,8 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     "jquery",
     'Magento_Ui/js/modal/confirm',
@@ -54,7 +55,8 @@ define([
                     }
                 });
 
-                var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
+                var searchButtonId = 'add_products',
+                    searchButton = new ControlButton(jQuery.mage.__('Add Products'), searchButtonId),
                     searchAreaId = this.getAreaId('search');
                 searchButton.onClick = function() {
                     $(searchAreaId).show();
@@ -73,7 +75,7 @@ define([
 
                     this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
                         proceed();
-                        if ($(searchAreaId) && !$(searchAreaId).visible()) {
+                        if ($(searchAreaId) && !$(searchAreaId).visible() && !$(searchButtonId)) {
                             this.addControlButton(searchButton);
                         }
                     });
@@ -156,6 +158,7 @@ define([
             }
             if(this.addresses[id]){
                 this.fillAddressFields(container, this.addresses[id]);
+
             }
             else{
                 this.fillAddressFields(container, {});
@@ -189,43 +192,53 @@ define([
             }
         },
 
-        changeAddressField : function(event){
-            var field = Event.element(event);
-            var re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/;
-            var matchRes = field.name.match(re);
+        /**
+         * Triggers on each form's element changes.
+         *
+         * @param {Object} event
+         */
+        changeAddressField: function (event) {
+            var field = Event.element(event),
+                re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/,
+                matchRes = field.name.match(re),
+                type,
+                name,
+                data;
 
             if (!matchRes) {
                 return;
             }
 
-            var type = matchRes[1];
-            var name = matchRes[2];
-            var data;
+            type = matchRes[1];
+            name = matchRes[2];
 
-            if(this.isBillingField(field.id)){
-                data = this.serializeData(this.billingAddressContainer)
-            }
-            else{
-                data = this.serializeData(this.shippingAddressContainer)
+            if (this.isBillingField(field.id)) {
+                data = this.serializeData(this.billingAddressContainer);
+            } else {
+                data = this.serializeData(this.shippingAddressContainer);
             }
             data = data.toObject();
 
-            if( (type == 'billing' && this.shippingAsBilling)
-                || (type == 'shipping' && !this.shippingAsBilling) ) {
+            if (type === 'billing' && this.shippingAsBilling || type === 'shipping' && !this.shippingAsBilling) {
                 data['reset_shipping'] = true;
             }
 
-            data['order['+type+'_address][customer_address_id]'] = $('order-'+type+'_address_customer_address_id').value;
+            data['order[' + type + '_address][customer_address_id]'] = null;
+            data['shipping_as_billing'] = jQuery('[name="shipping_same_as_billing"]').is(':checked') ? 1 : 0;
+
+            if (name === 'customer_address_id') {
+                data['order[' + type + '_address][customer_address_id]'] =
+                    $('order-' + type + '_address_customer_address_id').value;
+            }
 
             if (data['reset_shipping']) {
                 this.resetShippingMethod(data);
             } else {
                 this.saveData(data);
-                if (name == 'country_id' || name == 'customer_address_id') {
+
+                if (name === 'country_id' || name === 'customer_address_id') {
                     this.loadArea(['shipping_method', 'billing_method', 'totals', 'items'], true, data);
                 }
-                // added for reloading of default sender and default recipient for giftmessages
-                //this.loadArea(['giftmessage'], true, data);
             }
         },
 
@@ -344,6 +357,11 @@ define([
         },
 
         switchPaymentMethod : function(method){
+            jQuery('#edit_form')
+                .off('submitOrder')
+                .on('submitOrder', function(){
+                    jQuery(this).trigger('realOrder');
+                });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -428,7 +446,7 @@ define([
         },
 
         applyCoupon : function(code){
-            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: true});
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
             this.orderItemChanged = false;
         },
 
@@ -533,7 +551,7 @@ define([
                             if (this._isSummarizePrice()) {
                                 productPrice += this.productPriceBase[productId];
                             }
-                            productPrice = parseFloat(productPrice);
+                            productPrice = parseFloat(Math.round(productPrice + "e+2") + "e-2");
                             priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                             // and set checkbox checked
                             grid.setCheckboxChecked(checkbox, true);
@@ -1242,7 +1260,8 @@ define([
                 params.store_id = this.storeId;
             }
 
-            var currentCustomerGroupId = $(parameters.groupIdHtmlId).value;
+            var currentCustomerGroupId = $(parameters.groupIdHtmlId)
+                ? $(parameters.groupIdHtmlId).value : '';
 
             new Ajax.Request(parameters.validateUrl, {
                 parameters: params,
@@ -1376,12 +1395,15 @@ define([
         _label: '',
         _node: null,
 
-        initialize: function(label){
+        initialize: function(label, id){
             this._label = label;
             this._node = new Element('button', {
                 'class': 'action-secondary action-add',
                 'type':  'button'
             });
+            if (typeof id !== 'undefined') {
+                this._node.setAttribute('id', id)
+            }
         },
 
         onClick: function(){
@@ -1398,3 +1420,4 @@ define([
     };
 
 });
+

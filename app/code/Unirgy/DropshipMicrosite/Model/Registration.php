@@ -62,6 +62,11 @@ class Registration extends AbstractModel
      */
     protected $_storeManager;
 
+    /**
+     * @var HelperData
+     */
+    protected $_hlp;
+
     public function __construct(
         Context $context,
         Registry $registry, 
@@ -170,7 +175,9 @@ class Registration extends AbstractModel
 
         parent::afterSave();
 
-        if (!empty($_FILES)) {
+        $uploadFields = $this->_hlp->config()->getUploadFields();
+
+        if (!empty($uploadFields)) {
 
             /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
             $dirList = $this->_hlp->getObj('\Magento\Framework\App\Filesystem\DirectoryList');
@@ -181,15 +188,19 @@ class Registration extends AbstractModel
             $dirWrite = $this->_hlp->createObj('\Magento\Framework\Filesystem\Directory\WriteFactory')->create($baseDir);
             $dirWrite->create($vendorDir);
 
-            foreach ($_FILES as $k=>$img) {
-                if (empty($img['tmp_name']) || empty($img['name']) || empty($img['type'])) {
-                    continue;
-                }
-                if (!@move_uploaded_file($img['tmp_name'], $vendorAbsDir.DIRECTORY_SEPARATOR.$img['name'])) {
+            foreach ($uploadFields as $k) {
+                /**@var \Magento\MediaStorage\Model\File\Uploader $ioUpload */
+                $ioUpload = $this->_hlp->createFileUploader($k);
+                if (!$ioUpload) continue;
+                $img = $ioUpload->validateFile();
+                $res = $ioUpload->save($vendorAbsDir);
+                if (@$res['file']) {
+                    $this->setData($k, $vendorDir . DIRECTORY_SEPARATOR . $res['file']);
+                } else {
                     throw new \Exception('Error while uploading file: '.$img['name']);
                 }
-                $this->setData($k, 'registration/'.$this->getId().'/'.$img['name']);
             }
+
             $this->save();
         }
         $this->_inAfterSave = false;
@@ -224,7 +235,6 @@ class Registration extends AbstractModel
         }
         unset($_s);
         unset($s);
-        $vendor->unsetData('status');
         $vendor->setPostedShipping($postedShipping);
         $vendor->setShippingMethods($shipping);
         return $vendor;

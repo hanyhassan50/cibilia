@@ -21,7 +21,7 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Framework\Data\Form as DataForm;
 use \Unirgy\Dropship\Helper\Data as HelperData;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends \Unirgy\Dropship\Block\Adminhtml\Widget\Form
 {
     /**
      * @var HelperData

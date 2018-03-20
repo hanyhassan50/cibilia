@@ -106,7 +106,7 @@ $showVsku = $_hlp->isShowVendorSkuColumnInProductsTab() && ($_hlp->isUdmultiAvai
 <script type="text/javascript">
 require(["jquery", "prototype", 'varien/form'], function(jQuery) {
 
-    var typeOfProductJson = <?php echo \Zend\Json\Json::encode($typeOfProductConfig)?>;
+    var typeOfProductJson = <?php echo \Zend_Json::encode($typeOfProductConfig)?>;
     window['udChangeSubtypeOfProduct'] = function (tpSel) {
         var tpId = $('type_of_product').value;
         var stpId = tpSel.value;
@@ -202,7 +202,7 @@ require(["jquery", "prototype", 'varien/form'], function(jQuery) {
             <?php endif ?>
         </tr>
     </thead>
-    <tbody>
+<tbody>
 <?php foreach ($this->getProductCollection() as $_p): $_id = $_p->getEntityId(); ?>
         <tr>
             <td><?php echo $this->escapeHtml($_p->getId()); ?></td>
@@ -211,18 +211,26 @@ require(["jquery", "prototype", 'varien/form'], function(jQuery) {
                 <td><?php echo $this->escapeHtml($_p->getVendorSku()); ?></td>
             <?php endif ?>
             <td><a href="<?php echo $this->getUrl('udprod/vendor/productEdit', ['id'=>$_p->getId(0)])?>"><?php echo $this->escapeHtml($_p->getName()); ?></a></td>
-            <td><?php echo $_hlp->formatPrice($_p->getPrice()) ?></td>
+            <td><?php echo $_hlp->formatPrice($_p->getData('price')) ?></td>
             <td><?php echo $this->escapeHtml($_prSrc->setPath('system_status')->getOptionLabel($_p->getStatus()*1)) ?></td>
             <td>
                 <?php if ($_p->getStatus()==1):?>
+                <?php if ($_p->getData('_stock_status')===null):?>
+                <?php echo __('Not Available') ?>
+                <?php else: ?>
                 <?php echo $this->escapeHtml($_prSrc->setPath('stock_status')->getOptionLabel($_p->getData('_stock_status'))) ?>
+                <?php endif ?>
                 <?php else: ?>
                 <?php echo $this->escapeHtml($_prSrc->setPath('system_status')->getOptionLabel($_p->getStatus()*1)) ?>
                 <?php endif ?>
             </td>
             <td>
                 <?php if ($_p->getStatus()==1):?>
+                <?php if ($_p->getData('_stock_status')===null):?>
+                <?php echo __('Not Available') ?>
+                <?php else: ?>
                 <?php echo $this->escapeHtml($_p->getData('_stock_qty')*1) ?>
+                <?php endif ?>
                 <?php else: ?>
                 <?php echo $this->escapeHtml($_prSrc->setPath('system_status')->getOptionLabel($_p->getStatus()*1)) ?>
                 <?php endif ?>

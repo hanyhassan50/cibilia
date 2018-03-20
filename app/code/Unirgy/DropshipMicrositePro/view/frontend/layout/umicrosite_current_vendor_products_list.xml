@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <block class="Magento\Catalog\Block\Product\ListProduct" name="category.products.list" as="product_list" template="Magento_Catalog::product/list.phtml">
+        <block class="Unirgy\DropshipMicrositePro\Block\Vendor\ProductList" name="category.products.list" as="product_list" template="Magento_Catalog::product/list.phtml">
             <container name="category.product.list.additional" as="additional" />
             <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
                 <block class="Magento\Framework\View\Element\Template" as="default"/>
@@ -37,5 +37,6 @@
                 <argument xsi:type="string" name="columnCount">4</argument>
             </action>
         </block>
+        <block class="Magento\Framework\View\Element\FormKey" name="formkey"/>
     </body>
 </page>

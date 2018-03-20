@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Model;
 
 use Webkul\CustomRegistration\Api\Data\ManageFieldsInterface;
@@ -97,7 +105,7 @@ class Customfields extends \Magento\Framework\Model\AbstractModel implements Man
 
     /**
      * Prepare post's enable in account.
-     * 
+     *
      *
      * @return array
      */
@@ -145,5 +153,26 @@ class Customfields extends \Magento\Framework\Model\AbstractModel implements Man
     public function setId($id)
     {
         return $this->setData(self::ENTITY_ID, $id);
+    }
+    /**
+     * Get ID.
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return parent::getData(self::STATUS);
+    }
+
+    /**
+     * Set ID.
+     *
+     * @param int $id
+     *
+     * @return \Webkul\CustomRegistration\Api\Data\ManageFieldsInterface
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(self::STATUS, $status);
     }
 }

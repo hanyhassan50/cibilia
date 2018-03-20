@@ -2,8 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="udropship" translate="label" sortOrder="330" type="text" showInDefault="1" showInWebsite="1"
-                 showInStore="1">
+        <section id="udropship" translate="label" sortOrder="330" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Drop Shipping</label>
             <tab>sales</tab>
             <resource>Unirgy_Dropship::system_config</resource>
@@ -225,7 +224,7 @@
                        showInDefault="1" showInWebsite="1">
                     <label>Restrict shipment statuses in vendor interface</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_model>\Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
+                    <frontend_model>Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
                 </field>
                 <field id="restrict_shipment_status" translate="label" sortOrder="380" type="multiselect"
                        showInDefault="1" showInWebsite="1">
@@ -403,7 +402,7 @@
                        showInWebsite="1" showInStore="1">
                     <label>Use Custom HTML Customer Address Template For Vendors</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_model>\Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
+                    <frontend_model>Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
                 </field>
                 <field id="html_address_format" translate="label" sortOrder="120" type="textarea" showInDefault="1"
                        showInWebsite="1" showInStore="1">
@@ -413,7 +412,7 @@
                        showInWebsite="1" showInStore="1">
                     <label>Use Custom PDF Customer Address Template For Vendors</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_model>\Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
+                    <frontend_model>Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
                 </field>
                 <field id="pdf_address_format" translate="label" sortOrder="140" type="textarea" showInDefault="1"
                        showInWebsite="1" showInStore="1">
@@ -546,7 +545,7 @@
                        showInWebsite="1" showInStore="1">
                     <label>Allow Free Shipping</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_model>\Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
+                    <frontend_model>Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
                 </field>
                 <field id="freeweight_allowed" translate="label" sortOrder="45" type="select" showInDefault="1"
                        showInWebsite="1" showInStore="1">
@@ -562,7 +561,7 @@
                        showInWebsite="1">
                     <label>Free Shipping with Minimum Order Amount</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                    <frontend_model>\Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
+                    <frontend_model>Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
                 </field>
                 <field id="free_shipping_subtotal" translate="label" sortOrder="52" type="text" showInDefault="1"
                        showInWebsite="1">
@@ -610,7 +609,7 @@
                  showInStore="1">
             <label>Dropship Labels</label>
             <tab>sales</tab>
-            <resource>Unirgy_Dropship::system_config</resource>
+            <resource>Unirgy_Dropship::system_config_label</resource>
             <group id="general" translate="label" sortOrder="10" type="text" showInDefault="1">
                 <label>General</label>
                 <field id="use_global" translate="label" type="select" showInDefault="1">
@@ -696,7 +695,7 @@
                 <field id="fedex_payment_type" translate="label" sortOrder="30" type="select" showInDefault="1">
                     <label>Payment Type</label>
                     <source_model>Unirgy\Dropship\Model\Source</source_model>
-                    <frontend_model>\Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
+                    <frontend_model>Unirgy\Dropship\Block\Adminhtml\SystemConfigFormField\DependSelect</frontend_model>
                 </field>
                 <field id="fedex_thirdparty_account_number" translate="label" sortOrder="31" type="text"
                        showInDefault="1">

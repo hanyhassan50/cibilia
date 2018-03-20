@@ -3,7 +3,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="carriers">
-            <resource>Unirgy_DropshipTierShipping::system_config</resource>
             <group id="udtiership" translate="label" sortOrder="210" type="text" showInDefault="1" showInWebsite="1"
                    showInStore="1">
                 <label>Tier Shipping</label>
@@ -139,6 +138,11 @@
                     <label>V2 Simple Conditional Rates</label>
                     <frontend_model>Unirgy\DropshipTierShipping\Block\Adminhtml\SystemConfigField\V2\SimpleCondRates</frontend_model>
                     <backend_model>Unirgy\DropshipTierShipping\Model\SystemConfig\Backend\SimpleCondRates</backend_model>
+                </field>
+                <field id="free_method" translate="label" sortOrder="90" type="multiselect" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Free methods</label>
+                    <source_model>Unirgy\DropshipTierShipping\Model\Source</source_model>
                 </field>
                 <field id="sort_order" translate="label" sortOrder="100" type="text" showInDefault="1"
                        showInWebsite="1">

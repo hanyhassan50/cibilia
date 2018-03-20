@@ -65,6 +65,15 @@ class Tabs extends WidgetTabs
                     ->setVendorId($id)
                     ->toHtml(),
             ]);
+            if ($payout->isReversible() && $payout->getTotalRefund()>0) {
+                $this->addTab('refund_rows_section', [
+                    'label'     => __('Refunds'),
+                    'title'     => __('Refunds'),
+                    'content'   => $this->getLayout()->createBlock('\Unirgy\DropshipPayout\Block\Adminhtml\Payout\Edit\Tab\RefundRows', 'udpayout.refund_rows.grid')
+                        ->setVendorId($id)
+                        ->toHtml(),
+                ]);
+            }
             $this->addTab('adjustments_section', [
                 'label'     => __('Adjustments'),
                 'title'     => __('Adjustments'),

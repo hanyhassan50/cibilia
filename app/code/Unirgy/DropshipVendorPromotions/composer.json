@@ -1,11 +1,12 @@
 {
-    "name": "Unirgy\/DropshipVendorPromotions",
-    "description": "",
+    "name": "unirgy/m2-dropship-vendor-promotions",
+    "description": "uDropship Vendor Promotions add-on",
     "require": {
-        "php": "~5.5.0|~5.6.0"
+        "unirgy/m2-dropship": "3.1.*",
+        "magento/module-sales-rule": "100.0.*|100.1.*"
     },
     "type": "magento2-module",
-    "version": "2.4.0",
+    "version": "3.2.0",
     "license": [
         "Proprietary"
     ],
@@ -16,13 +17,5 @@
         "psr-4": {
             "Unirgy\\DropshipVendorPromotions\\": ""
         }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Unirgy\/DropshipVendorPromotions"
-            ]
-        ]
     }
 }

@@ -1,3 +1,12 @@
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 .wk_images{
     border: 2px solid #e2e2e2;
     box-shadow: 0 0 4px 2px;
@@ -5,4 +14,6 @@
     height: 75px;
     margin: 2px;
     width: 75px;
+}.wkchoice{
+	/*float: right !important;*/
 }

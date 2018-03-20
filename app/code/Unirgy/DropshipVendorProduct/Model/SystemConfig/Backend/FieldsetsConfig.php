@@ -50,15 +50,19 @@ class FieldsetsConfig extends Value
                     if (is_array(@$_val[$colKey])) {
                         unset($_val[$colKey]['$ROW']);
                         usort($_val[$colKey], [$this, 'sortBySortOrder']);
-                        foreach ($_val[$colKey] as $r) {
-                           $colDef[substr($colKey,0,-4)][] = $r['column_field'];
-                           $colDef['fields_extra'][$r['column_field']] = [
+                        foreach ($_val[$colKey] as $rKey=>$r) {
+                            if (!isset($r['column_field'])) {
+                                unset($_val[$colKey][$rKey]);
+                                continue;
+                            }
+                            $colDef[substr($colKey,0,-4)][] = $r['column_field'];
+                            $colDef['fields_extra'][$r['column_field']] = [
                                'use_limit_type' => @$r['use_limit_type'],
                                'limit_type' => @$r['limit_type'],
-                           ];
-                           if (!empty($r['is_required'])) {
+                            ];
+                            if (!empty($r['is_required'])) {
                                $colDef['required_fields'][] = $r['column_field'];
-                           }
+}
                         }
                     }
                 }

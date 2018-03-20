@@ -1,5 +1,16 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" >
+<!-- 
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <title>Additional Account Info</title>
     </head>
@@ -9,13 +20,7 @@
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-customfield-index-link">
                 <arguments>
                     <argument name="path" xsi:type="string">customregistration/customfields</argument>
-                    <argument name="label" xsi:type="string" translate="true">Become Cibilian</argument>
-                </arguments>
-            </block>
-		   	<block class="Webkul\CustomRegistration\Block\View\Element\Html\Link\Current" name="customer-account-customfield-advertiser-link">
-                <arguments>
-                    <argument name="path" xsi:type="string">cibilians/advertisers</argument>
-                    <argument name="label" xsi:type="string" translate="true">Advertisers</argument>
+                    <argument name="label" xsi:type="string" translate="true">Additional Account Information</argument>
                 </arguments>
             </block>
         </referenceBlock>

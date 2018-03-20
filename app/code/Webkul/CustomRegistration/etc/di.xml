@@ -1,6 +1,28 @@
 <?xml version="1.0"?>
-
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend"
+       type="Webkul\CustomRegistration\Model\Customer\Attribute\Backend\Multiselect"/>
+
+    <preference for="Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend"
+       type="Webkul\CustomRegistration\Model\Customer\Attribute\Backend\Image"/>
+
+    <preference for="Magento\Eav\Model\Entity\Attribute\Backend\Increment"
+       type="Webkul\CustomRegistration\Model\Customer\Attribute\Backend\File"/>
+
+    <type name="Magento\Customer\Controller\Account\CreatePost">
+        <plugin name="custom-create-post" type="Webkul\CustomRegistration\Plugin\Controller\CreatePost" sortOrder="1" />
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

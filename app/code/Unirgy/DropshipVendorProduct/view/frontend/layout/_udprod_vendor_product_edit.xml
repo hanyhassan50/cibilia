@@ -2,23 +2,16 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <!--
-        <css src="Unirgy_DropshipVendorProduct::css/udprod.css"/> -->
-        
-        <!-- error -->
-        <link src="jquery/chosen/chosen.jquery.js"/>
-        <link src="jquery/chosen/chosen.ajaxaddition.jquery.js"/>
-        <!-- error -->
-        
-
+        <css src="Unirgy_DropshipVendorProduct::css/udprod.css"/>
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
-        <css src="jquery/chosen/css/chosen.css"/>
+        <link src="Unirgy_DropshipVendorProduct::js/get-video-information.js"/>
     </head>
     <body>
         <referenceBlock name="udropship.content">
             <block class="Unirgy\DropshipVendorProduct\Block\Vendor\Product"
                    template="Unirgy_DropshipVendorProduct::unirgy/udprod/vendor/product/edit.phtml" name="udprod.edit" cacheable="false">
             </block>
+            <block class="Unirgy\DropshipVendorProduct\Block\Vendor\Product\VideoForm" name="new-video" template="Unirgy_DropshipVendorProduct::unirgy/udprod/vendor/product/video_form.phtml"/>
         </referenceBlock>
     </body>
 </page>

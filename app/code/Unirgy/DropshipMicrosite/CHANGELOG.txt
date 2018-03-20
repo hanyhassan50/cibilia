@@ -1,3 +1,57 @@
+===== 3.1.19 =====
+  * Fixed captcha
+
+===== 3.1.18 =====
+  * Fixed microsite urls processing when
+    "Use storecode before vendor key in URLs"=No and "Add Store Code to Urls"=Yes
+  * Fixed duplicate store codes in urls when "Add Store Code to Urls"=Yes
+
+===== 3.1.17 =====
+  * Fixed call to undefined method setIsFirstVisit in Observer\UdropshipVendorLogin.php
+
+===== 3.1.16 =====
+  * Fixed reference to non-existing class
+
+===== 3.1.15 =====
+  * Fixed usage of setBodyText instead of setBody in mail sending
+
+===== 3.1.14 =====
+  * Fixed file uploader in registration
+
+===== 3.1.13 =====
+  * Fixed usage of _store in url params instead of _scope
+
+===== 3.1.11 =====
+  * Fixed MEQP2 compatibility
+
+===== 3.1.10 =====
+  * Fixed data install when vendor don't have password
+  * Fixed empty message in vendor list template
+
+===== 3.1.9 =====
+  * Fixed composer.json
+  * Fixes for 2.2 compatibility (partial)
+
+===== 3.1.8 =====
+  * Fixed vendor base url not secure when all frontend links secure
+
+===== 3.1.7 =====
+  * Fixed vendor portal product edit url contains vendor key which sometime lead to 404 pages
+
+===== 3.1.6 =====
+  * Added "Use storecode before vendor key in URLs" configuration option
+
+===== 3.1.5 =====
+  * Fixed wrong reference for useVendorCategoriesFilter (issue error on flat catalog)
+
+===== 3.1.4 =====
+  * Fixed https link in confirmation email
+
+===== 3.1.3 =====
+  * Fixed store model override
+
+===== 3.1.2 =====
+  * Fixed vendor base url in vendors list
   * Fixed compatibility with magento 2.1
   * Fixed password_enc not cleared after welcome email
 

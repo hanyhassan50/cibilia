@@ -17,4 +17,12 @@
     <preference for="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content"
                 type="Unirgy\DropshipVendorProduct\Block\Adminhtml\CatalogProductHelperFormGalleryContent"/>
                 -->
+    <preference for="Unirgy\Dropship\Helper\Catalog" type="Unirgy\DropshipVendorProduct\Helper\Udcatalog"/>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="udprod_vendor" xsi:type="string">/udprod/vendor/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

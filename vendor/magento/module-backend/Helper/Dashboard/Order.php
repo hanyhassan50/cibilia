@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
@@ -9,6 +9,9 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Adminhtml dashboard helper for orders
+ *
+ * @api
+ * @since 100.0.2
  */
 class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 {
@@ -19,6 +22,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 100.0.6
      */
     protected $_storeManager;
 
@@ -31,9 +35,22 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
         \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
     ) {
         $this->_orderCollection = $orderCollection;
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
+    }
+
+    /**
+     * The getter function to get the new StoreManager dependency
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
+     *
+     * @deprecated 100.1.0
+     */
+    private function getStoreManager()
+    {
+        if ($this->_storeManager === null) {
+            $this->_storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        }
+        return $this->_storeManager;
     }
 
     /**
@@ -60,19 +77,5 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
             );
         }
         $this->_collection->load();
-    }
-
-    /**
-     * Get Store Manager
-     *
-     * @return \Magento\Store\Model\StoreManagerInterface
-     */
-    public function getStoreManager()
-    {
-        if (!$this->_storeManager) {
-            $this->_storeManager = ObjectManager::getInstance()->get('Magento\Store\Model\StoreManager');
-        }
-
-        return $this->_storeManager;
     }
 }

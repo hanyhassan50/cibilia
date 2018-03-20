@@ -102,10 +102,23 @@ class Vendor extends AbstractModel
     public function authenticate($username, $password)
     {
         $collection = $this->getCollection();
+        $failedCollection = $this->getCollection();
         $where = 'email=:username OR url_key=:username';
         $order = array(new \Zend_Db_Expr('email=:username desc'), new \Zend_Db_Expr('url_key=:username desc'));
         if ($this->_hlp->getScopeConfig('udropship/vendor/unique_vendor_name')) {
             $where .= ' OR vendor_name=:username';
+        }
+        $failedCollection->getSelect()
+            ->where('status in (?)', array(Source::VENDOR_STATUS_DISABLED, Source::VENDOR_STATUS_REJECTED))
+            ->where($where)
+            ->order($order);
+        $failedCollection->addBindParam('username', $username);
+        foreach ($failedCollection as $failedVendor) {
+            if ($failedVendor->getStatus()==Source::VENDOR_STATUS_REJECTED) {
+                throw new \Exception(__('This account is rejected.'));
+            } elseif ($failedVendor->getStatus()==Source::VENDOR_STATUS_DISABLED) {
+                throw new \Exception(__('This account is disabled.'));
+            }
         }
         $collection->getSelect()
             ->where('status not in (?)', array(Source::VENDOR_STATUS_DISABLED, Source::VENDOR_STATUS_REJECTED))
@@ -803,7 +816,7 @@ class Vendor extends AbstractModel
             $cCode = $this->getCarrierCode();
         }
         $trackConfig = $this->_hlp->config()->getTrackApi($cCode);
-        if (!$trackConfig || @$trackConfig['disabled']) {
+        if (!$trackConfig || @$trackConfig['disabled'] || !@$trackConfig['model']) {
             return false;
         }
         return $this->_hlp->getObj((string)$trackConfig['model']);
@@ -1073,7 +1086,9 @@ class Vendor extends AbstractModel
     {
         parent::afterSave();
 
-        if (!empty($_FILES)) {
+        $uploadFields = $this->_hlp->config()->getUploadFields();
+
+        if (!empty($uploadFields)) {
             /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
             $dirList = $this->_hlp->getObj('\Magento\Framework\App\Filesystem\DirectoryList');
             $baseDir = $dirList->getPath('media');
@@ -1082,17 +1097,22 @@ class Vendor extends AbstractModel
             /* @var \Magento\Framework\Filesystem\Directory\Write $dirWrite */
             $dirWrite = $this->_hlp->createObj('\Magento\Framework\Filesystem\Directory\WriteFactory')->create($baseDir);
             $dirWrite->create($vendorDir);
-            $changedFields = array();
-            foreach ($_FILES as $k=>$img) {
-                if (empty($img['tmp_name']) || empty($img['name']) || empty($img['type'])) {
-                    continue;
-                }
-                if (!@move_uploaded_file($img['tmp_name'], $vendorAbsDir.DIRECTORY_SEPARATOR.$img['name'])) {
+            $changedFields = [];
+
+            foreach ($uploadFields as $k) {
+                /**@var \Magento\MediaStorage\Model\File\Uploader $ioUpload */
+                $ioUpload = $this->_hlp->createFileUploader($k);
+                if (!$ioUpload) continue;
+                $img = $ioUpload->validateFile();
+                $res = $ioUpload->save($vendorAbsDir);
+                if (@$res['file']) {
+                    $this->setData($k, $vendorDir . DIRECTORY_SEPARATOR . $res['file']);
+                    $changedFields[] = $k;
+                } else {
                     throw new \Exception('Error while uploading file: '.$img['name']);
                 }
-                $changedFields[] = $k;
-                $this->setData($k, 'vendor/'.$this->getId().'/'.$img['name']);
             }
+
             if (!empty($changedFields)) {
                 $this->_hasImageUpload = true;
                 $changedFields[] = 'custom_vars_combined';
@@ -1107,7 +1127,7 @@ class Vendor extends AbstractModel
     public function afterCommitCallback()
     {
         if (!$this->getSkipUdropshipVendorIndexer()) {
-            /* @var \Magento\Framework\Indexer\IndexerRegistry $indexer */
+            /* @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
             $indexerRegistry = $this->_hlp->getObj('\Magento\Framework\Indexer\IndexerRegistry');
             /* @var \Magento\Indexer\Model\Config $indexerConfig */
             $indexerConfig = $this->_hlp->getObj('\Magento\Indexer\Model\Config');
@@ -1265,6 +1285,11 @@ class Vendor extends AbstractModel
     public function getAllowTiershipModify()
     {
         return $this->_hlp->isModuleActive('Unirgy_DropshipTierShipping') && $this->_hlp->getScopeConfig('carriers/udtiership/allow_vendor_modify');
+    }
+
+    public function getResizedLogoUrl($width, $height, $field='logo')
+    {
+        return $this->_hlp->getResizedVendorLogoUrl($this, $width, $height, $field);
     }
 
 }

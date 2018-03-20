@@ -9,23 +9,15 @@ use Magento\Framework\View\LayoutFactory;
 
 class Accordion extends WidgetAccordion
 {
-    /**
-     * @var LayoutFactory
-     */
-    protected $_viewLayoutFactory;
-
-    public function __construct(Context $context, 
-        LayoutFactory $viewLayoutFactory, 
-        array $data = [])
+    protected function _construct()
     {
-        $this->_viewLayoutFactory = $viewLayoutFactory;
-
-        parent::__construct($context, $data);
+        parent::_construct();
         $this->setTemplate('Unirgy_DropshipVendorProduct::unirgy/udprod/vendor/product/renderer/widget/accordion.phtml');
     }
     public function addItem($itemId, $config)
     {
-        $this->_items[$itemId] = $this->_viewLayoutFactory->create()->createBlock('Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\Widget\Accordion\Item')
+        $this->_items[$itemId] = $this->getLayout()
+            ->createBlock('Unirgy\DropshipVendorProduct\Block\Vendor\Product\Renderer\Widget\Accordion\Item')
             ->setData($config)
             ->setAccordion($this)
             ->setId($itemId);

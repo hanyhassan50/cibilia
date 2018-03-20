@@ -23,7 +23,7 @@ class Collection extends AbstractCollection
 {
     protected function _construct()
     {
-        $this->_init('Unirgy\Dropship\Model\Vendor\Statement\Refundrow', 'Unirgy\Dropship\Model\ResourceModel\Vendor\Statement\Refundrow');
+        $this->_init('Unirgy\Dropship\Model\Vendor\Statement\RefundRow', 'Unirgy\Dropship\Model\ResourceModel\Vendor\Statement\RefundRow');
         parent::_construct();
     }
 }

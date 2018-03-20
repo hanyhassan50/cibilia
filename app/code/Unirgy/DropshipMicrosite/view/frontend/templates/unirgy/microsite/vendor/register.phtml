@@ -132,6 +132,9 @@ if (!$_r->getCarrierCode()) {
                 <p class="required"><?php echo __('* Required Fields') ?></p>
             </td></tr></tbody></table>
         </div>
+<ul class="form-list">
+    <?php echo $this->getChildHtml('form.additional.info'); ?>
+</ul>
         <div class="button-set">
             <div><ul><li><a href="<?php echo $this->getUrl('udropship/vendor')?>"><?php echo __('Return to log in')?></a></li></ul></div>
             <button class="form-button" type="submit" name="send"><span><?php echo __('Register') ?></span></button>

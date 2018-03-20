@@ -340,18 +340,27 @@ class Availability extends DataObject
                 $hasOutOfStock = true;
                 $item->setUdmultiOutOfStock(true);
                 $message = $item->getMessage() ? $item->getMessage().'<br/>' : '';
+                $addressError = $stockError = null;
                 if (!$addressMatch) {
+                    $addressError = true;
                     $message .= __('This item is not available for your location.');
                 } elseif (!$countryMatch) {
+                    $addressError = true;
                     $message .= __('This item is not available for your country.');
                 } elseif (!$zipCodeMatch ) {
+                    $addressError = true;
                     $message .= __('This item is not available for your zipcode.');
                 } else {
+                    $stockError = true;
                     $message .= __('This product is currently out of stock.');
                 }
-                $item->setHasError(true)->setMessage($message);
+                if ($addressError) $this->_setAddressError($item);
+                if ($stockError) $this->_setStockError($item);
+                $item->setMessage($message);
                 if ($item->getParentItem()) {
-                    $item->getParentItem()->setHasError(true)->setMessage($message);
+                    if ($addressError) $this->_setAddressError($item->getParentItem());
+                    if ($stockError) $this->_setStockError($item->getParentItem());
+                    $item->getParentItem()->setMessage($message);
                     $qtyOptions = $item->getParentItem()->getQtyOptions();
                     if (is_array($qtyOptions)) {
                         foreach ($qtyOptions as $qtyOption) {
@@ -364,16 +373,32 @@ class Availability extends DataObject
         }
         if ($hasOutOfStock && !$quote->getHasError() && !$quote->getMessages()) {
             if (!$allAddressMatch) {
+                $this->_setAddressError($quote);
                 $message = __('Some items are not available for your location.');
             } elseif (!$allCountryMatch) {
+                $this->_setAddressError($quote);
                 $message = __('Some items are not available for your country.');
             } elseif (!$allZipcodeMatch) {
+                $this->_setAddressError($quote);
                 $message = __('Some items are not available for your zipcode.');
             } else {
+                $this->_setStockError($quote);
                 $message = __('Some of the products are currently out of stock');
             }
-            $quote->setHasError(true)->addMessage($message);
+            $quote->addMessage($message);
         }
+        return $this;
+    }
+    protected function _setStockError($entity)
+    {
+        $entity->setHasError(true);
+        $entity->setHasStockError(true);
+        return $this;
+    }
+    protected function _setAddressError($entity)
+    {
+        $entity->setHasError(true);
+        $entity->setHasAddressError(true);
         return $this;
     }
 }

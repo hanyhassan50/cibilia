@@ -47,7 +47,7 @@ $visibility = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\D
                     <textarea name="question[question_text]" id="question_text" title="<?php echo __('Question Text') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
                 </div>
             </li>
-            <?php echo $this->getChildHtml('form.additional.info'); ?>
+            <?php echo $this->getChildHtml('captcha'); ?>
         </ul>
     </div>
     <div class="buttons-set">

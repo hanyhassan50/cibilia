@@ -1,0 +1,10 @@
+/*
+ * creats by stagebit
+ * 27 jan 2018
+ */
+body {
+  background: #fff; }
+  body span {
+    font-weight: 600; }
+  body .test {
+    display: none; }

@@ -22,7 +22,7 @@ namespace MSP\ReCaptcha\Command;
 
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
-use MSP\ReCaptcha\Helper\Data;
+use MSP\ReCaptcha\Model\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,10 +56,13 @@ class ReCaptcha extends Command
         parent::configure();
     }
 
+    /**
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->config->saveConfig(
-            Data::XML_PATH_GENERAL_ENABLED_BACKEND,
+            Config::XML_PATH_ENABLED_BACKEND,
             '0',
             'default',
             0

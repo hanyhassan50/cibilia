@@ -36,11 +36,6 @@ class Products extends Template
     protected $_hlp;
 
     /**
-     * @var Collection
-     */
-    protected $_productCollection;
-
-    /**
      * @var Visibility
      */
     protected $_productVisibility;
@@ -63,8 +58,7 @@ class Products extends Template
     public function __construct(Context $context, 
         Registry $frameworkRegistry, 
         HelperData $udropshipHelper,
-        Collection $productCollection,
-        Visibility $productVisibility, 
+        Visibility $productVisibility,
         StockFactory $modelStockFactory, 
         SetCollection $setCollection, 
         ProductFactory $modelProductFactory, 
@@ -72,7 +66,6 @@ class Products extends Template
     {
         $this->_registry = $frameworkRegistry;
         $this->_hlp = $udropshipHelper;
-        $this->_productCollection = $productCollection;
         $this->_productVisibility = $productVisibility;
         $this->_modelStockFactory = $modelStockFactory;
         $this->_setCollection = $setCollection;
@@ -118,8 +111,8 @@ class Products extends Template
     }
     public function getUrl($route = '', $params = [])
     {
-        if (!isset($params['_store']) && $this->_oldStoreId) {
-            $params['_store'] = $this->_oldStoreId;
+        if (!isset($params['_scope']) && $this->_oldStoreId) {
+            $params['_scope'] = $this->_oldStoreId;
         }
         return parent::getUrl($route, $params);
     }
@@ -186,17 +179,36 @@ class Products extends Template
     protected function _getStockField($type)
     {
         $v = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session')->getVendor();
-        if (!$v || !$v->getId()) {
-            $isLocalVendor = 0;
-        } else {
-            $isLocalVendor = intval($v->getId()==$this->_scopeConfig->getValue('udropship/vendor/local_vendor', ScopeInterface::SCOPE_STORE));
-        }
         if ($this->_hlp->isUdmultiActive()) {
+            $conn = $this->_hlp->rHlp()->getConnection();
+            $_qtyExpr = $conn->getCheckSql(
+                'uvp.stock_qty IS NULL',
+                '10000', $conn->getCheckSql('uvp.stock_qty>0', 'uvp.stock_qty', '0')
+            );
+            $cfgMinQty = (int)$this->_getMinQty();
+
+            $stockQtyExpr = $conn->getCheckSql(
+                'cisi.use_config_min_qty>0',
+                'uvp.stock_qty>'.$cfgMinQty, 'uvp.stock_qty>cisi.min_qty'
+            );
+            if ($this->_isBackordersEnabled()) {
+                $_statusExpr = $conn->getCheckSql(
+                    'uvp.backorders=-1 AND (cisi.use_config_backorders>0 OR cisi.backorders>0)'
+                    .' OR uvp.backorders>0 OR uvp.stock_qty IS NULL OR '.$stockQtyExpr,
+                    '1', '0'
+                );
+            } else {
+                $_statusExpr = $conn->getCheckSql(
+                    'uvp.backorders=-1 AND (cisi.use_config_backorders=0 AND cisi.backorders>0)'
+                    .' OR uvp.backorders>0 OR uvp.stock_qty IS NULL OR '.$stockQtyExpr,
+                    '1', '0'
+                );
+            }
             switch ($type) {
                 case 'qty':
-                    return new \Zend_Db_Expr('IF(uvp.vendor_product_id is null, cisi.qty, uvp.stock_qty)');
+                    return new \Zend_Db_Expr("IF(uvp.vendor_product_id is null, cisi.qty, $_qtyExpr)");
                 case 'status':
-                    return new \Zend_Db_Expr("IF(uvp.vendor_product_id is null or $isLocalVendor, cisi.is_in_stock, null)");
+                    return new \Zend_Db_Expr("IF(uvp.vendor_product_id is null, cisi.is_in_stock, cisi.is_in_stock and $_statusExpr)");
             }
         } else {
             switch ($type) {
@@ -221,15 +233,20 @@ class Products extends Template
             $stockTable = $res->getTableName('cataloginventory_stock_item');
             $stockStatusTable = $res->getTableName('cataloginventory_stock_status');
             $wId = (int)$this->_storeManager->getDefaultStoreView()->getWebsiteId();
-            $collection = $this->_productCollection
+            if ($this->_hlp->hasMageFeature('stock_website')) {
+                $wId = 0;
+            }
+            $collection = $this->_hlp->createObj('\Unirgy\Dropship\Model\ResourceModel\ProductCollection')
+                ->setFlag('udskip_price_index',1)
                 ->setFlag('has_group_entity', 1)
+                ->setFlag('has_stock_status_filter', 1)
                 ->addAttributeToFilter('type_id', ['in'=>['simple','configurable','downloadable','virtual']])
                 ->addAttributeToSelect(['sku', 'name', 'status', 'price'])
             ;
             $collection->addAttributeToFilter('entity_id', ['in'=>$v->getAssociatedProductIds()]);
             $collection->addAttributeToFilter('visibility', ['in'=>$this->_productVisibility->getVisibleInSiteIds()]);
             $conn = $collection->getConnection();
-            $wIdsSql = $conn->quote(array_keys($this->_storeManager->getWebsites()));
+            $wIdsSql = $conn->quote([$wId]);
             //$collection->addAttributeToFilter('entity_id', array('in'=>array_keys($v->getAssociatedProducts())));
             $collection->getSelect()
                 ->join(
@@ -281,5 +298,28 @@ $collection->addAttributeToFilter('udropship_vendor', $v->getId());
             ->setTitle(__('Attribute Set'))
             ->setClass('validate-select absolute-advice')
             ->setOptions($options)->toHtml();
+    }
+    protected function _isManageStock()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    protected function _isBackordersEnabled()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_BACKORDERS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    protected function _getMinQty()
+    {
+        return $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

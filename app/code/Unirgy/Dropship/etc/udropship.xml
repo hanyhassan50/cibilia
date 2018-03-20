@@ -84,14 +84,6 @@
                 <legend>FedEx Specific</legend>
                 <position>70</position>
             </fedex>
-			<custom translate="legend">
-                <legend>Registration Step 1</legend>
-                <position>80</position>
-            </custom>
-			<custom_step2 translate="legend">
-                <legend>Registration Step 2</legend>
-                <position>90</position>
-            </custom_step2>
         </fieldsets>
 
         <fields>
@@ -996,18 +988,6 @@
                 <type>text</type>
             </vendor_name>
 
-            <vendor_referredby translate="label">
-                <label>Referred by</label>
-                <fieldset>vendor_info</fieldset>
-                <type>text</type>
-            </vendor_referredby>
-
-            <vendor_recommendation translate="label">
-                <label>Recommendation</label>
-                <fieldset>vendor_info</fieldset>
-                <type>text</type>
-            </vendor_recommendation>
-
             <telephone translate="label">
                 <label>Phone Number</label>
                 <fieldset>vendor_info</fieldset>
@@ -1129,109 +1109,7 @@
                 <label>Country</label>
                 <type>select</type>
             </billing_country_id>
-		   <owner_name translate="label">
-                <fieldset>custom</fieldset>
-                <label>Name and Surname of Owner/Responsible</label>
-                <type>text</type>
-                <position>20</position>
-           </owner_name>
-		   <your_role translate="label">
-                <label>Your role</label>
-                <fieldset>custom</fieldset>
-                <type>select</type>
-                <source>your_role</source>
-                <position>30</position>
-           </your_role>
-		   <company_address translate="label">
-                <label>Company Registered Address</label>
-                <fieldset>custom</fieldset>
-                <type>text</type>
-                <position>40</position>
-           </company_address>
 
-		   <company_employee translate="label">
-                <label>Question 1: How many people work in the company you wish to sign up?</label>
-                <fieldset>custom</fieldset>
-                <type>select</type>
-                <source>company_employee</source>
-                <position>30</position>
-           </company_employee>
-           <company_type translate="label">
-                <label>Question 2: Is your company part of a group of companies?</label>
-                <fieldset>custom</fieldset>
-                <type>select</type>
-                <source>company_type</source>
-                <position>30</position>
-           </company_type>
-           <product_categories translate="label">
-                <label>In which categories your products fit in?</label>
-                <fieldset>custom_step2</fieldset>
-                <type>multiselect</type>
-                <source>product_categories</source>
-                <position>0</position>
-           </product_categories>
-		   <product_sell_place translate="label">
-                <label>Where do you currently sell your products?</label>
-                <fieldset>custom_step2</fieldset>
-                <type>multiselect</type>
-                <source>product_sell_place</source>
-                <position>10</position>
-           </product_sell_place>
-           <product_sell_place_other translate="label">
-                <label>Other</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>20</position>
-           </product_sell_place_other>
-		   <best_time_to_call translate="label">
-                <label>When is the best time to call you</label>
-                <fieldset>custom_step2</fieldset>
-                <type>select</type>
-                <source>best_time_to_call</source>
-                <position>30</position>
-           </best_time_to_call>
-			<vat_number translate="label">
-                <label>VAT Number</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>40</position>
-           </vat_number>
-          <foundation_year translate="label">
-                <label>Year of foundation</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>50</position>
-           </foundation_year>
-		  <company_fb_page translate="label">
-                <label>Company Facebook page</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>60</position>
-           </company_fb_page>
-           <company_website translate="label">
-                <label>Company website</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>70</position>
-           </company_website>
-           <company_linkedin translate="label">
-                <label>Company LinkedIn page</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>80</position>
-           </company_linkedin>
-           <company_twitter translate="label">
-                <label>Company twitter</label>
-                <fieldset>custom_step2</fieldset>
-                <type>text</type>
-                <position>90</position>
-           </company_twitter>
-           <company_photos translate="label">
-                <label>Company Photos</label>
-                <fieldset>custom_step2</fieldset>
-                <type>image</type>
-                <position>100</position>
-           </company_photos>
         </fields>
     </vendor>
 

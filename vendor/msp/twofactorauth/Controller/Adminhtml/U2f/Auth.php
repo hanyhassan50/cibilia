@@ -22,13 +22,16 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\U2f;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\U2fKey;
 
-class Auth extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Auth extends AbstractAction
 {
     /**
      * @var TfaInterface
@@ -44,10 +47,6 @@ class Auth extends Action
      * @var PageFactory
      */
     private $pageFactory;
-    /**
-     * @var Registry
-     */
-    private $registry;
 
     /**
      * @var UserConfigManagerInterface
@@ -57,7 +56,6 @@ class Auth extends Action
     public function __construct(
         Action\Context $context,
         Session $session,
-        Registry $registry,
         PageFactory $pageFactory,
         UserConfigManagerInterface $userConfigManager,
         TfaInterface $tfa
@@ -66,7 +64,6 @@ class Auth extends Action
         $this->tfa = $tfa;
         $this->session = $session;
         $this->pageFactory = $pageFactory;
-        $this->registry = $registry;
         $this->userConfigManager = $userConfigManager;
     }
 
@@ -74,15 +71,14 @@ class Auth extends Action
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
     public function execute()
     {
-        $this->userConfigManager->setDefaultProvider($this->getUser(), U2fKey::CODE);
-        $this->registry->register('msp_tfa_current_provider', U2fKey::CODE);
+        $this->userConfigManager->setDefaultProvider($this->getUser()->getId(), U2fKey::CODE);
         return $this->pageFactory->create();
     }
 
@@ -93,8 +89,11 @@ class Auth extends Action
      */
     protected function _isAllowed()
     {
+        $user = $this->getUser();
+
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), U2fKey::CODE) &&
-            $this->tfa->getProvider(U2fKey::CODE)->getIsActive($this->getUser());
+            $user &&
+            $this->tfa->getProviderIsAllowed($this->getUser()->getId(), U2fKey::CODE) &&
+            $this->tfa->getProvider(U2fKey::CODE)->isActive($this->getUser()->getId());
     }
 }

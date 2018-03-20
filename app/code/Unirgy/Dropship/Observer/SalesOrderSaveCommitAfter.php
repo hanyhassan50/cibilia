@@ -4,18 +4,22 @@ namespace Unirgy\Dropship\Observer;
 
 use \Magento\Framework\Event\Observer;
 use \Magento\Framework\Event\ObserverInterface;
+use \Unirgy\Dropship\Helper\Data;
 use \Unirgy\Dropship\Helper\ProtectedCode;
 use \Unirgy\Dropship\Observer\AbstractObserver;
+
+use \Magento\Sales\Model\Order as ModelOrder;
+use \Unirgy\Dropship\Model\Source;
 
 class SalesOrderSaveCommitAfter extends AbstractObserver implements ObserverInterface
 {
     /**
-     * @var ProtectedCode
+    \Unirgy\Dropship\Helper\ProtectedCode\OrderSave
      */
     protected $_hlpPr;
 
     public function __construct(
-        ProtectedCode $helperProtectedCode,
+        \Unirgy\Dropship\Helper\ProtectedCode\OrderSave $helperProtectedCode,
         \Unirgy\Dropship\Observer\Context $context,
         array $data = []
     )

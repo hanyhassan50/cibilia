@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Customer My Account (All Pages)" design_abstraction="custom">
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <arguments>
+                <argument name="css_class" xsi:type="string">nav items svg-icons</argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true" />
+        <referenceBlock name="customer-account-navigation-billing-agreements-link" remove="true" />
+        <referenceBlock name="udqa-customer-index" remove="true" />
+
+
+        <referenceBlock name="customer_account_navigation">
+            <block class="Cibilia\Summary\Block\View\Element\Html\Link\Current" name="cibilia_dashbord" before="-">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Cibilian Dashboard</argument>
+                    <argument name="path" xsi:type="string">cibilians/dashboard</argument>
+                    <argument name="sortOrder" xsi:type="number">250</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="customer_account_navigation">
+            <action method="setTemplate">
+                <argument name="custom_account_dashbord" xsi:type="string">Magento_Theme::customer/account/sidebar.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-account-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                    <svg version="1.1" id="bi-globe-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                        <circle fill="none" cx="50" cy="50" r="27.5"/>
+                        <ellipse fill="none" cx="50" cy="50" rx="15.2" ry="27.2"/>
+                        <line fill="none" x1="50" y1="22.5" x2="50" y2="77.5"/>
+                        <ellipse fill="none" cx="50" cy="50" rx="27.2" ry="15.2"/>
+                        <line fill="none" x1="22.5" y1="50" x2="77.5" y2="50"/>
+                    </svg>]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-orders-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="si-cart-fifteen" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <polyline points="20.259,23.447 30.562,23.447 44.822,65.445 "/>
+                            <circle cx="46.373" cy="70.911" r="5.642"/>
+                            <circle cx="66.484" cy="70.911" r="5.642"/>
+                            <line x1="60.843" y1="70.911" x2="52.014" y2="70.911"/>
+                            <polyline points="33.889,33.247 78.491,33.247 72.929,58.026 42.303,58.026 "/>
+                            <line x1="75.543" y1="46.384" x2="38.35" y2="46.384"/>
+                            <polyline points="42.453,32.971 49.917,25.584 58.851,32.971 "/>
+                            <polyline points="53.625,28.65 65.459,23.748 72.573,32.971 "/>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-wish-list-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="si-heart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <path d="M50,42.287c0-4.606,5.197-11.114,10.643-11.114c5.446,0,10.643,3.728,10.643,10.328 C71.286,61.179,50,68.766,50,68.766S28.714,61.179,28.714,41.5c0-6.6,5.197-10.328,10.643-10.328S50,37.681,50,42.287z" style="stroke-dasharray: 141, 181; stroke-dashoffset: 0;"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-account-edit-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="bi-business-man" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                            <polygon fill="none" points="50,50.5 54.8,45.6 65.9,54.8 56.9,77.3 50,77.3 43.1,77.3 34.1,54.8 45.2,45.6 " />
+                            <polyline fill="none" points="51.2,50.5 53.1,52.4 54.6,65.5 50.6,69.5 46.6,65.5 48.2,52.4 50,50.5 " />
+                            <circle fill="none" cx="50" cy="36.6" r="7" />
+                            <line fill="none" x1="47.4" y1="47.9" x2="47.4" y2="43.1" />
+                            <line fill="none" x1="52.6" y1="47.9" x2="52.6" y2="43.1" />
+                            <polyline fill="none" points="65.9,54.8 65.9,77.3 56.9,77.3 " />
+                            <polyline fill="none" points="34.1,54.8 34.1,77.3 43.1,77.3 " />
+                            <line fill="none" x1="53.3" y1="54.5" x2="47.6" y2="57" />
+                            <line fill="none" x1="53.3" y1="60.4" x2="47.6" y2="63" />
+                            <path fill="none" d="M43,36.6c0,0-5.3-6.5-1.3-8.8c0.2-1.9,3.1-7.9,12.9-3.6c9.4,5,2.4,12.4,2.4,12.4" />
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="commission-payout">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="fi-piggybank" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <path d="M42.159,77.518c0,0,1.871,0,3.274,0 c1.403,0,1.403-0.932,1.403-1.786s0-2.019,0-2.641c0-0.621,0.759-0.508,1.225-0.397c0.466,0.111,4.998,1.129,9.685,0 c0.533-0.177,0.533,0.398,0.533,0.841c0,0.443,0,1.859,0,2.656c0,0.797,0.289,1.328,1.577,1.328c1.288,0,6.153,0,6.775,0 s1.155-0.398,1.155-1.35s0-7.989,0-7.989s4.398-4.161,5.043-7.458c1.599-0.31,3.021-0.598,3.421-0.686 c0.4-0.089,1.222-0.266,1.222-1.638s0-4.67,0-5.489s-0.155-1.35-1.177-1.527c-1.022-0.177-2.799-0.528-2.799-0.528 s-1.511-5.27-3.199-6.642c0.489-1.571,1.599-5.754,1.733-6.197c0.133-0.443-0.311-0.974-1.422-0.332 c-1.111,0.642-3.051,1.658-3.497,1.88s-0.568,0.506-1.447-0.05s-4.397-2.797-7.763-3.69c-0.643,0.472-5.847,3.817-11.028,0 c-2.08,0.792-24.102,10.912-9.322,31.16c0,4.189,0,8.031,0,8.566c0,0.535-0.162,1.97,1.101,1.97 C39.915,77.518,42.159,77.518,42.159,77.518z" style="stroke-dasharray: 164, 204; stroke-dashoffset: 0;"></path>
+                            <path d="M32.823,50.853c0,0-0.389,7.306-4.084,6.544 s-3.371-5.237-3.143-5.882c0.49-1.385,2.396-2.078,3.545,0.592c1.625,3.777-4.416,10.255-6.71,5.389" style="stroke-dasharray: 34, 74; stroke-dashoffset: 0;"></path>
+                            <path d="M46.388000000000005,28.381A5.922,5.9 0,1,1 58.232,28.381A5.922,5.9 0,1,1 46.388000000000005,28.381" style="stroke-dasharray: 38, 78; stroke-dashoffset: 0;"></path>
+                            <path d="M57.439,47.894A3.55,3.55 0,1,1 64.539,47.894A3.55,3.55 0,1,1 57.439,47.894" style="stroke-dasharray: 23, 63; stroke-dashoffset: 2;"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="payout-type">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="bi-bank" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                        <polygon fill="none" points="50,42.9 26,42.9 50,24.9 74,42.9 "/>
+                        <polyline fill="none" points="30,42.9 30,63.1 38.1,63.1 38.1,42.9 "/>
+                        <polyline fill="none" points="46,42.9 46,63.1 54,63.1 54,42.9 "/>
+                        <polyline fill="none" points="61.9,42.9 61.9,63.1 70,63.1 70,42.9 "/>
+                        <polygon fill="none" points="50,75.4 23,75.4 23,63.1 77,63.1 77,75.4 "/>
+                        <path fill="none" d="M51.6,32.6c0,0-1.8-0.8-2.4,0.3c-0.6,1.1,0.6,1.8,1.1,2c0.4,0.2,1.2,0.4,1.2,1.3c0.1,0.8-1.1,2.1-3,0.8"/>
+                        <line fill="none" x1="50.2" y1="31.1" x2="50.2" y2="32.2"/>
+                        <line fill="none" x1="50.2" y1="37.8" x2="50.2" y2="38.9"/>
+                    </svg>]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="referred-products">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="bi-handmike" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                            <path fill="none" d="M22.6,47.1c0,1.7-0.1,9.6,5.4,9.6c13.7,0,30.2,13,30.2,13V47.1V24.4c0,0-16.5,13-30.2,13 C22.5,37.5,22.6,45.4,22.6,47.1z" style="stroke-dasharray: 137, 177; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M50,29.9L50,64.2" style="stroke-dasharray: 35, 75; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M68.2,47.1L78.4,47.1" style="stroke-dasharray: 11, 51; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M64.9,55.9L73.9,63.6" style="stroke-dasharray: 12, 52; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M64.9,38.2L73.9,30.5" style="stroke-dasharray: 12, 52; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M40.4,59.4v16c0,0.7-0.6,1.3-1.3,1.3h-5.2c-0.7,0-1.3-0.6-1.3-1.3V57.1" style="stroke-dasharray: 44, 84; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M29.1,37.4L29.1,56.7" style="stroke-dasharray: 20, 60; stroke-dashoffset: 0;"></path>
+                            <path fill="none" d="M58.2,41.8c0,0,5.4,0.3,5.4,5.4s-5.4,5.1-5.4,5.1" style="stroke-dasharray: 17, 57; stroke-dashoffset: 0;"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-my-credit-cards-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                    <svg version="1.1" id="fi-creditcard" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                        <path d="M75.693,68.361H24.307 c-1.861,0-3.384-1.523-3.384-3.384V35.024c0-1.861,1.523-3.384,3.384-3.384h51.386c1.861,0,3.384,1.523,3.384,3.384v29.953 C79.078,66.838,77.555,68.361,75.693,68.361z" style="stroke-dasharray: 184, 224; stroke-dashoffset: 0;"></path>
+                        <path d="M20.922,54.272L79.078,54.272" style="stroke-dasharray: 59, 99; stroke-dashoffset: 0;"></path>
+                        <path d="M79.078,59.789L20.922,59.789" style="stroke-dasharray: 59, 99; stroke-dashoffset: 0;"></path>
+                        <path d="M28.1,39.329L34.013,39.329L34.013,44.483L27.1,44.483L27.1,39.329Z" style="stroke-dasharray: 25, 65; stroke-dashoffset: 0;"></path>
+                    </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-product-reviews-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                    <svg version="1.1" id="si-star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+				        <path d="M48.5,68.3L33,76.5L36.2,57.6L22.5,44.1L41.5,41.4L50,24.2L58.5,41.4L77.5,44.1L63.8,57.6L67,76.5L50,67.6Z" style="stroke-dasharray: 192, 232; stroke-dashoffset: 0;"></path>
+			        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-newsletter-subscriptions-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                    <svg version="1.1" id="si-envelope" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                        <path d="M50.5,34.7L78.9,34.7L78.9,65.3L21.1,65.3L21.1,34.7Z" style="stroke-dasharray: 177, 217; stroke-dashoffset: 0;"></path>
+                        <path d="M21.2,34.7L49.9,50L78.8,34.7" style="stroke-dasharray: 66, 106; stroke-dashoffset: 0;"></path>
+                    </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-address-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                    <svg version="1.1" id="si-credit-card" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                        <path d="M50.471,34.679L78.856,34.679L78.856,65.321L21.144,65.321L21.144,34.679Z" style="stroke-dasharray: 177, 217; stroke-dashoffset: 0;"></path>
+                        <path d="M30.76,49.999A5.685,5.685 0,1,1 42.13,49.999A5.685,5.685 0,1,1 30.76,49.999" style="stroke-dasharray: 36, 76; stroke-dashoffset: 0;"></path>
+                        <path d="M49.737,42.059L63.893,42.059" style="stroke-dasharray: 15, 55; stroke-dashoffset: 0;"></path>
+                        <path d="M49.737,49.999L70.177,49.999" style="stroke-dasharray: 21, 61; stroke-dashoffset: 4;"></path>
+                        <path d="M49.737,57.723L66.096,57.723" style="stroke-dasharray: 17, 57; stroke-dashoffset: 37;"></path>
+                    </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-customfield-advertiser-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="si-cart-fifteen-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <path class="fm adv" d="M60.27,51.019c-3.081-1.522-6.567-2.397-10.27-2.397c-3.704,0-7.189,0.875-10.27,2.397 C32.473,54.604,27.5,61.85,27.5,70.224v14.467c0,2.984,2.52,5.403,5.628,5.403h33.745c3.108,0,5.628-2.419,5.628-5.403V70.224 C72.5,61.85,67.527,54.604,60.27,51.019z" fill="none" style="stroke-dasharray: 177, 217;stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M45.667,50.622 54.5,58.737 48,64.517 48,90.095 " style="stroke-dasharray: 177, 217;stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M53.274,69.221a1.863,1.863 0 1,0 3.726,0a1.863,1.863 0 1,0 -3.726,0" fill="none"></path>
+                            <path class="fm adv" d="M53.274,76.221a1.863,1.863 0 1,0 3.726,0a1.863,1.863 0 1,0 -3.726,0" fill="none"></path>
+                            <path class="fm adv" d="M53.274,83.221a1.863,1.863 0 1,0 3.726,0a1.863,1.863 0 1,0 -3.726,0" fill="none"></path>
+                            <path class="fm adv" d="M53.125,16.549a4.875,4.875 0 1,0 9.75,0a4.875,4.875 0 1,0 -9.75,0" fill="none"></path>
+                            <path class="fm adv" d="M37.125,16.549a4.875,4.875 0 1,0 9.75,0a4.875,4.875 0 1,0 -9.75,0" fill="none"></path>
+                            <path class="fm adv" d="M44.241,15.665a5.759,5.759 0 1,0 11.518,0a5.759,5.759 0 1,0 -11.518,0" fill="none"></path>
+                            <path class="fm adv" d="M35.487,39.108a14.513,14.513 0 1,0 29.026,0a14.513,14.513 0 1,0 -29.026,0" fill="none"></path>
+                            <path class="fm adv" d="M59,28.059c-6,4.82-12,4.82-18,0V18.01h18V28.059z" fill="none"></path>
+                            <path class="fm adv" d="M59.029,19.424c-1.455,0-2.771-0.572-3.755-1.494c-0.262,0.611-0.629,1.159-1.074,1.639 c0.893,1.122,2.254,1.856,3.8,1.856c2.145,0,3.946-1.395,4.598-3.319C61.637,18.925,60.392,19.424,59.029,19.424z" fill="none"></path>
+                            <path class="fm adv" d="M40.971,19.424c-1.363,0-2.608-0.498-3.569-1.319c0.652,1.925,2.453,3.319,4.598,3.319 c1.546,0,2.907-0.733,3.8-1.856c-0.445-0.48-0.813-1.028-1.074-1.639C43.742,18.852,42.426,19.424,40.971,19.424z" fill="none"></path>
+                            <path class="fm adv" d="M54.745,17.361c-0.371,0.397-0.794,0.742-1.253,1.036c-1.009,0.646-2.205,1.027-3.493,1.027 s-2.484-0.38-3.493-1.027c-0.459-0.294-0.882-0.639-1.253-1.036c-0.162,0.202-0.34,0.391-0.529,0.568 c0.262,0.611,0.629,1.159,1.074,1.639c1.05,1.132,2.533,1.856,4.2,1.856s3.15-0.723,4.2-1.856c0.445-0.48,0.813-1.028,1.074-1.639 C55.085,17.752,54.908,17.563,54.745,17.361z" fill="none"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-customfield-index-link">
+            <arguments>
+                <argument name="svg" xsi:type="string" translate="true">
+                    <![CDATA[
+                        <svg version="1.1" id="cibilian-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 75.34 76.341" enable-background="new 0 0 75.34 76.341" xml:space="preserve">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M38.305,74.901C18.563,74.896,2.6,58.99,2.615,39.336
+                                C2.629,19.829,18.861,3.621,38.366,3.637C58.02,3.653,73.884,19.625,73.879,39.389C73.875,59.246,58.188,74.906,38.305,74.901z
+                                 M37.952,62.128c3.881,0.172,7.796-0.846,11.473-2.89c4.095-2.275,5.56-4.545,3.972-6.724c-2.459-3.377-4.861-1.238-7.382,0.247
+                                c-5.625,3.314-13.532,2.623-18.623-1.425c-5.099-4.054-7.135-10.462-5.319-16.739c2.998-10.373,15.593-14.613,25.23-8.387
+                                c2.19,1.415,4.223,2.023,5.865-0.277c1.773-2.482,0.396-4.383-1.79-5.919c-8.001-5.622-19.499-5.426-27.665,0.509
+                                c-8.102,5.891-11.516,16.189-8.453,25.512C18.434,55.701,27.325,62.101,37.952,62.128z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M37.952,62.128c-10.627-0.027-19.519-6.427-22.692-16.093
+                                c-3.063-9.322,0.352-19.621,8.453-25.512c8.166-5.935,19.664-6.131,27.665-0.509c2.187,1.536,3.563,3.437,1.79,5.919
+                                c-1.643,2.301-3.675,1.692-5.865,0.277c-9.638-6.227-22.232-1.986-25.23,8.387c-1.815,6.277,0.221,12.686,5.319,16.739
+                                c5.091,4.048,12.998,4.739,18.623,1.425c2.521-1.485,4.923-3.624,7.382-0.247c1.588,2.179,0.123,4.448-3.972,6.724
+                                C45.748,61.282,41.833,62.3,37.952,62.128z"/>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

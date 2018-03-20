@@ -101,7 +101,7 @@ RegionUpdater.prototype._checkRegionRequired = function()
         <table><tbody>
         <?php foreach ($_fieldset['fields'] as $_k=>$_f):
             $_value = $_v->getData($_k);
-            if (is_array($_value)) continue;
+            if (is_array($_value) && $_f['type']!='multiselect') continue;
             $_escaped = is_scalar($_value) ? htmlspecialchars($_value) : $_value;
             $_class = !empty($_f['class']) ? $_f['class'] : '';
         ?><tr>

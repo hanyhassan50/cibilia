@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject {{trans "Your"}} {{var store.getFrontendName()}} {{trans "order has shipped"}} @-->
+<!--@subject {{trans "Your %store_name order has shipped" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var billing.getName()":"Guest Customer Name",
@@ -23,8 +23,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <!--<p class="greeting">{{trans "%name," name=$billing.getName()}}</p>-->
-            <p class="greeting">{{var billing.getName()}}</p>
+            <p class="greeting">{{trans "%name," name=$billing.getName()}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
             </p>

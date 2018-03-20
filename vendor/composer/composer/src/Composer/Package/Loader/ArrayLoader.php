@@ -14,9 +14,11 @@ namespace Composer\Package\Loader;
 
 use Composer\Package;
 use Composer\Package\AliasPackage;
+use Composer\Package\Link;
 use Composer\Package\RootAliasPackage;
 use Composer\Package\RootPackageInterface;
 use Composer\Package\Version\VersionParser;
+use Composer\Semver\VersionParser as SemverVersionParser;
 
 /**
  * @author Konstantin Kudryashiv <ever.zet@gmail.com>
@@ -27,7 +29,7 @@ class ArrayLoader implements LoaderInterface
     protected $versionParser;
     protected $loadOptions;
 
-    public function __construct(VersionParser $parser = null, $loadOptions = false)
+    public function __construct(SemverVersionParser $parser = null, $loadOptions = false)
     {
         if (!$parser) {
             $parser = new VersionParser;
@@ -115,7 +117,7 @@ class ArrayLoader implements LoaderInterface
             if (isset($config[$type])) {
                 $method = 'set'.ucfirst($opts['method']);
                 $package->{$method}(
-                    $this->versionParser->parseLinks(
+                    $this->parseLinks(
                         $package->getName(),
                         $package->getPrettyVersion(),
                         $opts['description'],
@@ -147,7 +149,7 @@ class ArrayLoader implements LoaderInterface
         }
 
         if (!empty($config['time'])) {
-            $time = ctype_digit($config['time']) ? '@'.$config['time'] : $config['time'];
+            $time = preg_match('/^\d++$/D', $config['time']) ? '@'.$config['time'] : $config['time'];
 
             try {
                 $date = new \DateTime($time, new \DateTimeZone('UTC'));
@@ -168,6 +170,9 @@ class ArrayLoader implements LoaderInterface
             if (isset($config['scripts']) && is_array($config['scripts'])) {
                 foreach ($config['scripts'] as $event => $listeners) {
                     $config['scripts'][$event] = (array) $listeners;
+                }
+                if (isset($config['scripts']['composer'])) {
+                    trigger_error('The `composer` script name is reserved for internal use, please avoid defining it', E_USER_DEPRECATED);
                 }
                 $package->setScripts($config['scripts']);
             }
@@ -214,6 +219,32 @@ class ArrayLoader implements LoaderInterface
         }
 
         return $package;
+    }
+
+    /**
+     * @param  string $source        source package name
+     * @param  string $sourceVersion source package version (pretty version ideally)
+     * @param  string $description   link description (e.g. requires, replaces, ..)
+     * @param  array  $links         array of package name => constraint mappings
+     * @return Link[]
+     */
+    public function parseLinks($source, $sourceVersion, $description, $links)
+    {
+        $res = array();
+        foreach ($links as $target => $constraint) {
+            if (!is_string($constraint)) {
+                throw new \UnexpectedValueException('Link constraint in '.$source.' '.$description.' > '.$target.' should be a string, got '.gettype($constraint) . ' (' . var_export($constraint, true) . ')');
+            }
+            if ('self.version' === $constraint) {
+                $parsedConstraint = $this->versionParser->parseConstraints($sourceVersion);
+            } else {
+                $parsedConstraint = $this->versionParser->parseConstraints($constraint);
+            }
+
+            $res[strtolower($target)] = new Link($source, $target, $parsedConstraint, $description, $constraint);
+        }
+
+        return $res;
     }
 
     /**

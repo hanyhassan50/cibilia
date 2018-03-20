@@ -22,14 +22,18 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Duo;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\View\Result\PageFactory;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Api\TfaSessionInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\DuoSecurity;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 
-class Authpost extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Authpost extends AbstractAction
 {
     /**
      * @var TfaInterface
@@ -57,17 +61,34 @@ class Authpost extends Action
     private $duoSecurity;
 
     /**
-     * @var EventInterface
+     * @var DataObjectFactory
      */
-    private $event;
+    private $dataObjectFactory;
 
+    /**
+     * @var AlertInterface
+     */
+    private $alert;
+
+    /**
+     * Authpost constructor.
+     * @param Action\Context $context
+     * @param Session $session
+     * @param PageFactory $pageFactory
+     * @param DuoSecurity $duoSecurity
+     * @param TfaSessionInterface $tfaSession
+     * @param DataObjectFactory $dataObjectFactory
+     * @param AlertInterface $alert
+     * @param TfaInterface $tfa
+     */
     public function __construct(
         Action\Context $context,
         Session $session,
         PageFactory $pageFactory,
         DuoSecurity $duoSecurity,
         TfaSessionInterface $tfaSession,
-        EventInterface $event,
+        DataObjectFactory $dataObjectFactory,
+        AlertInterface $alert,
         TfaInterface $tfa
     ) {
         parent::__construct($context);
@@ -76,32 +97,39 @@ class Authpost extends Action
         $this->pageFactory = $pageFactory;
         $this->tfaSession = $tfaSession;
         $this->duoSecurity = $duoSecurity;
-        $this->event = $event;
+        $this->dataObjectFactory = $dataObjectFactory;
+        $this->alert = $alert;
     }
 
     /**
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
         $user = $this->getUser();
 
-        if ($this->duoSecurity->verify($user, $this->getRequest())) {
-            $this->tfa->getProvider(DuoSecurity::CODE)->activate($this->getUser());
+        if ($this->duoSecurity->verify($user, $this->dataObjectFactory->create([
+            'data' => $this->getRequest()->getParams(),
+        ]))) {
+            $this->tfa->getProvider(DuoSecurity::CODE)->activate($user->getId());
             $this->tfaSession->grantAccess();
             return $this->_redirect('/');
         } else {
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_TwoFactorAuth',
-                'message' => 'DuoSecurity invalid auth',
-                'username' => $user->getUserName(),
-            ]);
+            $this->alert->event(
+                'MSP_TwoFactorAuth',
+                'DuoSecurity invalid auth',
+                AlertInterface::LEVEL_WARNING,
+                $user->getUserName()
+            );
 
             return $this->_redirect('*/*/auth');
         }
@@ -115,7 +143,10 @@ class Authpost extends Action
     protected function _isAllowed()
     {
         // Do not check for activation
+        $user = $this->getUser();
+
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), DuoSecurity::CODE);
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), DuoSecurity::CODE);
     }
 }

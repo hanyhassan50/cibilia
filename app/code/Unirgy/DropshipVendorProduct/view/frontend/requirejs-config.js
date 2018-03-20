@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,9 +11,21 @@ var config = {
             "treeSuggest":        "mage/backend/tree-suggest",
             "actionLink":         "mage/backend/action-link",
             "jstree":             "jquery/jstree/jquery.jstree",
-            "jqueryValidate": 	  'jquery/jquery.validate',
-            "jqueryChosen": 	  'jquery/chosen/chosen.jquery',
-            "jqueryChosenAjax":   'jquery/chosen/chosen.ajaxaddition.jquery',
+            "newVideoDialog":     "Unirgy_DropshipVendorProduct/js/new-video-dialog",
+            "openVideoModal":     "Unirgy_DropshipVendorProduct/js/video-modal",
         }
-    }
+    },
+    "bundles": {
+        "Unirgy_DropshipVendorProduct/js/backend_theme": [
+            "globalNavigation",
+            "globalSearch",
+            "modalPopup",
+            "useDefault",
+            "loadingPopup",
+            "backendCollapsable"
+        ]
+    },
+    "deps": [
+        "Unirgy_DropshipVendorProduct/js/backend_theme"
+    ]
 };

@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Block\Adminhtml\Customer\Edit;
 
 use Magento\Customer\Controller\RegistryConstants;
@@ -86,7 +94,7 @@ class Tabs extends Generic implements TabInterface
      */
     public function getTabLabel()
     {
-        return __('Identity Proof');
+        return __('Custom Registration Fields');
     }
 
     /**
@@ -94,7 +102,7 @@ class Tabs extends Generic implements TabInterface
      */
     public function getTabTitle()
     {
-        return __('Identity Proof');
+        return __('Custom Registration Fields');
     }
 
     /**
@@ -168,6 +176,11 @@ class Tabs extends Generic implements TabInterface
             $_fieldValue = '';
             $optiondata = [];
             $usedInForms = $this->getUsedInForms($record->getId());
+            $isRequiredArray = explode(' ', $record->getFrontendClass());
+            $required =  false;
+            if (in_array('required', $isRequiredArray)) {
+                $required =  true;
+            }
             $isShowOnEditPage = in_array('adminhtml_customer', $usedInForms);
             if (!empty($_customerData)) {
                 foreach ($_customerData as $key => $value) {
@@ -178,12 +191,17 @@ class Tabs extends Generic implements TabInterface
                             $_fieldValue = $this->formatDate($value, \IntlDateFormatter::SHORT, false);
                         } elseif ($record->getFrontendInput() == 'boolean') {
                             $_fieldValue = $value;
-                        } elseif ($record->getFrontendInput() == 'multiselect' || $record->getFrontendInput() == 'select') {
+                        } elseif ($record->getFrontendInput() == 'multiselect' ||
+                            $record->getFrontendInput() == 'select'
+                        ) {
                             $_fieldValue = $value;
                             $optiondata = $record->getSource()->getAllOptions();
-                            usort($optiondata, function ($a, $b) {
-                                return $a['value'] - $b['value'];
-                            });
+                            usort(
+                                $optiondata,
+                                function ($a, $b) {
+                                    return $a['value'] <=> $b['value'];
+                                }
+                            );
                         } else {
                             $_fieldValue = $value;
                         }
@@ -194,11 +212,15 @@ class Tabs extends Generic implements TabInterface
             if ($record->getFrontendInput() == 'multiselect' || $record->getFrontendInput() == 'select') {
                 $optiondata = $record->getSource()->getAllOptions();
                 usort($optiondata, function ($a, $b) {
-                    return $a['value'] - $b['value'];
+                    return $a['value'] <=> $b['value'];
                 });
             }
             if ($isShowOnEditPage) {
                 if ($record->getFrontendInput() == 'image') {
+                    if($_fieldValue)
+                        $imageUrl ='customfield/image'.$_fieldValue;
+                    else
+                        $imageUrl='';
                     $fieldset->addField(
                         $record->getAttributeCode(),
                         'image',
@@ -206,9 +228,18 @@ class Tabs extends Generic implements TabInterface
                             'name' => $record->getAttributeCode(),
                             'label' => __($record->getFrontendLabel()),
                             'title' => __($record->getFrontendLabel()),
-                            'class' => $record->getFrontendClass(),
-                            'value' => 'customfield/image'.$_fieldValue,
+                            'required' => $required,
+                            'value' => $imageUrl,
                             'note' => __('Allowed image types:').' '.$record->getNote()
+                        ]
+                    );
+                    $fieldset->addField(
+                        'saved_'.$record->getAttributeCode(),
+                        'hidden',
+                        [
+                            'name' => 'customer['.$record->getAttributeCode().']',
+                            'data-form-part' => $this->getData('target_form'),
+                            'value' => $_fieldValue,
                         ]
                     );
                 } elseif ($record->getFrontendInput() == 'text') {
@@ -220,24 +251,25 @@ class Tabs extends Generic implements TabInterface
                             'data-form-part' => $this->getData('target_form'),
                             'label' => __($record->getFrontendLabel()),
                             'title' => __($record->getFrontendLabel()),
-                            'class' => $record->getFrontendClass(),
+                            'required' => $required,
                             'value' => $_fieldValue,
                         ]
                     );
                 } elseif ($record->getFrontendInput() == "date") {
                         $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
                         $fieldset->addField(
-                            $record->getInputName(),
+                            $record->getAttributeCode(),
                             'date',
                             [
                                 'name' => 'customer['.$record->getAttributeCode().']',
                                 'data-form-part' => $this->getData('target_form'),
-                                'class'     => 'custom_date_field '.$record->getFrontendClass(),
+                                'class'     => 'custom_date_field',
+                                'required' => $required,
                                 'label' => __($record->getFrontendLabel()),
                                 'title' => __($record->getFrontendLabel()),
                                 'value' => $_fieldValue,
                                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-                                'date_format' => $dateFormat,
+                                'date_format' => 'MM/dd/Y',
                             ]
                         );
                 } elseif ($record->getFrontendInput() == 'multiselect') {
@@ -248,7 +280,7 @@ class Tabs extends Generic implements TabInterface
                             'name' => $record->getAttributeCode(),
                             'label' => __($record->getFrontendLabel()),
                             'title' => __($record->getFrontendLabel()),
-                            'class' => $record->getFrontendClass(),
+                            'required' => $required,
                             'values' => $optiondata,
                             'value' => $_fieldValue,
                         ]
@@ -262,7 +294,6 @@ class Tabs extends Generic implements TabInterface
                             'data-form-part' => $this->getData('target_form'),
                             'label' => __($record->getFrontendLabel()),
                             'title' => __($record->getFrontendLabel()),
-                            'class' => $record->getFrontendClass(),
                             'onclick' => "",
                             'onchange' => "this.value = this.checked?1:0",
                             'value' => $_fieldValue,
@@ -278,13 +309,16 @@ class Tabs extends Generic implements TabInterface
                             'data-form-part' => $this->getData('target_form'),
                             'label' => __($record->getFrontendLabel()),
                             'title' => __($record->getFrontendLabel()),
-                            'class' => $record->getFrontendClass(),
+                            'required' => $required,
                             'values' => $optiondata,
-                            'value' => $_fieldValue,							
+                            'value' => $_fieldValue,
                         ]
                     );
                 } elseif ($record->getFrontendInput() == 'file') {
-                    $url = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'customfield/file'.$_fieldValue;
+                    $url = $this->storeManager
+                    ->getStore()
+                    ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'customfield/file'.$_fieldValue;
+
                     $fieldset->addField(
                         $record->getAttributeCode(),
                         'file',
@@ -293,20 +327,30 @@ class Tabs extends Generic implements TabInterface
                             'data-form-part' => $this->getData('target_form'),
                             'label' => __($record->getFrontendLabel()),
                             'title' => __($record->getFrontendLabel()),
-                            'class' => $record->getFrontendClass(),
+                            'required' => $_fieldValue == '' ? $required : false,
                             'note' => __('Allowed file types:').' '.$record->getNote(),
-                            'after_element_html' => '<a target="_blank" href="'.$url.'">'.__('Download').'</a>',
+                            'after_element_html' => $_fieldValue != '' ?
+                            '<a target="_blank" href="'.$url.'">'.__('Download').'</a>':'',
+                        ]
+                    );
+                } else {
+                    $fieldset->addField(
+                        $record->getAttributeCode(),
+                        'textarea',
+                        [
+                            'name' => 'customer['.$record->getAttributeCode().']',
+                            'data-form-part' => $this->getData('target_form'),
+                            'label' => __($record->getFrontendLabel()),
+                            'title' => __($record->getFrontendLabel()),
+                            'required' => $required,
+                            'value' => $_fieldValue,
                         ]
                     );
                 }
             }
         }
-		
-		
-		
         $this->setForm($form);
         $form->setUseContainer(true);
-		
         return parent::_prepareForm();
     }
     /**
@@ -316,7 +360,7 @@ class Tabs extends Generic implements TabInterface
     {
         if ($this->canShowTab()) {
             $this->_prepareForm();
-		
+
             return parent::_toHtml();
         } else {
             return '';
@@ -338,13 +382,20 @@ class Tabs extends Generic implements TabInterface
     public function getCustomAttribute()
     {
         $typeId = $this->_eavEntity->setType('customer')->getTypeId();
-        $custom_field = $this->_objectManager->create('Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection')->getTable('wk_customfields');
+        $customField = $this->_objectManager->create(
+            'Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection'
+        )->getTable('wk_customfields');
+
         $collection = $this->_attributeCollection->create()
                 ->setEntityTypeFilter($typeId)
                 ->addFilter('is_user_defined', 1)
                 ->setOrder('sort_order', 'ASC');
         $collection->getSelect()
-        ->join(array("ccp" => "wk_customfields"), "ccp.attribute_id = main_table.attribute_id", array("status" => "status"))->where("ccp.status = 1");
+        ->join(
+            ["ccp" => $customField],
+            "ccp.attribute_id = main_table.attribute_id",
+            ["status" => "status"]
+        )->where("ccp.status = 1");
         return $collection;
     }
     public function getCurrentCustomer()

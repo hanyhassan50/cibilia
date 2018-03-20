@@ -31,23 +31,23 @@ class Form extends Generic
     /**
      * @var HelperData
      */
-    protected $_helper;
+    protected $_hlp;
 
     /**
      * @var Source
      */
-    protected $_source;
+    protected $_tcSrc;
 
     public function __construct(
         Context $context,
         Registry $registry,
         FormFactory $formFactory,
-        HelperData $helper,
-        Source $modelSource,
+        HelperData $udropshipHelper,
+        Source $tiercomSource,
         array $data = []
     ) {
-        $this->_helper = $helper;
-        $this->_source = $modelSource;
+        $this->_hlp = $udropshipHelper;
+        $this->_tcSrc = $tiercomSource;
 
         parent::__construct($context, $registry, $formFactory, $data);
         $this->setDestElementId('vendor_tiercom');
@@ -56,7 +56,7 @@ class Form extends Generic
     protected function _prepareForm()
     {
         $vendor = $this->_coreRegistry->registry('vendor_data');
-        $hlp = $this->_helper;
+        $hlp = $this->_hlp;
         $id = $this->getRequest()->getParam('id');
         $form = $this->_formFactory->create();
         $this->setForm($form);
@@ -68,7 +68,7 @@ class Form extends Generic
         $fieldset->addField('tiercom_fallback_lookup', 'select', [
             'name' => 'tiercom_fallback_lookup',
             'label' => __('Commission fallback lookup method'),
-            'options' => $this->_source->setPath('tiercom_fallback_lookup')->toOptionHash(),
+            'options' => $this->_tcSrc->setPath('tiercom_fallback_lookup')->toOptionHash(),
         ]);
 
         $fieldset->addType('tiercom_rates', 'Unirgy\DropshipTierCommission\Block\Adminhtml\VendorEditTab\ComRates\Form\Rates');
@@ -81,23 +81,23 @@ class Form extends Generic
         $fieldset->addField('tiercom_fixed_calc_type', 'select', [
             'name' => 'tiercom_fixed_calc_type',
             'label' => __('Fixed Rates Calculation Type'),
-            'options' => $this->_source->setPath('tiercom_fixed_calc_type')->toOptionHash(),
+            'options' => $this->_tcSrc->setPath('tiercom_fixed_calc_type')->toOptionHash(),
         ]);
 
         $fieldset->addField('commission_percent', 'text', [
             'name' => 'commission_percent',
             'label' => __('Default Commission Percent'),
-            'after_element_html' => __('<br />Default value: %.2F. Leave empty to use default.',
-                                       $this->_scopeConfig->getValue('udropship/tiercom/commission_percent',
-                                                                                    ScopeInterface::SCOPE_STORE))
+            'after_element_html' => __('<br />Default value: %1. Leave empty to use default.',
+                sprintf('%.2F', $this->_hlp->getScopeConfig('udropship/tiercom/commission_percent'))
+            )
         ]);
 
         $fieldset->addField('transaction_fee', 'text', [
             'name' => 'transaction_fee',
             'label' => __('Fixed Flat Rate (per po) [old transaction fee]'),
-            'after_element_html' => __('<br />Default value: %.2F. Leave empty to use default.',
-                                       $this->_scopeConfig->getValue('udropship/tiercom/transaction_fee',
-                                                                                    ScopeInterface::SCOPE_STORE))
+            'after_element_html' => __('<br />Default value: %1. Leave empty to use default.',
+                sprintf('%.2F', $this->_hlp->getScopeConfig('udropship/tiercom/transaction_fee'))
+            )
         ]);
 
         $fieldset->addType('tiercom_fixed_rule', 'Unirgy\Dropship\Block\Adminhtml\Vendor\Helper\Form\DependSelect');
@@ -105,7 +105,7 @@ class Form extends Generic
         $fieldset->addField('tiercom_fixed_rule', 'tiercom_fixed_rule', [
             'name' => 'tiercom_fixed_rule',
             'label' => __('Rule for Fixed Rates'),
-            'options' => $this->_source->setPath('tiercom_fixed_rates')->toOptionHash(),
+            'options' => $this->_tcSrc->setPath('tiercom_fixed_rates')->toOptionHash(),
             'field_config' => [
                 'hide_depend_fields' => [
                     'tiercom_fixed_rates' => '',

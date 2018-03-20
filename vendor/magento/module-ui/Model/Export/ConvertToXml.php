@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\Export;
@@ -125,19 +125,26 @@ class ConvertToXml
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
 
+        $component->getContext()->getDataProvider()->setLimit(0, 0);
+
         /** @var SearchResultInterface $searchResult */
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
 
-        $this->prepareItems($component->getName(), $searchResult->getItems());
+        /** @var DocumentInterface[] $searchResultItems */
+        $searchResultItems = $searchResult->getItems();
+
+        $this->prepareItems($component->getName(), $searchResultItems);
 
         /** @var SearchResultIterator $searchResultIterator */
-        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResult->getItems()]);
+        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResultItems]);
 
         /** @var Excel $excel */
-        $excel = $this->excelFactory->create([
-            'iterator' => $searchResultIterator,
-            'rowCallback'=> [$this, 'getRowData'],
-        ]);
+        $excel = $this->excelFactory->create(
+            [
+                'iterator' => $searchResultIterator,
+                'rowCallback'=> [$this, 'getRowData'],
+            ]
+        );
 
         $this->directory->create('export');
         $stream = $this->directory->openFile($file, 'w+');

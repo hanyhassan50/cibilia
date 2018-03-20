@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="custom_cibilia_product_set_online_email_template" label="Sent email of set product online to cibilian and vendor" file="stagebitProductSetonlineNotifyEmailToCibilianVendor.html" type="html" module="StageBit_CustomCode" area="frontend"/>
+    <template id="custom_cibilia_vendor_approve_notifyto_cibilia_template" label="Sent vendor approve notify email to cibilia" file="stagebitVendorApproveNotifyEmailToCibilia.html" type="html" module="StageBit_CustomCode" area="frontend"/>
+    <template id="custom_cibilia_cibilian_idproof_denied_template" label="Sent idproof denied email to cibilia" file="stagebitIdproofDeniedEmailToCibilia.html" type="html" module="StageBit_CustomCode" area="frontend"/>
+</config>

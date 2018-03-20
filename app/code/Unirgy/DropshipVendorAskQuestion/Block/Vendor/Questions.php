@@ -82,8 +82,8 @@ class Questions extends Template
     }
     public function getUrl($route = '', $params = [])
     {
-        if (!isset($params['_store']) && $this->_oldStoreId) {
-            $params['_store'] = $this->_oldStoreId;
+        if (!isset($params['_scope']) && $this->_oldStoreId) {
+            $params['_scope'] = $this->_oldStoreId;
         }
         return parent::getUrl($route, $params);
     }
@@ -105,7 +105,7 @@ class Questions extends Template
         $datetimeFormatInt = \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT;
         $dateFormat = $localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $r = $this->_request;
-        $param = $r->getParam('filter_product_sku');
+        $param = $r->getParam('filter_sku');
         if (!is_null($param) && $param!=='') {
             $collection->addFieldToFilter('product_sku', ['like'=>$param.'%']);
         }
@@ -120,9 +120,9 @@ class Questions extends Template
         $param = $r->getParam('filter_replied');
         if (!is_null($param) && $param!=='') {
             if ($param) {
-                $collection->addFieldToFilter('LENGTH(answer_text)', ['gt' => 0]);
+                $collection->addFieldToFilter('answer_text_length', ['gt' => 0]);
             } else {
-                $collection->addFieldToFilter(['answer_text','LENGTH(answer_text)'], [['null' => 1], ['eq' => 0]]);
+                $collection->addFieldToFilter(['answer_text','answer_text_length'], [['null' => 1], ['eq' => 0]]);
             }
         }
         $param = $r->getParam('filter_question');
@@ -142,6 +142,9 @@ class Questions extends Template
 
         if (($v = $r->getParam('filter_question_date_from'))) {
             $collection->addFieldToFilter('question_date', ['gteq'=>$this->_hlp->dateLocaleToInternal($v, null, true)]);
+        }
+        if (($v = $r->getParam('filter_visibility')) && $v!=='') {
+            $collection->addFieldToFilter('visibility', $v);
         }
         if (($v = $r->getParam('filter_question_date_to'))) {
             $_filterDate = $this->_hlp->dateLocaleToInternal($v, $dateFormat, true);

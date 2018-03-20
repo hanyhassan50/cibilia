@@ -25,7 +25,7 @@
 
     $arrGridData = $block->_prepareGridData($_vendors);
     $arrGridCommission = $block->_prepareVendorCommission();
-    
+
     /* $arrStatus = array(
         'I'=> 'Inactive',`
         'A'=> 'Active',
@@ -45,18 +45,18 @@
             <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Orders') ?></caption>
             <thead>
                 <tr>
-                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Vendor #') ?></th>
-                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Reg. date') ?></th>
-                    <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Company name') ?></th>
-                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Email') ?></th>
-                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Mobile') ?></th>
-                    <th scope="col" class="col earned"><?php /* @escapeNotVerified */ echo __('Earned') ?></th>
-                    <th scope="col" class="col locked"><?php /* @escapeNotVerified */ echo __('Locked') ?></th>
-                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
+                    <th class="id"><?php /* @escapeNotVerified */ echo __('Vendor #') ?></th>
+                    <th class="date"><?php /* @escapeNotVerified */ echo __('Reg. date') ?></th>
+                    <th class="shipping"><?php /* @escapeNotVerified */ echo __('Company name') ?></th>
+                    <th class="total"><?php /* @escapeNotVerified */ echo __('Email') ?></th>
+                    <th class="total"><?php /* @escapeNotVerified */ echo __('Mobile') ?></th>
+                    <th class="earned"><?php /* @escapeNotVerified */ echo __('Earned') ?></th>
+                    <th class="locked"><?php /* @escapeNotVerified */ echo __('Locked') ?></th>
+                    <th class="status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
                     <?php if($arrGridData['manage']) { ?>
-                        <th scope="col" class="col store"><?php /* @escapeNotVerified */ echo __('Manage Vendors') ?></th>
+                        <th scope="col" class="store"><?php /* @escapeNotVerified */ echo __('Manage Vendors') ?></th>
                     <?php } ?>
-                    <th scope="col" class="col actions">&nbsp;</th>
+                    <th scope="col" class="actions">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,43 +64,37 @@
                 <?php $defaultEarned = 0; $defaultLocked = 0;?>
                     <?php $objVendor = $objectManager->create('Unirgy\Dropship\Model\Vendor')->load($_vendor->getData("email"),'email');?>
                     <tr>
-                        <td data-th="<?php echo $block->escapeHtml(__('Vendor #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_vendor->getData("reg_id"); ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Reg. date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_vendor->getData('registered_at')) ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Company name')) ?>" class="col shipping"><?php echo $_vendor->getData("vendor_name"); ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Email')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_vendor->getData("email");?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Mobile')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_vendor->getData("telephone");?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Vendor #')) ?>" class="id"><?php /* @escapeNotVerified */ echo $_vendor->getData("reg_id"); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Reg. date')) ?>" class="date"><?php /* @escapeNotVerified */ echo $block->formatDate($_vendor->getData('registered_at')) ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Company name')) ?>" class="shipping"><?php echo $_vendor->getData("vendor_name"); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Email')) ?>" class="total"><?php /* @escapeNotVerified */ echo $_vendor->getData("email");?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Mobile')) ?>" class="total"><?php /* @escapeNotVerified */ echo $_vendor->getData("telephone");?></td>
                         <?php if(array_key_exists($objVendor->getId(), $arrGridCommission)){ ?>
                             <?php if($arrGridCommission[$objVendor->getId()]['earn'] != ''){ ?>
-                                <td data-th="<?php echo $block->escapeHtml(__('Earned')) ?>" class="col earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($arrGridCommission[$objVendor->getId()]['earn'],true,false); ?></td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Earned')) ?>" class="earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($arrGridCommission[$objVendor->getId()]['earn'],true,false); ?></td>
                             <?php }else{ ?>
-                                <td data-th="<?php echo $block->escapeHtml(__('Earned')) ?>" class="col earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultEarned,true,false); ?></td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Earned')) ?>" class="earned"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultEarned,true,false); ?></td>
                             <?php } ?>
                             <?php if($arrGridCommission[$objVendor->getId()]['lock'] != ''){ ?>
-                                <td data-th="<?php echo $block->escapeHtml(__('Locked')) ?>" class="col lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($arrGridCommission[$objVendor->getId()]['lock'],true,false); ?></td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Locked')) ?>" class="lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($arrGridCommission[$objVendor->getId()]['lock'],true,false); ?></td>
                             <?php }else{ ?>
-                                <td data-th="<?php echo $block->escapeHtml(__('Locked')) ?>" class="col lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultLocked,true,false); ?></td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Locked')) ?>" class="lock"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($defaultLocked,true,false); ?></td>
                             <?php } ?>
                             
                         <?php }else{ ?>
-                            <td data-th="<?php echo $block->escapeHtml(__('Earned')) ?>" class="col earned">-</td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Locked')) ?>" class="col lock">-</td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Earned')) ?>" class="earned">-</td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Locked')) ?>" class="lock">-</td>
                         <?php } ?>
 
-                        <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php echo $arrGridData[$_vendor->getId()]['status']; ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="status"><?php echo __($arrGridData[$_vendor->getId()]['status']); ?></td>
                         <?php if($arrGridData['manage']) { ?>
-                            <td data-th="<?php echo $block->escapeHtml(__('Manage Store')) ?>" class="col store"><?php echo $arrGridData[$_vendor->getId()]['link']; ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Manage Store')) ?>" class="store"><?php echo __($arrGridData[$_vendor->getId()]['link']); ?></td>
                         <?php } ?>
-                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="actions">
                             <a href="<?php /* @escapeNotVerified */ echo $block->getRecommedationUrl($_vendor) ?>" class="action order">
                                     <span><?php /* @escapeNotVerified */ echo __('Recommend') ?></span>
                                 </a>
                         </td>
-
-
-
-                        
-
-
                     </tr>
                 <?php endforeach; ?>
             </tbody>

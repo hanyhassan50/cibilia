@@ -2,16 +2,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
     <acl>
         <resources>
-            <resource id="Cibilia_Adminhtml::admin">
+            <resource id="Cibilia_Adminhtml::admin"  title="Cibilia admin">
                 <resource id="Cibilia_Summary::summary" title="Summary" sortOrder="40">
                     <resource id="Cibilia_Summary::manage" title="Summary Module" sortOrder="10">
 						<resource id="Cibilia_Summary::save" title="Save Summary" sortOrder="10" />
                         <resource id="Cibilia_Summary::news_delete" title="Delete Summary" sortOrder="20" />
 					</resource>
                 </resource>
-                <resource id="Cibilia_Adminhtml::stores">
-                    <resource id="Cibilia_Adminhtml::stores_settings">
-                        <resource id="Cibilia_Adminhtml::config">
+                <resource id="Cibilia_Adminhtml::stores"  title="Cibilia Stores">
+                    <resource id="Cibilia_Adminhtml::stores_settings"  title="Stores Settings">
+                        <resource id="Cibilia_Adminhtml::config"  title="Config">
                             <resource id="Cibilia_Summary::config_summary" title="Summary Section" sortOrder="50" />
                         </resource>
                     </resource>

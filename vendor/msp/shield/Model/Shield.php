@@ -21,9 +21,13 @@
 namespace MSP\Shield\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Module\Dir\Reader;
-use MSP\SecuritySuiteCommon\Api\UtilsInterface;
+use MSP\SecuritySuiteCommon\Api\LockDownInterface;
+use MSP\Shield\Api\IpsInterface;
+use MSP\Shield\Api\ScanResultInterface;
 use MSP\Shield\Api\ShieldInterface;
 
 class Shield implements ShieldInterface
@@ -44,27 +48,86 @@ class Shield implements ShieldInterface
     private $reader;
 
     /**
-     * @var Cache
+     * @var IpsInterface
      */
-    private $cache;
+    private $ips;
 
     /**
-     * @var UtilsInterface
+     * @var LockDownInterface
      */
-    private $utils;
+    private $lockDown;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Reader $reader,
-        Cache $cache,
+        IpsInterface $ips,
         DirectoryList $directoryList,
-        UtilsInterface $utils
+        LockDownInterface $lockDown,
+        RequestInterface $request,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->directoryList = $directoryList;
         $this->reader = $reader;
-        $this->cache = $cache;
-        $this->utils = $utils;
+        $this->ips = $ips;
+        $this->lockDown = $lockDown;
+        $this->request = $request;
+        $this->deploymentConfig = $deploymentConfig;
+    }
+
+    /**
+     * Return backend path
+     * @return string
+     */
+    private function getBackendPath()
+    {
+        $backendConfigData = $this->deploymentConfig->getConfigData('backend');
+        return $backendConfigData['frontName'];
+    }
+
+    /**
+     * Return true if $uri is a backend URI
+     * @param string $uri
+     * @return bool
+     */
+    private function isBackendUri($uri = null)
+    {
+        $uri = $this->getSanitizedUri($uri);
+        $backendPath = $this->getBackendPath();
+
+        // @codingStandardsIgnoreStart
+        $uri = parse_url($uri, PHP_URL_PATH);
+        // @codingStandardsIgnoreEnd
+
+        return (strpos($uri, "/$backendPath/") === 0) || preg_match("|/$backendPath$|", $uri);
+    }
+
+    /**
+     * Get sanitized URI
+     * @param string $uri
+     * @return string
+     */
+    private function getSanitizedUri($uri = null)
+    {
+        if ($uri === null) {
+            $uri = $this->request->getRequestUri();
+        }
+
+        $uri = filter_var($uri, FILTER_SANITIZE_URL);
+        $uri = preg_replace('|/+|', '/', $uri);
+        $uri = preg_replace('|^/.+?\.php|', '', $uri);
+
+        return $uri;
     }
 
     /**
@@ -73,21 +136,20 @@ class Shield implements ShieldInterface
      */
     public function shouldScan()
     {
-        $enabledBackend = !! $this->scopeConfig->getValue(ShieldInterface::XML_PATH_ENABLED_BACKEND);
-        if ($this->utils->isBackendUri() && !$enabledBackend) {
+        if ($this->isBackendUri()) {
             return false;
         }
 
-        $adminPath = $this->utils->getBackendPath();
-
         $whiteList = trim($this->scopeConfig->getValue(ShieldInterface::XML_PATH_URI_WHITELIST));
-        $whiteList = str_replace('$admin', $adminPath, $whiteList);
         $whiteList = preg_split('/[\r\n\s,]+/', $whiteList);
-        $whiteList[] = '/msp_security_suite/stop/index/';
 
-        $requestUri = $this->utils->getSanitizedUri();
+        if (!$this->lockDown->getStealthMode()) {
+            $whiteList[] = '/msp_security_suite/stop/index/';
+        }
+
+        $requestUri = $this->getSanitizedUri();
         foreach ($whiteList as $uri) {
-            if (strpos($requestUri, $uri) === 0) {
+            if ($uri && (strpos($requestUri, $uri) === 0)) {
                 return false;
             }
         }
@@ -102,7 +164,7 @@ class Shield implements ShieldInterface
      * @param array $whitelist
      * @return array
      */
-    protected function getFilteredRequestArg($type, $originalRequest, $whitelist)
+    private function getFilteredRequestArg($type, $originalRequest, $whitelist)
     {
         $res = [];
 
@@ -118,17 +180,20 @@ class Shield implements ShieldInterface
     /**
      * Get filtered request without whitelisted parameters
      * @return array|false
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function getFilteredRequest()
+    private function getFilteredRequest()
     {
         $checkCookies = !!$this->scopeConfig->getValue(ShieldInterface::XML_PATH_CHECK_COOKIES);
 
         $paramsWhiteList = trim(strtolower($this->scopeConfig->getValue(ShieldInterface::XML_PATH_PARAMS_WHITELIST)));
         $paramsWhiteList = preg_split('/[\r\n\s,]+/', $paramsWhiteList);
 
+        // @codingStandardsIgnoreStart
+        // Using super globals to avoid RequestInterface use
         $request = [
             'GET' => $this->getFilteredRequestArg('GET', $_GET, $paramsWhiteList),
-            'POST' => $this->getFilteredRequestArg('POST', $_POST, $paramsWhiteList),
+            'POST' => $this->getFilteredRequestArg('POST', $_POST, $paramsWhiteList)
         ];
 
         if ($checkCookies) {
@@ -136,34 +201,23 @@ class Shield implements ShieldInterface
         } else {
             $request['COOKIE'] = [];
         }
+        // @codingStandardsIgnoreEnd
 
         return count($request['GET']) || count($request['POST']) || count($request['COOKIE']) ? $request : false;
     }
 
     /**
      * Scan HTTP request and return false if no hack attempt has been detected
-     * @return \IDS\Report|false
+     * @return ScanResultInterface
      */
     public function scanRequest()
     {
         $request = $this->getFilteredRequest();
         if (!$request) {
-            return false;
+            return null;
         }
 
-        $tmpPath = $this->directoryList->getPath(DirectoryList::TMP);
-
-        $init = \IDS\Init::init();
-        $init->config['General']['tmp_path'] = $tmpPath;
-        $init->config['General']['filter_type'] = 'xml';
-        $init->config['General']['scan_keys'] = false;
-        $init->config['General']['filter_path'] =
-            $this->reader->getModuleDir('etc', 'MSP_Shield') . '/ids_filter.xml';
-
-        $ids = new \IDS\Monitor($init, $this->cache);
-        $result = $ids->run($request);
-
-        return $result->isEmpty() ? false : $result;
+        return $this->ips->scanRequest($request);
     }
 
     /**
@@ -181,7 +235,7 @@ class Shield implements ShieldInterface
      */
     public function getMinImpactToLog()
     {
-        return intval($this->scopeConfig->getValue(ShieldInterface::XML_PATH_MIN_IMPACT_LOG));
+        return (int) $this->scopeConfig->getValue(ShieldInterface::XML_PATH_MIN_IMPACT_LOG);
     }
 
     /**
@@ -190,7 +244,6 @@ class Shield implements ShieldInterface
      */
     public function getMinImpactToStop()
     {
-        return intval($this->scopeConfig->getValue(ShieldInterface::XML_PATH_MIN_IMPACT_STOP));
+        return (int) $this->scopeConfig->getValue(ShieldInterface::XML_PATH_MIN_IMPACT_STOP);
     }
-
 }

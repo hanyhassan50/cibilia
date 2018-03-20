@@ -36,7 +36,7 @@ class ListQuestion extends Description
     {
         parent::_prepareLayout();
 
-        if ($toolbar = $this->_viewLayoutFactory->create()->getBlock('udqa.product.list.toolbar')) {
+        if ($toolbar = $this->getLayout()->getBlock('udqa.product.list.toolbar')) {
             $toolbar->setCollection($this->getQuestionsCollection());
             $this->setChild('toolbar', $toolbar);
         }

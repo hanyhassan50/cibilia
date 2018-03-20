@@ -21,13 +21,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ReadmeCommand extends Command
 {
+    const COMMAND_NAME = 'readme';
+
     /**
      * @see Command
      */
     protected function configure()
     {
         $this
-            ->setName('readme')
+            ->setName(self::COMMAND_NAME)
             ->setDescription('Generates the README content, based on the fix command help')
         ;
     }
@@ -70,13 +72,13 @@ your system:
 
 .. code-block:: bash
 
-    \$ wget %download.url% -O php-cs-fixer
+    $ wget %download.url% -O php-cs-fixer
 
 or with curl:
 
 .. code-block:: bash
 
-    \$ curl -L %download.url% -o php-cs-fixer
+    $ curl -L %download.url% -o php-cs-fixer
 
 then:
 
@@ -90,7 +92,7 @@ Then, just run ``php-cs-fixer``.
 Globally (Composer)
 ~~~~~~~~~~~~~~~~~~~
 
-To install PHP-CS-Fixer, install Composer and issue the following command:
+To install PHP CS Fixer, install Composer and issue the following command:
 
 .. code-block:: bash
 
@@ -107,7 +109,7 @@ you're good to go:
 
 .. code-block:: bash
 
-    export PATH="$PATH:$HOME/.composer/vendor/bin"
+    $ export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 Globally (homebrew)
 ~~~~~~~~~~~~~~~~~~~

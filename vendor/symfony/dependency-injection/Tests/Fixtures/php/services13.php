@@ -9,8 +9,6 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
 
 /**
- * ProjectServiceContainer.
- *
  * This class has been auto-generated
  * by the Symfony Dependency Injection Component.
  */
@@ -19,9 +17,6 @@ class ProjectServiceContainer extends Container
     private $parameters;
     private $targetDirs = array();
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->services =
@@ -45,12 +40,17 @@ class ProjectServiceContainer extends Container
     }
 
     /**
-     * Gets the 'bar' service.
+     * {@inheritdoc}
+     */
+    public function isFrozen()
+    {
+        return true;
+    }
+
+    /**
+     * Gets the public 'bar' shared service.
      *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return \stdClass A stdClass instance
+     * @return \stdClass
      */
     protected function getBarService()
     {

@@ -13,7 +13,7 @@ use Unirgy\SimpleLicense\Model\LicenseFactory;
 class MassRemove extends AbstractLicense
 {
     /**
-     * @var ModelLicense
+     * @var LicenseFactory
      */
     protected $licenseFacotry;
 
@@ -40,7 +40,7 @@ class MassRemove extends AbstractLicense
         try {
             $ids = $this->getRequest()->getPost('licenses');
             if (!$ids) {
-                throw new \Exception(__('No licenses to remove'));
+                throw new \RuntimeException(__('No licenses to remove'));
             }
             $licenses = $this->licenseFacotry->create()->getCollection()->addFieldToFilter('license_id', $ids);
             /** @var \Unirgy\SimpleLicense\Model\License $l */

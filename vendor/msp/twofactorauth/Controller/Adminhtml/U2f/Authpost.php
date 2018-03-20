@@ -22,19 +22,25 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use Magento\Framework\DataObjectFactory;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 use MSP\TwoFactorAuth\Api\TfaSessionInterface;
 use MSP\TwoFactorAuth\Api\TrustedManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\U2fKey;
 use MSP\TwoFactorAuth\Model\Tfa;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 
-class Authpost extends Action
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Authpost extends AbstractAction
 {
     /**
      * @var Tfa
      */
     private $tfa;
+
     /**
      * @var Session
      */
@@ -59,10 +65,16 @@ class Authpost extends Action
      * @var TrustedManagerInterface
      */
     private $trustedManager;
+
     /**
-     * @var EventInterface
+     * @var DataObjectFactory
      */
-    private $event;
+    private $dataObjectFactory;
+
+    /**
+     * @var AlertInterface
+     */
+    private $alert;
 
     public function __construct(
         Tfa $tfa,
@@ -71,7 +83,8 @@ class Authpost extends Action
         TfaSessionInterface $tfaSession,
         TrustedManagerInterface $trustedManager,
         U2fKey $u2fKey,
-        EventInterface $event,
+        DataObjectFactory $dataObjectFactory,
+        AlertInterface $alert,
         Action\Context $context
     ) {
         parent::__construct($context);
@@ -82,32 +95,36 @@ class Authpost extends Action
         $this->jsonFactory = $jsonFactory;
         $this->tfaSession = $tfaSession;
         $this->trustedManager = $trustedManager;
-        $this->event = $event;
+        $this->dataObjectFactory = $dataObjectFactory;
+        $this->alert = $alert;
     }
 
     /**
      * Dispatch request
      *
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
         $result = $this->jsonFactory->create();
 
         try {
-            $this->u2fKey->verify($this->getUser(), $this->getRequest());
+            $this->u2fKey->verify($this->getUser(), $this->dataObjectFactory->create([
+                'data' => $this->getRequest()->getParams(),
+            ]));
             $this->tfaSession->grantAccess();
             $this->trustedManager->handleTrustDeviceRequest(U2fKey::CODE, $this->getRequest());
 
             $res = ['success' => true];
         } catch (\Exception $e) {
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_TwoFactorAuth',
-                'message' => 'U2F error',
-                'username' => $this->getUser()->getUserName(),
-                'additional' => $e->getMessage(),
-            ]);
+            $this->alert->event(
+                'MSP_TwoFactorAuth',
+                'U2F error',
+                AlertInterface::LEVEL_ERROR,
+                $this->getUser()->getUserName(),
+                AlertInterface::ACTION_LOG,
+                $e->getMessage()
+            );
 
             $res = ['success' => false, 'message' => $e->getMessage()];
         }
@@ -119,7 +136,7 @@ class Authpost extends Action
     /**
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
@@ -134,7 +151,8 @@ class Authpost extends Action
         $user = $this->getUser();
 
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), U2fKey::CODE) &&
-            $this->tfa->getProvider(U2fKey::CODE)->getIsActive($user);
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), U2fKey::CODE) &&
+            $this->tfa->getProvider(U2fKey::CODE)->isActive($user->getId());
     }
 }

@@ -49,11 +49,6 @@ class Source extends AbstractSource
     protected $_websiteFactory;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $_configScopeConfigInterface;
-
-    /**
      * @var \Magento\Cms\Model\Config\Source\Page
      */
     protected $_cmsPageSource;
@@ -68,7 +63,6 @@ class Source extends AbstractSource
         DropshipMicrositeHelperData $dropshipMicrositeHelperData, 
         ModelSource $modelSource, 
         WebsiteFactory $modelWebsiteFactory, 
-        ScopeConfigInterface $configScopeConfigInterface, 
         \Magento\Cms\Model\Config\Source\Page $cmsPageSource,
         Config $eavConfig,
         array $data = []
@@ -78,7 +72,6 @@ class Source extends AbstractSource
         $this->_msHlp = $dropshipMicrositeHelperData;
         $this->_src = $modelSource;
         $this->_websiteFactory = $modelWebsiteFactory;
-        $this->_configScopeConfigInterface = $configScopeConfigInterface;
         $this->_cmsPageSource = $cmsPageSource;
         $this->_eavConfig = $eavConfig;
 
@@ -168,9 +161,9 @@ class Source extends AbstractSource
         case 'carrier_code':
         case 'registration_carriers':
             $options = [];
-            $carriers = explode(',', $this->_configScopeConfigInterface->getValue('udropship/microsite/registration_carriers', ScopeInterface::SCOPE_STORE));
+            $carriers = explode(',', $this->_hlp->getScopeConfig('udropship/microsite/registration_carriers'));
             foreach ($carriers as $code) {
-                $options[$code] = $this->_configScopeConfigInterface->getValue("carriers/{$code}/title", ScopeInterface::SCOPE_STORE);
+                $options[$code] = $this->_hlp->getScopeConfig("carriers/{$code}/title");
             }
             break;
             

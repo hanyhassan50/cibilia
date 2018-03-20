@@ -1,11 +1,12 @@
 {
-    "name": "Unirgy\/DropshipVendorProduct",
-    "description": "",
+    "name": "unirgy/m2-dropship-vendor-product",
+    "description": "uDropship Vendor Product add-on",
     "require": {
-        "php": "~5.5.0|~5.6.0"
+        "unirgy/m2-dropship": "3.1.*",
+        "magento/module-google-optimizer": "100.0.*|100.1.*|101.0.*"
     },
     "type": "magento2-module",
-    "version": "2.4.0",
+    "version": "3.2.2",
     "license": [
         "Proprietary"
     ],
@@ -16,13 +17,5 @@
         "psr-4": {
             "Unirgy\\DropshipVendorProduct\\": ""
         }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Unirgy\/DropshipVendorProduct"
-            ]
-        ]
     }
 }

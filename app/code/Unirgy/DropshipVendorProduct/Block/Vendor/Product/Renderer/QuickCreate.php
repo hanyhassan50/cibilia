@@ -336,6 +336,16 @@ class QuickCreate extends Template implements RendererInterface
                                 $field['name'],
                                 $this->_element->getName().'[$ROW]'
                             ));
+                            if (isset($field['class'])) {
+                                $field['class'] = str_replace(
+                                    'udmulti_special_date',
+                                    $this->prepareIdSuffix($this->_columnsForm->addSuffixToName(
+                                        'udmulti_special_date',
+                                        'udsell_cfgsell[$ROW]'
+                                    )),
+                                    $field['class']
+                                );
+                            }
                             $fields[] = $field;
                         }
                     }
@@ -437,6 +447,7 @@ class QuickCreate extends Template implements RendererInterface
     {
         if (is_null($this->_additionalElementTypes)) {
             $result = [
+                'date'    => '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Form\DateRaw',
                 'select_status'   => '\Magento\Framework\Data\Form\Element\Select',
                 'stock_data_qty'=> '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Form\StockDataQty',
                 'price_price'    => '\Unirgy\DropshipVendorProduct\Block\Vendor\Product\Form\Price',

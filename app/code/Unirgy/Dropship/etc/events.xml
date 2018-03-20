@@ -19,11 +19,23 @@
     <event name="udropship_vendor_save_commit_after">
         <observer name="udropship" instance="Unirgy\Dropship\Observer\UdropshipVendorSaveCommitAfter"/>
     </event>
+    <event name="controller_action_predispatch_checkout_index_index">
+        <observer name="udropship"
+                  instance="Unirgy\Dropship\Observer\ControllerActionPredispatchCheckoutIndexIndex"/>
+    </event>
     <event name="controller_action_predispatch_checkout_cart_add">
         <observer name="udropship"
                   instance="Unirgy\Dropship\Observer\ControllerActionPredispatchCheckoutCartAdd"/>
     </event>
-    <event name="controller_action_predispatch_checkout_cart_updatePost">
+    <event name="controller_action_predispatch_checkout_cart_updatepost">
+        <observer name="udropship"
+                  instance="Unirgy\Dropship\Observer\ControllerActionPredispatchCheckoutCartUpdatePost"/>
+    </event>
+    <event name="controller_action_predispatch_checkout_cart_delete">
+        <observer name="udropship"
+                  instance="Unirgy\Dropship\Observer\ControllerActionPredispatchCheckoutCartUpdatePost"/>
+    </event>
+    <event name="controller_action_predispatch_checkout_sidebar_removeitem">
         <observer name="udropship"
                   instance="Unirgy\Dropship\Observer\ControllerActionPredispatchCheckoutCartUpdatePost"/>
     </event>
@@ -74,6 +86,7 @@
     </event>
     <event name="udropship_shipment_status_save_after">
         <observer name="udropship" instance="Unirgy\Dropship\Observer\UdropshipShipmentStatusSaveAfter"/>
+        <observer name="udropship_shipment_status_save_after_grid_sync" instance="SalesShipmentIndexGridSyncInsert" />
     </event>
     <event name="checkout_type_multishipping_create_orders_single">
         <observer name="udropship" instance="Unirgy\Dropship\Observer\MultishippingBeforeSubmitOrder"/>
@@ -92,5 +105,8 @@
     </event>
     <event name="core_config_data_save_commit_after">
         <observer name="udropship" instance="Unirgy\Dropship\Observer\CoreConfigDataSaveCommitAfter"/>
+    </event>
+    <event name="sales_order_item_collection_load_after">
+        <observer name="udropship" instance="Unirgy\Dropship\Observer\SalesOrderItemColletionLoadAfter"/>
     </event>
 </config>

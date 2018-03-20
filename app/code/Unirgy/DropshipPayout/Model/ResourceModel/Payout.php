@@ -32,6 +32,10 @@ class Payout extends AbstractStatement
     {
         return $this->getTable('udropship_payout_row');
     }
+    protected function _getRefundRowTable()
+    {
+        return $this->getTable('udropship_payout_refund_row');
+    }
     protected function _getAdjustmentTable()
     {
         return $this->getTable('udropship_payout_adjustment');
@@ -61,6 +65,16 @@ class Payout extends AbstractStatement
             $conn->quoteInto('payout_id=?', $statement->getId())
             .$conn->quoteInto(' AND (po_id not in (?)', $poIds)
             .$conn->quoteInto(' OR po_type!=? OR po_id is NULL)', $statement->getPoType())
+        );
+        return $this;
+    }
+
+    protected function _cleanRefundRowTable($statement)
+    {
+        $conn = $this->getConnection();
+        $conn->delete(
+            $this->_getRefundRowTable(),
+            $conn->quoteInto('payout_id=?', $statement->getId())
         );
         return $this;
     }
@@ -141,6 +155,36 @@ class Payout extends AbstractStatement
         return parent::_prepareRowSave($statement, $row);
     }
 
+    protected function _prepareRefundRowSave($statement, $row)
+    {
+        $row['payout_id'] = $statement->getId();
+        $row['row_json'] = \Zend_Json::encode($row);
+        $row = array_merge($row, $row['amounts']);
+        return $row;
+    }
+
+    protected function _saveRefundRows(AbstractModel $object)
+    {
+        $this->_cleanRefundRowTable($object);
+        if ($object->getRefunds()) {
+            $rows = array();
+            $rawRows = array();
+            foreach ($object->getRefunds() as $refund) {
+                $_row = $this->_prepareTableInsert($this->_getRefundRowTable(), $this->_prepareRefundRowSave($object, $refund), false);
+                foreach ($_row as $_r) {
+                    $rawRows[] = $_r;
+                }
+                $rows[] = implode(',', array_fill(0, count($_row), '?'));
+            }
+            $this->getConnection()->query(sprintf(
+                'INSERT INTO %s (%s) VALUES (%s) %s',
+                $this->_getRefundRowTable(), implode(',', $this->getTableColumns($this->_getRefundRowTable())), implode('),(', $rows),
+                $this->_hlp->createOnDuplicateExpr($this->getConnection(), $this->getTableColumns($this->_getRefundRowTable()))
+            ), $rawRows);
+        }
+        return $this;
+    }
+
     protected function _afterSave(AbstractModel $object)
     {
        
@@ -152,6 +196,7 @@ class Payout extends AbstractStatement
         }
         
         $this->_saveRows($object);
+        $this->_saveRefundRows($object);
         $this->_saveAdjustments($object);
         
         if ($object->getOrders()) {

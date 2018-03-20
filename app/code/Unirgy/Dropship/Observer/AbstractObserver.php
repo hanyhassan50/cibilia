@@ -92,6 +92,24 @@ abstract class AbstractObserver extends DataObject
         $this->_iHlp->setIsCartUpdateActionFlag((bool)$flag);
         return $this;
     }
+    public function getIsThrowOnQuoteError()
+    {
+        return $this->_iHlp->getIsThrowOnQuoteError();
+    }
+    public function setIsThrowOnQuoteError($flag)
+    {
+        $this->_iHlp->setIsThrowOnQuoteError((bool)$flag);
+        return $this;
+    }
+    public function getIsCheckoutIndexActionFlag()
+    {
+        return $this->_iHlp->getIsCheckoutIndexActionFlag();
+    }
+    public function setIsCheckoutIndexActionFlag($flag)
+    {
+        $this->_iHlp->setIsCheckoutIndexActionFlag((bool)$flag);
+        return $this;
+    }
 
     public function syncMultiAddressUdropshipVendor($observer)
     {
@@ -245,6 +263,7 @@ abstract class AbstractObserver extends DataObject
                 $runtimeAttrCodesParentNode->addChild($runtimeAttrCode);
             }
         }
+        /*
         if ($this->_hlp->getScopeFlag('udropship/stock/split_bundle_by_vendors')) {
             Mage::getConfig()->setNode('global/models/bundle/rewrite/product_type', 'Unirgy\Dropship\Model\BundleProductType');
         }
@@ -256,6 +275,7 @@ abstract class AbstractObserver extends DataObject
 
             }
         }
+        */
     }
 
     public function beforeCrontab()
@@ -267,7 +287,9 @@ abstract class AbstractObserver extends DataObject
         $this->_eventManager->dispatch('udropship_init_config_rewrites', array());
     }
 
-
+    /**
+     * @param $order \Magento\Sales\Model\Order
+     */
     public function changeOrderStatusAfterPosGenarated($order)
     {
         $strict = $this->_hlp->getScopeFlag('udropship/vendor/strict_change_order_status_after_po');
@@ -277,7 +299,16 @@ abstract class AbstractObserver extends DataObject
             && (in_array($order->getStatus(), $madStatuses) || !$strict)
             && $order->getStatus()!=$cosAfterPoStatus
         ) {
-            $order->addStatusHistoryComment(
+            $states = $order->getConfig()->getStates();
+            $state = $order->getState();
+            foreach ($states as $__state=>$__stateLbl) {
+                $stateStatuses = $order->getConfig()->getStateStatuses($__state, false);
+                if (in_array($cosAfterPoStatus, $stateStatuses)) {
+                    $state = $__state;
+                    break;
+                }
+            }
+            $order->setState($state)->addStatusHistoryComment(
                 __('Order status changed after POs generated'),
                 $cosAfterPoStatus);
         }

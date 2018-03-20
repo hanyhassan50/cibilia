@@ -32,7 +32,7 @@
                 <label>General</label>
                 <comment><![CDATA[
                     <div class="msp_securitysuite-comment">
-                        This module is a memeber of <strong><a target="_blank" href="https://github.com/magespecialist/m2-MSP_Security_Suite">MageSpecialist Security Suite</a></strong>. <a target="_blank" href="https://github.com/magespecialist/m2-MSP_Security_Suite">Click here</a> to see all the Security Suite modules.<br />
+                        This module is a member of <strong><a target="_blank" href="https://github.com/magespecialist/m2-MSP_Security_Suite">MageSpecialist Security Suite</a></strong>. <a target="_blank" href="https://github.com/magespecialist/m2-MSP_Security_Suite">Click here</a> to see all the Security Suite modules.<br />
                         Source code, installation and configuration guide: <a target="_blank" href="https://github.com/magespecialist/m2-MSP_Security_Suite">https://github.com/magespecialist/m2-MSP_Security_Suite</a>.
                     </div>
                 ]]></comment>
@@ -40,7 +40,7 @@
                     <label>Enable Two Factor Auth</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field  id="force_providers" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field canRestore="1" id="force_providers" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Force providers</label>
                     <source_model>MSP\TwoFactorAuth\Model\Config\Source\Provider</source_model>
                     <comment>Force providers to be used by all users in this system. Leave empty to allow individual selection.</comment>
@@ -54,7 +54,7 @@
                     <label>Enable this provider</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field  id="allow_trusted_devices" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field canRestore="1" id="allow_trusted_devices" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable "trust this device" option</label>
                     <comment>NOTE: This option should be used in HTTPS only environments</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -68,7 +68,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Requires HTTPS to work</comment>
                 </field>
-                <field  id="allow_trusted_devices" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field canRestore="1" id="allow_trusted_devices" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable "trust this device" option</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -100,7 +100,7 @@
                 <field id="api_key" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API key</label>
                 </field>
-                <field id="allow_trusted_devices" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field canRestore="1" id="allow_trusted_devices" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable "trust this device" option</label>
                     <comment>NOTE: This option should be used in HTTPS only environments</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

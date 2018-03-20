@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="svg" xsi:type="string">
+                    <![CDATA[
+                        <svg version="1.1" id="si-cart-fifteen-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <path class="fm adv" d="M60.27,51.019c-3.081-1.522-6.567-2.397-10.27-2.397c-3.704,0-7.189,0.875-10.27,2.397 C32.473,54.604,27.5,61.85,27.5,70.224v14.467c0,2.984,2.52,5.403,5.628,5.403h33.745c3.108,0,5.628-2.419,5.628-5.403V70.224 C72.5,61.85,67.527,54.604,60.27,51.019z" fill="none" style="stroke-dasharray: 150, 190; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M45.667,50.622 54.5,58.737 48,64.517 48,90.095 " style="stroke-dasharray: 47, 87; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M53.274,69.221a1.863,1.863 0 1,0 3.726,0a1.863,1.863 0 1,0 -3.726,0" fill="none" style="stroke-dasharray: 12, 52; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M53.274,76.221a1.863,1.863 0 1,0 3.726,0a1.863,1.863 0 1,0 -3.726,0" fill="none" style="stroke-dasharray: 12, 52; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M53.274,83.221a1.863,1.863 0 1,0 3.726,0a1.863,1.863 0 1,0 -3.726,0" fill="none" style="stroke-dasharray: 12, 52; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M53.125,16.549a4.875,4.875 0 1,0 9.75,0a4.875,4.875 0 1,0 -9.75,0" fill="none" style="stroke-dasharray: 31, 71; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M37.125,16.549a4.875,4.875 0 1,0 9.75,0a4.875,4.875 0 1,0 -9.75,0" fill="none" style="stroke-dasharray: 31, 71; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M44.241,15.665a5.759,5.759 0 1,0 11.518,0a5.759,5.759 0 1,0 -11.518,0" fill="none" style="stroke-dasharray: 37, 77; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M35.487,39.108a14.513,14.513 0 1,0 29.026,0a14.513,14.513 0 1,0 -29.026,0" fill="none" style="stroke-dasharray: 92, 132; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M59,28.059c-6,4.82-12,4.82-18,0V18.01h18V28.059z" fill="none" style="stroke-dasharray: 58, 98; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M59.029,19.424c-1.455,0-2.771-0.572-3.755-1.494c-0.262,0.611-0.629,1.159-1.074,1.639 c0.893,1.122,2.254,1.856,3.8,1.856c2.145,0,3.946-1.395,4.598-3.319C61.637,18.925,60.392,19.424,59.029,19.424z" fill="none" style="stroke-dasharray: 21, 61; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M40.971,19.424c-1.363,0-2.608-0.498-3.569-1.319c0.652,1.925,2.453,3.319,4.598,3.319 c1.546,0,2.907-0.733,3.8-1.856c-0.445-0.48-0.813-1.028-1.074-1.639C43.742,18.852,42.426,19.424,40.971,19.424z" fill="none" style="stroke-dasharray: 21, 61; stroke-dashoffset: 0;"></path>
+                            <path class="fm adv" d="M54.745,17.361c-0.371,0.397-0.794,0.742-1.253,1.036c-1.009,0.646-2.205,1.027-3.493,1.027 s-2.484-0.38-3.493-1.027c-0.459-0.294-0.882-0.639-1.253-1.036c-0.162,0.202-0.34,0.391-0.529,0.568 c0.262,0.611,0.629,1.159,1.074,1.639c1.05,1.132,2.533,1.856,4.2,1.856s3.15-0.723,4.2-1.856c0.445-0.48,0.813-1.028,1.074-1.639 C55.085,17.752,54.908,17.563,54.745,17.361z" fill="none" style="stroke-dasharray: 26, 66; stroke-dashoffset: 0;"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

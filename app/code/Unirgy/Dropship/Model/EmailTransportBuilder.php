@@ -1,9 +1,24 @@
 <?php
 
 namespace Unirgy\Dropship\Model;
+use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\Message;
+use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\TransportInterfaceFactory;
+use Magento\Framework\ObjectManagerInterface;
 
 class EmailTransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
+    public function __construct(
+        \Magento\Framework\Mail\Template\FactoryInterface $templateFactory,
+        \Magento\Framework\Mail\MessageInterface $message,
+        \Magento\Framework\Mail\Template\SenderResolverInterface $senderResolver,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\Mail\TransportInterfaceFactory $mailTransportFactory
+    ) {
+        parent::__construct($templateFactory, $message, $senderResolver, $objectManager, $mailTransportFactory);
+        $this->reset();
+    }
     protected function prepareMessage()
     {
         $variables = $this->templateVars;

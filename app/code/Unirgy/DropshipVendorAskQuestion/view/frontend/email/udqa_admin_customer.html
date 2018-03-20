@@ -1,27 +1,27 @@
-<!--@subject {{trans "Question replied by vendor"}}@-->
+<!--@subject Question replied by vendor@-->
 
-{{trans "Question to"}} {{var question.vendor_name}} {{if question.shipment_id}}{{trans "regarding shipment #"}}{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}{{trans "regarding product"}} {{var question.product_name}}{{/if}} {{trans "has been answered"}}
+Question to {{var question.vendor_name}} {{if question.shipment_id}}regarding shipment #{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}regarding product {{var question.product_name}}{{/if}} has been answered
 <br/><br/>
-{{trans "Please see details below:"}}
+Please see details below:
 <br/>
 <br/>
-<b>{{trans "Customer Name:"}}</b>  {{var question.customer_name}}
+<b>Customer Name:</b>  {{var question.customer_name}}
 <br/>
-<b>{{trans "Customer E-mail:"}}</b>  {{var question.customer_email}}
+<b>Customer E-mail:</b>  {{var question.customer_email}}
 <br/>
-<b>{{trans "Vendor Name:"}}</b>  {{var question.vendor_name}}
+<b>Vendor Name:</b>  {{var question.vendor_name}}
 <br/>
-<b>{{trans "Vendor E-mail:"}}</b>  {{var question.vendor_email}}
+<b>Vendor E-mail:</b>  {{var question.vendor_email}}
 <br/>
 <br/>
-{{trans "Question Text:"}}
+Question Text:
 <pre>{{var question.question_text}}</pre>
 <br/>
 <br/>
-{{trans "Answer Text:"}}
+Answer Text:
 <pre>{{var question.answer_text}}</pre>
 
 <br/>
 <br/>
 
-{{trans "You can view details in"}} <a href="{{var question.getAdminUrl()}}">{{trans "admin area"}}</a>
+You can view details in <a href="{{var question.getAdminUrl()}}">admin area</a>

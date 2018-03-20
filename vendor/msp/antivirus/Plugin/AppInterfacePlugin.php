@@ -23,13 +23,9 @@ namespace MSP\AntiVirus\Plugin;
 use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\Http;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\UrlInterface;
 use MSP\AntiVirus\Api\AntiVirusInterface;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
-use MSP\SecuritySuiteCommon\Api\SessionInterface;
+use MSP\SecuritySuiteCommon\Api\LockDownInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 
 class AppInterfacePlugin
 {
@@ -44,81 +40,64 @@ class AppInterfacePlugin
     private $antiVirus;
 
     /**
-     * @var Http
-     */
-    private $http;
-
-    /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
      * @var State
      */
     private $state;
 
     /**
-     * @var EventInterface
+     * @var LockDownInterface
      */
-    private $event;
+    private $lockDown;
 
     /**
-     * @var ObjectManagerInterface
+     * @var AlertInterface
      */
-    private $objectManager;
-
+    private $alert;
 
     public function __construct(
         RequestInterface $request,
-        Http $http,
-        UrlInterface $url,
         State $state,
         AntiVirusInterface $antiVirus,
-        EventInterface $event,
-        ObjectManagerInterface $objectManager
+        LockDownInterface $lockDown,
+        AlertInterface $alert
     ) {
         $this->request = $request;
         $this->antiVirus = $antiVirus;
-        $this->http = $http;
-        $this->url = $url;
         $this->state = $state;
-        $this->event = $event;
-        $this->objectManager = $objectManager;
+        $this->lockDown = $lockDown;
+        $this->alert = $alert;
     }
 
     /**
      * Return true if content should be checked
      * @return bool
      */
-    protected function shouldCheck()
+    private function shouldCheck()
     {
         return in_array($this->request->getMethod(), ['PUT', 'POST']);
     }
 
+    /**
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
+     */
     public function aroundLaunch(AppInterface $subject, \Closure $proceed)
     {
         // We are creating a plugin for AppInterface to make sure we can perform an AV scan early in the code.
-        // A predispatch observer is not an option.
-
         if ($this->antiVirus->isEnabled() && $this->shouldCheck()) {
             $res = $this->antiVirus->scanRequest();
 
             if ($res) {
-                $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                    'module' => 'MSP_AntiVirus',
-                    'message' => 'Found ' . $res,
-                    'action' => 'stop',
-                ]);
+                $this->alert->event(
+                    'MSP_AntiVirus',
+                    'Found ' . $res,
+                    AlertInterface::LEVEL_SECURITY_ALERT,
+                    null,
+                    AlertInterface::ACTION_LOCKDOWN
+                );
 
                 $this->state->setAreaCode('frontend');
 
-                // Must use object manager because a session cannot be activated before setting area
-                $this->objectManager->get('MSP\SecuritySuiteCommon\Api\SessionInterface')
-                    ->setEmergencyStopMessage(__('Malware found: %1', $res));
-
-                $this->http->setRedirect($this->url->getUrl('msp_security_suite/stop/index'));
-                return $this->http;
+                return $this->lockDown->doHttpLockdown(__('Malware found: %1', $res));
             }
         }
 

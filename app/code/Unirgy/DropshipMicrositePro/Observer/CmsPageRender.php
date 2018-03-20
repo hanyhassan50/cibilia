@@ -41,6 +41,7 @@ class CmsPageRender extends AbstractObserver implements ObserverInterface
             && ($_vendor = $this->_msHlp->getCurrentVendor())
         ) {
             $landingPageTitle = $this->_msHlp->getLandingPageTitle();
+
             $observer->getPage()->setContentHeading(
                 $landingPageTitle
             );

@@ -23,10 +23,6 @@ $_element = $this->getElement()
             if (false === strpos($sId, '-')) {
                 $sId = $sId.'-'.$this->getTypeOfProduct();
             }
-
-            
-
-
             $sIdEnc = md5($sId);
             list($_sId) = explode('-', $sId);
             $allowGroupedValue = $this->getCfgValue($_globalTSC, $sId, 'allow_grouped');

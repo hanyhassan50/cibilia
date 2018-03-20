@@ -21,7 +21,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="MSP\ReCaptcha\Api\ValidateInterface" type="MSP\ReCaptcha\Model\Validate" />
+    <preference for="MSP\ReCaptcha\Api\ValidateInterface" type="MSP\ReCaptcha\Model\Validate"/>
 
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
@@ -30,4 +30,15 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\View\Asset\Minification">
+        <plugin name="msp-exclude" type="MSP\ReCaptcha\Plugin\ExcludeFromMinification"/>
+    </type>
+
+    <!-- Default HTTP response provider -->
+    <preference for="MSP\ReCaptcha\Model\Provider\ResponseProviderInterface"
+                type="MSP\ReCaptcha\Model\Provider\Response\DefaultResponseProvider"/>
+
+    <preference for="MSP\ReCaptcha\Model\IsCheckRequiredInterface"
+                type="MSP\ReCaptcha\Model\IsCheckRequired"/>
 </config>

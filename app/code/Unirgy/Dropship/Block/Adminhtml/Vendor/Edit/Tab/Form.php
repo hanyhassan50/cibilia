@@ -227,8 +227,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         $fieldset->addField('password', 'password', array(
             'name'      => 'password',
-            'label'     => __('Password'),
+            'label'     => __('New Password'),
             'class'     => 'validate-password',
+            'note'      => __('Leave empty for no change'),
         ));
 /*
         $fieldset->addField('password', 'password', array(
@@ -324,7 +325,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField('vendor_attn', 'text', array(
             'name'      => 'vendor_attn',
             'label'     => __('Attention To'),
-            'required'  => true,
         ));
 
         $fieldset->addField('street', 'textarea', array(

@@ -45,6 +45,14 @@ class SalesQuoteSaveBefore extends AbstractObserver implements ObserverInterface
             $hlp->applyDefaultVendorIds($items)->applyStockAvailability($items);
             $this->_iHlp->initBaseCosts($items);
             $this->_eventManager->dispatch('udropship_prepare_quote_items_after', array('items'=>$items));
+            if ($this->getIsThrowOnQuoteError() && $quote->getHasError()) {
+                $errorMsg = '';
+                foreach ($quote->getErrors() as $__err) {
+                    if (!empty($errorMsg)) $errorMsg .= "\n";
+                    $errorMsg .= $__err->getText();
+                }
+                throw new \Magento\Framework\Exception\LocalizedException(__($errorMsg));
+            }
         }
     }
 }

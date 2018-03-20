@@ -1,4 +1,4 @@
-<!--@subject {{trans "Application Confirmation from"}} Cibilia@-->
+<!--@subject Application Confirmation from {{var store_name}}! @-->
 
 <style type="text/css">
     body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
@@ -18,16 +18,15 @@
         <table cellspacing="0" cellpadding="0" border="0" width="650">
             <tr>
                 <td valign="top">
-                    <p><strong>{{trans "Dear"}} {{var vendor.vendor_name}},</strong></p>
-                        
-                    <p>{{trans "Thank you for your application"}}</p>
+                    <p><strong>Dear {{var vendor.vendor_name}},</strong></p>
 
-                    <p>{{trans "Your request should be processed shortly, and you should receive a confirmation email."}}</p>
+                    <p>Thank you for your application!</p>
 
-                    <p>{{trans "Best regards"}}<br/><a href="{{store url=''}}">Team Cibilia</a></p>
+                    <p>Your request should be processed shortly, and you should receive a confirmation email.</p>
+
+                    <p>Best regards,<br/><a href="{{store url=''}}">{{var store_name}}</a></p>
                </td>
            </tr>
-
        </table>
    </td>
 </tr>

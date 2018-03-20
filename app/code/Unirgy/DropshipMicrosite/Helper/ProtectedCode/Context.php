@@ -79,6 +79,10 @@ class Context
      */
     public $_eventManager;
 
+    public $urlScopeResolver;
+
+    public $_url;
+
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Store\Model\StoreManagerInterface $modelStoreManagerInterface,
@@ -88,7 +92,10 @@ class Context
         \Magento\Framework\App\Config\ScopeConfigInterface $configScopeConfigInterface,
         \Unirgy\DropshipMicrosite\Helper\Data $dropshipMicrositeHelperData,
         \Unirgy\Dropship\Model\VendorFactory $modelVendorFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManagerInterface)
+        \Magento\Framework\Event\ManagerInterface $eventManagerInterface,
+        \Magento\Framework\Url\ScopeResolverInterface $urlScopeResolver,
+        \Magento\Framework\UrlInterface $url
+    )
     {
         $this->_logger = $logger;
         $this->_storeManager = $modelStoreManagerInterface;
@@ -99,6 +106,7 @@ class Context
         $this->_msHlp = $dropshipMicrositeHelperData;
         $this->_vendorFactory = $modelVendorFactory;
         $this->_eventManager = $eventManagerInterface;
-
+        $this->urlScopeResolver = $urlScopeResolver;
+        $this->_url = $url;
     }
 }

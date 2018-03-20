@@ -4,20 +4,8 @@ $tpl = $prod->getData('__tpl_product');
 $name = $this->getElement()->getName();
 $id = $this->getElement()->getId();
 $type = $this->getElement()->getType();
-
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$model = $objectManager->create('\Magento\Eav\Model\Config');
 ?>
-<?php 
-$attr =  $model->getAttribute('catalog_product', $this->getElement()->getId()); 
-if($this->getElement()->getId() == "origin_of_raw_materials"){
-	$label = $attr->getStoreLabel();
-	$html = '<label class="label admin__field-label" for="' .$this->getElement()->getId() .'"><span>' .$label .'</span></label>' . "\n";
-}else{
-	$html = $this->getElement()->getLabelHtml();
-}
-?>
-<?php echo $html; ?> <br />
+<?php echo $this->getElement()->getLabelHtml() . ( $this->getElement()->getRequired() ? ' <span class="required">*</span>' : '' ) ?> <br />
 <?php echo $this->getElementHtml() ?>
 <?php if (in_array($type, ['text','textarea']) && $prod && $tpl && ($tplData = $tpl->getData($id))==$prod->getData($id) && is_scalar($tplData)): ?>
 <script type="text/javascript">
@@ -38,6 +26,9 @@ require(["jquery", "prototype","domReady!"], function(jQuery) {
                 el.value='';
             }
         });
+        if (jQuery(el).is(':focus') && el.value==tpl) {
+            el.value='';
+        }
     }
 });
 

@@ -126,4 +126,10 @@ class Collection extends ShipmentCollection
         }
         return $this;
     }
+    protected function _afterLoad()
+    {
+        parent::_afterLoad();
+        $this->walk('unserializeFields');
+        return $this;
+    }
 }

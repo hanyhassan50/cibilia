@@ -25,15 +25,6 @@ class ProductPost extends AbstractVendor
 {
     public function execute()
     {
-
-         //Bharat Get vendor
-        { 
-            $vendorSess = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
-
-            $vendor_username = $vendorSess->getusername();
-        }   
-         
-
         $session = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
         $v = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session')->getVendor();
         $hlp = $this->_hlp;
@@ -41,14 +32,9 @@ class ProductPost extends AbstractVendor
         $r = $this->getRequest();
         $oldStoreId = $this->_storeManager->getStore()->getId();
         $this->_storeManager->setCurrentStore(0);
-        
-        $data = $r->getPost();
-        
-        
         if ($r->isPost()) {
             try {
                 $prod = $this->_initProduct();
-
                 $isNew = !$prod->getId();
                 if (!$this->_hlp->getScopeFlag('udprod/general/disable_name_check')) {
                     $ufName = $prod->formatUrlKey($prod->getName());
@@ -70,58 +56,19 @@ class ProductPost extends AbstractVendor
                 }
                 $canSaveCustOpt = $prod->getCanSaveCustomOptions();
                 $custOptAll = [];
-
                 if (!$isNew && $canSaveCustOpt) {
                     $__custOptAll = $prod->getOptions();
                     foreach ($__custOptAll as $__custOpt) {
                         $__cov = $__custOpt->getData();
                         if ($__custOpt->getGroupByType() == Option::OPTION_GROUP_SELECT) {
-                            foreach ($__custOpt->getValues() as $__optValue) {
-                                $__cov['optionValues'][] = $__optValue->getData();
+                            foreach ($this->getCustomOptionValues($__custOpt) as $__optValue) {
+                                $__cov['optionValues'][] = is_array($__optValue) ? $__optValue : $__optValue->getData();
                             }
                         }
                         $custOptAll[] = $__cov;
                     }
                 }
-
-                
-                $v_store_id = $prHlp->getVendorsStoreIdByProduct($vendor_username);
-                
-                if($v_store_id === "13")
-                {
-                    $vndr_stor_id = array("7");
-                }
-                
-                if($v_store_id === "14")
-                {
-                    $vndr_stor_id = array("5");
-                }
-
-                if($v_store_id === "15")
-                {
-                    $vndr_stor_id = array("4");
-                }
-
-                if($v_store_id === "16")
-                {
-                    $vndr_stor_id = array("8");
-                }
-
-                if($v_store_id === "17")
-                {
-                    $vndr_stor_id = array("6");
-                }
-                    
-                if($v_store_id === "1")
-                {
-                    $vndr_stor_id = array("1");
-                }           
-
-                $prod->setWebsiteIds($vndr_stor_id);   // JACK
                 $prod->save();
-                
-                
-
                 $prHlp->processAfterSave($prod);
                 $prHlp->processUdmultiPost($prod, $v);
                 if ($isNew) {
@@ -142,8 +89,8 @@ class ProductPost extends AbstractVendor
                         foreach ($__custOptAll as $__custOpt) {
                             $__cov = $__custOpt->getData();
                             if ($__custOpt->getGroupByType() == Option::OPTION_GROUP_SELECT) {
-                                foreach ($__custOpt->getValues() as $__optValue) {
-                                    $__cov['optionValues'][] = $__optValue->getData();
+                                foreach ($this->getCustomOptionValues($__custOpt) as $__optValue) {
+                                    $__cov['optionValues'][] = is_array($__optValue) ? $__optValue : $__optValue->getData();
                                 }
                             }
                             $custOptAllNew[] = $__cov;
@@ -154,23 +101,12 @@ class ProductPost extends AbstractVendor
                     }
                 }
                 $prHlp->reindexProduct($prod);
-                if ($isNew && $prod->getCreatedBy() ==2) {
-                    ObjectManager::getInstance()->create('Cibilia\Idproofs\Model\Idproof')->_sendProductNotifyAdminFromCibilian($prod->getId());
-                }
-                if ($isNew && $prod->getCreatedBy() ==1) {
-                    ObjectManager::getInstance()->create('Cibilia\Idproofs\Model\Idproof')->_sendProductNotifyAdminFromVendor($prod->getId());
-                }
-               /* if(!$session->getCreatedBy() && $prod->getCreatedBy() ==2 && $prod->getIsApproved()) {
-
-                    $prod->setData('status',$data['product']['status'])->save();
-                }*/
                 $this->messageManager->addSuccess(__('Product has been saved'));
             } catch (\Exception $e) {
                 $session->setUdprodFormData($r->getPost('product'));
                 $this->messageManager->addError($e->getMessage());
             }
         }
-
         $this->_storeManager->setCurrentStore($oldStoreId);
         $this->_redirectAfterPost(@$prod);
     }

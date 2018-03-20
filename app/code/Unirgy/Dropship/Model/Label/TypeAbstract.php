@@ -26,21 +26,29 @@ abstract class TypeAbstract extends DataObject
     /**
      * @var HelperData
      */
-    protected $_helperData;
+    protected $_hlp;
 
     /**
      * @var DirectoryList
      */
-    protected $_filesystemDirectoryList;
+    protected $_fsDirList;
 
-    public function __construct(array $data = [],
-                                HelperData $helperData = null,
-                                DirectoryList $filesystemDirectoryList = null)
+    public function __construct(
+        HelperData $helperData,
+        DirectoryList $filesystemDirectoryList,
+        array $data = []
+    )
     {
-        $this->_helperData = $helperData;
-        $this->_filesystemDirectoryList = $filesystemDirectoryList;
+        $this->_hlp = $helperData;
+        $this->_fsDirList = $filesystemDirectoryList;
 
         parent::__construct($data);
+        $this->_construct();
+    }
+
+    protected function _construct()
+    {
+
     }
 
     /**
@@ -50,7 +58,7 @@ abstract class TypeAbstract extends DataObject
     public function printBatch($batch=null)
     {
         $data = $this->renderBatchContent($batch);
-        $this->_helperData->sendDownload($data['filename'], $data['content'], $data['type']);
+        $this->_hlp->sendDownload($data['filename'], $data['content'], $data['type']);
     }
 
     /**
@@ -61,12 +69,17 @@ abstract class TypeAbstract extends DataObject
     public function printTrack($track=null)
     {
         $data = $this->renderTrackContent($track);
-        $this->_helperData->sendDownload($data['filename'], $data['content'], $data['type']);
+        $this->_hlp->sendDownload($data['filename'], $data['content'], $data['type']);
     }
 
     public function getBatchPathName($batch)
     {
-        return $this->_filesystemDirectoryList->getPath('var') . ('batch').'/'.$this->getBatchFileName($batch);
+        $baseDir = $this->_fsDirList->getPath('var');
+        $batchDir = $this->_fsDirList->getPath('var') . "/batch/";
+        /* @var \Magento\Framework\Filesystem\Directory\Write $dirWrite */
+        $dirWrite = $this->_hlp->createObj('\Magento\Framework\Filesystem\Directory\WriteFactory')->create($baseDir);
+        $dirWrite->create('batch');
+        return $batchDir.$this->getBatchFileName($batch);
     }
 
     protected function _getTrackVendorId($track)
@@ -82,6 +95,6 @@ abstract class TypeAbstract extends DataObject
 
     protected function _getTrackVendor($track)
     {
-        return $this->_helperData->getVendor($this->_getTrackVendorId($track));
+        return $this->_hlp->getVendor($this->_getTrackVendorId($track));
     }
 }

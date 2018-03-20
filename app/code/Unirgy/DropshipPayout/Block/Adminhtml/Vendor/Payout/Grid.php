@@ -134,6 +134,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'currency' => 'base_currency_code',
                 'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
             ]);
+            $this->addColumn('pt_grid_total_refund', [
+                'header' => __('Total Refund'),
+                'index' => 'total_refund',
+                'type'  => 'price',
+                'currency' => 'base_currency_code',
+                'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
+            ]);
         } else {
             $this->addColumn('pt_grid_total_payment', [
                 'header' => __('Total Payment'),

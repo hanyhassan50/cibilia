@@ -25,5 +25,9 @@ class ShipmentGridCollection extends \Magento\Sales\Model\ResourceModel\Order\Sh
         $this->setMainTable('sales_shipment_grid');
     }
 
+    protected function _afterLoad()
+    {
+        return $this;
+    }
 
 }

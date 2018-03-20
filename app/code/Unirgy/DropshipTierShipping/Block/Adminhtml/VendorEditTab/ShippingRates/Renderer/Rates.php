@@ -27,6 +27,8 @@ class Rates extends Widget implements RendererInterface
      */
     protected $_element = null;
 
+    protected $_hlp;
+
     /**
      * Rates constructor.
      * @param Context $context
@@ -34,10 +36,12 @@ class Rates extends Widget implements RendererInterface
      * @param array $data
      */
     public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
         Context $context,
         HelperData $helperData,
         array $data = []
     ) {
+        $this->_hlp = $udropshipHelper;
         $this->_helperData = $helperData;
         $this->setTemplate('Unirgy_DropshipTierShipping::udtiership/vendor/helper/category_rates_config.phtml');
         parent::__construct($context, $data);
@@ -86,7 +90,7 @@ class Rates extends Widget implements RendererInterface
     {
         $value = $this->_element->getValue();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -101,7 +105,7 @@ class Rates extends Widget implements RendererInterface
     {
         $value = $this->_scopeConfig->getValue('carriers/udtiership/rates', ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }

@@ -26,6 +26,8 @@ class Rates extends Template
      */
     protected $_vendorSession;
 
+    protected $_hlp;
+
     /**
      * Rates constructor.
      * @param Context $context
@@ -34,6 +36,7 @@ class Rates extends Template
      * @param array $data
      */
     public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
         Context $context,
         HelperData $helperData,
         Session $vendorSession,
@@ -41,6 +44,7 @@ class Rates extends Template
     ) {
         parent::__construct($context, $data);
 
+        $this->_hlp = $udropshipHelper;
         $this->_helperData = $helperData;
         $this->_vendorSession = $vendorSession;
     }
@@ -60,7 +64,7 @@ class Rates extends Template
     {
         $value = $this->getVendor()->getTiershipRates();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -75,7 +79,7 @@ class Rates extends Template
     {
         $value = $this->_scopeConfig->getValue('carriers/udtiership/rates', ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }

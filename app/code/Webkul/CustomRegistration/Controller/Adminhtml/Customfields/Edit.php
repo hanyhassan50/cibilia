@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Controller\Adminhtml\Customfields;
 
 use Magento\Backend\App\Action;
@@ -102,11 +110,10 @@ class Edit extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        //$id = $this->getRequest()->getParam('attribute_id');
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('id');
-        //echo $id; die;
-        $model1 = $this->_objectManager->create('Webkul\CustomRegistration\Model\Customfields');
+
+        $modelCustomfield = $this->_objectManager->create('Webkul\CustomRegistration\Model\Customfields');
         $attributeModel = $this->_attributeFactory->create();
         $childAttributeModel = $this->_objectManager->create(
             'Magento\Customer\Model\Attribute'
@@ -120,14 +127,14 @@ class Edit extends \Magento\Backend\App\Action
             $this->_entityTypeId
         );
         if ($id) {
-            $model1->load($id);
+            $modelCustomfield->load($id);
             $attributeId = $this->_attributeMetaData
                         ->create()
-                        ->getAttribute('customer', $model1->getAttributeCode())
+                        ->getAttribute('customer', $modelCustomfield->getAttributeCode())
                         ->getAttributeId();
 
             $model->load($attributeId);
-            $model->setIsVisible($model1->getStatus());
+            $model->setIsVisible($modelCustomfield->getStatus());
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This attribute no longer exists.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
@@ -145,9 +152,9 @@ class Edit extends \Magento\Backend\App\Action
 
             $requiredCheck = $model->getFrontendClass();
             $require = explode(' ', $requiredCheck);
+            $model->setFrontendClass($require[0]);
             if (in_array('required', $require)) {
                 $model->setIsRequired(1);
-                $model->setFrontendClass($require[0]);
             }
             /*
              * if dependable attribute presents.
@@ -159,8 +166,8 @@ class Edit extends \Magento\Backend\App\Action
                 $require = explode(' ', $requiredCheck);
                 if (in_array('required', $require)) {
                     $childAttributeModel->setIsRequired(1);
-                    $childAttributeModel->setFrontendClass($require[0]);
                 }
+                $childAttributeModel->setFrontendClass($require[0]);
                 $model->setFrontendInput('dependable');
                 $model->setDependAttributeId($childAtrributeId);
             }
@@ -171,6 +178,7 @@ class Edit extends \Magento\Backend\App\Action
         if (!empty($data)) {
             $model->addData($data);
         }
+
         $attributeData = $this->getRequest()->getParam('attribute');
         if (!empty($attributeData) && $id === null) {
             $model->addData($attributeData);

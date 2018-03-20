@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Tab;
 
 abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractBlock
@@ -11,7 +19,6 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractB
      */
     protected function _prepareLayout()
     {
-        //$this->addChild('labels', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels');
         $this->addChild('options', 'Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Options');
         return parent::_prepareLayout();
     }

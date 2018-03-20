@@ -1,80 +1,17 @@
-tOutputStream(), 50);
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%%');
-        $bar->start();
-        $bar->display();
-        $bar->advance();
+#!/usr/bin/env sh
 
-        // set shorter format
-        $bar->setFormat(' %current%/%max% [%bar%]');
-        $bar->advance();
+dir=$(d=${0%[/\\]*}; cd "$d" > /dev/null; cd "../pdepend/pdepend/src/bin" && pwd)
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  1/50 [>---------------------------]   2%').
-            $this->generateOutput('  2/50 [=>--------------------------]     '),
-            stream_get_contents($output->getStream())
-        );
-    }
+# See if we are running in Cygwin by checking for cygpath program
+if command -v 'cygpath' >/dev/null 2>&1; then
+	# Cygwin paths start with /cygdrive/ which will break windows PHP,
+	# so we need to translate the dir path to windows format. However
+	# we could be using cygwin PHP which does not require this, so we
+	# test if the path to PHP starts with /cygdrive/ rather than /usr/bin
+	if [[ $(which php) == /cygdrive/* ]]; then
+		dir=$(cygpath -m "$dir");
+	fi
+fi
 
-    public function testStartWithMax()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream());
-        $bar->setFormat('%current%/%max% [%bar%]');
-        $bar->start(50);
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput(' 0/50 [>---------------------------]').
-            $this->generateOutput(' 1/50 [>---------------------------]'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testSetCurrentProgress()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-        $bar->setProgress(15);
-        $bar->setProgress(25);
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  1/50 [>---------------------------]   2%').
-            $this->generateOutput(' 15/50 [========>-------------------]  30%').
-            $this->generateOutput(' 25/50 [==============>-------------]  50%'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    /**
-     */
-    public function testSetCurrentBeforeStarting()
-    {
-        $bar = new ProgressBar($this->getOutputStream());
-        $bar->setProgress(15);
-        $this->assertNotNull($bar->getStartTime());
-    }
-
-    /**
-     * @expectedException        \LogicException
-     * @expectedExceptionMessage You can't regress the progress bar
-     */
-    public function testRegressProgress()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->setProgress(15);
-        $bar->setProgress(10);
-    }
-
-    public function testRedrawFrequency()
-    {
-        $bar = $this->getMock('Symfony\Component\Console\Helper\ProgressBar', array('display'), array($output = $this->getOutputStream(), 6));
-        $bar->expects($this->exactly(
+dir=$(echo $dir | sed 's/ /\ /g')
+"${dir}/pdepend" "$@"

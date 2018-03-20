@@ -74,14 +74,6 @@ class Tabs extends WidgetTabs
             ));
         }
 
-         $this->addTab('vendornew_section', array(
-            'label'     => __('Vendor New Data'),
-            'title'     => __('Vendor New Data'),
-            'content'   => $this->getLayout()->createBlock('Unirgy\Dropship\Block\Adminhtml\Vendor\Edit\Tab\Vendornew')
-                ->setVendorId($id)
-                ->toHtml(),
-        ));
-
         if(($tabId = $this->getRequest()->getParam('tab'))) {
             $this->setActiveTab($tabId);
         }

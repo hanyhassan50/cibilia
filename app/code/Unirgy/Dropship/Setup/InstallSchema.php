@@ -27,13 +27,19 @@ class InstallSchema implements InstallSchemaInterface
 {
     const MEDIUMTEXT_SIZE=16777216;
     const TEXT_SIZE=65536;
+    protected $_hlp;
+    public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper
+    ) {
+        $this->_hlp = $udropshipHelper;
+    }
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $installer = $setup;
         $installer->startSetup();
         $connection = $installer->getConnection();
 
-        $tableName = $installer->getTable('udropship_shipping');
+            $tableName = $installer->getTable('udropship_shipping');
         $table = $connection->newTable($tableName)
             ->addColumn('shipping_id', Table::TYPE_INTEGER, 10, [
                 'identity' => true,
@@ -595,6 +601,8 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn('order_created_at', Table::TYPE_DATETIME, null, ['nullable' => false])
             ->addColumn('po_created_at', Table::TYPE_DATETIME, null, ['nullable' => false])
             ->addColumn('total_refund', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_payment', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_invoice', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
             ->addColumn('subtotal', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
             ->addColumn('shipping', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
             ->addColumn('discount', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])

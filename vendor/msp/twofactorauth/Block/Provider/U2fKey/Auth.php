@@ -22,26 +22,14 @@ namespace MSP\TwoFactorAuth\Block\Provider\U2fKey;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\Json\EncoderInterface;
-use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Model\Provider\Engine\U2fKey;
 
 class Auth extends Template
 {
     /**
-     * @var TfaInterface
-     */
-    private $tfa;
-
-    /**
      * @var U2fKey
      */
     private $u2fKey;
-
-    /**
-     * @var EncoderInterface
-     */
-    private $encoder;
 
     /**
      * @var Session
@@ -50,35 +38,35 @@ class Auth extends Template
 
     public function __construct(
         Template\Context $context,
-        TfaInterface $tfa,
         Session $session,
-        EncoderInterface $encoder,
         U2fKey $u2fKey,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->tfa = $tfa;
         $this->u2fKey = $u2fKey;
-        $this->encoder = $encoder;
         $this->session = $session;
     }
 
     /**
-     * Get register data JSON payload
-     * @return string
+     * @inheritdoc
      */
-    public function getAuthenticateData()
+    public function getJsLayout()
     {
-        return $this->encoder->encode($this->u2fKey->getAuthenticateData($this->session->getUser()));
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['postUrl'] =
+            $this->getUrl('*/*/authpost');
 
-    public function getPostUrl()
-    {
-        return $this->getUrl('*/*/authpost');
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['successUrl'] =
+            $this->getUrl('/');
 
-    public function getSuccessUrl()
-    {
-        return $this->getUrl('/');
+        $this->jsLayout['components']['msp-twofactorauth-auth']['loggingImageUrl'] =
+            $this->getViewFileUrl('MSP_TwoFactorAuth::images/logging.gif');
+
+        $this->jsLayout['components']['msp-twofactorauth-auth']['touchImageUrl'] =
+            $this->getViewFileUrl('MSP_TwoFactorAuth::images/u2f/touch.png');
+
+        $this->jsLayout['components']['msp-twofactorauth-auth']['authenticateData'] =
+            $this->u2fKey->getAuthenticateData($this->session->getUser());
+
+        return parent::getJsLayout();
     }
 }

@@ -11,11 +11,12 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Simplexml\Config;
 use Unirgy\SimpleUp\Model\Module;
 use Zend\Json\Json;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 class Data extends AbstractHelper
 {
@@ -30,7 +31,7 @@ class Data extends AbstractHelper
     protected $_directoryList;
 
     /**
-     * @var Write
+     * @var WriteInterface
      */
     protected $_directoryWrite;
 
@@ -66,18 +67,12 @@ class Data extends AbstractHelper
     protected $modulesList;
 
     public function __construct(
-        Context $context
-        ,
-        DirectoryList $directoryList
-        ,
-        WriteFactory $writeFactory
-        ,
-        Filesystem $filesystem
-        ,
-        EncryptorInterface $encryptorInterface
-        ,
-        CacheManager $cacheManager
-        ,
+        Context $context,
+        DirectoryList $directoryList,
+        WriteFactory $writeFactory,
+        Filesystem $filesystem,
+        EncryptorInterface $encryptorInterface,
+        CacheManager $cacheManager,
         Module $module
     ) {
         parent::__construct($context);
@@ -96,17 +91,26 @@ class Data extends AbstractHelper
     {
         $parsed = parse_url($uri);
         if (empty($parsed['host']) || !preg_match('#(^|\.)unirgy\.com$#', $parsed['host'])) {
-            throw new \Exception('Invalid download URL: ' . $uri);
+            throw new Exception(__('Invalid download URL: %1', $uri));
         }
-        $dlDir = $this->_directoryList->getPath('var') . ('/usimpleup/download');
-        $this->_directoryWrite->create($dlDir);
+        /** @var $dlDir WriteInterface $dlDir */
+        $dlDir = $this->_directoryWrite->create($this->_directoryList->getPath('var') . '/usimpleup/download');
+        if (!$dlDir->isExist()) {
+            try {
+                $dlDir->create();
+            } catch (Exception $exception) {
+                throw new FileSystemException(__('Error creating folder: %1', $dlDir));
+            }
+        }
 
-        $filePath = $dlDir . '/' . basename($parsed['path']);
+        $filePath = $dlDir->getAbsolutePath('/' . basename($parsed['path']));
         $fd = fopen($filePath, 'wb');
 
         $uri .= (strpos($uri, '?') === false ? '?' : '&') . 'php=' . PHP_VERSION;
         if (function_exists('ioncube_loader_version')) {
             $uri .= '&ioncube=' . ioncube_loader_version();
+        } elseif (function_exists('sg_load')) {
+            $uri .= '&sg=1';
         }
 
         $ch = curl_init();
@@ -114,19 +118,27 @@ class Data extends AbstractHelper
             CURLOPT_URL => $uri,
             CURLOPT_BINARYTRANSFER => true,
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_FILE => $fd,
         ]);
+        if ((bool)$this->scopeConfig->isSetFlag('usimpleup/general/verify_ssl')) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            #curl_setopt($curl, CURLOPT_CAINFO, dirname( __DIR__ ) . '/etc/gd_bundle-g2-g1.crt');
+            curl_setopt($ch, CURLOPT_CAINFO, dirname( __DIR__ ) . '/ssl/cacert.pem');
+        } else {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        }
         if (curl_exec($ch) === false) {
-            $error = __('Error while downloading file: %s', curl_error($ch));
+            $error = __('Error while downloading file: %1', curl_error($ch));
             curl_close($ch);
             fclose($fd);
-            throw new \Exception($error);
+            throw new Exception($error);
         }
         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
-            $error = __('File not found or error while downloading: %s', $uri);
+            $error = __('File not found or error while downloading: %1', $uri);
             curl_close($ch);
             fclose($fd);
-            throw new \Exception($error);
+            throw new Exception($error);
         }
         curl_close($ch);
         fclose($fd);
@@ -136,8 +148,8 @@ class Data extends AbstractHelper
 
     public function install($uri, $filePath)
     {
-        $tempDir = $this->_directoryList->getPath('var') . ('usimpleup/unpacked') . '/' . basename($filePath);
-        $this->_directoryWrite->create($tempDir);
+        $tempDir = $this->_directoryList->getPath('var') . '/usimpleup/unpacked' . '/' . basename($filePath);
+        $this->_directoryWrite->create($tempDir)->create();
 
         $this->unarchive($filePath, $tempDir);
         $this->registerModulesFromDir($uri, $tempDir);
@@ -146,16 +158,16 @@ class Data extends AbstractHelper
         if ($useFtp) {
             $errors = $this->ftpUpload($tempDir);
             if ($errors) {
-                $logDir = $this->_directoryList->getPath('var') . ('usimpleup/log') . '/' . basename($filePath);
-                $this->_directoryWrite->create($logDir);
+                $logDir = $this->_directoryList->getPath('var') . '/usimpleup/log' . '/' . basename($filePath);
+                $this->_directoryWrite->create($logDir)->create();
 
                 $fd = fopen($logDir . '/errors.log', 'a+');
                 foreach ($errors as $error) {
                     fwrite($fd, date('Y-m-d H:i:s') . ' ' . $error . "\n");
                 }
                 fclose($fd);
-                throw new \Exception(__('Errors during FTP upload, see this log file: %s',
-                                        'usimpleup/log/' . basename($filePath) . '/errors.log'));
+                throw new Exception(__('Errors during FTP upload, see this log file: %s',
+                    'usimpleup/log/' . basename($filePath) . '/errors.log'));
             }
         } else {
             $this->unarchive($filePath, $this->_directoryList->getRoot());
@@ -171,23 +183,23 @@ class Data extends AbstractHelper
                 $this->unzip($filePath, $target);
                 break;
             default:
-                throw new \Exception(__('Unknown archive format'));
+                throw new Exception(__('Unknown archive format'));
         }
     }
 
     public function unzip($filePath, $target)
     {
         if (!extension_loaded('zip')) {
-            throw new \Exception(__('Zip PHP extension is not installed'));
+            throw new Exception(__('Zip PHP extension is not installed'));
         }
         $zip = new \ZipArchive();
         if (!$zip->open($filePath)) {
-            throw new \Exception(__('Invalid or corrupted zip file'));
+            throw new Exception(__('Invalid or corrupted zip file'));
         }
         if (!$zip->extractTo($target)) {
             $zip->close();
-            throw new \Exception(__('Errors during unpacking zip file. Please check destination write permissions: %s',
-                                    $target));
+            throw new Exception(__('Errors during unpacking zip file. Please check destination write permissions: %s',
+                $target));
         }
         $zip->close();
     }
@@ -195,20 +207,20 @@ class Data extends AbstractHelper
     public function ftpUpload($from)
     {
         if (!extension_loaded('ftp')) {
-            throw new \Exception(__('FTP PHP extension is not installed'));
+            throw new Exception(__('FTP PHP extension is not installed'));
         }
         $conf = $this->scopeConfig->getValue('usimpleup/ftp');
         if (!($conn = ftp_connect($conf['host'], $conf['port']))) {
-            throw new \Exception(__('Could not connect to FTP host'));
+            throw new Exception(__('Could not connect to FTP host'));
         }
-        $password = $this->_ftpPassword ? $this->_ftpPassword : $this->_encryptor->decrypt($conf['password']);
+        $password = $this->_ftpPassword ?: $this->_encryptor->decrypt($conf['password']);
         if (!@ftp_login($conn, $conf['user'], $password)) {
             ftp_close($conn);
-            throw new \Exception(__('Could not login to FTP host'));
+            throw new Exception(__('Could not login to FTP host'));
         }
         if (!@ftp_chdir($conn, $conf['path'])) {
             ftp_close($conn);
-            throw new \Exception(__('Could not navigate to FTP Magento base path'));
+            throw new Exception(__('Could not navigate to FTP Magento base path'));
         }
 
         $errors = $this->ftpUploadDir($conn, $from . '/');
@@ -223,7 +235,7 @@ class Data extends AbstractHelper
         $errors = [];
         $dir = opendir($source);
         while ($file = readdir($dir)) {
-            if ($file == '.' || $file == "..") {
+            if ($file === '.' || $file === "..") {
                 continue;
             }
             if (!is_dir($source . $file)) {
@@ -254,7 +266,7 @@ class Data extends AbstractHelper
     {
         $configFiles = glob($dir . '/app/code/*/*/etc/config.xml');
         if (!$configFiles) {
-            throw new \Exception('Could not find module configuration files');
+            throw new \RuntimeException('Could not find module configuration files');
         }
         foreach ($configFiles as $file) {
             $dir = dirname($file);
@@ -322,7 +334,7 @@ EOT
             $uriMods[(string)$usimpleup['remote'] . $mod->getLicenseKey()][$modName] = $mod;
         }
 
-        $uSimpleUpVersion = $this->getModuleList()->getOne("Unirgy_SimpleUp")["setup_version"];
+        $uSimpleUpVersion = $this->getModuleList()->getOne('Unirgy_SimpleUp')['setup_version'];
         foreach ($uriMods as $uri => $mods) {
             $uri .= (strpos($uri, '?') !== false ? '&' : '?') . 'm=2&usuv=' . $uSimpleUpVersion;
             $ch = curl_init();
@@ -330,38 +342,49 @@ EOT
                 CURLOPT_URL => $uri,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER => false,
+                CURLOPT_FOLLOWLOCATION => 1,
             ]);
+            if ((bool)$this->scopeConfig->isSetFlag('usimpleup/general/verify_ssl')) {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+                #curl_setopt($curl, CURLOPT_CAINFO, dirname( __DIR__ ) . '/etc/gd_bundle-g2-g1.crt');
+                curl_setopt($ch, CURLOPT_CAINFO, dirname( __DIR__ ) . '/ssl/cacert.pem');
+            } else {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            }
             $response = curl_exec($ch);
             curl_close($ch);
             if ($response === false) {
-                throw new \Exception(__('Error while downloading file: %s', curl_error($ch)));
+                throw new Exception(__('Error while downloading file: %s', curl_error($ch)));
             }
             //$response = @file_get_contents($uri);
             if (!$response) {
-                throw new \Exception(__('Invalid meta uri resource: %s', $uri));
+                throw new Exception(__('Invalid meta uri resource: %s', $uri));
             }
             //$xml = new Element($response);
+            $result = [];
             try {
                 $json = trim($response);
                 if ($json[0] === '{' || $json[0] === '[') {
                     $result = Json::decode($json, Json::TYPE_ARRAY);
-                } else {
-                    $result = [];
                 }
-            } catch (\Exception $e) {
-                if ($e->getMessage() == 'Decoding failed: Syntax error') {
+            } catch (Exception $e) {
+                if ($e->getMessage() === 'Decoding failed: Syntax error') {
                     $result = [];
                 } else {
                     //throw $e;
                     $result = [];
                 }
             }
-            foreach ((array)$result as $modName => $node) {
-                if (!$modName || empty($mods[$modName]) || !isset($node['version']['latest'])) {
+            foreach ($mods as $modName => $mod) {
+                if (empty($result[$modName])) {
+                    continue;
+                }
+                $node = $result[$modName];
+                if (empty($node['version']['latest'])) {
                     continue;
                 }
                 /** @var Module $mods [$modName] */
-                $mods[$modName]->setLastChecked(self::now())->setRemoteVersion((string)$node['version']['latest'])->save();
+                $mod->setLastChecked(self::now())->setRemoteVersion($node['version']['latest'])->save();
             }
         }
     }
@@ -424,10 +447,11 @@ EOT
 
     /**
      * @return \Magento\Framework\Module\ModuleList|mixed
+     * @throws \RuntimeException
      */
     public function getModuleList()
     {
-        if ($this->modulesList == null) {
+        if ($this->modulesList === null) {
             $this->modulesList = ObjectManager::getInstance()->get('Magento\Framework\Module\ModuleListInterface');
         }
 

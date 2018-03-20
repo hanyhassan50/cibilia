@@ -31,13 +31,17 @@ class TemplateSku extends Field
 
     protected $_element = null;
 
+    protected $_hlp;
+
     public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
         Context $context,
         ProductFactory $modelProductFactory,
         Collection $setCollection, 
         ModelProductFactory $catalogModelProductFactory, 
         array $data = [])
     {
+        $this->_hlp = $udropshipHelper;
         $this->_uProductFactory = $modelProductFactory;
         $this->_setCollection = $setCollection;
         $this->_productFactory = $catalogModelProductFactory;
@@ -65,17 +69,18 @@ class TemplateSku extends Field
 
     public function getConfigurableAttributes($setId)
     {
-        static $prod;
-        if (null === $prod) {
-            $prod = $this->_uProductFactory->create()->setTypeId('configurable');
-        }
+        static $prod = [];
         list($_setId) = explode('-', $setId);
-        $prod->setAttributeSetId($_setId);
+        if (!isset($prod[$_setId])) {
+            $prod[$_setId] = $this->_uProductFactory->create()->setTypeId('configurable');
+        }
+        $_prod = $prod[$_setId];
+        $_prod->setAttributeSetId($_setId);
         $_cfgAttributes = [];
-        $cfgAttributes = $prod->getTypeInstance(true)
-            ->getSetAttributes($prod);
+        $cfgAttributes = $_prod->getTypeInstance(true)
+            ->getSetAttributes($_prod);
         foreach ($cfgAttributes as $cfgAttribute) {
-            if ($prod->getTypeInstance(true)->canUseAttribute($cfgAttribute, $prod)) {
+            if ($_prod->getTypeInstance(true)->canUseAttribute($cfgAttribute, $_prod)) {
                 $_cfgAttributes[$cfgAttribute->getId()] = $cfgAttribute->getFrontend()->getLabel();
             }
         }
@@ -91,7 +96,7 @@ class TemplateSku extends Field
         $setIds = [];
         $_options = $this->_scopeConfig->getValue('udprod/general/type_of_product', ScopeInterface::SCOPE_STORE);
         if (!is_array($_options)) {
-            $_options = unserialize($_options);
+            $_options = $this->_hlp->unserialize($_options);
         }
         $options = [];
         if (is_array($_options)) {
@@ -112,7 +117,6 @@ class TemplateSku extends Field
 
     public function getCfgValue($cfg, $key, $subKey)
     {
-
         if (false === strpos($key, '-')) {
             $key = $key.'-'.$this->getTypeOfProduct();
         }
@@ -123,7 +127,5 @@ class TemplateSku extends Field
         }
         return $result;
     }
-
-    
 
 }

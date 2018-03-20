@@ -1,0 +1,81 @@
+<!--@subject {{trans "%name is now ready to sell on Cibilia." name=$vendor.getVendorName()}} @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td align="center" valign="top" style="padding:20px 0 20px 0">
+            <table bgcolor="#FFFFFF" cellspacing="5px" cellpadding="5px" border="0" width="650">
+                <tr>
+                    <td valign="top" style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        Dear Cibilian,
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        We have some tasty news for you!
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        We have verified {{trans "%name" name=$vendor.getVendorName()}} information, and we have authorized the food maker to open a dedicated e-shop on Cibilia.
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        Now is the time to take action!
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        Upload your delicious OlioPuglia [Company name] products to our portal, populating your space online and begin getting credit for each order you receive. All it takes is a few clicks!
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        ADD PRODUCTS (button leads to a landing page with short introduction about how to insert new product).
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        Help us share the culture of the quality and love of simple things!
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        We look forward to seeing you on Cibilia.com!
+                    </td>
+                </tr>
+                <tr>
+                    <td height="15px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;font-weight: 600;">The Cibilia Team</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,5 @@
+<?php $vendor =   $block->getVendorSubdomain(); ?>
+
+<?php if($vendor['url'] && $vendor['vendor']->getStatus() == 'A') : ?>
+    <p><strong><?php echo __('Vendor :');?></strong>  <a href="<?php echo $vendor['url']; ?>" title="subdomain"><?php echo $vendor['url']; ?></a></p>
+<?php endif; ?>

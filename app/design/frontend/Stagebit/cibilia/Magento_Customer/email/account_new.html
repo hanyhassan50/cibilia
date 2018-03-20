@@ -1,0 +1,42 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Welcome to Cibilia, %name" name=$customer.name}} @-->
+<!--@vars {
+"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
+"var customer.email":"Customer Email",
+"var customer.name":"Customer Name"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p class="greeting">{{trans "Hello %name!" name=$customer.name}}</p>
+<p>{{trans "Thanks for signing up with Cibilia."}}</p>
+<p>
+    {{trans 'Here is the information you need to access the portal:'}}
+</p>
+<ul>
+    <li><strong>{{trans "Email:"}}</strong> {{var customer.email}}</li>
+    <li><strong>{{trans "Password:"}}</strong> <em>{{trans "Password you set when creating account"}}</em></li>
+</ul>
+<p>
+    {{trans 'When you log on, you can make purchases in just a few clicks and then check the status of your orders.'}}
+</p>
+<p style="margin: 0;">{{trans "Forgot your password? Don't worry. You can reset it at any time by clicking here. To change any information in your profile, go to the 'my account' section." }}</p>
+<p style="margin: 0;">{{trans "Would you like to be part of Cibilia's success?" }}</p>
+<p style="margin: 0;">{{trans "Become a 'Cibiliano' (+icon, is a button) and start getting credit immediately by introducing us to the best food makers you know!" }}</p>
+<table>
+    <tr>
+        <td height="15px"></td>
+    </tr>
+</table>
+<p>{{trans "We look forward to seeing you on Cibilia.com"}}</p>
+<table>
+    <tr>
+        <td height="20px"></td>
+    </tr>
+</table>
+<p style="font-weight: 600;">{{trans "The Cibilia Team"}}</p>

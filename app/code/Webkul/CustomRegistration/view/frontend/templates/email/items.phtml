@@ -1,4 +1,13 @@
 <?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 // @codingStandardsIgnoreFile
 ?>
 <?php $_order = $block->getOrder() ?>
@@ -27,7 +36,7 @@
                                         if ($attrAsArray['frontend_input'] == 'date') {
                                             $_fieldValue = $this->formatDate($value, \IntlDateFormatter::SHORT, false);
                                         } elseif ($attrAsArray['frontend_input'] == 'boolean') {
-                                            $_fieldValue = $value;
+                                                $_fieldValue = $value;
                                         } elseif ($attrAsArray['frontend_input'] == 'select') {
                                             foreach ($attributeData->getSource()->getAllOptions() as $instance) {
                                                 if ($value == $instance['value']) {

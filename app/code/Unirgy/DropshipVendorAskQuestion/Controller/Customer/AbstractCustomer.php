@@ -23,6 +23,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Unirgy\DropshipVendorAskQuestion\Helper\Data as HelperData;
 use Unirgy\Dropship\Helper\Data as DropshipHelperData;
+use Magento\Framework\Exception\LocalizedException;
 
 abstract class AbstractCustomer extends Action
 {
@@ -71,7 +72,7 @@ abstract class AbstractCustomer extends Action
         $captchaModel = $this->_captchaHelper->getCaptcha($formId);
         if ($captchaModel->isRequired()) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->getRequest(), $formId))) {
-                throw new \Exception(__('Incorrect CAPTCHA.'));
+                throw new LocalizedException(__('Incorrect CAPTCHA.'));
             }
         }
         return $this;

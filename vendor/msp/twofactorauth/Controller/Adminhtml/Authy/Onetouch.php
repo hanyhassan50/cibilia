@@ -24,15 +24,14 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\JsonFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
 
-class Onetouch extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Onetouch extends AbstractAction
 {
-    /**
-     * @var Authy
-     */
-    private $authy;
-
     /**
      * @var Session
      */
@@ -48,35 +47,51 @@ class Onetouch extends Action
      */
     private $tfa;
 
+    /**
+     * @var Authy\OneTouch
+     */
+    private $oneTouch;
+
+    /**
+     * Onetouch constructor.
+     * @param Action\Context $context
+     * @param JsonFactory $jsonFactory
+     * @param TfaInterface $tfa
+     * @param Authy\OneTouch $oneTouch
+     * @param Session $session
+     */
     public function __construct(
         Action\Context $context,
         JsonFactory $jsonFactory,
         TfaInterface $tfa,
-        Authy $authy,
+        Authy\OneTouch $oneTouch,
         Session $session
     ) {
         parent::__construct($context);
-        $this->authy = $authy;
         $this->session = $session;
         $this->jsonFactory = $jsonFactory;
         $this->tfa = $tfa;
+        $this->oneTouch = $oneTouch;
     }
 
     /**
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
         $result = $this->jsonFactory->create();
 
         try {
-            $approvalCode = $this->authy->requestOneTouch($this->getUser());
+            $approvalCode = $this->oneTouch->request($this->getUser());
             $res = ['success' => true, 'code' => $approvalCode];
         } catch (\Exception $e) {
             $result->setHttpResponseCode(500);
@@ -88,14 +103,15 @@ class Onetouch extends Action
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
+        $user = $this->getUser();
+
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            $this->tfa->getProvider(Authy::CODE)->getIsActive($this->getUser());
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            $this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

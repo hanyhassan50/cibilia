@@ -9,8 +9,10 @@ class ProductHelper extends \Magento\Catalog\Model\ResourceModel\Product
 {
     public function multiUpdateAttributes($attrData, $storeId)
     {
+        $hlp = \Magento\Framework\App\ObjectManager::getInstance()->get('\Unirgy\Dropship\Helper\Data');
         $object = new DataObject();
         $object->setStoreId($storeId);
+        $rowIdField = $hlp->rowIdField();
 
         $this->getConnection()->beginTransaction();
         try {
@@ -23,7 +25,7 @@ class ProductHelper extends \Magento\Catalog\Model\ResourceModel\Product
                     }
                     $i++;
                     $object->setId($entityId);
-                    $object->setEntityId($entityId);
+                    $object->setData($rowIdField,$entityId);
                     $this->_saveAttributeValue($object, $attribute, $value);
                     if ($i % 1000 == 0) {
                         $this->_processAttributeValues();

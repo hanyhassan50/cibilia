@@ -10,12 +10,12 @@ use \Unirgy\Dropship\Observer\AbstractObserver;
 class AfterSubmitOrder extends AbstractObserver implements ObserverInterface
 {
     /**
-     * @var ProtectedCode
+     * @var \Unirgy\Dropship\Helper\ProtectedCode\OrderSave
      */
     protected $_hlpPr;
 
     public function __construct(
-        ProtectedCode $helperProtectedCode,
+        \Unirgy\Dropship\Helper\ProtectedCode\OrderSave $helperProtectedCode,
         \Unirgy\Dropship\Observer\Context $context,
         array $data = []
     )

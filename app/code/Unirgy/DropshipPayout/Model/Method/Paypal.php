@@ -95,6 +95,11 @@ class Paypal implements MethodInterface
     {
         return $this->_isOnline;
     }
+    protected $_isReversible=false;
+    public function isReversible()
+    {
+        return $this->_isReversible;
+    }
     public function isTestMode()
     {
         return $this->_scopeConfig->getValue('udropship/payout_paypal/test_mode', ScopeInterface::SCOPE_STORE);
@@ -145,6 +150,11 @@ class Paypal implements MethodInterface
     {
         $unq = sha1(uniqid(microtime(), true));
         return substr($unq, 0, 15).substr($unq, 25);
+    }
+
+    public function reverse($payout)
+    {
+        return $this;
     }
     
     public function pay($payout)

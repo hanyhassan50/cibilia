@@ -1,41 +1,17 @@
-($output->getStream())
-        );
-    }
+#!/usr/bin/env sh
 
-    public function testDisplayWithQuietVerbosity()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(true, StreamOutput::VERBOSITY_QUIET), 50);
-        $bar->display();
+dir=$(d=${0%[/\\]*}; cd "$d" > /dev/null; cd "../squizlabs/php_codesniffer/scripts" && pwd)
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            '',
-            stream_get_contents($output->getStream())
-        );
-    }
+# See if we are running in Cygwin by checking for cygpath program
+if command -v 'cygpath' >/dev/null 2>&1; then
+	# Cygwin paths start with /cygdrive/ which will break windows PHP,
+	# so we need to translate the dir path to windows format. However
+	# we could be using cygwin PHP which does not require this, so we
+	# test if the path to PHP starts with /cygdrive/ rather than /usr/bin
+	if [[ $(which php) == /cygdrive/* ]]; then
+		dir=$(cygpath -m "$dir");
+	fi
+fi
 
-    public function testFinishWithoutStart()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->finish();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput(' 50/50 [============================] 100%'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testPercent()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-           
+dir=$(echo $dir | sed 's/ /\ /g')
+"${dir}/phpcs" "$@"

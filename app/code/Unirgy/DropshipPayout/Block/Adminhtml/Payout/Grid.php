@@ -152,9 +152,27 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
             ]);
 
+            /*
             $this->addColumn('total_due', [
-                'header' => __('Total Due'),
-                'index' => 'total_due',
+                'header' => __('Payment Due'),
+                'index' => 'payment_due',
+                'type'  => 'price',
+                'currency' => 'base_currency_code',
+                'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
+            ]);
+            */
+
+            $this->addColumn('total_refund', [
+                'header' => __('Total Refund'),
+                'index' => 'total_refund',
+                'type'  => 'price',
+                'currency' => 'base_currency_code',
+                'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
+            ]);
+
+            $this->addColumn('total_reversed', [
+                'header' => __('Total Reversed'),
+                'index' => 'total_reversed',
                 'type'  => 'price',
                 'currency' => 'base_currency_code',
                 'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
@@ -176,13 +194,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
             ]);
 
-            $this->addColumn('total_due', [
-                'header' => __('Payment Due'),
-                'index' => 'payment_due',
-                'type'  => 'price',
-                'currency' => 'base_currency_code',
-                'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
-            ]);
         }
 
         $this->addColumn('created_at', [

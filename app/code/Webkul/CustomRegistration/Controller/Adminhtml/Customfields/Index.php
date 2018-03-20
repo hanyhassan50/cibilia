@@ -1,5 +1,13 @@
 <?php
-    
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */   
 namespace Webkul\CustomRegistration\Controller\Adminhtml\Customfields;
 
 class Index extends \Magento\Backend\App\Action
@@ -25,7 +33,7 @@ class Index extends \Magento\Backend\App\Action
         
         $resultPage->setActiveMenu('Webkul_CustomRegistration::index');
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Fields'));
-        $resultPage->addBreadcrumb(__('Manage Fields'),__('Manage Fields'));
+        $resultPage->addBreadcrumb(__('Manage Fields'), __('Manage Fields'));
         return $resultPage;
-    }   
+    }
 }

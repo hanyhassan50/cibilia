@@ -13,6 +13,24 @@
  * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
+ * @package    MSP_TwoFactorAuth
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/**
+ * MageSpecialist
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@magespecialist.it so we can send you a copy immediately.
+ *
+ * @category   MSP
  * @package    MSP_NoSpam
  * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -20,11 +38,9 @@
 
 namespace MSP\TwoFactorAuth\Model;
 
-use Magento\User\Api\Data\UserInterface;
-use Magento\User\Block\User;
-use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Api\ProviderInterface;
 use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
-use MSP\TwoFactorAuth\Model\Provider\EngineInterface;
+use MSP\TwoFactorAuth\Api\EngineInterface;
 
 class Provider implements ProviderInterface
 {
@@ -42,11 +58,6 @@ class Provider implements ProviderInterface
      * @var string
      */
     private $name;
-
-    /**
-     * @var boolean
-     */
-    private $allowTrustedDevices;
 
     /**
      * @var UserConfigManagerInterface
@@ -74,10 +85,9 @@ class Provider implements ProviderInterface
     private $canReset;
 
     /**
-     * @var
+     * @var string
      */
     private $icon;
-
 
     public function __construct(
         EngineInterface $engine,
@@ -105,9 +115,9 @@ class Provider implements ProviderInterface
      * Return true if this provider has been enabled by admin
      * @return boolean
      */
-    public function getIsEnabled()
+    public function isEnabled()
     {
-        return $this->getEngine()->getIsEnabled();
+        return $this->getEngine()->isEnabled();
     }
 
     /**
@@ -150,7 +160,7 @@ class Provider implements ProviderInterface
      * Return true if this provider configuration can be reset
      * @return boolean
      */
-    public function getCanReset()
+    public function isResetAllowed()
     {
         return $this->canReset;
     }
@@ -159,60 +169,50 @@ class Provider implements ProviderInterface
      * Return true if this provider allows trusted devices
      * @return boolean
      */
-    public function getAllowTrustedDevices()
+    public function isTrustedDevicesAllowed()
     {
-        return $this->engine->getAllowTrustedDevices();
+        return $this->engine->isTrustedDevicesAllowed();
     }
 
     /**
-     * Reset provider configuration
-     * @param UserInterface $user
-     * @return $this
+     * @inheritdoc
      */
-    public function resetConfiguration(UserInterface $user)
+    public function resetConfiguration($userId)
     {
-        $this->userConfigManager->setProviderConfig($user, $this->getCode(), null);
+        $this->userConfigManager->setProviderConfig($userId, $this->getCode(), null);
         return $this;
     }
 
     /**
-     * Return true if this provider has been configured
-     * @param UserInterface $user
-     * @return bool
+     * @inheritdoc
      */
-    public function getIsConfigured(UserInterface $user)
+    public function isConfigured($userId)
     {
-        return !is_null($this->getConfiguration($user));
+        return $this->getConfiguration($userId) !== null;
     }
 
     /**
-     * Get user configuration
-     * @param UserInterface $user
-     * @return array|null
+     * @inheritdoc
      */
-    public function getConfiguration(UserInterface $user)
+    public function getConfiguration($userId)
     {
-        return $this->userConfigManager->getProviderConfig($user, $this->getCode());
+        return $this->userConfigManager->getProviderConfig($userId, $this->getCode());
     }
 
     /**
-     * Return true if current provider has been activated
-     * @param UserInterface $user
-     * @return bool
+     * @inheritdoc
      */
-    public function getIsActive(UserInterface $user)
+    public function isActive($userId)
     {
-        return $this->userConfigManager->getProviderConfigurationIsActive($user, $this->getCode());
+        return $this->userConfigManager->isProviderConfigurationActive($userId, $this->getCode());
     }
 
     /**
-     * Activate provider
-     * @param UserInterface $user
-     * @return $this
+     * @inheritdoc
      */
-    public function activate(UserInterface $user)
+    public function activate($userId)
     {
-        $this->userConfigManager->activateProviderConfiguration($user, $this->getCode());
+        $this->userConfigManager->activateProviderConfiguration($userId, $this->getCode());
         return $this;
     }
 

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="StageBit_Design::css/source/bootstrap.min.css" />
+        <css src="StageBit_Design::css/source/bootstrap-multiselect.css" />
+        <css src="StageBit_Design::css/source/stagebit.css" />
+    </head>
+    <body>
+        <referenceContainer name="register" remove="true"/>
+        <referenceBlock name="udmspro_register">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">StageBit_CustomCode::unirgy/udmspro/vendor/register.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

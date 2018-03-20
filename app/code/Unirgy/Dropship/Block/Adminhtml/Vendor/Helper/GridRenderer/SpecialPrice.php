@@ -49,10 +49,14 @@ class SpecialPrice extends Number
                         'dateFormat' => $_dateFormat,
                         'showsTime' => false,
                         'buttonText' => 'Select Date',
+                        'showOn' => 'focus'
                     ],
                 ]
             )
         ) . '"';
+
+        $dataInit = '';
+        $_dateFormatJson = json_encode($_dateFormat);
 
         if ($this->getColumn()->getEditable()) {
         $htmlId = '_'.md5(uniqid(microtime(), true));
@@ -62,6 +66,34 @@ $sfdLabel <input id="{$htmlId}_sfd" type="text" class="input-text" name="_specia
 </nobr><br />
 <nobr>
 $stdLabel <input id="{$htmlId}_std" type="text" class="input-text" name="_special_to_date" value="$toDate" style="width:110px !important;" $dataInit />
+<script type="text/javascript">
+{
+    require([
+        'jquery',
+        'mage/calendar'
+    ], function (jQuery) {
+        jQuery(function () { 
+            var myChangeVendorProductProperty = function (el) {
+                window.changeVendorProductProperty.call(el);
+            };
+            jQuery("#{$htmlId}_sfd").calendar({
+                "dateFormat": $_dateFormatJson,
+                "showsTime": false,
+                "buttonText": "Select Date",
+                "showOn": "focus",
+                "onSelect": myChangeVendorProductProperty.curry($("{$htmlId}_sfd"))
+            });
+            jQuery("#{$htmlId}_std").calendar({
+                "dateFormat": $_dateFormatJson,
+                "showsTime": false,
+                "buttonText": "Select Date",
+                "showOn": "focus",
+                "onSelect": myChangeVendorProductProperty.curry($("{$htmlId}_std"))
+            });
+        });
+    });
+}
+</script>
 </nobr>
 EOT;
         }

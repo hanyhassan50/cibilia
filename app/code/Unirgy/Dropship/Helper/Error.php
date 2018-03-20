@@ -100,7 +100,7 @@ class Error extends AbstractHelper
                 ->setFrom($fromEmail, $fromName)
                 ->addTo($toEmail, $toName)
                 ->setSubject($subject)
-                ->setBodyText($template)
+                ->setBody($template)
                 ->send();
             $transport = $this->_hlp->createObj('Magento\Framework\Mail\TransportInterface', ['message' => $message]);
             $transport->sendMessage();
@@ -153,7 +153,7 @@ class Error extends AbstractHelper
                 ->setFrom($fromEmail, $fromName)
                 ->addTo($toEmail, $toName)
                 ->setSubject($subject)
-                ->setBodyText($template)
+                ->setBody($template)
                 ->send();
             $transport = $this->_hlp->createObj('Magento\Framework\Mail\TransportInterface', ['message' => $message]);
             $transport->sendMessage();
@@ -220,7 +220,7 @@ class Error extends AbstractHelper
                 ->setFrom($fromEmail, $fromName)
                 ->addTo($toEmail, $toName)
                 ->setSubject($subject)
-                ->setBodyText($template)
+                ->setBody($template)
                 ->send();
             $transport = $this->_hlp->createObj('Magento\Framework\Mail\TransportInterface', ['message' => $message]);
             $transport->sendMessage();

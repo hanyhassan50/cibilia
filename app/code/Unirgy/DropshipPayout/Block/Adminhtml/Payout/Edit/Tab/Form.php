@@ -186,6 +186,20 @@ class Form extends Generic
                 'label'     => __('Total Due'),
                 'text' => $this->_hlp->formatPrice($payout->getData('total_due'))
             ]);
+
+            if ($payout->isReversible() && $payout->getTotalRefund()>0) {
+                $fieldset->addField('total_refund', 'note', [
+                    'name'      => 'total_refund',
+                    'label'     => __('Total Refund'),
+                    'text' => $this->_hlp->formatPrice($payout->getData('total_payment'))
+                ]);
+
+                $fieldset->addField('total_reversed', 'note', [
+                    'name'      => 'total_reversed',
+                    'label'     => __('Total Reversed'),
+                    'text' => $this->_hlp->formatPrice($payout->getData('payment_paid'))
+                ]);
+            }
         } else {
             $fieldset->addField('total_payment', 'note', [
                 'name'      => 'total_payment',
@@ -204,6 +218,7 @@ class Form extends Generic
                 'label'     => __('Payment Due'),
                 'text' => $this->_hlp->formatPrice($payout->getData('payment_due'))
             ]);
+
         }
 
         $fieldset->addField('notes', 'textarea', [

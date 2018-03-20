@@ -4,24 +4,37 @@ namespace Cibilia\Dropshipextend\Block;
 
 use \Magento\Store\Model\StoreManagerInterface;
 
-class Siteswitch 
-			extends \Magento\Framework\View\Element\Template
+/**
+ * Class Siteswitch
+ * @package Cibilia\Dropshipextend\Block
+ */
+class Siteswitch extends \Magento\Framework\View\Element\Template
 {
+    protected $_locale;
+
     public function _prepareLayout()
     {
         return parent::_prepareLayout();
     }
 
+    /**
+     * Siteswitch constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Store\Api\Data\StoreInterface $store
+     * @param array $data
+     */
     public function __construct(
-        
+
         \Magento\Framework\View\Element\Template\Context $context,
         StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
          array $data = []
-		) 
+		)
     {
-		  	$this->_storeManager = $storeManager;
-  		  	
-  		   parent::__construct($context, $data);
+        $this->_storeManager = $storeManager;
+        $this->_locale  =   $scopeConfig;
+        parent::__construct($context, $data);
 	}
 
 	public function getWebsitesData() 
@@ -33,18 +46,27 @@ class Siteswitch
 	    foreach($_websites as $website){
 	        foreach($website->getStores() as $store){
 	            $wedsiteId = $website->getId();
-	            $storeObj = $this->_storeManager->getStore($store);
+	            $storeObj  = $this->_storeManager->getStore($store);
+	            $storeId   = $this->_storeManager->getStore($store)->getId();
+	            $storeCode = $this->_storeManager->getStore($store)->getCode();
+	            $defaultStore = $this->_storeManager->getDefaultStoreView()->getCode();
+	            $locale =   $this->_locale->getValue('general/locale/code',\Magento\Store\Model\ScopeInterface::SCOPE_STORE ,$storeId);
+	            $locale =   str_replace('_','-', $locale);
 	            $name = $website->getName();
-	            $url = $storeObj->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
-	            if($url != "http://tst.foodmakers.cibilia.com/")
+	            $url = $storeObj->getBaseUrl();
+	            if($url != "http://foodmakers.cibilia-dev.com/")
 	            {
-	            	 array_push($_websiteData, array('name' => $name,'url' => $url));
-	            }else{
-					if($currentWebSite == $wedsiteId){
+	                if($name == 'productores.cibilia.com' || $name == 'foodmakers.cibilia.com' || $name == 'produttori.cibilia.com' || $name == 'fabricantes.cibilia.com' || $name == 'lebensmittelhersteller.cibilia.com' || $name == 'fabricants.cibilia.com' ) {
+	                    continue;
+                    } else {
+                        array_push($_websiteData, array('name' => $name, 'url' => $url, 'code' => $storeCode,'default_store' => $defaultStore, 'locale' => $locale ));
+                    }
+	            }
+	            else{
+                    if($currentWebSite == $wedsiteId){
 						$isVisible = false;
 					}
 	            }
-	           
 	        }
 	    }
 	    return array($_websiteData,$isVisible);

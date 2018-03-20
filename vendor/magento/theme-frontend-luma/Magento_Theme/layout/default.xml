@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,20 +14,6 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <referenceBlock name="header.links">
-            <block class="Cibilia\Idproofs\Block\Vendorlogin" name="vendor.login">
-                <arguments>
-                    <argument name="label" xsi:type="string" translate="true">Vendor Login</argument>
-                    <argument name="path" xsi:type="string">udropship/vendor/login</argument>
-                </arguments>
-            </block>
-            <block class="Cibilia\Idproofs\Block\Vendorlink" name="vendor.link">
-                <arguments>
-                    <argument name="label" xsi:type="string" translate="true">Vendor Account</argument>
-                    <argument name="path" xsi:type="string">udropship/vendor/</argument>
-                </arguments>
-            </block>
-        </referenceBlock>
         <referenceBlock name="logo">
             <arguments>
                 <argument name="logo_img_width" xsi:type="number">148</argument>
@@ -35,7 +21,7 @@
             </arguments>
         </referenceBlock>
         <referenceContainer name="footer">
-            <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" after="footer_links" template="switch/stores.phtml"/>
+            <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" after="footer_links" template="Magento_Store::switch/stores.phtml"/>
         </referenceContainer>
         <referenceBlock name="report.bugs" remove="true"/>
         <move element="copyright" destination="before.body.end"/>

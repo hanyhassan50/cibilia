@@ -1,19 +1,36 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Model\CallbackPool;
+use Magento\Framework\Serialize\Serializer\Json;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract resource model
+ *
+ * @api
  */
 abstract class AbstractResource
 {
     /**
-     * Main constructor
+     * @var Json
+     * @since 100.2.0
+     */
+    protected $serializer;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -22,13 +39,6 @@ abstract class AbstractResource
          */
         $this->_construct();
     }
-
-    /**
-     * Array of callbacks subscribed to commit transaction commit
-     *
-     * @var array
-     */
-    protected static $_commitCallbacks = [];
 
     /**
      * Resource initialization
@@ -42,7 +52,7 @@ abstract class AbstractResource
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    abstract protected function getConnection();
+    abstract public function getConnection();
 
     /**
      * Start resource transaction
@@ -59,14 +69,13 @@ abstract class AbstractResource
     /**
      * Subscribe some callback to transaction commit
      *
-     * @param array $callback
+     * @param callable|array $callback
      * @return $this
      * @api
      */
     public function addCommitCallback($callback)
     {
-        $connectionKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$connectionKey][] = $callback;
+        CallbackPool::attach(spl_object_hash($this->getConnection()), $callback);
         return $this;
     }
 
@@ -83,18 +92,13 @@ abstract class AbstractResource
          * Process after commit callbacks
          */
         if ($this->getConnection()->getTransactionLevel() === 0) {
-            $connectionKey = spl_object_hash($this->getConnection());
-            if (isset(self::$_commitCallbacks[$connectionKey])) {
-                $callbacks = self::$_commitCallbacks[$connectionKey];
-                self::$_commitCallbacks[$connectionKey] = [];
-                try {
-                    foreach ($callbacks as $callback) {
-                        call_user_func($callback);
-                    }
-                } catch (\Exception $e) {
-                    echo $e;
-                    throw $e;
+            $callbacks = CallbackPool::get(spl_object_hash($this->getConnection()));
+            try {
+                foreach ($callbacks as $callback) {
+                    call_user_func($callback);
                 }
+            } catch (\Exception $e) {
+                $this->getLogger()->critical($e);
             }
         }
         return $this;
@@ -109,8 +113,7 @@ abstract class AbstractResource
     public function rollBack()
     {
         $this->getConnection()->rollBack();
-        $connectionKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$connectionKey] = [];
+        CallbackPool::clear(spl_object_hash($this->getConnection()));
         return $this;
     }
 
@@ -129,7 +132,7 @@ abstract class AbstractResource
         if (empty($value) && $unsetEmpty) {
             $object->unsetData($field);
         } else {
-            $object->setData($field, serialize($value ?: $defaultValue));
+            $object->setData($field, $this->getSerializer()->serialize($value ?: $defaultValue));
         }
 
         return $this;
@@ -146,16 +149,15 @@ abstract class AbstractResource
     protected function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
         $value = $object->getData($field);
-
         if ($value) {
-            $unserializedValue = @unserialize($value);
-            $value = $unserializedValue !== false || $value === 'b:0;' ? $unserializedValue : $value;
-        }
-
-        if (empty($value)) {
-            $object->setData($field, $defaultValue);
+            $value = $this->getSerializer()->unserialize($object->getData($field));
+            if (empty($value)) {
+                $object->setData($field, $defaultValue);
+            } else {
+                $object->setData($field, $value);
+            }
         } else {
-            $object->setData($field, $value);
+            $object->setData($field, $defaultValue);
         }
     }
 
@@ -200,7 +202,7 @@ abstract class AbstractResource
         $type = strtolower($type);
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\Locale\FormatInterface'
+                \Magento\Framework\Locale\FormatInterface::class
             )->getNumber(
                 $value
             );
@@ -240,5 +242,35 @@ abstract class AbstractResource
             $columns = empty($fieldsetColumns) ? '*' : [$object->getIdFieldName()];
         }
         return $columns;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return Json
+     * @deprecated 100.2.0
+     * @since 100.2.0
+     */
+    protected function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
+    }
+
+    /**
+     * Get logger
+     *
+     * @return LoggerInterface
+     * @deprecated 100.2.0
+     * @since 100.2.0
+     */
+    private function getLogger()
+    {
+        if (null === $this->logger) {
+            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }

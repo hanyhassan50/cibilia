@@ -14,7 +14,7 @@ foreach (['length_gte', 'length_gt', 'symlength_gte', 'symlength_gt'] as $ltKey)
     }
 }
 ?>
-<?php echo $this->getElement()->getLabelHtml(); ?> <br />
+<?php echo $this->getElement()->getLabelHtml() . ( $this->getElement()->getRequired() ? ' <span class="required">*</span>' : '' ) ?> <br />
 <?php echo $this->getElementHtml() ?>
 <?php echo $this->getAfterElementHtml() ?>
 <?php if ($this->getElement()->getId()=='description'): ?>

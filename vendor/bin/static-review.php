@@ -1,32 +1,17 @@
-AdvanceOverMax()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 10);
-        $bar->setProgress(9);
-        $bar->advance();
-        $bar->advance();
+#!/usr/bin/env sh
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  9/10 [=========================>--]  90%').
-            $this->generateOutput(' 10/10 [============================] 100%').
-            $this->generateOutput(' 11/11 [============================] 100%'),
-            stream_get_contents($output->getStream())
-        );
-    }
+dir=$(d=${0%[/\\]*}; cd "$d" > /dev/null; cd "../sjparkinson/static-review/bin" && pwd)
 
-    public function testCustomizations()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 10);
-        $bar->setBarWidth(10);
-        $bar->setBarCharacter('_');
-        $bar->setEmptyBarCharacter(' ');
-        $bar->setProgressCharacter('/');
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%%');
-        $bar->start();
-        $bar->advance();
+# See if we are running in Cygwin by checking for cygpath program
+if command -v 'cygpath' >/dev/null 2>&1; then
+	# Cygwin paths start with /cygdrive/ which will break windows PHP,
+	# so we need to translate the dir path to windows format. However
+	# we could be using cygwin PHP which does not require this, so we
+	# test if the path to PHP starts with /cygdrive/ rather than /usr/bin
+	if [[ $(which php) == /cygdrive/* ]]; then
+		dir=$(cygpath -m "$dir");
+	fi
+fi
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/10 [/         ]   0%').
-            $this->generateOutput('  1/10 [_/        ]  10%'),
-            stream_
+dir=$(echo $dir | sed 's/ /\ /g')
+"${dir}/static-review.php" "$@"

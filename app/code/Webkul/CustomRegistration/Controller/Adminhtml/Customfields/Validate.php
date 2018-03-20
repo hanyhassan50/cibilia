@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Controller\Adminhtml\Customfields;
 
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
@@ -14,8 +22,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     protected $layoutFactory;
      /**
-     * @var string
-     */
+      * @var string
+      */
     protected $_customerEntityTypeId;
 
     /**
@@ -113,5 +121,13 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
         }
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Webkul_CustomRegistration::index');
     }
 }

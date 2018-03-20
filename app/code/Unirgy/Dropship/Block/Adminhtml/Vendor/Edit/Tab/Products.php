@@ -27,6 +27,7 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Framework\Registry;
 use \Unirgy\Dropship\Helper\Data as DropshipHelperData;
 use \Unirgy\Dropship\Model\Vendor;
+use Magento\Store\Model\ScopeInterface;
 
 class Products extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -196,7 +197,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended implements \M
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
-            ->addStoreFilter($this->getRequest()->getParam('store'))
+            //->addStoreFilter($this->getRequest()->getParam('store'))
 //            ->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
 //            ->addAttributeToFilter('type_id', array('in'=>array('simple')))
         ;
@@ -265,8 +266,9 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended implements \M
         }
         $this->addColumn('price', array(
             'header'    => __('Price'),
-            'type'  => 'currency',
-            'currency_code' => (string) $this->_scopeConfig->getValue(Currency::XML_PATH_CURRENCY_BASE),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => $this->_scopeConfig->getValue('currency/options/base', ScopeInterface::SCOPE_STORE),
             'index'     => 'price'
         ));
         if ($this->_hlp->isUdmultiAvailable()) {
@@ -425,7 +427,7 @@ if (!$('vendor_products').value) {
 }
 var vendorProducts = $('vendor_products').value.evalJSON();
 
-function changeVendorProductProperty() {
+window.changeVendorProductProperty = function() {
     if (!vendorProducts[this.productId]) {
         vendorProducts[this.productId] = {};
     }
@@ -502,5 +504,9 @@ udropship_vendor_productsJsObject.rowClickCallback = function (grid, event) {
 udropship_vendor_productsJsObject.initGrid();
 <?php
         return ob_get_clean();
+    }
+    public function getRequireJsDependencies()
+    {
+        return ['jquery'];
     }
 }

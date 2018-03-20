@@ -95,16 +95,19 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn('sender_transaction_status', Table::TYPE_TEXT, 255, ['nullable' => true])
             ->addColumn('orders_data', Table::TYPE_TEXT, self::LONGTEXT_SIZE, ['nullable' => false])
             ->addColumn('total_orders', Table::TYPE_TEXT, self::MEDIUMTEXT_SIZE, ['nullable' => false])
-            ->addColumn('transaction_fee', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('total_payout', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('total_paid', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('total_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('total_payment', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('total_invoice', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('payment_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('invoice_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('payment_paid', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
-            ->addColumn('invoice_paid', Table::TYPE_DECIMAL, [12,4], ['nullable' => true])
+            ->addColumn('transaction_fee', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_payout', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_paid', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_payment', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_invoice', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_refund', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_reversed', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('refund_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('payment_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('invoice_due', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('payment_paid', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('invoice_paid', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
             ->addColumn('subtotal', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
             ->addColumn('shipping', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
             ->addColumn('discount', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
@@ -287,6 +290,86 @@ class InstallSchema implements InstallSchemaInterface
                 AdapterInterface::INDEX_TYPE_UNIQUE
             );
         }
+
+        $refundRowTable = $setup->getTable('udropship_payout_refund_row');
+        $table = $connection->newTable($refundRowTable)
+            ->addColumn('row_id', Table::TYPE_INTEGER, 10, [
+                'identity' => true,
+                'unsigned' => true,
+                'nullable' => false,
+                'primary'  => true
+            ])
+            ->addColumn('payout_id', Table::TYPE_INTEGER, 10, ['unsigned' => true,'nullable' => false])
+            ->addColumn('refund_id', Table::TYPE_INTEGER, 10, ['unsigned' => true,'nullable' => false])
+            ->addColumn('order_id', Table::TYPE_INTEGER, 10, ['unsigned' => true,'nullable' => false])
+            ->addColumn('po_id', Table::TYPE_INTEGER, 10, ['unsigned' => true,'nullable' => false])
+            ->addColumn('po_type', Table::TYPE_TEXT, 32, ['nullable' => false, 'default'=>'shipment'])
+            ->addColumn('refund_increment_id', Table::TYPE_TEXT, 50, ['nullable' => false])
+            ->addColumn('order_increment_id', Table::TYPE_TEXT, 50, ['nullable' => false])
+            ->addColumn('po_increment_id', Table::TYPE_TEXT, 50, ['nullable' => false])
+            ->addColumn('refund_created_at', Table::TYPE_DATETIME, null, ['nullable' => false])
+            ->addColumn('order_created_at', Table::TYPE_DATETIME, null, ['nullable' => false])
+            ->addColumn('po_created_at', Table::TYPE_DATETIME, null, ['nullable' => false])
+            ->addColumn('total_refund', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_payment', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('total_invoice', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('subtotal', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('shipping', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('discount', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('tax', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('hidden_tax', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('handling', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('trans_fee', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('com_amount', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('adj_amount', Table::TYPE_DECIMAL, [12,4], ['nullable' => false])
+            ->addColumn('has_error', Table::TYPE_SMALLINT, null, ['nullable' => false])
+            ->addColumn('error_info', Table::TYPE_TEXT, self::TEXT_SIZE, ['nullable' => false])
+            ->addColumn('row_json', Table::TYPE_TEXT, self::TEXT_SIZE, ['nullable' => false])
+            ->addColumn('reversed', Table::TYPE_SMALLINT, null, ['nullable' => false])
+            ->addIndex(
+                $setup->getIdxName($refundRowTable, ['payout_id']),
+                ['payout_id']
+            )
+            ->addForeignKey(
+                $setup->getFkName($refundRowTable, 'payout_id', 'udropship_payout', 'payout_id'),
+                'payout_id',
+                $setup->getTable('udropship_payout'),
+                'payout_id',
+                Table::ACTION_CASCADE
+            )
+            ->setComment('Vendor Payout Refund Row Table')
+            ->setOption('type', 'InnoDB')
+            ->setOption('charset', 'utf8');
+        if ((bool)$this->_moduleManager->isEnabled('Unirgy_DropshipTierCommission')) {
+            $table
+                ->addColumn('po_item_id', Table::TYPE_INTEGER, 10, ['unsigned' => true,'nullable' => false])
+                ->addColumn('refund_item_id', Table::TYPE_INTEGER, 10, ['unsigned' => true,'nullable' => false])
+                ->addColumn('sku', Table::TYPE_TEXT, 128, ['nullable' => false])
+                ->addColumn('simple_sku', Table::TYPE_TEXT, 128, ['nullable' => false])
+                ->addColumn('vendor_sku', Table::TYPE_TEXT, 128, ['nullable' => false])
+                ->addColumn('vendor_simple_sku', Table::TYPE_TEXT, 128, ['nullable' => false])
+                ->addColumn('product', Table::TYPE_TEXT, 255, ['nullable' => false])
+                ->addIndex(
+                    $installer->getIdxName(
+                        $refundRowTable,
+                        ['refund_id','po_id','po_type','payout_id','po_item_id'],
+                        AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
+                    ['refund_id','po_id','po_type','payout_id','po_item_id'],
+                    AdapterInterface::INDEX_TYPE_UNIQUE
+                );
+        } else {
+            $table->addIndex(
+                $setup->getIdxName(
+                    $refundRowTable,
+                    ['refund_id','po_id','po_type','payout_id'],
+                    AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['refund_id','po_id','po_type','payout_id'],
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+            );
+        }
+        $connection->createTable($table);
 
         $installer->endSetup();
     }

@@ -1,0 +1,49 @@
+<!--@subject Your product is online with Cibilia! @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td align="center" valign="top" style="padding:20px 0 20px 0">
+            <table bgcolor="#FFFFFF" cellspacing="5px" cellpadding="5px" border="0" width="650">
+                <tr>
+                    <td valign="top" style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        Hello Cibiliano!
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">Congratulations and thank you for having uploaded your product to Cibilia. Now it is ready to be purchased by many gourmands just like yourself.</td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">The product that you uploaded online: </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="{{var baseurl}}{{trans 'catalog/product/view/id/'}}{{trans '%product_id' product_id=$product.getId()}}">
+                            <img src="{{media url=''}}{{trans 'catalog/product/'}}{{trans "%product_img" product_img=$product.getThumbnail()}}" alt="{{trans "%product_name" product_name=$product.getName()}}" width="200px" height="auto" />
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">Share it on your social media profiles to promote it with a click, and begin to get credit right away! </td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;">
+                        (THUMBNAILS OF FB AND LINKEDIN _ LINK TO IT)
+                    </td>
+                </tr>
+                <tr>
+                    <td height="20px"></td>
+                </tr>
+                <tr>
+                    <td style="font-family: 'Raleway',Open sans, Arial, sans-serif; color:#808080; font-size:14px; line-height: 24px;font-weight: 600;">The Cibilia Team</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

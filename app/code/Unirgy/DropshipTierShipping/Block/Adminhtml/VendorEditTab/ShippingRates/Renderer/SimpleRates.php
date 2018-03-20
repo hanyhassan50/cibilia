@@ -19,6 +19,18 @@ class SimpleRates extends Widget implements RendererInterface
      */
     protected $_element = null;
 
+    protected $_hlp;
+
+    public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
+        \Magento\Backend\Block\Template\Context $context,
+        array $data = []
+    )
+    {
+        $this->_hlp = $udropshipHelper;
+        parent::__construct($context, $data);
+    }
+
     /**
      *
      */
@@ -63,7 +75,7 @@ class SimpleRates extends Widget implements RendererInterface
     {
         $value = $this->_element->getValue();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -79,7 +91,7 @@ class SimpleRates extends Widget implements RendererInterface
         $value = $this->_scopeConfig->getValue('carriers/udtiership/simple_rates',
                                                ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }

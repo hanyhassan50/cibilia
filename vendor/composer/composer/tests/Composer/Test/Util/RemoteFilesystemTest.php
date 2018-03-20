@@ -13,7 +13,6 @@
 namespace Composer\Test\Util;
 
 use Composer\Util\RemoteFilesystem;
-use Installer\Exception;
 
 class RemoteFilesystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,14 +27,6 @@ class RemoteFilesystemTest extends \PHPUnit_Framework_TestCase
 
         $res = $this->callGetOptionsForUrl($io, array('http://example.org', array()));
         $this->assertTrue(isset($res['http']['header']) && is_array($res['http']['header']), 'getOptions must return an array with headers');
-        $found = false;
-        foreach ($res['http']['header'] as $header) {
-            if (0 === strpos($header, 'User-Agent:')) {
-                $found = true;
-            }
-        }
-
-        $this->assertTrue($found, 'getOptions must have a User-Agent header');
     }
 
     public function testGetOptionsForUrlWithAuthorization()
@@ -137,19 +128,22 @@ class RemoteFilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->callCallbackGet($fs, STREAM_NOTIFY_FAILURE, 0, 'HTTP/1.1 404 Not Found', 404, 0, 0));
     }
 
+    /**
+     * @group slow
+     */
     public function testCaptureAuthenticationParamsFromUrl()
     {
         $io = $this->getMock('Composer\IO\IOInterface');
         $io->expects($this->once())
             ->method('setAuthentication')
-            ->with($this->equalTo('example.com'), $this->equalTo('user'), $this->equalTo('pass'));
+            ->with($this->equalTo('github.com'), $this->equalTo('user'), $this->equalTo('pass'));
 
         $fs = new RemoteFilesystem($io);
         try {
-            $fs->getContents('example.com', 'http://user:pass@www.example.com/something');
+            $fs->getContents('github.com', 'https://user:pass@github.com/composer/composer/404');
         } catch (\Exception $e) {
             $this->assertInstanceOf('Composer\Downloader\TransportException', $e);
-            $this->assertEquals(404, $e->getCode());
+            $this->assertNotEquals(200, $e->getCode());
         }
     }
 
@@ -171,11 +165,118 @@ class RemoteFilesystemTest extends \PHPUnit_Framework_TestCase
         unlink($file);
     }
 
-    protected function callGetOptionsForUrl($io, array $args = array(), array $options = array())
+    /**
+     * @group TLS
+     */
+    public function testGetOptionsForUrlCreatesSecureTlsDefaults()
+    {
+        $io = $this->getMock('Composer\IO\IOInterface');
+
+        $res = $this->callGetOptionsForUrl($io, array('example.org', array('ssl' => array('cafile' => '/some/path/file.crt'))), array(), 'http://www.example.org');
+
+        $this->assertTrue(isset($res['ssl']['ciphers']));
+        $this->assertRegExp("|!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA|", $res['ssl']['ciphers']);
+        $this->assertTrue($res['ssl']['verify_peer']);
+        $this->assertTrue($res['ssl']['SNI_enabled']);
+        $this->assertEquals(7, $res['ssl']['verify_depth']);
+        if (PHP_VERSION_ID < 50600) {
+            $this->assertEquals('www.example.org', $res['ssl']['CN_match']);
+            $this->assertEquals('www.example.org', $res['ssl']['SNI_server_name']);
+        }
+        $this->assertEquals('/some/path/file.crt', $res['ssl']['cafile']);
+        if (version_compare(PHP_VERSION, '5.4.13') >= 0) {
+            $this->assertTrue($res['ssl']['disable_compression']);
+        } else {
+            $this->assertFalse(isset($res['ssl']['disable_compression']));
+        }
+    }
+
+    /**
+     * Provides URLs to public downloads at BitBucket.
+     *
+     * @return string[][]
+     */
+    public function provideBitbucketPublicDownloadUrls()
+    {
+        return array(
+            array('https://bitbucket.org/seldaek/composer-live-test-repo/downloads/composer-unit-test-download-me.txt', '1234'),
+        );
+    }
+
+    /**
+     * Tests that a BitBucket public download is correctly retrieved.
+     *
+     * @param string $url
+     * @param string $contents
+     * @dataProvider provideBitbucketPublicDownloadUrls
+     */
+    public function testBitBucketPublicDownload($url, $contents)
+    {
+        $io = $this
+            ->getMockBuilder('Composer\IO\ConsoleIO')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rfs = new RemoteFilesystem($io);
+        $hostname = parse_url($url, PHP_URL_HOST);
+
+        $result = $rfs->getContents($hostname, $url, false);
+
+        $this->assertEquals($contents, $result);
+    }
+
+    /**
+     * Tests that a BitBucket public download is correctly retrieved when `bitbucket-oauth` is configured.
+     *
+     * @param string $url
+     * @param string $contents
+     * @dataProvider provideBitbucketPublicDownloadUrls
+     */
+    public function testBitBucketPublicDownloadWithAuthConfigured($url, $contents)
+    {
+        $io = $this
+            ->getMockBuilder('Composer\IO\ConsoleIO')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $config = $this
+            ->getMockBuilder('Composer\Config')
+            ->getMock();
+        $config
+            ->method('get')
+            ->withAnyParameters()
+            ->willReturn(array());
+
+        $io
+            ->method('hasAuthentication')
+            ->with('bitbucket.org')
+            ->willReturn(true);
+        $io
+            ->method('getAuthentication')
+            ->with('bitbucket.org')
+            ->willReturn(array(
+                'username' => 'x-token-auth',
+                // This token is fake, but it matches a valid token's pattern.
+                'password' => '1A0yeK5Po3ZEeiiRiMWLivS0jirLdoGuaSGq9NvESFx1Fsdn493wUDXC8rz_1iKVRTl1GINHEUCsDxGh5lZ=',
+            ));
+
+        $rfs = new RemoteFilesystem($io, $config);
+        $hostname = parse_url($url, PHP_URL_HOST);
+
+        $result = $rfs->getContents($hostname, $url, false);
+
+        $this->assertEquals($contents, $result);
+    }
+
+    protected function callGetOptionsForUrl($io, array $args = array(), array $options = array(), $fileUrl = '')
     {
         $fs = new RemoteFilesystem($io, null, $options);
         $ref = new \ReflectionMethod($fs, 'getOptionsForUrl');
+        $prop = new \ReflectionProperty($fs, 'fileUrl');
         $ref->setAccessible(true);
+        $prop->setAccessible(true);
+
+        $prop->setValue($fs, $fileUrl);
 
         return $ref->invokeArgs($fs, $args);
     }

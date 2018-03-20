@@ -7,15 +7,7 @@ $rcElements = $this->getElement()->getRightColumn();
 $lcElements = $this->getElement()->getLeftColumn();
 $rcElements = $this->getElement()->getRightColumn();
 ?>
-<?php
-if($this->getElement()->getLegend() == "Step 2"){
-	$style="style='display:none'";
-	$id="step2";
-}else if($this->getElement()->getLegend() == "Step 1"){
-	$id="step1";
-}
-?>
-<div class="generic-box udmspro-register-fieldset" alt="<?php echo $this->getElement()->getLegend()?>" <?php echo $style; ?> id="<?php echo $id; ?>">
+<div class="generic-box udmspro-register-fieldset" alt="<?php echo $this->getElement()->getLegend()?>">
 <h3><?php echo $this->getElement()->getLegend()?></h3>
 <table style="width:100%"><tbody>
 

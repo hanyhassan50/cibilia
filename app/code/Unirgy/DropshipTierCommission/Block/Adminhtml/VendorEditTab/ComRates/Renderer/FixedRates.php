@@ -10,7 +10,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class FixedRates extends Widget implements RendererInterface
 {
     protected $_element = null;
+    protected $_hlp;
 
+    public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
+        \Magento\Backend\Block\Template\Context $context,
+        array $data = []
+    )
+    {
+        $this->_hlp = $udropshipHelper;
+        parent::__construct($context, $data);
+    }
     public function _construct()
     {
         $this->setTemplate('Unirgy_DropshipTierCommission::udtiercom/vendor/helper/fixed/rates_config.phtml');
@@ -37,7 +47,7 @@ class FixedRates extends Widget implements RendererInterface
     {
         $value = $this->_element->getValue();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];

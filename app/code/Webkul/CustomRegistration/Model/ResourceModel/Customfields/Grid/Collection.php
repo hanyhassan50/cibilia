@@ -1,12 +1,12 @@
 <?php
-
 /**
- * Webkul CustomRegistration AbstractCollection ResourceModel Customfields\Grid Model
+ * Webkul Software.
  *
- * @category    Webkul
- * @package     Webkul_CustomRegistration
- * @author      Webkul Software Private Limited
- *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
  */
 
 namespace Webkul\CustomRegistration\Model\ResourceModel\Customfields\Grid;
@@ -163,6 +163,7 @@ class Collection extends CustomfieldsCollection implements SearchResultInterface
      */
     protected function _renderFiltersBefore()
     {
+        // echo $this->getSelect();die;
         $this->getSelect()->where('has_parent=0');
         parent::_renderFiltersBefore();
     }

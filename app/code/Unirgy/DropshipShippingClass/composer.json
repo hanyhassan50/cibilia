@@ -1,0 +1,20 @@
+{
+    "name": "unirgy/m2-dropship-shipping-class",
+    "description": "uDropship Shipping Class add-on",
+    "require": {
+        "unirgy/m2-dropship": "3.1.*"
+    },
+    "type": "magento2-module",
+    "version": "3.2.0",
+    "license": [
+        "Proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Unirgy\\DropshipShippingClass\\": ""
+        }
+    }
+}

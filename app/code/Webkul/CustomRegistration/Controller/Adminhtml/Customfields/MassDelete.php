@@ -1,57 +1,50 @@
 <?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Controller\Adminhtml\Customfields;
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
+use Webkul\CustomRegistration\Model\ResourceModel\Customfields\CollectionFactory;
 
 /**
- * Class MassDelete
+ * Class Delete
  */
 class MassDelete extends \Magento\Backend\App\Action
 {
     /**
-     * Field id
+     * @var Filter
      */
-    const ID_FIELD = 'entity_id';
-
-    const REDIRECT_URL = '*/*/';
+    protected $_filter;
 
     /**
-     * Resource collection
-     *
-     * @var string
+     * @var CollectionFactory
      */
-    protected $collection = 'Webkul\CustomRegistration\Model\ResourceModel\Customfields\Collection';
-
-    /**
-     * Page model
-     *
-     * @var string
-     */
-    protected $model = 'Webkul\CustomRegistration\Model\Customfields';
-    /**
-     * Execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
-     */
-     /**
-     * @param Action\Context $context
-     * @param Product\Builder $productBuilder
-     */
-    private $_attributeSetFactory;
+    protected $_collectionFactory;
 
     protected $_attributeFactory;
 
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        AttributeSetFactory $attributeSetFactory,
+        \Magento\Ui\Component\MassAction\Filter $filter,
+        CollectionFactory $collectionFactory,
         \Magento\Customer\Model\AttributeFactory $attributeFactory
     ) {
-        $this->_attributeSetFactory = $attributeSetFactory;
+        $this->_filter = $filter;
+        $this->_collectionFactory = $collectionFactory;
         $this->_attributeFactory = $attributeFactory;
         parent::__construct($context);
     }
@@ -60,111 +53,51 @@ class MassDelete extends \Magento\Backend\App\Action
      *
      * @return boolean
      */
-    
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Webkul_CustomRegistration::customregistration');
+        return $this->_authorization
+                        ->isAllowed(
+                            'Webkul_CustomRegistration::customregistration'
+                        );
     }
+
+    /**
+     * Execute action
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     */
     public function execute()
     {
-        $selected = $this->getRequest()->getParam('selected');
-        $excluded = $this->getRequest()->getParam('excluded');
-        try {
-            if (isset($excluded)) {
-                if (!empty($excluded) && $excluded != 'false') {
-                    $this->excludedDelete($excluded);
-                } else {
-                    $this->deleteAll();
-                }
-            } elseif (!empty($selected)) {
-                $this->selectedDelete($selected);
-            } else {
-                $this->messageManager->addError(__('Please select item(s).'));
+        $collection = $this->_filter->getCollection($this->_collectionFactory->create());
+
+        $attributeModel = $this->_attributeFactory->create();
+        $count = 0;
+        foreach ($collection as $item) {
+            $id = $item->getEntityId();
+            $attributeModel->load($item->getAttributeId());
+            $requiredCheck = $attributeModel->getFrontendClass();
+            $attributeCode = $attributeModel->getAttributeCode();
+            $require = explode(' ', $requiredCheck);
+            $attributeModel->delete();
+            $item->delete();
+            /**
+             * if dependable attribute presents.
+             */
+            if (in_array('dependable_field_'.$attributeCode, $require)) {
+                $childAttributeModel = $this->_objectManager->get('Webkul\CustomRegistration\Model\Customfields');
+                $childAttributeId = $id + 1;
+                $childAttributeModel->load($childAttributeId);
+                $attributeModel->load($childAttributeModel->getAttributeId());
+                $attributeModel->delete();
+                $childAttributeModel->delete();
             }
-        } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $count++;
         }
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $count));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath(static::REDIRECT_URL);
-    }
-
-    /**
-     * Delete all
-     *
-     * @return void
-     * @throws \Exception
-     */
-    protected function deleteAll()
-    {
-        /** @var AbstractCollection $collection */
-        $collection = $this->_objectManager->get($this->collection);
-        $this->setSuccessMessage($this->delete($collection));
-    }
-
-    /**
-     * Delete all but the not selected
-     *
-     * @param array $excluded
-     * @return void
-     * @throws \Exception
-     */
-    protected function excludedDelete(array $excluded)
-    {
-        /** @var AbstractCollection $collection */
-        $collection = $this->_objectManager->get($this->collection);
-        $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
-        $this->setSuccessMessage($this->delete($collection));
-    }
-
-    /**
-     * Delete selected items
-     *
-     * @param array $selected
-     * @return void
-     * @throws \Exception
-     */
-    protected function selectedDelete(array $selected)
-    {
-        /** @var AbstractCollection $collection */
-        $collection = $this->_objectManager->get($this->collection);
-        $collection->addFieldToFilter(static::ID_FIELD, ['in' => $selected]);
-        $this->setSuccessMessage($this->delete($collection));
-    }
-
-    /**
-     * Delete collection items
-     *
-     * @param AbstractCollection $collection
-     * @return int
-     */
-    protected function delete(AbstractCollection $collection)
-    {
-        $count = 0;
-        $attributeModel = $this->_attributeFactory->create();
-        foreach ($collection->getAllIds() as $id) {
-            /** @var \Magento\Framework\Model\AbstractModel $model */
-            $model = $this->_objectManager->get($this->model);
-            $model->load($id);
-            $attributeId = $model->getAttributeId();
-            $attributeModel->load($attributeId);
-            $attributeModel->delete();
-            $model->delete();
-            ++$count;
-        }
-
-        return $count;
-    }
-
-    /**
-     * Set error messages
-     *
-     * @param int $count
-     * @return void
-     */
-    protected function setSuccessMessage($count)
-    {
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $count));
+        return $resultRedirect->setPath('*/*/');
     }
 }

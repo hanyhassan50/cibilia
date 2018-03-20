@@ -1,4 +1,4 @@
-<!--@subject {{trans "New Shipment Request for Order"}} # {{var order.increment_id}} {{trans "from"}} {{var store_name}} @-->
+<!--@subject New Shipment Request for Order # {{var order.increment_id}} from {{var store_name}} @-->
 
 <style type="text/css">
     body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
@@ -18,20 +18,21 @@
         <table cellspacing="0" cellpadding="0" border="0" width="650">
             <tr>
                 <td valign="top">
-                    <p><strong>{{trans "Dear"}} {{var vendor_name}},</strong></p>
+                    <p><strong>Dear {{var vendor_name}},</strong></p>
 
-                    <p>{{trans "Please fulfill this new order #"}} {{var order_id}} for:</p>
+                    <p>Please fulfill this new order # {{var order_id}} for:</p>
 
                     <p><strong>{{var customer_info|raw}}</strong></p>
 
                     {{layout handle="udropship_email_po_items" shipment=$shipment order=$order}}
 
-                    <p>{{trans "Please ship via"}} <strong>{{var shipping_method}}</strong>. {{trans "If that is not available, please notify us before shipping."}}</p>
+                    <p>Please ship via <strong>{{var shipping_method}}</strong>. If that is not available, please notify us before shipping.</p>
 
-                    <p>{{trans "You can"}} <a href="{{var packingslip_url}}">{{trans "download packing slip PDF here"}}</a></p>
+                    <p>You can <a href="{{var packingslip_url}}">download packing slip PDF here</a></p>
 
-                    <p><a href="{{var shipment_url}}">{{trans "Click here to logon to your shipping control panel</a> once you are ready to notify us of the shipment and input tracking numbers."}}</p>
-                    <p>{{trans "Thank you for your partnership."}}</p>
+                    <p><a href="{{var shipment_url}}">Click here to logon to your shipping control panel</a> once you are ready to notify us of the shipment and input tracking numbers.</p>
+
+                    <p>Thank you for your partnership.</p>
 
                     <p><a href="{{store url=''}}">{{var store_name}}</a></p>
                </td>
@@ -39,6 +40,5 @@
        </table>
    </td>
 </tr>
-
 </table>
 </div>

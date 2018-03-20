@@ -40,12 +40,12 @@ class MassUpgrade extends AbstractModule
             }
             $this->_simpleUpHelper->upgradeModules($modules);
             $this->messageManager->addSuccess(__('Modules have been upgraded'));
-            $enable = join(" ", $modules);
+//            $enable = join(" ", $modules);
             $upgradeNotice = <<<CLI
 Now you have to login to your server's command line and perform:</br>
 If you just installed Unirgy module for first time:</br>
 <code>
-    bin/magento module:enable {$enable}
+    bin/magento module:enable <list all module names here>
 </code></br>
 Otherwise simply:</br>
 <code>

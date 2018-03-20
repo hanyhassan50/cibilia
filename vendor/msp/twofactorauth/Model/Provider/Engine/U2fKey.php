@@ -21,13 +21,13 @@
 namespace MSP\TwoFactorAuth\Model\Provider\Engine;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Api\Data\UserInterface;
 use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
-use MSP\TwoFactorAuth\Model\Provider\EngineInterface;
+use MSP\TwoFactorAuth\Api\EngineInterface;
 use u2flib_server\U2F;
 
 class U2fKey implements EngineInterface
@@ -66,11 +66,12 @@ class U2fKey implements EngineInterface
      * @param array $hash
      * @return \stdClass
      */
-    protected function hashToObject(array $hash)
+    private function hashToObject(array $hash)
     {
+        // @codingStandardsIgnoreStart
         $object = new \stdClass();
-        foreach ($hash as $key => $value)
-        {
+        // @codingStandardsIgnoreEnd
+        foreach ($hash as $key => $value) {
             $object->$key = $value;
         }
 
@@ -80,22 +81,23 @@ class U2fKey implements EngineInterface
     /**
      * Return true on token validation
      * @param UserInterface $user
-     * @param RequestInterface $request
+     * @param DataObject $request
      * @return true
      * @throws LocalizedException
+     * @throws \u2flib_server\Error
      */
-    public function verify(UserInterface $user, RequestInterface $request)
+    public function verify(UserInterface $user, DataObject $request)
     {
         $u2f = $this->getU2f();
 
         $registration = $this->getRegistration($user);
-        if (is_null($registration)) {
+        if ($registration === null) {
             throw new LocalizedException(__('Missing registration data'));
         }
 
-        $requests = [$this->hashToObject($request->getParam('request')[0])];
+        $requests = [$this->hashToObject($request->getData('request')[0])];
         $registrations = [$this->hashToObject($registration)];
-        $response = $this->hashToObject($request->getParam('response'));
+        $response = $this->hashToObject($request->getData('response'));
 
         // it triggers an error in case of auth failure
         $u2f->doAuthenticate($requests, $registrations, $response);
@@ -105,6 +107,8 @@ class U2fKey implements EngineInterface
     /**
      * Create the registration challenge
      * @return array
+     * @throws LocalizedException
+     * @throws \u2flib_server\Error
      */
     public function getRegisterData()
     {
@@ -117,13 +121,14 @@ class U2fKey implements EngineInterface
      * @param UserInterface $user
      * @return array
      * @throws LocalizedException
+     * @throws \u2flib_server\Error
      */
     public function getAuthenticateData(UserInterface $user)
     {
         $u2f = $this->getU2f();
 
         $registration = $this->getRegistration($user);
-        if (is_null($registration)) {
+        if ($registration === null) {
             throw new LocalizedException(__('Missing registration data'));
         }
 
@@ -134,10 +139,11 @@ class U2fKey implements EngineInterface
      * Get registration information
      * @param UserInterface $user
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getRegistration(UserInterface $user)
+    private function getRegistration(UserInterface $user)
     {
-        $providerConfig = $this->userConfigManager->getProviderConfig($user, static::CODE);
+        $providerConfig = $this->userConfigManager->getProviderConfig($user->getId(), static::CODE);
 
         if (!isset($providerConfig['registration'])) {
             return null;
@@ -149,9 +155,12 @@ class U2fKey implements EngineInterface
     /**
      * Register a new key
      * @param UserInterface $user
-     * @param $request
-     * @param $response
+     * @param array $request
+     * @param array $response
      * @return \u2flib_server\Registration
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \u2flib_server\Error
      */
     public function registerDevice(UserInterface $user, array $request, array $response)
     {
@@ -162,7 +171,7 @@ class U2fKey implements EngineInterface
         $u2f = $this->getU2f();
         $res = $u2f->doRegister($request, $response);
 
-        $this->userConfigManager->addProviderConfig($user, static::CODE, [
+        $this->userConfigManager->addProviderConfig($user->getId(), static::CODE, [
             'registration' => [
                 'certificate' => $res->certificate,
                 'keyHandle' => $res->keyHandle,
@@ -170,7 +179,7 @@ class U2fKey implements EngineInterface
                 'counter' => $res->counter,
             ]
         ]);
-        $this->userConfigManager->activateProviderConfiguration($user, static::CODE);
+        $this->userConfigManager->activateProviderConfiguration($user->getId(), static::CODE);
 
         return $res;
     }
@@ -179,7 +188,7 @@ class U2fKey implements EngineInterface
      * Return true if this provider has been enabled by admin
      * @return boolean
      */
-    public function getIsEnabled()
+    public function isEnabled()
     {
         return !!$this->scopeConfig->getValue(static::XML_PATH_ENABLED);
     }
@@ -188,17 +197,26 @@ class U2fKey implements EngineInterface
      * Return true if this provider allows trusted devices
      * @return boolean
      */
-    public function getAllowTrustedDevices()
+    public function isTrustedDevicesAllowed()
     {
         return !!$this->scopeConfig->getValue(static::XML_PATH_ALLOW_TRUSTED_DEVICES);
     }
 
-    protected function getU2f()
+    private function getU2f()
     {
         /** @var Store $store */
         $store = $this->storeManager->getStore(Store::ADMIN_CODE);
 
+        $baseUrl = $store->getBaseUrl();
+        if (preg_match('/^(https?:\/\/.+?)\//', $baseUrl, $matches)) {
+            $domain = $matches[1];
+        } else {
+            throw new LocalizedException(__('Unexpected error while parsing domain name'));
+        }
+
         /** @var U2F $u2f */
-        return new U2F(trim($store->getBaseUrl(), '/'));
+        // @codingStandardsIgnoreStart
+        return new U2F($domain);
+        // @codingStandardsIgnoreEnd
     }
 }

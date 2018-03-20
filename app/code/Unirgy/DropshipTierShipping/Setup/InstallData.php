@@ -60,6 +60,7 @@ class InstallData implements InstallDataInterface
                 'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
                 'input_renderer' => 'Unirgy\DropshipTierShipping\Block\ProductAttribute\Form\UseCustom',
                 'visible_on_front' => false,
+                'default' => 0
             ]
         );
         $catalogSetup->addAttribute(

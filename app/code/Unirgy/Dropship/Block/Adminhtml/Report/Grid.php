@@ -120,7 +120,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             ->join(array('grid'=>$res->getTableName('sales_shipment_grid')), 'grid.entity_id=main_table.entity_id', ['order_increment_id','order_created_at','increment_id','created_at','udropship_status','base_shipping_amount','total_qty'])
             ->join(array('o'=>$res->getTableName('sales_order')), 'o.entity_id=main_table.order_id', array('base_grand_total', 'order_status'=>'o.status'))
             ->join(array('a'=>$res->getTableName('sales_order_address')), 'a.parent_id=o.entity_id and a.address_type="shipping"', array('region_id'))
-            ->columns(array('udropship_vendor', 'udropship_available_at', 'udropship_method', 'udropship_method_description', 'udropship_status', 'base_shipping_amount', 'base_subtotal'=>'base_total_value', 'total_cost'))
+            ->columns(array('udropship_vendor', 'udropship_available_at', 'udropship_method', 'udropship_method_description', 'udropship_status', 'base_shipping_amount', 'base_subtotal'=>'base_total_value', 'total_cost'), 'main_table')
             ->columns(array(
                 'tracking_price'=>$this->_getFlatExpressionColumn('tracking_price'),
                 'tracking_ids'=>$this->_getFlatExpressionColumn('tracking_ids'),
@@ -236,6 +236,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn('udropship_vendor', array(
             'header' => __('Vendor'),
             'index' => 'udropship_vendor',
+            'filter_index' => 'main_table.udropship_vendor',
             'type' => 'options',
             'options' => $this->_hlp->src()->setPath('vendors')->toOptionHash(),
             'filter' => '\Unirgy\Dropship\Block\Vendor\GridColumnFilter'

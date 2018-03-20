@@ -24,6 +24,7 @@
                     </action>
                 </block>
             </block>
+            <block class="Magento\Framework\View\Element\FormKey" name="formkey"/>
         </referenceContainer>
     </body>
 </page>

@@ -21,7 +21,6 @@ class Vendorlogin extends \Magento\Framework\App\Action\Action {
                 $objVendor = $objectManager->create('\Unirgy\Dropship\Model\Vendor')->load($id);
                 
                 if($objVendor && $objVendor->getId()){
-
                     $objVendorSession = $objectManager->get('Unirgy\Dropship\Model\Session');
 
                     $vendorUrl = $storeManager->getStore()->getUrl('udropship');
@@ -30,14 +29,13 @@ class Vendorlogin extends \Magento\Framework\App\Action\Action {
                         return $resultRedirect->setPath($vendorUrl);
 
                     }else{
-
                         $objVendorSession->setVendorAsLoggedIn($objVendor);
                         
                         if (!$objVendorSession->getBeforeAuthUrl()) {
                             $objVendorSession->setBeforeAuthUrl($vendorUrl);
                         }
                         $objVendorSession->setCreatedBy('2');
-                        return $resultRedirect->setPath($vendorUrl);    
+                        return $resultRedirect->setPath($vendorUrl);
                     }
                 }else{
                     $this->messageManager->addError(__('Cannot login as vendor'));

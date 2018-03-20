@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,8 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
 /**
  * Coupon codes grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -65,7 +66,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $priceRule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $priceRule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         /**
          * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection
@@ -105,7 +106,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'width' => '100',
                 'type' => 'options',
                 'options' => [__('No'), __('Yes')],
-                'renderer' => 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used',
+                'renderer' => \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used::class,
                 'filter_condition_callback' => [$this->_salesRuleCoupon->create(), 'addIsUsedFilterCallback']
             ]
         );

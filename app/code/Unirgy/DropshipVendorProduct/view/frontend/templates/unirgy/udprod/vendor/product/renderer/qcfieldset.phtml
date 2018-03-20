@@ -72,7 +72,7 @@ window['cfgQcAddFirstAttribute'] = function () {
     <?php endforeach ?>
     if (allSelected) {
         var urlTpl = new Template(
-            '<?php echo $this->getUrl('udprod/vendor/cfgQuickCreateAttribute', ['_current'=>true, 'cfg_attr_values'=>'{{cfg_attr_values}}']) ?>',
+            '<?php echo $this->getUrl('udprod/vendor/cfgQuickCreateAttribute', ['__vp'=>true,'_current'=>true,'_escape_params'=>false,'cfg_attr_values'=>'{{cfg_attr_values}}']) ?>',
             /(^|.|\r|\n)(\{\{(.*?)\}\})/
         );
         $('cfg-quick-create-wrapper-<?php echo $cfgAttr->getAttributeCode() ?>').addClassName('loading');

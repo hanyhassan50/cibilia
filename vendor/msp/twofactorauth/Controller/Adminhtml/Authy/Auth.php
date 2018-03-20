@@ -22,13 +22,16 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Authy;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\App\Action;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Api\UserConfigManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 use MSP\TwoFactorAuth\Model\Provider\Engine\Authy;
 
-class Auth extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Auth extends AbstractAction
 {
     /**
      * @var TfaInterface
@@ -44,20 +47,23 @@ class Auth extends Action
      * @var PageFactory
      */
     private $pageFactory;
-    /**
-     * @var Registry
-     */
-    private $registry;
 
     /**
      * @var UserConfigManagerInterface
      */
     private $userConfigManager;
 
+    /**
+     * Auth constructor.
+     * @param Action\Context $context
+     * @param Session $session
+     * @param PageFactory $pageFactory
+     * @param UserConfigManagerInterface $userConfigManager
+     * @param TfaInterface $tfa
+     */
     public function __construct(
         Action\Context $context,
         Session $session,
-        Registry $registry,
         PageFactory $pageFactory,
         UserConfigManagerInterface $userConfigManager,
         TfaInterface $tfa
@@ -66,7 +72,6 @@ class Auth extends Action
         $this->tfa = $tfa;
         $this->session = $session;
         $this->pageFactory = $pageFactory;
-        $this->registry = $registry;
         $this->userConfigManager = $userConfigManager;
     }
 
@@ -74,27 +79,31 @@ class Auth extends Action
      * Get current user
      * @return \Magento\User\Model\User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
     }
 
+    /**
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function execute()
     {
-        $this->userConfigManager->setDefaultProvider($this->getUser(), Authy::CODE);
-        $this->registry->register('msp_tfa_current_provider', Authy::CODE);
+        $this->userConfigManager->setDefaultProvider($this->getUser()->getId(), Authy::CODE);
         return $this->pageFactory->create();
     }
 
     /**
-     * Check if admin has permissions to visit related pages
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed()
     {
+        $user = $this->getUser();
+
         return
-            $this->tfa->getProviderIsAllowed($this->getUser(), Authy::CODE) &&
-            $this->tfa->getProvider(Authy::CODE)->getIsActive($this->getUser());
+            $user &&
+            $this->tfa->getProviderIsAllowed($user->getId(), Authy::CODE) &&
+            $this->tfa->getProvider(Authy::CODE)->isActive($user->getId());
     }
 }

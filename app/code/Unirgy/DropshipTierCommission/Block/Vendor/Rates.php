@@ -58,7 +58,7 @@ class Rates extends Template
     {
         $value = $this->getVendor()->getTiercomRates();
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (!is_array($value)) {
             $value = [];
@@ -73,7 +73,7 @@ class Rates extends Template
     {
         $value = $this->_scopeConfig->getValue('udropship/tiercom/rates', ScopeInterface::SCOPE_STORE);
         if (is_string($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         return $value;
     }

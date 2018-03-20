@@ -67,7 +67,7 @@ class TemplateSku extends Value
                 $value = current($origData);
                 $value = !isset($value['value']) ? [] : $value['value'];
                 if (!is_array($value)) {
-                    $value = unserialize($value);
+                    $value = $this->_hlp->unserialize($value);
                 }
                 $this->_myOrigValue = $value;
             }
@@ -79,11 +79,11 @@ class TemplateSku extends Value
         $origValue = $this->getMyOrigValue();
         $origValue = empty($origValue) ? [] : $origValue;
         if (!is_array($origValue)) {
-            $origValue = unserialize($origValue);
+            $origValue = $this->_hlp->unserialize($origValue);
         }
         $value = empty($value) ? [] : $value;
         if (!is_array($value)) {
-            $value = unserialize($value);
+            $value = $this->_hlp->unserialize($value);
         }
         if (is_array($value)) {
             foreach ($value as $sIdEnc => $_val) {
@@ -113,7 +113,7 @@ class TemplateSku extends Value
     {
         if (!is_array($this->getValue())) {
             $value = $this->getValue();
-            $this->setData('value', empty($value) ? false : unserialize($value));
+            $this->setData('value', empty($value) ? false : $this->_hlp->unserialize($value));
         }
         return parent::afterLoad();
     }
@@ -121,7 +121,7 @@ class TemplateSku extends Value
     public function beforeSave()
     {
         if (is_array($this->getValue())) {
-            $this->setData('value', serialize($this->getValue()));
+            $this->setData('value', $this->_hlp->serialize($this->getValue()));
         }
         return parent::beforeSave();
     }

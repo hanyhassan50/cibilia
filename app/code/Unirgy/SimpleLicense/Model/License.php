@@ -17,8 +17,6 @@ use \Magento\Framework\Model\AbstractModel;
  * @method string getLicenseExpire()
  * @method string getLicenseStatus()
  * @method string getServerRestriction()
- * @method string getServerRestriction1()
- * @method string getServerRestriction2()
  * @method int getRetryNum()
  * @method array getProducts()
  * @package Unirgy\SimpleLicense\Model
@@ -28,5 +26,35 @@ class License extends AbstractModel
     protected function _construct()
     {
         $this->_init('Unirgy\SimpleLicense\Model\ResourceModel\License');
+    }
+
+    public function getServerRestriction1()
+    {
+        return $this->getData('server_restriction1');
+    }
+
+    public function getServerRestriction2()
+    {
+        return $this->getData('server_restriction2');
+    }
+
+    public function getModules()
+    {
+        return explode("\n", $this->getData('products'));
+    }
+
+    public function __get($name)
+    {
+        return $this->_getData($name);
+    }
+
+    public function __set($name, $value)
+    {
+        return $this->setData($name, $value);
+    }
+
+    public function __isset($name)
+    {
+        return $this->hasData($name);
     }
 }

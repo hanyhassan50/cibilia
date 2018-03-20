@@ -38,9 +38,7 @@ class CatalogProductCollectionApplyLimitationsAfter extends AbstractObserver imp
         try {
             if ($vendor) {
                 $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
-echo 1;
             } elseif ($this->_viewDesign->getArea()=='frontend') {
-echo 2;
                 $res = $this->_hlp->rHlp();
                 $sql = "select vendor_id from {$res->getTableName('udropship_vendor')} where status='A'";
                 $session = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');

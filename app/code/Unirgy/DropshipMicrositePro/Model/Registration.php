@@ -85,6 +85,7 @@ class Registration extends ModelRegistration
     {
         $hlp = $this->_msHlp;
         $dhlp = $this->_hlp;
+        $hasBillingCountry = in_array('billing_country_id', array_keys($this->getRegFields()));
         extract($this->getData());
 
         $hasPasswordField = false;
@@ -108,6 +109,9 @@ class Registration extends ModelRegistration
         }
 
         $this->setStreet(@$street1."\n".@$street2);
+        if ($hasBillingCountry) {
+            $this->setBillingStreet(@$billing_street1."\n".@$billing_street2);
+        }
         $this->initPassword(@$password);
         $this->initUrlKey(@$url_key);
         $this->setRemoteIp($_SERVER['REMOTE_ADDR']);

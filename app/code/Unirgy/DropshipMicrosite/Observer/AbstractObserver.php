@@ -37,7 +37,7 @@ abstract class AbstractObserver
     protected $_httpHeader;
 
     /**
-     * @var HelperData
+     * @var \Unirgy\Dropship\Helper\Data
      */
     protected $_hlp;
 
@@ -72,12 +72,14 @@ abstract class AbstractObserver
     protected function _initConfigRewrites()
     {
         return ;
+        /*
         if ($this->scopeConfig->isSetFlag('udropship/microsite/filter_vendor_categories', ScopeInterface::SCOPE_STORE)) {
             Mage::getConfig()->setNode('global/models/catalog_resource/rewrite/category_tree', 'Unirgy\DropshipMicrosite\Model\ResourceModel\CategoryTree');
             Mage::getConfig()->setNode('global/models/catalog_resource/rewrite/category_flat', 'Unirgy\DropshipMicrosite\Model\ResourceModel\CategoryFlat');
         }
         Mage::getConfig()->setNode('global/blocks/catalog/rewrite/navigation', 'Unirgy\DropshipMicrosite\Block\CatalogNavigation');
         Mage::getConfig()->setNode('global/blocks/page/rewrite/html_topmenu', 'Unirgy\DropshipMicrosite\Block\PageTopmenu');
+        */
     }
 
 
@@ -95,7 +97,7 @@ abstract class AbstractObserver
     {
         $session = $this->_hlp->session();
         $session->writeClose();
-        $GLOBALS['_SESSION'] = null;
+        //$GLOBALS['_SESSION'] = null;
         if ($restore) {
             $this->_hlp->setDesignStore();
         } else {

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="svg" xsi:type="string">
+                    <![CDATA[<svg version="1.1" id="si-cart-fifteen-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <path d="M20.259,23.447L30.562,23.447L44.822,65.445" style="stroke-dasharray: 55, 95; stroke-dashoffset: 0;"></path>
+                            <path d="M40.730999999999995,70.911A5.642,5.642 0,1,1 52.015,70.911A5.642,5.642 0,1,1 40.730999999999995,70.911" style="stroke-dasharray: 36, 76; stroke-dashoffset: 0;"></path>
+                            <path d="M60.84199999999999,70.911A5.642,5.642 0,1,1 72.12599999999999,70.911A5.642,5.642 0,1,1 60.84199999999999,70.911" style="stroke-dasharray: 36, 76; stroke-dashoffset: 0;"></path>
+                            <path d="M60.843,70.911L52.014,70.911" style="stroke-dasharray: 9, 49; stroke-dashoffset: 0;"></path>
+                            <path d="M33.889,33.247L78.491,33.247L72.929,58.026L42.303,58.026" style="stroke-dasharray: 101, 141; stroke-dashoffset: 0;"></path>
+                            <path d="M75.543,46.384L38.35,46.384" style="stroke-dasharray: 38, 78; stroke-dashoffset: 0;"></path>
+                            <path d="M42.453,32.971L49.917,25.584L58.851,32.971" style="stroke-dasharray: 23, 63; stroke-dashoffset: 0;"></path>
+                            <path d="M53.625,28.65L65.459,23.748L72.573,32.971" style="stroke-dasharray: 25, 65; stroke-dashoffset: 0;"></path>
+                        </svg>
+                    ]]>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

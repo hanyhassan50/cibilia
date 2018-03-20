@@ -25,6 +25,17 @@
             <argument name="session" xsi:type="object">Unirgy\Dropship\Model\Session\Proxy</argument>
         </arguments>
     </type>
+    <type name="Unirgy\Dropship\Model\ProductImage">
+        <arguments>
+            <argument name="catalogProductMediaConfig" xsi:type="object">Unirgy\Dropship\Model\VendorImageMediaConfig</argument>
+            <argument name="assetImageFactory" xsi:type="object">Unirgy\Dropship\Model\VendorAssetImageFactory</argument>
+        </arguments>
+    </type>
+    <type name="Unirgy\Dropship\Model\VendorAssetImage">
+        <arguments>
+            <argument name="mediaConfig" xsi:type="object">Unirgy\Dropship\Model\VendorImageMediaConfig</argument>
+        </arguments>
+    </type>
 
     <virtualType name="UdropshipShippingGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
@@ -66,6 +77,15 @@
     <type name="Magento\Sales\Model\Order\Shipment">
         <plugin name="fixGetComments" type="Unirgy\Dropship\Plugin\OrderShipment" />
     </type>
+    <type name="Magento\Framework\App\Config">
+        <plugin name="modifiedGetConfigValue" type="Unirgy\Dropship\Plugin\Config" />
+    </type>
+    <type name="Magento\Framework\App\Config\ScopeConfigInterface">
+        <plugin name="modifiedGetConfigValue" type="Unirgy\Dropship\Plugin\Config" />
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment\Collection">
+        <plugin name="udUnserializeFields" type="Unirgy\Dropship\Plugin\OrderShipmentCollection" />
+    </type>
 
     <virtualType name="ShipmentGridAggregator" type="Magento\Sales\Model\ResourceModel\Grid">
         <arguments>
@@ -83,4 +103,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="udropship_vendor" xsi:type="string">/udropship/vendor/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

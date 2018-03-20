@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
-use Magento\Framework\Session\Config;
-use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\Exception\SessionException;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * Magento session save handler
@@ -24,7 +24,7 @@ class SaveHandler implements SaveHandlerInterface
 
     /**
      * Config
-     * 
+     *
      * @var ConfigInterface
      */
     private $config;
@@ -128,19 +128,17 @@ class SaveHandler implements SaveHandlerInterface
     {
         return $this->saveHandlerAdapter->gc($maxLifetime);
     }
-    
+
     /**
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated
+     * @deprecated 100.0.8
      */
     private function getConfig()
     {
-        if (!($this->config instanceof ConfigInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                ConfigInterface::class
-            );
+        if ($this->config === null) {
+            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
         }
         return $this->config;
     }

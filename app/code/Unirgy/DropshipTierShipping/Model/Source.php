@@ -147,6 +147,12 @@ class Source extends AbstractSource
             $options = $this->_deliveryTypeCollection->toOptionHash();
             break;
 
+        case 'carriers/udtiership/free_method':
+            $selector = false;
+            $options = $this->_deliveryTypeCollection->toOptionHash();
+            $options = ['-1'=>__('** NONE **')] + $options;
+            break;
+
         default:
             throw new \Exception(__('Invalid request for source options: '.$this->getPath()));
         }

@@ -105,6 +105,11 @@ class Data extends AbstractHelper
         ]);
         return $payout->initTotals();
     }
+
+    public function canAutoPayoutPo($po)
+    {
+        return !in_array($po->getOrder()->getPayment()->getMethod(), ['upadaptive']);
+    }
     
     public function processPost()
     {
@@ -232,6 +237,39 @@ class Data extends AbstractHelper
         }
 
         return $this;
+    }
+
+    public function processCreditmemo($creditmemo)
+    {
+        $rHlp = $this->_hlp->rHlp();
+        $conn = $rHlp->getConnection();
+        $payoutIds = $conn->fetchCol(
+            $conn->select()->distinct(true)
+                ->from($rHlp->getTableName('udropship_payout_row'), ['payout_id'])
+                ->where('order_id=?', $creditmemo->getOrderId())
+        );
+        $payouts = [];
+        foreach ($payoutIds as $payoutId) {
+            $_payout = $this->_payoutFactory->create()->load($payoutId);
+            if (!in_array($_payout, [Payout::STATUS_HOLD, Payout::STATUS_CANCELED])
+                && $_payout->isReversible()
+            ) {
+                $payouts[] = $_payout;
+            }
+        }
+        foreach ($payouts as $payout) {
+            try {
+                $payout->refreshRefunds();
+                $payout->reverse();
+            } catch (\Exception $e) {
+                $this->_hlp->logError("$e");
+            }
+        }
+    }
+
+    public function processPos($pos, $subtotalBase)
+    {
+        $this->_payoutFactory->create()->processPos($pos, $subtotalBase);
     }
     
     public function cleanupSchedules()

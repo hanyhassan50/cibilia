@@ -2,6 +2,7 @@
 /** @var \Unirgy\Dropship\Helper\Data $_hlp */
 $_hlp = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropship\Helper\Data');
 $_src = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\DropshipVendorPromotions\Model\Source');
+$_useDates = !($_hlp->isEE() && $_hlp->compareMageVer('2.1.2','2.1.2'));
 ?>
 <form method="get">
 <fieldset>
@@ -20,6 +21,7 @@ $_src = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropshi
         </div>
         <div class="col-2">
             <ul class="form-list">
+                <?php if ($_useDates): ?>
                 <li>
                     <label for="filter_rule_date_from"><?php echo __('Date Start') ?></label><br/>
                     <input id="filter_rule_date_from" name="filter_rule_date_from" title="<?php echo __('From Date Start') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_rule_date_from') ?>" /> -
@@ -30,6 +32,7 @@ $_src = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropshi
                     <input id="filter_rule_expire_from" name="filter_rule_expire_from" title="<?php echo __('From Date Expire') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_rule_expire_from') ?>" /> -
                     <input id="filter_rule_expire_to" name="filter_rule_expire_to" title="<?php echo __('To Date Expire') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_rule_expire_to') ?>" />
                 </li>
+                <?php endif; ?>
                 <li>
                     <label for="filter_rule_status"><?php echo __('Status') ?></label><br/>
                     <select id="filter_rule_status" name="filter_rule_status" title="<?php echo __('Status') ?>"  style="width:160px;">
@@ -72,8 +75,10 @@ $_src = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropshi
         <tr>
             <th><?php echo __('Name')?></th>
             <th><?php echo __('Coupon')?></th>
+            <?php if ($_useDates): ?>
             <th><?php echo __('Date Start')?></th>
             <th><?php echo __('Date Expire')?></th>
+            <?php endif ?>
             <th><?php echo __('Status')?></th>
         </tr>
     </thead>
@@ -85,8 +90,10 @@ $_src = \Magento\Framework\App\ObjectManager::getInstance()->get('Unirgy\Dropshi
         <tr>
             <td><a href="<?php echo $this->getUrl('udpromo/vendor/ruleEdit', ['id'=>$_id])?>"><?php echo $this->escapeHtml($_p->getData('name')); ?></a></td>
             <td><?php echo $this->escapeHtml($_p->getData('code')); ?></td>
+            <?php if ($_useDates): ?>
             <td><?php echo $_ruleDate; ?></td>
             <td><?php echo $_expireDate; ?></td>
+            <?php endif; ?>
             <td><?php echo $_src->setPath('statuses')->getOptionLabel($_p->getIsActive())?></td>
         </tr>
 <?php endforeach ?>

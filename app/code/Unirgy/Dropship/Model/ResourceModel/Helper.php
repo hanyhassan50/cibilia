@@ -76,6 +76,10 @@ class Helper extends AbstractDb
         }
         return $this->_tables[$cacheName];
     }
+    public function getSalesConnection()
+    {
+        return $this->_resources->getConnection('sales');
+    }
     public function getMyConnection($connectionName=\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION)
     {
         return $this->_resources->getConnection($connectionName);
@@ -334,12 +338,13 @@ class Helper extends AbstractDb
         reset($idFieldWithValue);
         $_idField = key($idFieldWithValue);
         $_idValue = current($idFieldWithValue);
-        $condition = $this->getConnection()->quoteInto($_idField.' in (?)', $_idValue);
-        $loadSel = $this->getConnection()->select()->from($table, $preparedFields)->where($condition);
+        $conn = $model->getResource()->getConnection();
+        $condition = $conn->quoteInto($_idField.' in (?)', $_idValue);
+        $loadSel = $conn->select()->from($table, $preparedFields)->where($condition);
         if ($forUpdate) {
             $loadSel->forUpdate(true);
         }
-        $data = $this->getConnection()->fetchRow($loadSel);
+        $data = $conn->fetchRow($loadSel);
         self::_transport(true);
         return $data;
     }
@@ -355,6 +360,7 @@ class Helper extends AbstractDb
     {
         self::_transport(true);
         $this->_prepareResourceData($model->getResource(), $ids, array_flip($fields), $fields);
+        $conn = $model->getResource()->getConnection();
         $idFieldWithValue = self::_getMetaData('id');
         $table = self::_getMetaData('table');
         $preparedData = self::_getMetaData('data');
@@ -371,16 +377,16 @@ class Helper extends AbstractDb
         if ($_idValue instanceof \Zend_Db_Expr
             || $_idValue instanceof Select
         ) {
-            $condition .= $this->getConnection()->quoteInto(" AND $_idField ?", $_idValue);
+            $condition .= $conn->quoteInto(" AND $_idField ?", $_idValue);
         } elseif ($_idValue===false) {
             $condition .= " AND false";
         } elseif ($_idValue===null) {
-            $condition .= $this->getConnection()->quoteInto(" AND $_idField IS NULL", $_idValue);
+            $condition .= $conn->quoteInto(" AND $_idField IS NULL", $_idValue);
         } elseif ($_idValue === true) {
         } else {
-            $condition .= $this->getConnection()->quoteInto(" AND $_idField in (?)", $_idValue);
+            $condition .= $conn->quoteInto(" AND $_idField in (?)", $_idValue);
         }
-        $loadSel = $this->getConnection()->select()->from($table, $preparedFields);
+        $loadSel = $conn->select()->from($table, $preparedFields);
         $loadSel->where($condition);
         if ($model->getData('__udload_order')) {
             $__uloArr = $model->getData('__udload_order');
@@ -403,7 +409,7 @@ class Helper extends AbstractDb
             $loadSel->forUpdate(true);
         }
         $result = array();
-        $data = $this->getConnection()->fetchAll($loadSel);
+        $data = $conn->fetchAll($loadSel);
         if (is_array($data) && !empty($data)) {
             foreach ($data as $tmp) {
                 $__idValue = $tmp[$_idField];
@@ -430,7 +436,7 @@ class Helper extends AbstractDb
     }
     public function getOrderItemPoInfo($order)
     {
-        $conn = $this->getConnection();
+        $conn = $order->getResource()->getConnection();
         $itemIds = array();
         foreach ($order->getAllItems() as $item) {
             $itemIds[] = $item->getId();

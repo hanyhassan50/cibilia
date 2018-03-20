@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <section id="custom_cibilia" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="product_set_online_email" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Product Status Online Email To Cibilian And Vendor</label>
+                <field id="template" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+            <group id="vendor_approve_notifyto_cibilia" translate="label" type="text" sortOrder="71" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Food maker verified - to Cibilian</label>
+                <field id="template" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+            <group id="cibilian_idproof_denied" translate="label" type="text" sortOrder="72" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Identity not verified, Cibilian role denied</label>
+                <field id="template" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

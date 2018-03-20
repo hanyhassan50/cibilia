@@ -1,4 +1,4 @@
-<!--@subject {{trans "Application Rejected at"}} {{var store_name}}! @-->
+<!--@subject Application Rejected at {{var store_name}}! @-->
 
 <style type="text/css">
     body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
@@ -18,11 +18,11 @@
         <table cellspacing="0" cellpadding="0" border="0" width="650">
             <tr>
                 <td valign="top">
-                    <p><strong>{{trans "Dear"}} {{var vendor.vendor_name}},</strong></p>
+                    <p><strong>Dear {{var vendor.vendor_name}},</strong></p>
 
-                    <p>{{trans "Your application request was rejected"}}{{if vendor.reject_reason}} {{trans "due to the following reason:"}} {{var vendor.reject_reason}}{{/if}}.</p>
+                    <p>Your application request was rejected{{if vendor.reject_reason}} due to the following reason: {{var vendor.reject_reason}}{{/if}}.</p>
 
-                    <p>{{trans "Best regards,"}}<br/><a href="{{store url=''}}">{{var store_name}}</a></p>
+                    <p>Best regards,<br/><a href="{{store url=''}}">{{var store_name}}</a></p>
                </td>
            </tr>
        </table>

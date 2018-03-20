@@ -55,57 +55,63 @@ class VendorProductAssoc extends AbstractResource
         $vendorAttr = $this->_eavConfig->getAttribute('catalog_product', 'udropship_vendor');
 
         $conn->delete($this->getTable('udropship_vendor_product_assoc'), array('product_id in (?)' => $entityIds));
+        $rowIdField = $this->_hlp->rowIdField();
+        $vendorTbl = $this->getTable('udropship_vendor');
+        $vpTbl = $this->getTable('udropship_vendor_product');
+        $prodTbl = $this->getTable('catalog_product_entity');
+        $assocTbl = $this->getTable('udropship_vendor_product_assoc');
+        $uvAttrTbl = $vendorAttr->getBackend()->getTable();
 
         $select = $conn->select()
-            ->from(array('vid' => $vendorAttr->getBackend()->getTable()), array())
+            ->from(['vid' => $uvAttrTbl], [])
             ->join(
-                array('v'=>$this->getTable('udropship_vendor')),
+                ['v'=>$vendorTbl],
                 'v.vendor_id=vid.value',
-                array()
+                []
             )
             ->join(
-                array('pid'=>$this->getTable('catalog_product_entity')),
-                'pid.'.$this->_hlp->rowIdField().'=vid.'.$this->_hlp->rowIdField(),
-                array()
+                ['pid'=>$prodTbl],
+                "pid.$rowIdField=vid.$rowIdField",
+                []
             )
             ->where('vid.attribute_id=?', $vendorAttr->getId())
-            ->where('vid.'.$this->_hlp->rowIdField().' in (?)', $entityIds);
+            ->where('pid.entity_id in (?)', $entityIds);
 
-        $select->columns(array(
-            'vid.value', 'vid.'.$this->_hlp->rowIdField(),
+        $select->columns([
+            'vid.value', 'pid.entity_id',
             new \Zend_Db_Expr('1'),
             new \Zend_Db_Expr('0'),
-        ));
+        ]);
 
         $insertSelect = sprintf("INSERT INTO %s (vendor_id,product_id,is_attribute,is_udmulti) %s "
             ." ON DUPLICATE KEY UPDATE is_attribute=values(is_attribute),is_udmulti=values(is_udmulti)",
-            $this->getTable('udropship_vendor_product_assoc'), $select
+            $assocTbl, $select
         );
         $conn->query($insertSelect);
 
         $select = $conn->select()
-            ->from(array('vid' => $this->getTable('udropship_vendor_product')), array())
+            ->from(['vid' => $vpTbl], [])
             ->join(
-                array('v'=>$this->getTable('udropship_vendor')),
+                ['v'=>$vendorTbl],
                 'v.vendor_id=vid.vendor_id',
-                array()
+                []
             )
             ->join(
-                array('pid'=>$this->getTable('catalog_product_entity')),
+                ['pid'=>$prodTbl],
                 'pid.entity_id=vid.product_id',
-                array()
+                []
             )
             ->where('vid.product_id in (?)', $entityIds);
 
-        $select->columns(array(
+        $select->columns([
             'vid.vendor_id', 'vid.product_id',
             new \Zend_Db_Expr('0'),
             new \Zend_Db_Expr('1'),
-        ));
+        ]);
 
         $insertSelect = sprintf("INSERT INTO %s (vendor_id,product_id,is_attribute,is_udmulti) %s "
             ." ON DUPLICATE KEY UPDATE is_attribute=is_attribute,is_udmulti=values(is_udmulti)",
-            $this->getTable('udropship_vendor_product_assoc'), $select
+            $assocTbl, $select
         );
         $conn->query($insertSelect);
 
@@ -124,51 +130,63 @@ class VendorProductAssoc extends AbstractResource
 
         $conn->delete($this->getTable('udropship_vendor_product_assoc'), array('vendor_id in (?)' => $entityIds));
 
+        $rowIdField = $this->_hlp->rowIdField();
+        $vendorTbl = $this->getTable('udropship_vendor');
+        $vpTbl = $this->getTable('udropship_vendor_product');
+        $prodTbl = $this->getTable('catalog_product_entity');
+        $assocTbl = $this->getTable('udropship_vendor_product_assoc');
+        $uvAttrTbl = $vendorAttr->getBackend()->getTable();
+
         $select = $conn->select()
-            ->from(array('vid' => $vendorAttr->getBackend()->getTable()), array())
+            ->from(['vid' => $uvAttrTbl], [])
             ->join(
-                array('v'=>$this->getTable('udropship_vendor')),
+                ['v'=>$vendorTbl],
                 'v.vendor_id=vid.value',
-                array()
+                []
+            )
+            ->join(
+                ['pid'=>$prodTbl],
+                "pid.$rowIdField=vid.$rowIdField",
+                []
             )
             ->where('vid.attribute_id=?', $vendorAttr->getId())
             ->where('vid.value in (?)', $entityIds);
 
-        $select->columns(array(
-            'vid.value', 'vid.'.$this->_hlp->rowIdField(),
+        $select->columns([
+            'vid.value', 'pid.entity_id',
             new \Zend_Db_Expr('1'),
             new \Zend_Db_Expr('0'),
-        ));
+        ]);
 
         $insertSelect = sprintf("INSERT INTO %s (vendor_id,product_id,is_attribute,is_udmulti) %s "
             ." ON DUPLICATE KEY UPDATE is_attribute=values(is_attribute),is_udmulti=values(is_udmulti)",
-            $this->getTable('udropship_vendor_product_assoc'), $select
+            $assocTbl, $select
         );
         $conn->query($insertSelect);
 
         $select = $conn->select()
-            ->from(array('vid' => $this->getTable('udropship_vendor_product')), array())
+            ->from(['vid' => $vpTbl], [])
             ->join(
-                array('v'=>$this->getTable('udropship_vendor')),
+                ['v'=>$this->getTable('udropship_vendor')],
                 'v.vendor_id=vid.vendor_id',
-                array()
+                []
             )
             ->join(
-                array('pid'=>$this->getTable('catalog_product_entity')),
+                ['pid'=>$this->getTable('catalog_product_entity')],
                 'pid.entity_id=vid.product_id',
-                array()
+                []
             )
             ->where('vid.vendor_id in (?)', $entityIds);
 
-        $select->columns(array(
+        $select->columns([
             'vid.vendor_id', 'vid.product_id',
             new \Zend_Db_Expr('0'),
             new \Zend_Db_Expr('1'),
-        ));
+        ]);
 
         $insertSelect = sprintf("INSERT INTO %s (vendor_id,product_id,is_attribute,is_udmulti) %s "
             ." ON DUPLICATE KEY UPDATE is_attribute=is_attribute,is_udmulti=values(is_udmulti)",
-            $this->getTable('udropship_vendor_product_assoc'), $select
+            $assocTbl, $select
         );
         $conn->query($insertSelect);
 

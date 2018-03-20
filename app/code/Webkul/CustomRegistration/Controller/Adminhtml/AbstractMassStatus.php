@@ -1,112 +1,89 @@
 <?php
-
 /**
- * Webkul CustomRegistration AbstractMassStatus Controller
+ * Webkul Software.
  *
- * @category    Webkul
- * @package     Webkul_CustomRegistration
- * @author      Webkul Software Private Limited
- *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
  */
- 
 namespace Webkul\CustomRegistration\Controller\Adminhtml;
 
-use Webkul\CustomRegistration\Controller\Adminhtml\AbstractMassDisplayEmail;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Webkul\CustomRegistration\Model\ResourceModel\Customfields\CollectionFactory;
 
 /**
  * Class AbstractMassStatus
  */
-class AbstractMassStatus extends AbstractMassDisplayEmail
+class AbstractMassStatus extends \Magento\Backend\App\Action
 {
     /**
-     * @var AttributeSetFactory
+     * Item status
+     *
+     * @var bool
      */
-    private $_attributeSetFactory;
+    protected $status = true;
+    /**
+     * @var Filter
+     */
+    protected $_filter;
 
     /**
-     * @param Action\Context                           $context,
-     * @param \Magento\Customer\Model\AttributeFactory $attributeFactory
-     * @param AttributeSetFactory                      $attributeSetFactory
-    */
+     * @var CollectionFactory
+     */
+    protected $_collectionFactory;
+
+    protected $_attributeFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Customer\Model\AttributeFactory $attributeFactory,
-        AttributeSetFactory $attributeSetFactory
+        \Magento\Ui\Component\MassAction\Filter $filter,
+        CollectionFactory $collectionFactory,
+        \Magento\Customer\Model\AttributeFactory $attributeFactory
     ) {
-        $this->_attributeSetFactory = $attributeSetFactory;
-        parent::__construct($context, $attributeFactory);
+        $this->_filter = $filter;
+        $this->_collectionFactory = $collectionFactory;
+        $this->_attributeFactory = $attributeFactory;
+        parent::__construct($context);
     }
-
     /**
-     * Set status to all
+     * Check for is allowed
      *
-     * @return void
-     * @throws \Exception
+     * @return boolean
      */
-    protected function setStatusAll()
+    protected function _isAllowed()
     {
-        /** @var AbstractCollection $collection */
-        $collection = $this->_objectManager->get($this->collection);
-        $this->setStatus($collection);
-        $this->setSuccessMessage($this->setStatus($collection));
+        return $this->_authorization
+                        ->isAllowed(
+                            'Webkul_CustomRegistration::customregistration'
+                        );
     }
-
     /**
-     * Set status to all but the not selected
+     * Execute action
      *
-     * @param array $excluded
-     * @return void
-     * @throws \Exception
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    protected function excludedSetStatus(array $excluded)
+    public function execute()
     {
-        /** @var AbstractCollection $collection */
-        $collection = $this->_objectManager->get($this->collection);
-        $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
-        $this->setStatus($collection);
-        $this->setSuccessMessage($this->setStatus($collection));
-    }
-
-    /**
-     * Set status to selected items
-     *
-     * @param array $selected
-     * @return void
-     * @throws \Exception
-     */
-    protected function selectedSetStatus(array $selected)
-    {
-        /** @var AbstractCollection $collection */
-        $collection = $this->_objectManager->get($this->collection);
-        $collection->addFieldToFilter(static::ID_FIELD, ['in' => $selected]);
-        $this->setStatus($collection);
-        $this->setSuccessMessage($this->setStatus($collection));
-    }
-
-    /**
-     * Set status to collection items
-     *
-     * @param AbstractCollection $collection
-     * @return void
-     */
-    protected function setStatus(AbstractCollection $collection)
-    {
-        $count = 0;
+        $collection = $this->_filter->getCollection($this->_collectionFactory->create());
         $attributeModel = $this->_attributeFactory->create();
-        foreach ($collection->getAllIds() as $id) {
-            $count++;
-            /** @var \Magento\Framework\Model\AbstractModel $model */
-            $model = $this->_objectManager->get($this->model);
-            $model->load($id);
-            $model->setStatus($this->status);
-            $attributeId = $model->getAttributeId();
+        $count = 0;
+        foreach ($collection as $item) {
+            $id = $item->getEntityId();
+            $item->setStatus($this->status);
+            $attributeId = $item->getAttributeId();
             $attributeModel->load($attributeId);
             $requiredCheck = $attributeModel->getFrontendClass();
             $require = explode(' ', $requiredCheck);
-
-            $model->save();
             /**
              * if dependable attribute presents.
              */
@@ -117,7 +94,13 @@ class AbstractMassStatus extends AbstractMassDisplayEmail
                 $childAttributeModel->setStatus($this->status);
                 $childAttributeModel->save();
             }
+            $item->save();
+            $count++;
         }
-        return $count;
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', $count));
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('*/*/');
     }
 }

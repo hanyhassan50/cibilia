@@ -216,7 +216,7 @@ class Item extends AbstractHelper
     {
         $addOptions = $this->getAdditionalOptions($item);
         if (!empty($addOptions) && is_string($addOptions)) {
-            $addOptions = unserialize($addOptions);
+            $addOptions = $this->_hlp->unserialize($addOptions);
         }
         if (!is_array($addOptions)) {
             $addOptions = array();
@@ -236,7 +236,7 @@ class Item extends AbstractHelper
     {
         $addOptions = $this->getAdditionalOptions($item);
         if (!empty($addOptions) && is_string($addOptions)) {
-            $addOptions = unserialize($addOptions);
+            $addOptions = $this->_hlp->unserialize($addOptions);
         }
         if (!is_array($addOptions)) {
             $addOptions = array();
@@ -308,22 +308,22 @@ class Item extends AbstractHelper
         $currentTime = $this->_hlp->now();
         if ($item instanceof Product) {
             if ($item->getCustomOption($code)) {
-                $item->getCustomOption($code)->setValue($serialize ? serialize($value) : $value);
+                $item->getCustomOption($code)->setValue($serialize ? $this->_serialize($value) : $value);
             } else {
-                $item->addCustomOption($code, $serialize ? serialize($value) : $value);
+                $item->addCustomOption($code, $serialize ? $this->_serialize($value) : $value);
             }
             $item->setUpdatedAt($currentTime);
         } elseif ($item instanceof QuoteItem) {
             $optionsByCode = $item->getOptionsByCode();
             if (isset($optionsByCode[$code])) {
                 $optionsByCode[$code]->isDeleted(false);
-                $optionsByCode[$code]->setValue($serialize ? serialize($value) : $value);
+                $optionsByCode[$code]->setValue($serialize ? $this->_serialize($value) : $value);
             } else {
                 $item->addOption(array(
                     'product' => $item->getProduct(),
                     'product_id' => $item->getProduct()->getId(),
                     'code' => $code,
-                    'value' => $serialize ? serialize($value) : $value
+                    'value' => $serialize ? $this->_serialize($value) : $value
                 ));
             }
             $item->setUpdatedAt($currentTime);
@@ -331,20 +331,20 @@ class Item extends AbstractHelper
             $optionsByCode = $item->getQuoteItem()->getOptionsByCode();
             if (isset($optionsByCode[$code])) {
                 $optionsByCode[$code]->isDeleted(false);
-                $optionsByCode[$code]->setValue($serialize ? serialize($value) : $value);
+                $optionsByCode[$code]->setValue($serialize ? $this->_serialize($value) : $value);
             } else {
                 $item->getQuoteItem()->addOption(array(
                     'product' => $item->getQuoteItem()->getProduct(),
                     'product_id' => $item->getQuoteItem()->getProduct()->getId(),
                     'code' => $code,
-                    'value' => $serialize ? serialize($value) : $value
+                    'value' => $serialize ? $this->_serialize($value) : $value
                 ));
             }
             $item->getQuoteItem()->setUpdatedAt($currentTime);
         } elseif ($item instanceof OrderItem) {
             $options = $item->getProductOptions();
             $options[$code] = $value;
-            //$item->setProductOptions($options);
+            $item->setProductOptions($options);
             $item->setUpdatedAt($currentTime);
         } elseif ($item instanceof DataObject && $item->getOrderItem()) {
             $options = $item->getOrderItem()->getProductOptions();
@@ -353,6 +353,14 @@ class Item extends AbstractHelper
             $item->getOrderItem()->setUpdatedAt($currentTime);
         }
         return $value;
+    }
+    protected function _serialize($value)
+    {
+        if (!$this->_hlp->hasMageFeature('serialize')) {
+            return $this->_hlp->serialize($value);
+        } else {
+            return serialize($value);
+        }
     }
     public function deleteItemOption($item, $code)
     {
@@ -412,8 +420,8 @@ class Item extends AbstractHelper
 
                 // dispose of some options params, that can cramp comparing of arrays
                 if (is_string($item2OptionValue) && is_string($optionValue)) {
-                    $_itemOptionValue = @unserialize($item2OptionValue);
-                    $_optionValue     = @unserialize($optionValue);
+                    $_itemOptionValue = $this->_hlp->unserialize($item2OptionValue);
+                    $_optionValue     = $this->_hlp->unserialize($optionValue);
                     if (is_array($_itemOptionValue) && is_array($_optionValue)) {
                         $item2OptionValue = $_itemOptionValue;
                         $optionValue     = $_optionValue;
@@ -448,7 +456,7 @@ class Item extends AbstractHelper
     }
     public function getAddress($item)
     {
-        $address = false;
+        $quote = $address = false;
         if ($item instanceof AbstractItem) {
             $quote = $item->getQuote();
             $address = $item->getAddress();
@@ -477,7 +485,7 @@ class Item extends AbstractHelper
         }
 
         $info = $this->getItemOption($item, 'info_buyRequest');
-        $info = new DataObject(unserialize($info));
+        $info = new DataObject($this->_hlp->unserialize($info));
         $info->setQty($qty);
 
         if (!$quote) $quote = $item->getQuote();
@@ -505,7 +513,7 @@ class Item extends AbstractHelper
             if ($item->isDummy(true)) continue;
             $addOptions = $this->getAdditionalOptions($item);
             if (!empty($addOptions) && is_string($addOptions)) {
-                $addOptions = unserialize($addOptions);
+                $addOptions = $this->_hlp->unserialize($addOptions);
             }
             if (!is_array($addOptions)) {
                 $addOptions = array();
@@ -534,7 +542,7 @@ class Item extends AbstractHelper
         $optVal = $item->getVendorSku() ? $item->getVendorSku() : $item->getSku();
         $addOptions = $this->getAdditionalOptions($oItem);
         if (!empty($addOptions) && is_string($addOptions)) {
-            $addOptions = unserialize($addOptions);
+            $addOptions = $this->_hlp->unserialize($addOptions);
         }
         if (!is_array($addOptions)) {
             $addOptions = array();
@@ -958,6 +966,26 @@ class Item extends AbstractHelper
     public function setIsCartUpdateActionFlag($flag)
     {
         $this->_cartUpdateActionFlag=(bool)$flag;
+        return $this;
+    }
+    protected $_throwOnQuoteError=false;
+    public function getIsThrowOnQuoteError()
+    {
+        return $this->_throwOnQuoteError;
+    }
+    public function setIsThrowOnQuoteError($flag)
+    {
+        $this->_throwOnQuoteError=(bool)$flag;
+        return $this;
+    }
+    protected $_checkoutIndexActionFlag=false;
+    public function getIsCheckoutIndexActionFlag()
+    {
+        return $this->_checkoutIndexActionFlag;
+    }
+    public function setIsCheckoutIndexActionFlag($flag)
+    {
+        $this->_checkoutIndexActionFlag=(bool)$flag;
         return $this;
     }
 }

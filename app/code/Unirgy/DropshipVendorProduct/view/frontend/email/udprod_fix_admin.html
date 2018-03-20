@@ -1,4 +1,4 @@
-<!--@subject Cibilia: {{trans "Fix products notification for"}} {{var vendor.vendor_name}} @-->
+<!--@subject {{var store_name}}: Fix products notification for {{var vendor.vendor_name}} @-->
 
 <style type="text/css">
     body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
@@ -18,11 +18,11 @@
         <table cellspacing="0" cellpadding="0" border="0" width="650">
             <tr>
                 <td valign="top">
-                    <p>{{trans "The following products were marked by site administrator as requiring fix:"}}</p>
+                    <p>The following products were marked by site administrator as requiring fix:</p>
 
                     {{var notification_grid|raw}}
 
-                    <p>{{trans "All the best,"}}<br/><a href="{{store url=''}}">{{var store_name}}</a></p>
+                    <p>All the best,<br/><a href="{{store url=''}}">{{var store_name}}</a></p>
                </td>
            </tr>
        </table>

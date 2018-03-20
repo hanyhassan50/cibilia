@@ -29,6 +29,8 @@ use Unirgy\Dropship\Model\Source as DropshipSource;
 use Unirgy\Dropship\Model\Vendor\StatementFactory;
 use Unirgy\Dropship\Model\Vendor\Statement\AbstractStatement;
 use Unirgy\Dropship\Model\Vendor\Statement\StatementInterface;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
+use \Magento\Framework\Data\Collection as DataCollection;
 
 class Payout extends AbstractStatement implements StatementInterface
 {
@@ -81,6 +83,7 @@ class Payout extends AbstractStatement implements StatementInterface
     const STATUS_HOLD       = 'hold';
     const STATUS_PAYPAL_IPN = 'paypal_ipn';
     const STATUS_PAID       = 'paid';
+    const STATUS_REVERSED   = 'reversed';
     const STATUS_ERROR      = 'error';
     const STATUS_CANCELED   = 'canceled';
 
@@ -159,7 +162,7 @@ class Payout extends AbstractStatement implements StatementInterface
                 if ($this->getVendor()->getApplyCommissionOnTax()) {
                     $taxCom = round($order['amounts']['tax'] * $order['com_percent'] / 100, 2);
                     $order['amounts']['com_amount'] += $taxCom;
-                    $order['amounts']['total_payout'] -= $taxCom;
+                    //$order['amounts']['total_payout'] -= $taxCom;
                 }
             }
         } else {
@@ -259,7 +262,7 @@ class Payout extends AbstractStatement implements StatementInterface
             'po_increment_id' => $po->getIncrementId(),
             'po_created_at' => $po->getCreatedAt(),
             'po_statement_date' => $po->getStatementDate(),
-            'po_type' => $po instanceof Po ? 'po' : 'shipment',
+            'po_type' => $po instanceof \Unirgy\DropshipPo\Model\Po ? 'po' : 'shipment',
             'sku' => $poItem->getSku(),
             'simple_sku' => $poItem->getOrderItem()->getProductOptionByCode('simple_sku'),
             'vendor_sku' => $poItem->getVendorSku(),
@@ -283,8 +286,8 @@ class Payout extends AbstractStatement implements StatementInterface
         $iTax = $orderItem->getBaseTaxAmount() * ($_rowDivider > 0 ? $_rowDivider : 1);
         $iDiscount = $orderItem->getBaseDiscountAmount() * ($_rowDivider > 0 ? $_rowDivider : 1);
 
-        if ($orderItem->getOrder()->getData('udpo_amount_fields') && $poItem->getPo()
-            || $orderItem->getOrder()->getData('ud_amount_fields') && $poItem->getShipment()
+        if ($po->getOrder()->getData('udpo_amount_fields') && $poItem->getPo()
+            || $po->getOrder()->getData('ud_amount_fields') && $poItem->getShipment()
         ) {
             $iHiddenTax = $poItem->getBaseHiddenTaxAmount();
             $iTax = $poItem->getBaseTaxAmount();
@@ -317,6 +320,419 @@ class Payout extends AbstractStatement implements StatementInterface
         unset($_ar);
         $order['amounts'] = array_merge($this->_getEmptyTotals(), $amountRow);
         return $order;
+    }
+
+    public function initRefundItem($refundItem, $onlySubtotal)
+    {
+        $pOptions = $refundItem->getProductOptions();
+        if (!is_array($pOptions)) {
+            $pOptions = $this->_hlp->unserialize($pOptions);
+        }
+        $hlp = $this->_hlp;
+        $order = [
+            'po_id' => $refundItem->getPoId(),
+            'date' => $refundItem->getPoCreatedAt(),
+            'id' => $refundItem->getPoIncrementId(),
+            'com_percent' => $refundItem->getCommissionPercent(),
+            'po_com_percent' => $refundItem->getPoCommissionPercent(),
+            'trans_fee' => $refundItem->getTransactionFee(),
+            'order_id' => $refundItem->getOrderId(),
+            'order_created_at' => $refundItem->getOrderCreatedAt(),
+            'order_increment_id' => $refundItem->getOrderIncrementId(),
+            'refund_created_at' => $refundItem->getRefundCreatedAt(),
+            'refund_increment_id' => $refundItem->getRefundIncrementId(),
+            'po_increment_id' => $refundItem->getPoIncrementId(),
+            'po_created_at' => $refundItem->getPoCreatedAt(),
+            'po_type' => $refundItem->getPoType(),
+            'sku' => $refundItem->getSku(),
+            'simple_sku' => @$pOptions['simple_sku'],
+            'vendor_sku' => $refundItem->getVendorSku(),
+            'vendor_simple_sku' => $refundItem->getVendorSimpleSku(),
+            'product' => $refundItem->getName(),
+            'po_item_id' => $refundItem->getPoItemId(),
+            'refund_item_id' => $refundItem->getRefundItemId(),
+            'refund_id' => $refundItem->getRefundId()
+        ];
+        $refundQty = min($refundItem->getQty(), $refundItem->getRefundQty());
+        $iHiddenTax = $refundItem->getBaseHiddenTaxAmount() / max(1, $refundItem->getQtyOrdered());
+        $iHiddenTax = $iHiddenTax * $refundQty;
+        $iTax = $refundItem->getBaseTaxAmount() / max(1, $refundItem->getQtyOrdered());
+        $iTax = $iTax * $refundQty;
+        $iDiscount = $refundItem->getBaseDiscountAmount() / max(1, $refundItem->getQtyOrdered());
+        $iDiscount = $iDiscount * $refundQty;
+        if ($this->getVendor()->getStatementSubtotalBase() == 'cost') {
+            $subtotal = $refundItem->getBaseCost() * $refundQty;
+        } else {
+            $subtotal = $refundItem->getBasePrice() * $refundQty;
+        }
+        $amountRow = [
+            'subtotal' => $subtotal,
+            'shipping' => $onlySubtotal ? 0 : min($refundItem->getBaseShippingAmount(),
+                                                  $refundItem->getRefundShippingAmount()),
+            'tax' => $iTax,
+            'hidden_tax' => $iHiddenTax,
+            'discount' => $iDiscount,
+            'trans_fee' => $onlySubtotal ? 0 : $refundItem->getPoTransactionFee(),
+        ];
+        foreach ($amountRow as &$_ar) {
+            $_ar = is_null($_ar) ? 0 : $_ar;
+        }
+        unset($_ar);
+        $order['amounts'] = array_merge($this->_getEmptyTotals(), $amountRow);
+        return $order;
+    }
+
+    public function calculateRefund($order)
+    {
+        if ($this->_hlp->isModuleActive('Unirgy_DropshipTierCommission')) {
+            return $this->_calculateRefundTierCom($order);
+        } else {
+            return $this->_calculateRefund($order);
+        }
+    }
+
+    /**
+     * @param $refund
+     * @return mixed
+     */
+    protected function _calculateRefundTierCom($refund)
+    {
+        $taxInSubtotal = $this->_taxHelperData->displaySalesBothPrices() || $this->_taxHelperData->displaySalesPriceInclTax();
+        if (is_null($refund['com_percent'])) {
+            $refund['com_percent'] = $this->getVendor()->getCommissionPercent();
+        }
+        $refund['com_percent'] *= 1;
+        if (is_null($refund['po_com_percent'])) {
+            $refund['po_com_percent'] = $this->getVendor()->getCommissionPercent();
+        }
+        $refund['po_com_percent'] *= 1;
+
+        if (isset($refund['amounts']['tax']) && in_array($this->getVendor()->getStatementTaxInPayout(),
+                                                         ['', 'include'])
+        ) {
+            if ($taxInSubtotal) {
+                if ($this->getVendor()->getApplyCommissionOnTax()) {
+                    $refund['amounts']['subtotal'] += $refund['amounts']['tax'];
+                    $refund['amounts']['subtotal'] += $refund['amounts']['hidden_tax'];
+                    $refund['amounts']['com_amount'] = $refund['amounts']['subtotal'] * $refund['com_percent'] / 100;
+                } else {
+                    $refund['amounts']['com_amount'] = $refund['amounts']['subtotal'] * $refund['com_percent'] / 100;
+                    $refund['amounts']['subtotal'] += $refund['amounts']['tax'];
+                    $refund['amounts']['subtotal'] += $refund['amounts']['hidden_tax'];
+                }
+            } else {
+                $refund['amounts']['com_amount'] = $refund['amounts']['subtotal'] * $refund['com_percent'] / 100;
+                $refund['amounts']['total_refund'] += $refund['amounts']['tax'];
+                $refund['amounts']['total_refund'] += $refund['amounts']['hidden_tax'];
+                $refund['amounts']['refund_payment'] += $refund['amounts']['tax'];
+                $refund['amounts']['refund_payment'] += $refund['amounts']['hidden_tax'];
+                if ($this->getVendor()->getApplyCommissionOnTax()) {
+                    $taxCom = round($refund['amounts']['tax'] * $refund['com_percent'] / 100, 2);
+                    $refund['amounts']['com_amount'] += $taxCom;
+                    //$refund['amounts']['total_refund'] -= $taxCom;
+                }
+            }
+        } else {
+            $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
+        }
+
+        $refund['amounts']['com_amount'] = round($refund['amounts']['com_amount'], 2);
+
+        $refund['amounts']['total_refund'] = $refund['amounts']['subtotal'] - $refund['amounts']['com_amount'] - $refund['amounts']['trans_fee'] + $refund['amounts']['adj_amount'];
+        $refund['amounts']['refund_payment'] = $refund['amounts']['subtotal'] + $refund['amounts']['adj_amount'];
+
+        if (isset($refund['amounts']['discount']) && in_array($this->getVendor()->getStatementDiscountInPayout(),
+                                                              ['', 'include'])
+        ) {
+            if ($this->getVendor()->getApplyCommissionOnDiscount()) {
+                $discountCom = round($refund['amounts']['discount'] * $refund['com_percent'] / 100, 2);
+                $refund['amounts']['com_amount'] -= $discountCom;
+                $refund['amounts']['total_refund'] += $discountCom;
+            }
+            $refund['amounts']['total_refund'] -= $refund['amounts']['discount'];
+        }
+        $refund['amounts']['refund_payment'] -= $refund['amounts']['discount'];
+        if (isset($refund['amounts']['shipping']) && in_array($this->getVendor()->getStatementShippingInPayout(),
+                                                              ['', 'include'])
+        ) {
+            if ($this->getVendor()->getApplyCommissionOnShipping()) {
+                $shipCom = round($refund['amounts']['shipping'] * $refund['po_com_percent'] / 100, 2);
+                $refund['amounts']['com_amount'] += $shipCom;
+                $refund['amounts']['total_refund'] -= $shipCom;
+            }
+            $refund['amounts']['total_refund'] += $refund['amounts']['shipping'];
+        }
+        $refund['amounts']['refund_payment'] += $refund['amounts']['shipping'];
+        $refund['amounts']['refund_invoice'] = $refund['amounts']['com_amount'];
+
+        return $refund;
+    }
+
+    protected function _calculateRefund($refund)
+    {
+        $taxInSubtotal = $this->_taxHelperData->displaySalesBothPrices() || $this->_taxHelperData->displaySalesPriceInclTax();
+        if (is_null($refund['com_percent'])) {
+            $refund['com_percent'] = $this->getVendor()->getCommissionPercent();
+        }
+        $refund['com_percent'] *= 1;
+
+        if (isset($refund['amounts']['tax']) && in_array($this->getVendor()->getStatementTaxInPayout(), array('', 'include'))) {
+            if ($taxInSubtotal) {
+                if ($this->getVendor()->getApplyCommissionOnTax()) {
+                    $refund['amounts']['subtotal'] += $refund['amounts']['tax'];
+                    $refund['amounts']['subtotal'] += $refund['amounts']['hidden_tax'];
+                    $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
+                } else {
+                    $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
+                    $refund['amounts']['subtotal'] += $refund['amounts']['tax'];
+                    $refund['amounts']['subtotal'] += $refund['amounts']['hidden_tax'];
+                }
+            } else {
+                $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
+                $refund['amounts']['total_refund']  += $refund['amounts']['tax'];
+                $refund['amounts']['total_refund']  += $refund['amounts']['hidden_tax'];
+                $refund['amounts']['refund_payment'] += $refund['amounts']['tax'];
+                $refund['amounts']['refund_payment'] += $refund['amounts']['hidden_tax'];
+                if ($this->getVendor()->getApplyCommissionOnTax()) {
+                    $taxCom = round($refund['amounts']['tax']*$refund['com_percent']/100, 2);
+                    $refund['amounts']['com_amount'] += $taxCom;
+                    //$refund['amounts']['total_refund'] -= $taxCom;
+                }
+            }
+        } else {
+            $refund['amounts']['com_amount'] = $refund['amounts']['subtotal']*$refund['com_percent']/100;
+        }
+
+        $refund['amounts']['com_amount'] = round($refund['amounts']['com_amount'], 2);
+
+        $refund['amounts']['total_refund'] = $refund['amounts']['subtotal']-$refund['amounts']['com_amount']-$refund['amounts']['trans_fee']+$refund['amounts']['adj_amount'];
+        $refund['amounts']['refund_payment'] = $refund['amounts']['subtotal']+$refund['amounts']['adj_amount'];
+
+        if (isset($refund['amounts']['discount']) && in_array($this->getVendor()->getStatementDiscountInPayout(), array('', 'include'))) {
+            if ($this->getVendor()->getApplyCommissionOnDiscount()) {
+                $discountCom = round($refund['amounts']['discount']*$refund['com_percent']/100, 2);
+                $refund['amounts']['com_amount'] -= $discountCom;
+                $refund['amounts']['total_refund'] += $discountCom;
+            }
+            $refund['amounts']['total_refund'] -= $refund['amounts']['discount'];
+        }
+        $refund['amounts']['refund_payment'] -= $refund['amounts']['discount'];
+        if (isset($refund['amounts']['shipping']) && in_array($this->getVendor()->getStatementShippingInPayout(), array('', 'include'))) {
+            if ($this->getVendor()->getApplyCommissionOnShipping()) {
+                $shipCom = round($refund['amounts']['shipping']*$refund['com_percent']/100, 2);
+                $refund['amounts']['com_amount'] += $shipCom;
+                $refund['amounts']['total_refund'] -= $shipCom;
+            }
+            $refund['amounts']['total_refund'] += $refund['amounts']['shipping'];
+        }
+        $refund['amounts']['refund_payment'] += $refund['amounts']['shipping'];
+        $refund['amounts']['refund_invoice'] = $refund['amounts']['com_amount'];
+
+        return $refund;
+    }
+
+    public function accumulateRefund($refund, $totals_amount)
+    {
+        $totals_amount['total_refund'] += $refund['amounts']['total_refund'];
+        $totals_amount['refund_payment'] += $refund['amounts']['refund_payment'];
+        $totals_amount['refund_invoice'] += $refund['amounts']['refund_invoice'];
+        return $totals_amount;
+    }
+
+    /**
+     * @return ItemCollection
+     */
+    protected function _getRefundCollectionTierCom()
+    {
+        $poType = $this->getVendor()->getStatementPoType();
+        $excludeStatus = [\Unirgy\Dropship\Model\Source::SHIPMENT_STATUS_CANCELED];
+        if ($poType == 'po') {
+            $excludeStatus = [\Unirgy\DropshipPo\Model\Source::UDPO_STATUS_CANCELED];
+        }
+        $fields = ['base_price', 'base_tax_amount', 'base_discount_amount', 'qty_ordered'];
+        //if ($baseCost) $fields[] = 'base_cost';
+        $res = $this->_hlp->rHlp();
+        $refunds = $this->_hlp->createObj('\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection');
+        $refunds->addFieldToSelect(['refund_item_id' => 'entity_id', 'refund_qty' => 'qty']);
+        $refunds->getSelect()
+            ->join(
+                ['r' => $res->getTableName('sales_creditmemo')],
+                'r.entity_id=main_table.parent_id',
+                [
+                    'refund_increment_id' => 'increment_id',
+                    'refund_created_at' => 'created_at',
+                    'refund_id' => 'entity_id',
+                    'refund_shipping_amount' => 'base_shipping_amount'
+                ]
+            )
+            ->join(
+                ['o' => $res->getTableName('sales_order')],
+                'o.entity_id=r.order_id',
+                []
+            )
+            ->join(
+                ['tg' => $poType == 'po' ? $res->getTableName('udropship_po_grid') : $res->getTableName('sales_shipment_grid')],
+                'tg.order_id=o.entity_id',
+                [
+                    'order_increment_id',
+                    'po_increment_id' => 'increment_id',
+                    'order_id',
+                    'po_id' => 'entity_id',
+                    'order_created_at',
+                    'po_created_at' => 'created_at'
+                ]
+            )
+            ->join(
+                ['t' => $poType == 'po' ? $res->getTableName('udropship_po') : $res->getTableName('sales_shipment')],
+                't.entity_id=tg.entity_id',
+                ['base_shipping_amount', 'po_commission_percent' => 'commission_percent', 'po_transaction_fee' => 'transaction_fee']
+            )
+            ->join(['i' => $res->getTableName('sales_order_item')], 'i.item_id=main_table.order_item_id', $fields)
+            ->join(['pi' => $poType == 'po' ? $res->getTableName('udropship_po_item') : $res->getTableName('sales_shipment_item')],
+                   'i.item_id=pi.order_item_id and t.entity_id=pi.parent_id',
+                   ['po_item_id' => 'entity_id', 'qty', 'commission_percent', 'base_cost', 'transaction_fee'])
+            ->columns(['po_type' => new \Zend_Db_Expr("'$poType'")])
+            ->where("t.udropship_status not in (?)", $excludeStatus)
+            ->where("t.udropship_vendor=?", $this->getVendorId())
+            ->where("r.order_id in (?)", $this->getOrderIds())
+            ->order('main_table.entity_id asc')
+            ->group('main_table.entity_id');
+
+        return $refunds;
+    }
+
+    /**
+     * @var
+     */
+    protected $_refundCollection;
+
+    protected function _getRefundCollection()
+    {
+        $poType = $this->getVendor()->getStatementPoType();
+        $excludeStatus = [\Unirgy\Dropship\Model\Source::SHIPMENT_STATUS_CANCELED];
+        if ($poType == 'po') {
+            $excludeStatus = [\Unirgy\DropshipPo\Model\Source::UDPO_STATUS_CANCELED];
+        }
+        $res = $this->_hlp->rHlp();
+        $refunds = $this->_hlp->createObj('\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
+        $refunds->addFieldToSelect(array('refund_increment_id'=>'increment_id','refund_id'=>'entity_id','refund_shipping_amount'=>'base_shipping_amount'));
+        $refunds->getSelect()
+        ->join(
+            array('o'=>$res->getTableName('sales_order')),
+            'o.entity_id=main_table.order_id',
+            array()
+        )
+        ->join(
+            array('tg'=>$poType == 'po' ? $res->getTableName('udropship_po_grid') : $res->getTableName('sales_shipment_grid')),
+            'tg.order_id=o.entity_id',
+            array('order_increment_id','po_increment_id'=>'increment_id','order_id','po_id'=>'entity_id','order_created_at','po_created_at'=>'created_at')
+        )
+        ->join(
+            array('t'=>$poType == 'po' ? $res->getTableName('udropship_po') : $res->getTableName('sales_shipment')),
+            't.entity_id=tg.entity_id',
+            array('commission_percent','base_shipping_amount')
+        )
+        ->columns(array('po_type'=>new \Zend_Db_Expr("'$poType'")))
+        ->where("t.udropship_status not in (?)", $excludeStatus)
+        ->where("t.udropship_vendor=?", $this->getVendorId())
+        ->where("r.order_id in (?)", $this->getOrderIds())
+        ->order('main_table.entity_id asc');
+
+        return $refunds;
+    }
+    public function processRefunds($pos, $subtotalBase)
+    {
+        $poItemsToLoad = array();
+        $subtotalKey = $subtotalBase == 'cost' ? 'total_cost' : 'base_total_value';
+        foreach ($pos as $po) {
+            $id = $po->getPoId().'-'.$po->getRefundId();
+            foreach (array($subtotalKey, 'base_tax_amount', 'base_discount_amount') as $k) {
+                $poItemsToLoad[$id][$k] = true;
+            }
+        }
+        if ($poItemsToLoad) {
+            if ($pos instanceof DataCollection) {
+                $samplePo = $pos->getFirstItem();
+            } else {
+                reset($pos);
+                $samplePo = current($pos);
+            }
+            $refundIds = $poIds = array();
+            foreach ($poItemsToLoad as $id=>$_dummy) {
+                list($poId, $refundId) = explode('-', $id);
+                $poIds[] = $poId;
+                $refundIds[] = $refundId;
+            }
+            $poType = $samplePo->getPoType();
+
+            if ($poType == 'po') {
+                $poItems = $this->_hlp->createObj('\Unirgy\DropshipPo\Model\Po\Item')->getCollection();
+            } else {
+                $poItems = $this->_hlp->createObj('\Magento\Sales\Model\Order\Shipment\Item')->getCollection();
+            }
+            $fields = array('base_price', 'base_tax_amount', 'base_discount_amount', 'qty_ordered');
+            $rFields = array('refund_qty'=>'qty');
+            $fields[] = 'base_cost';
+            $poItems->getSelect()
+                ->join(array('i'=>$poItems->getTable('sales_order_item')), 'i.item_id=main_table.order_item_id', $fields)
+                ->join(array('o'=>$poItems->getTable('sales_order')), 'i.order_id=o.entity_id', array())
+                ->join(array('r'=>$poItems->getTable('sales_creditmemo')), 'r.order_id=o.entity_id', array('refund_id'=>'entity_id'))
+                ->join(array('ri'=>$poItems->getTable('sales_creditmemo_item')), 'i.item_id=ri.order_item_id and r.entity_id=ri.parent_id', $rFields)
+                ->where('main_table.order_item_id<>0 and main_table.parent_id in (?)', array_keys($poIds))
+                ->where('r.entity_id in (?)', array_keys($refundIds))
+                ->where('concat(main_table.parent_id,"-",r.entity_id) in (?)', array_keys($poItemsToLoad))
+            ;
+
+            $itemTotals = array();
+            foreach ($poItems as $item) {
+                $id = $item->getId();
+                if (empty($itemTotals[$id])) {
+                    $itemTotals[$id] = array($subtotalKey=>0, 'base_tax_amount'=>0, 'base_discount_amount'=>0);
+                }
+                $refundQty = min($item->getQty(),$item->getRefundQty());
+                $itemTotals[$id][$subtotalKey] += $subtotalBase == 'cost' ? $item->getBaseCost()*$refundQty : $item->getBasePrice()*$refundQty;
+                $iTax = $item->getBaseTaxAmount()/max(1,$item->getQtyOrdered());
+                $iTax = $iTax*$refundQty;
+                $iDiscount = $item->getBaseDiscountAmount()/max(1,$item->getQtyOrdered());
+                $iDiscount = $iDiscount*$refundQty;
+                $itemTotals[$id]['base_tax_amount'] += $iTax;
+                $itemTotals[$id]['base_discount_amount'] += $iDiscount;
+            }
+            foreach ($itemTotals as $id=>$total) {
+                foreach ($total as $k=>$v) {
+                    if (!empty($poItemsToLoad[$id][$k])) {
+                        $pos->getItemById($id)->setData($k, $v);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param bool $reload
+     * @return ItemCollection
+     */
+    public function getRefundCollection($reload = false)
+    {
+        if (is_null($this->_refundCollection) || $reload) {
+            if ($this->_hlp->isModuleActive('Unirgy_DropshipTierCommission')) {
+                $this->_refundCollection = $this->_getRefundCollectionTierCom();
+            } else {
+                $this->_refundCollection = $this->_getRefundCollection();
+                $this->processRefunds($this->_refundCollection, $this->getVendor()->getStatementSubtotalBase());
+            }
+        }
+        return $this->_refundCollection;
+    }
+
+    public function getOrderIds()
+    {
+        $orders = $this->getOrders();
+        $oIds = [];
+        foreach ($orders as $order) {
+            $oIds[] = $order['order_id'];
+        }
+        return $oIds;
     }
 
     protected $_roundingDeltas = [];
@@ -375,7 +791,20 @@ class Payout extends AbstractStatement implements StatementInterface
     
     public function finishPayout()
     {
-        return $this->finishStatement();
+        $this->finishStatement();
+        $this->_calculateRefundDue();
+        return $this;
+    }
+
+    protected function _calculateRefundDue()
+    {
+        $this->initTotals();
+        $this->_totals_amount['total_reversed'] = $this->getTotalReversed();
+        $this->_totals_amount['refund_due']  = $this->_totals_amount['total_refund'] - $this->_totals_amount['total_reversed'];
+        $this->setTotalReversed($this->_totals_amount['total_reversed']);
+        $this->setTotalRefund($this->_totals_amount['total_refund']);
+        $this->setRefundDue($this->_totals_amount['refund_due']);
+        return $this;
     }
 
     protected function _getEmptyTotals($format=false)
@@ -417,6 +846,92 @@ class Payout extends AbstractStatement implements StatementInterface
         ) {
             $statement->completePayout($this);
         }
+        return $this;
+    }
+
+    public function refreshRefunds()
+    {
+        $this->_resetRefunds();
+        $this->_resetRefundTotals();
+        $this->setTotalRefund(0);
+        if ($this->_hlp->isModuleActive('Unirgy_DropshipTierCommission')) {
+            $this->_refreshRefundsTierCom();
+        } else {
+            $this->_refreshRefunds();
+        }
+        $this->finishPayout();
+        return $this;
+    }
+
+    protected function _refreshRefundsTierCom()
+    {
+        $refunds = $this->getRefundCollection();
+
+        $totals_amount = $this->_totals_amount;
+        $processedRefundIds = [];
+        foreach ($refunds as $id => $refund) {
+            if ($refund->getOrderItem()->isDummy(true)) continue;
+            $refundRow = $this->initRefundItem($refund, in_array($refund->getRefundId(), $processedRefundIds));
+            $processedRefundIds[] = $refund->getRefundId();
+
+            $this->_eventManager->dispatch('udropship_vendor_statement_refund_item_row', [
+                'statement' => $this,
+                'refund' => $refund,
+                'refund_row' => &$refundRow
+            ]);
+
+            $refundRow = $this->calculateRefund($refundRow);
+            $totals_amount = $this->accumulateRefund($refundRow, $totals_amount);
+
+            $this->_refunds[$id] = $refundRow;
+        }
+        $this->_totals_amount = $totals_amount;
+    }
+
+    protected function _refreshRefunds()
+    {
+        $refunds = $this->getRefundCollection();
+
+        $totals_amount = $this->_totals_amount;
+        foreach ($refunds as $id=>$refund) {
+
+            $refundRow = $this->initRefund($refund);
+
+            $this->_eventManager->dispatch('udropship_vendor_statement_refund_row', array(
+                'statement'=>$this,
+                'refund'=>$refund,
+                'refund_row'=>&$refundRow
+            ));
+
+            $refundRow = $this->calculateRefund($refundRow);
+
+            $this->_refunds[$id] = $refundRow;
+        }
+        $this->_totals_amount = $totals_amount;
+    }
+
+    public function reverse()
+    {
+        $this->_payoutHlpPr->payoutReverse($this);
+        return $this;
+    }
+
+    public function afterReverse()
+    {
+        $this->markRefundAmountsReverse($this);
+        $this->addMessage(__('Successfully Reversed'), self::STATUS_REVERSED)->setIsJustReversed(true);
+        $this->initTotals();
+        foreach ($this->_refunds as &$refund) {
+            $refund['reversed'] = true;
+        }
+        unset($refund);
+        return $this;
+    }
+
+    public function markRefundAmountsReverse($obj)
+    {
+        $this->setTotalReversed($this->getTotalReversed()+$obj->getRefundDue());
+        $this->finishPayout();
         return $this;
     }
     
@@ -462,5 +977,16 @@ class Payout extends AbstractStatement implements StatementInterface
             return false;
         }
         return $this->_hlp->createObj($methodClass);
+    }
+
+    public function isReversible()
+    {
+        if (!$this->getPayoutMethod()) throw new \Exception(__("Empty payout method"));
+        $pmNode = $this->_hlp->config()->getPayoutMethod($this->getPayoutMethod());
+        if (!$pmNode) throw new \Exception(__("Unknown payout method: '%1'", $this->getPayoutMethod()));
+        $methodClass = $pmNode['model'];
+        if (!class_exists($methodClass)) throw new \Exception(__("Can't find payout method class"));
+        $method = $this->_hlp->createObj($methodClass);
+        return $method->isReversible();
     }
 }

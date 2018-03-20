@@ -52,7 +52,7 @@ class InstallData implements InstallDataInterface
                 'user_defined' => 1,
                 'required' => 0,
                 'visible' => 0,
-                'backend' => '\Magento\Eav\Model\Entity\Attribute\Backend\Serialized',
+                'backend' => '\Unirgy\DropshipVendorProduct\Model\ProductAttributeBackend\Serialized',
                 'visible_on_front' => false,
             ]
         );
@@ -66,7 +66,7 @@ class InstallData implements InstallDataInterface
                 'user_defined' => 1,
                 'required' => 0,
                 'visible' => 0,
-                'backend' => '\Magento\Eav\Model\Entity\Attribute\Backend\Serialized',
+                'backend' => '\Unirgy\DropshipVendorProduct\Model\ProductAttributeBackend\Serialized',
                 'visible_on_front' => false,
             ]
         );
@@ -80,7 +80,7 @@ class InstallData implements InstallDataInterface
                 'user_defined' => 1,
                 'required' => 0,
                 'visible' => 0,
-                'backend' => '\Magento\Eav\Model\Entity\Attribute\Backend\Serialized',
+                'backend' => '\Unirgy\DropshipVendorProduct\Model\ProductAttributeBackend\Serialized',
                 'visible_on_front' => false,
             ]
         );

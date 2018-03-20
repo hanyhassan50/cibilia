@@ -56,7 +56,8 @@ abstract class AbstractStatement extends AbstractDb
 
     public function fixStatementDate($vendor, $poType, $stPoStatuses, $dateFrom=null, $dateTo=null)
     {
-        $conn = $this->getConnection();
+        $rHlp = $this->_hlp->rHlp();
+        $conn = $rHlp->getSalesConnection();
         if ('po' == $poType) {
             if (!is_array($stPoStatuses)) {
                 $stPoStatuses = explode(',', $stPoStatuses);
@@ -241,7 +242,8 @@ abstract class AbstractStatement extends AbstractDb
     protected function _changePosAttribute($poIds, $poType, $poAttr, $poAttrValue, $excludePoSelect=null)
     {
         if (empty($poIds)) return $this;
-        $conn = $this->getConnection();
+        $rHlp = $this->_hlp->rHlp();
+        $conn = $rHlp->getSalesConnection();
         if (!is_null($excludePoSelect)) {
             $_sTbl = $this->getTable('sales_shipment');
             $poIds = $conn->fetchCol(

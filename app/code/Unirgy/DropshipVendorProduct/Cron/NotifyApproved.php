@@ -6,22 +6,6 @@ class NotifyApproved extends AbstractCron
 {
     public function execute()
     {
-        // {
-        //     $to = "royshah1122@gmail.com";
-        //     $subject = "My subject";
-        //     $txt = "Hello world!";
-        //     $headers = "From: webmaster@example.com" . "\r\n" .
-            
-        //     mail($to,$subject,$txt,$headers);   
-
-        // }
-
-        // $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/TEST_APPROVE.log');
-        // $logger = new \Zend\Log\Logger();
-        // $logger->addWriter($writer);
-        // $logger->info('Notify Cron Approved');
-        
-
         $oldStoreId = $this->_storeManager->getStore()->getId();
         $this->_storeManager->setCurrentStore(0);
         $prods = $this->_productFactory->create()->getCollection()
@@ -43,8 +27,5 @@ class NotifyApproved extends AbstractCron
             $this->_prodHlp->sendApprovedAdminNotificationEmail($vProds, $v);
         }
         $this->_storeManager->setCurrentStore($oldStoreId);
-
-        return false;
     }
-
 }

@@ -31,6 +31,11 @@ class Offline implements MethodInterface
     {
         return $this->_isOnline;
     }
+    protected $_isReversible=false;
+    public function isReversible()
+    {
+        return $this->_isReversible;
+    }
     public function pay($payout)
     {
         if ($payout instanceof StatementInterface) {
@@ -40,5 +45,9 @@ class Offline implements MethodInterface
             $pt->afterPay();
         }
         return true;
+    }
+    public function reverse($payout)
+    {
+        return $this;
     }
 }

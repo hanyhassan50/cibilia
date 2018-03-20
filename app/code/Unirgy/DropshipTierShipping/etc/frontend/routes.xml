@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
-        <route id="udtiership" frontName="authentic_food_makers_tiership">
+        <route id="udtiership" frontName="udtiership">
             <module name="Unirgy_DropshipTierShipping"/>
         </route>
     </router>

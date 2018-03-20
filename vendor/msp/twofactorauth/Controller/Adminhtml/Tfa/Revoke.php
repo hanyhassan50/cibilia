@@ -23,8 +23,9 @@ namespace MSP\TwoFactorAuth\Controller\Adminhtml\Tfa;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use MSP\TwoFactorAuth\Api\TrustedManagerInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 
-class Revoke extends Action
+class Revoke extends AbstractAction
 {
     /**
      * @var TrustedManagerInterface
@@ -43,7 +44,7 @@ class Revoke extends Action
      * Dispatch request
      *
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -52,6 +53,6 @@ class Revoke extends Action
         $this->trustedManager->revokeTrustedDevice($tokenId);
 
         $this->messageManager->addSuccessMessage(__('Device authorization revoked'));
-        $this->_redirect('adminhtml/user/edit', ['user_id' => $userId]);
+        return $this->_redirect('adminhtml/user/edit', ['user_id' => $userId]);
     }
 }

@@ -23,9 +23,8 @@ namespace MSP\NoSpam\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use MSP\NoSpam\Api\NoSpamInterface;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
-use MSP\SecuritySuiteCommon\Api\SessionInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
+use MSP\SecuritySuiteCommon\Api\LockDownInterface;
 
 class FrontControllerActionPredispatch implements ObserverInterface
 {
@@ -35,30 +34,23 @@ class FrontControllerActionPredispatch implements ObserverInterface
     private $noSpam;
 
     /**
-     * @var LogManagementInterface
+     * @var LockDownInterface
      */
-    private $logManagement;
+    private $lockDown;
 
     /**
-     * @var EventInterface
+     * @var AlertInterface
      */
-    private $event;
-
-    /**
-     * @var SessionInterface
-     */
-    private $session;
+    private $alert;
 
     public function __construct(
         NoSpamInterface $noSpam,
-        LogManagementInterface $logManagement,
-        EventInterface $event,
-        SessionInterface $session
+        AlertInterface $alert,
+        LockDownInterface $lockDown
     ) {
         $this->noSpam = $noSpam;
-        $this->logManagement = $logManagement;
-        $this->event = $event;
-        $this->session = $session;
+        $this->lockDown = $lockDown;
+        $this->alert = $alert;
     }
 
     /**
@@ -69,26 +61,22 @@ class FrontControllerActionPredispatch implements ObserverInterface
     {
         if ($action = $this->noSpam->shouldCheckAction()) {
             if ($reason = $this->noSpam->shouldStopIp()) {
-                // We are performing an in-place forward instead of a redirect to
-                // avoid 30x codes for search engines.
+                $this->alert->event(
+                    'MSP_NoSpam',
+                    'IP identified as: ' . $reason,
+                    AlertInterface::LEVEL_WARNING,
+                    null,
+                    $action
+                );
 
-                if ($action == NoSpamInterface::ACTION_STOP) {
-                    $this->session->setEmergencyStopMessage(__('Your IP has been identified as: %1', $reason));
-
-                    $request = $observer->getRequest();
-                    $request->setMethod('GET');
-                    $request->initForward();
-                    $request->setModuleName('msp_security_suite');
-                    $request->setControllerName('stop');
-                    $request->setActionName('index');
-                    $request->setDispatched(false);
+                if ($action == AlertInterface::ACTION_LOCKDOWN) {
+                    /** @var \Magento\Framework\App\Action\Action $controllerAction */
+                    $controllerAction = $observer->getEvent()->getControllerAction();
+                    $this->lockDown->doActionLockdown(
+                        $controllerAction,
+                        __('Your IP has been identified as: %1', $reason)
+                    );
                 }
-
-                $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                    'module' => 'MSP_NoSpam',
-                    'message' => $reason,
-                    'action' => $action,
-                ]);
             }
         }
     }

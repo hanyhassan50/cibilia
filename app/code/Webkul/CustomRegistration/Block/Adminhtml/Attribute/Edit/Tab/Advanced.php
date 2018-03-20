@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
 namespace Webkul\CustomRegistration\Block\Adminhtml\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
@@ -112,7 +120,7 @@ class Advanced extends Generic
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 characters.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass,
@@ -146,7 +154,7 @@ class Advanced extends Generic
             ]
         );
 
-        //$dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         /*$fieldset->addField(
             'default_value_date',
             'date',
@@ -177,31 +185,6 @@ class Advanced extends Generic
 
         $frontendInputValues = array_merge($frontendInputElm->getValues(), $additionalTypes);
         $frontendInputElm->setValues($frontendInputValues);
-
-
-        /*$scopes = [
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Website'),
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
-        ];
-
-        if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id'
-        ) {
-            unset($scopes[\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE]);
-        }
-
-        $fieldset->addField(
-            'is_global',
-            'select',
-            [
-                'name' => 'is_global',
-                'label' => __('Scope'),
-                'title' => __('Scope'),
-                'note' => __('Declare attribute value saving scope'),
-                'values' => $scopes
-            ],
-            'attribute_code'
-        );*/
          
         $this->propertyLocker->lock($form);
         $this->setForm($form);

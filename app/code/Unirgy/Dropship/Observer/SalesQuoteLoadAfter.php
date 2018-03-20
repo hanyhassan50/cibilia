@@ -20,15 +20,19 @@ class SalesQuoteLoadAfter extends AbstractObserver implements ObserverInterface
      */
     protected $_iHlp;
 
+    protected $_urlBuilder;
+
     public function __construct(
         ProtectedCode $helperProtectedCode,
         Item $helperItem,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \Unirgy\Dropship\Observer\Context $context,
         array $data = []
     )
     {
         $this->_hlpPr = $helperProtectedCode;
         $this->_iHlp = $helperItem;
+        $this->_urlBuilder = $urlBuilder;
 
         parent::__construct($context, $data);
     }
@@ -41,12 +45,23 @@ class SalesQuoteLoadAfter extends AbstractObserver implements ObserverInterface
             $qId = $quote->getId();
             $hlp = $this->_hlpPr;
             if ($hl->isSkipQuoteLoadAfterEvent($qId) || $this->getIsCartUpdateActionFlag()) return;
-            $items = $observer->getQuote()->getAllItems();
+            $items = $quote->getAllItems();
             $this->_eventManager->dispatch('udropship_prepare_quote_items_before', array('items'=>$items));
             $hlp->setAllowReorginizeQuote(true);
             $hlp->applyDefaultVendorIds($items)->applyStockAvailability($items);
             $this->_iHlp->initBaseCosts($items);
             $hlp->setAllowReorginizeQuote(false);
+            if ($this->getIsCheckoutIndexActionFlag()) {
+                if ($quote->getHasAddressError() && !$quote->getHasStockError()) {
+                    $quote->setHasError(false);
+                }
+            } else {
+                if ($quote->getHasAddressError() && !$quote->getHasStockError()) {
+                    $quote->addMessage(
+                        __('Change you address <a href="$1">here</a>.', $this->_urlBuilder->getUrl('checkout'))
+                    );
+                }
+            }
             $this->_eventManager->dispatch('udropship_prepare_quote_items_after', array('items'=>$items));
         } catch (\Exception $e) {
             // all necessary actions should be already done by now, kill the exception

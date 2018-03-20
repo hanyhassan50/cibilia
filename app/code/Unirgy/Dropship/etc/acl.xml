@@ -21,8 +21,8 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Unirgy_Dropship::config" title="Dropship" sortOrder="50"/>
-                            <resource id="Unirgy_Dropship::config_label" title="Dropship Labels" sortOrder="60"/>
+                            <resource id="Unirgy_Dropship::system_config" title="Dropship" sortOrder="50"/>
+                            <resource id="Unirgy_Dropship::system_config_label" title="Dropship Labels" sortOrder="60"/>
                         </resource>
                     </resource>
                 </resource>

@@ -31,6 +31,7 @@ abstract class AbstractObserver
     protected function _initConfigRewrites()
     {
         return;
+        /*
         if (!$this->_tsHlp->isV2Rates()) return;
         Mage::getConfig()->setNode('global/models/udtiership/rewrite/carrier', 'Unirgy\DropshipTierShipping\Model\V2\Carrier');
         foreach ([
@@ -40,6 +41,7 @@ abstract class AbstractObserver
             $store->setConfig('carriers/udtiership/udtiership/model', 'udtiership/v2_carrier');
             Mage::getConfig()->setNode('default/carriers/udtiership/model', 'udtiership/v2_carrier');
         }
+        */
     }
 
 }

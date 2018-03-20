@@ -40,6 +40,7 @@ class AdminUserSaveAfter implements ObserverInterface
     /**
      * @param Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(Observer $observer)
     {
@@ -50,7 +51,7 @@ class AdminUserSaveAfter implements ObserverInterface
             if (!is_array($data['msp_tfa_providers'])) {
                 $data['msp_tfa_providers'] = [];
             }
-            $this->userConfigManager->setProvidersCodes($user, $data['msp_tfa_providers']);
+            $this->userConfigManager->setProvidersCodes($user->getId(), $data['msp_tfa_providers']);
         }
     }
 }

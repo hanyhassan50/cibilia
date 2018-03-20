@@ -1,14 +1,28 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_CustomRegistration
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
 <fieldset class="fieldset create account" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
-	<legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Additional Information') ?></span></legend><br> 
-    <?php $_collection = $block->attributeCollectionFilter(); ?>
+    <?php $_collection = $block->attributeCollectionFilter();
+        if (count($_collection)):
+    ?>
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Additional Information') ?></span></legend><br>
+    <?php endif; ?>
     		<?php foreach($_collection as $attributeData){ ?>
             <?php $isRequiredArray = explode(' ', $attributeData->getFrontendClass());?>
     			<?php $attrAsArray = $attributeData->toArray(); ?>
-                <?php 
+                <?php
                 $usedInForms = $block->getUsedInForms($attributeData->getId());
                 $isShowOnRegisterPage = in_array('customer_account_create', $usedInForms);?>
                 <?php if ($isShowOnRegisterPage): ?>
-    			<div class="field <?php echo $attributeData->getAttributeCode() ?> <?php echo in_array('required', $isRequiredArray)?'required':'' ?>">
+    			<div class="<?php if($attributeData->getFrontendInput() == 'boolean') echo 'choice ' ?> field <?php echo $attributeData->getAttributeCode() ?> <?php echo in_array('required', $isRequiredArray)?'required':'' ?>">
     			<?php if ($attributeData->getFrontendInput() != 'boolean'): ?>
 		            <label for="<?php echo $attributeData->getAttributeCode() ?>" class="label"><span><?php /* @escapeNotVerified */ echo $attributeData->getFrontendLabel(); ?></span></label>
 	            <?php endif ?>
@@ -46,8 +60,8 @@
 							<?php } ?>
         				</select>
         			<?php elseif ($attributeData->getFrontendInput() == 'boolean'):?>
-        				<input type="checkbox" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-text <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> value="1">
-        				<label for="is_subscribed" class="label"><span><?php /* @escapeNotVerified */ echo $attributeData->getFrontendLabel(); ?></span></label>
+        				<input type="checkbox" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="wkinput-text <?php echo $attributeData->getFrontendClass() ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?> value="1">
+        				<label for="<?php echo $attrAsArray['attribute_code'] ?>" class="label"><span><?php /* @escapeNotVerified */ echo $attributeData->getFrontendLabel(); ?></span></label>
 
     				<?php elseif ($attributeData->getFrontendInput() == 'image'):?>
                         <input type="file" name="<?php echo $attrAsArray['attribute_code'] ?>" id="<?php echo $attrAsArray['attribute_code'] ?>" class="input-text custom_file <?php echo $attributeData->getFrontendClass() ?>" data-allowed = "<?php echo $attrAsArray['note'] ?>" <?php echo in_array('required', $isRequiredArray)? 'data-validate="{required:true}"':'' ?>><br>
@@ -72,7 +86,7 @@
                 <?php endif ?>
         <?php } ?>
 </fieldset>
-<script> 
+<script>
     require([
         "jquery",
         "mage/calendar",
@@ -87,17 +101,21 @@
             var parentValue = $.trim($(this).find("option:selected").text());
             if(parentValue == 'No' || parentValue == ''){
                 $('.'+$('.child_'+childClass).attr('id')).hide();
+                $('.'+$('.child_'+childClass).attr('id')).find('input').attr('disabled','disabled');
             }
         });
-        
+
         $( "select[class*='dependable_field_']" ).change(function(target){
             var childClass = $(this).attr('id');
             var parentValue = $.trim($(this).find("option:selected").text());
+
             if(parentValue == 'Yes'){
                 $('.'+$('.child_'+childClass).attr('id')).show();
+                $('.'+$('.child_'+childClass).attr('id')).find('input').removeAttr('disabled');
             }else{
                 $('.child_'+childClass).removeAttr('data-validate');
                 $('.'+$('.child_'+childClass).attr('id')).hide();
+                $('.'+$('.child_'+childClass).attr('id')).find('input').attr('disabled','disabled');
             }
         });
 
@@ -105,7 +123,7 @@
 
         $('.custom_file').change(function(){
             var ext_arr = $(this).attr("data-allowed").split(",");
-            if(ext_arr.indexOf($(this).val().split("\\").pop().split(".").pop()) < 0){  
+            if(ext_arr.indexOf($(this).val().split("\\").pop().split(".").pop()) < 0){
                 //alert('Invalid Image Extension. Allowed extension is '+$(this).attr("data-allowed"));
                 var self = $(this);
                 $('<div />').html('Invalid Image Extension. Allowed extensions are '+$(this).attr("data-allowed"))
@@ -124,8 +142,8 @@
                             }
                     }]
                  });
-                
+
             }
         });
     })
-    </script>  
+    </script>

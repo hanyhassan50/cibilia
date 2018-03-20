@@ -1,0 +1,66 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="block block-dashboard-orders">
+    <?php $_orders = $block->getOrders(); ?>
+    <div class="block-title order">
+        <strong><?= /* @escapeNotVerified */ __('Recent Orders') ?></strong>
+        <?php if (sizeof($_orders->getItems()) > 0): ?>
+            <a class="action view" href="<?= /* @escapeNotVerified */ $block->getUrl('sales/order/history') ?>">
+                <span><?= /* @escapeNotVerified */ __('View All') ?></span>
+            </a>
+        <?php endif; ?>
+    </div>
+    <div class="block-content">
+        <?= $block->getChildHtml() ?>
+        <?php if (sizeof($_orders->getItems()) > 0): ?>
+            <div class="table-wrapper orders-recent">
+                <table class="data table table-order-items recent" id="my-orders-table">
+                    <caption class="table-caption"><?= /* @escapeNotVerified */ __('Recent Orders') ?></caption>
+                    <thead>
+                    <tr>
+                        <th class="id"><?= /* @escapeNotVerified */ __('Order #') ?></th>
+                        <th class="date"><?= /* @escapeNotVerified */ __('Date') ?></th>
+                        <th class="shipping"><?= /* @escapeNotVerified */ __('Ship To') ?></th>
+                        <th class="total"><?= /* @escapeNotVerified */ __('Order Total') ?></th>
+                        <th class="status"><?= /* @escapeNotVerified */ __('Status') ?></th>
+                        <th class="actions"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($_orders as $_order): ?>
+                        <tr>
+                            <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="id"><?= /* @escapeNotVerified */ $_order->getRealOrderId() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="date"><?= /* @escapeNotVerified */ $block->formatDate($_order->getCreatedAt()) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Ship To')) ?>" class="shipping"><?= $_order->getShippingAddress() ? $block->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Order Total')) ?>" class="total"><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="status"><?= /* @escapeNotVerified */ $_order->getStatusLabel() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="actions">
+                                <a href="<?= /* @escapeNotVerified */ $block->getViewUrl($_order) ?>" class="action view">
+                                    <span><?= /* @escapeNotVerified */ __('View Order') ?></span>
+                                </a>
+                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
+                                    <a href="#" data-post='<?php /* @escapeNotVerified */ echo
+                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                        ->getPostData($block->getReorderUrl($_order))
+                                    ?>' class="action order">
+                                        <span><?= /* @escapeNotVerified */ __('Reorder') ?></span>
+                                    </a>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <div class="message info empty"><span><?= /* @escapeNotVerified */ __('You have placed no orders.') ?></span></div>
+        <?php endif; ?>
+    </div>
+</div>

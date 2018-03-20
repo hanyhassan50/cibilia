@@ -29,6 +29,8 @@ class Config
      */
     protected $_data;
 
+    protected $_hlp;
+
     /**
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -36,11 +38,13 @@ class Config
      * @param string $cacheId
      */
     public function __construct(
+        \Unirgy\Dropship\Helper\Data $udropshipHelper,
         Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\Config\ScopeInterface $configScope,
         $cacheId = 'UdropshipConfig'
     ) {
+        $this->_hlp = $udropshipHelper;
         $this->_reader = $reader;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
@@ -51,8 +55,8 @@ class Config
     {
         if ($this->_data===null) {
             $cacheId = $this->_cacheId;
-            $cachedData = unserialize($this->_cache->load($cacheId));
-            if (is_array($cachedData)) {
+            $cachedData = $this->_hlp->unserialize($this->_cache->load($cacheId));
+            if (is_array($cachedData) && !empty($cachedData)) {
                 $this->_initFromSource($cachedData);
                 return $this;
             }
@@ -85,6 +89,23 @@ class Config
             $currentPointer = & $currentPointer[$segment];
         }
         $currentPointer = $value;
+    }
+
+    public function setConfigData($path, $value)
+    {
+        $this->_data->setData($path, $value);
+        return $this;
+    }
+
+    public function getUploadFields()
+    {
+        $uploadFields = [];
+        foreach ($this->getField() as $code=>$node) {
+            if (in_array(@$node['type'], ['image','file'])) {
+                $uploadFields[] = $code;
+            }
+        }
+        return $uploadFields;
     }
 
     public function getFieldset($name=null, $field=null)

@@ -10,9 +10,11 @@ class CheckoutCartAddProductComplete extends AbstractObserver implements Observe
     public function execute(Observer $observer)
     {
         return;
+        /*
         if (($allowOrigin = $this->_getAccessAllowOrigin())) {
             Mage::app()->getResponse()->setHeader('Access-Control-Allow-Origin', $allowOrigin);
             Mage::app()->getResponse()->setHeader('Access-Control-Allow-Headers', 'X-Prototype-Version, X-Requested-With');
         }
+        */
     }
 }

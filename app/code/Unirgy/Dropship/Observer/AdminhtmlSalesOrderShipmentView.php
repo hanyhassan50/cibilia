@@ -35,7 +35,8 @@ class AdminhtmlSalesOrderShipmentView extends AbstractObserver implements Observ
 
     public function execute(Observer $observer)
     {
-        if (($soi = Mage::app()->getLayout()->getBlock('order_info'))
+        $layout = $this->_hlp->getObj('\Magento\Framework\View\LayoutInterface');
+        if (($soi = $layout->getBlock('order_info'))
             && ($shipment = $this->_registry->registry('current_shipment'))
         ) {
             if (($vName = $this->_hlp->getVendorName($shipment->getUdropshipVendor()))) {

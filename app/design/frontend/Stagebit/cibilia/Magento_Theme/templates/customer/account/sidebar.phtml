@@ -1,0 +1,33 @@
+<?php
+$links = $block->getLinks();
+?>
+
+<ul id="svg-icons-menu" class="nav items">
+    <?php
+        if($links) {
+            foreach ($links as $link) {
+                if($link instanceof Cibilia\Summary\Block\View\Element\Html\Link\Current && !$link->isCibilian()) {
+                    continue;
+                } else {
+                    if ($link instanceof Magento\Customer\Block\Account\Delimiter) { ?>
+                        <li class="nav item">
+                            <span class="delimiter"></span>
+                        </li>
+                    <?php } elseif($link->isCurrent()) { ?>
+                        <li class="nav item ai-icon current">
+                            <strong class="ai-icon"><?php echo ($link->getSvg() ? $link->getSvg():'') . $link->getLabel(); ?></strong>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav item ai-icon">
+                            <?php  ?>
+                            <a href="<?php echo $link->getHref(); ?>" class="ai-icon">
+                                <?php echo ($link->getSvg() ? $link->getSvg():'') . $link->getLabel(); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                <?php } ?>
+    <?php
+            }
+        }
+    ?>
+</ul>

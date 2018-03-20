@@ -20,14 +20,17 @@
 
 namespace MSP\TwoFactorAuth\Controller\Adminhtml\Tfa;
 
-use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\UserFactory;
 use Magento\User\Model\ResourceModel\User as UserResourceModel;
 use MSP\TwoFactorAuth\Api\TfaInterface;
+use MSP\TwoFactorAuth\Controller\Adminhtml\AbstractAction;
 
-class Reset extends Action
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ */
+class Reset extends AbstractAction
 {
     /**
      * @var UserResourceModel
@@ -73,10 +76,10 @@ class Reset extends Action
             throw new LocalizedException(__('Unknown provider'));
         }
 
-        $provider->resetConfiguration($user);
+        $provider->resetConfiguration($user->getId());
 
         $this->messageManager->addSuccessMessage(__('Configuration has been reset for this user'));
-        $this->_redirect('adminhtml/user/edit', ['user_id' => $userId]);
+        return $this->_redirect('adminhtml/user/edit', ['user_id' => $userId]);
     }
 
     /**

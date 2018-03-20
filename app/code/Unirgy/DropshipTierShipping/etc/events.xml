@@ -13,7 +13,7 @@
     <event name="controller_front_init_before">
         <observer name="udtiership" instance="Unirgy\DropshipTierShipping\Observer\ControllerFrontInitBefore"/>
     </event>
-    <event name="udropship_init_config_rewrites">
-        <observer name="udtiership" instance="Unirgy\DropshipTierShipping\Observer\UdropshipInitConfigRewrites"/>
+    <event name="adminhtml_catalog_product_form_prepare_excluded_field_list">
+        <observer name="udtiership" instance="Unirgy\DropshipTierShipping\Observer\UpdateExcludedFieldListObserver"/>
     </event>
 </config>

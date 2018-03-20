@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
+use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Type processor Test
  */
-class TypeProcessorTest extends \PHPUnit_Framework_TestCase
+class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
@@ -115,6 +117,26 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_typeProcessor->isArrayType('string[]'));
     }
 
+    public function testIsValidTypeDeclaration()
+    {
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('Traversable')); // Interface
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('stdObj')); // Class
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('array'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('callable'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('string'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('string[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('int'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('float'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('double'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('boolean'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('mixed[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('stdObj[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('Traversable[]'));
+    }
+
     public function getArrayItemType()
     {
         $this->assertEquals('string', $this->_typeProcessor->getArrayItemType('str[]'));
@@ -128,7 +150,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'TestModule1V1EntityItem',
-            $this->_typeProcessor->translateTypeName('\Magento\TestModule1\Service\V1\Entity\Item')
+            $this->_typeProcessor->translateTypeName(\Magento\TestModule1\Service\V1\Entity\Item::class)
         );
         $this->assertEquals(
             'TestModule3V1EntityParameter[]',
@@ -186,6 +208,25 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider processSimpleTypeExceptionProvider
+     */
+    public function testProcessSimpleTypeException($value, $type)
+    {
+        $this->expectException(
+            SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        );
+        $this->_typeProcessor->processSimpleAndAnyType($value, $type);
+    }
+
+    public static function processSimpleTypeExceptionProvider()
+    {
+        return [
+            "int type, string value" => ['test', 'int'],
+            "float type, string value" => ['test', 'float'],
+        ];
+    }
+
+    /**
      * @expectedException \Magento\Framework\Exception\SerializationException
      * @expectedExceptionMessage Invalid type for value: "integer". Expected Type: "int[]".
      */
@@ -196,43 +237,13 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);
     }
 
-    public function testFindSetterMethodName()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $setterName = $this->_typeProcessor->findSetterMethodName($class, 'AttrName');
-        $this->assertEquals("setAttrName", $setterName);
-
-        $booleanSetterName = $this->_typeProcessor->findSetterMethodName($class, 'Active');
-        $this->assertEquals("setIsActive", $booleanSetterName);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameInvalidAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameWrongCamelCasedAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
-    }
-
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessageRegExp /@param annotation is incorrect for the parameter "name" \w+/
      */
     public function testGetParamType()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
         $this->_typeProcessor->getParamType($paramsReflection[0]);
@@ -240,7 +251,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParameterDescription()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
         $this->assertEquals('Name of the attribute', $this->_typeProcessor->getParamDescription($paramsReflection[0]));
@@ -249,5 +260,36 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     public function testGetOperationName()
     {
         $this->assertEquals("resNameMethodName", $this->_typeProcessor->getOperationName("resName", "methodName"));
+    }
+
+    /**
+     * Checks a case when method has only `@inheritdoc` annotation.
+     */
+    public function testGetReturnTypeWithInheritDocBlock()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => true,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getPropertyName');
+
+        self::assertEquals($expected, $this->_typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    /**
+     * Checks a case when method and parent interface don't have `@return` annotation.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Getter return type must be specified using @return annotation. See Magento\Framework\Reflection\Test\Unit\Fixture\TSample::getName()
+     */
+    public function testGetReturnTypeWithoutReturnTag()
+    {
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getName');
+        $this->_typeProcessor->getGetterReturnType($methodReflection);
     }
 }

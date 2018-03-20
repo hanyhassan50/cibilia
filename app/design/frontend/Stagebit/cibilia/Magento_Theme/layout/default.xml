@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="base-footer-container">
+            <block class="Cibilia\Dropshipextend\Block\Siteswitch" name="store_switcher" template="siteswitcher.phtml" after="block_footer_payment"/>
+        </referenceBlock>
+        <referenceBlock name="currency" remove="true"/>
+        <referenceBlock name="top.search" remove="true"/>
+        <referenceContainer name="container_header_primary_right_1">
+            <block class="Magento\Customer\Block\Account\AuthorizationLink" name="custom_header_page_link" template="Magento_Theme::header/custom_page_link.phtml" />
+            <block class="Magento\Customer\Block\Account\Navigation" name="top.links" template="Magento_Theme::header/custom/top_links.phtml" before="minicart"/>
+        </referenceContainer>
+
+        <referenceBlock name="top.links">
+            <referenceBlock name="register-link" remove="true"/>
+            <referenceBlock name="wish-list-link" remove="true"/>
+        </referenceBlock>
+    </body>
+</page>

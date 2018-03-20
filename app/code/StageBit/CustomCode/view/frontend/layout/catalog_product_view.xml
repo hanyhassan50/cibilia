@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <container name="vendor.subdomain.info" label="Vendor subdomain" htmlTag="div" htmlClass="vendor-subdomain-info" before="product.info.price">
+                <block class="StageBit\CustomCode\Block\Product\Vendor\Subdomain" name="product.vendor.subdomain" template="StageBit_CustomCode::product/vendor/subdomain.phtml" before="-" />
+            </container>
+        </referenceContainer>
+    </body>
+</page>

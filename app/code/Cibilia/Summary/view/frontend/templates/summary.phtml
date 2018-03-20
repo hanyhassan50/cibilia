@@ -14,10 +14,9 @@
            $requestedAmount = $requestedAmount + $withdraw->getAmount();
         }
         $pendingAmount = $objSummary->getPendingAmount() - $requestedAmount;
-
     }
     $lockedAmount = 0;
-        
+
     $arrLockedCollection = $objectManager->create('Cibilia\Commission\Model\Commissions')->getCollection()->addFieldToFilter('cibilian_id',$customerSession->getCustomer()->getId())->addFieldToFilter('status',3);
     foreach ($arrLockedCollection as $locked) {
        $lockedAmount = $lockedAmount + $locked->getTotalCommission();

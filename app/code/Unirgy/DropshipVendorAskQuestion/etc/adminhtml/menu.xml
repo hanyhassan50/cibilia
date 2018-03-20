@@ -4,8 +4,8 @@
     <menu>
         <add id="Unirgy_DropshipVendorAskQuestion::udqa"
              resource="Unirgy_DropshipVendorAskQuestion::udqa" module="Unirgy_Dropship"
-             title="Vendor Questions" sortOrder="12000"
-             parent="Unirgy_Dropship::udropship" />
+             title="Dropship Vendor Questions" sortOrder="12000"
+             parent="Magento_Sales::sales" />
         <add id="Unirgy_DropshipVendorAskQuestion::udqa_pending"
              resource="Unirgy_DropshipVendorAskQuestion::udqa_pending" module="Unirgy_Dropship"
              title="Pending Questions/Answers" sortOrder="10" action="udqa/index/pending"

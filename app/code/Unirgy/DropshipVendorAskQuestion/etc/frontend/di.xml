@@ -5,6 +5,7 @@
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="udqa_vendor" xsi:type="string">/udqa/vendor/</item>
+                <item name="udqa_customer" xsi:type="string">/udqa/customer/</item>
             </argument>
         </arguments>
     </type>

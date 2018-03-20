@@ -1,10 +1,22 @@
 <?php
 namespace Cibilia\Idproofs\Controller\Index; 
 
-class Approve extends \Magento\Framework\App\Action\Action {
-   
-    
-	public function execute()
+use Magento\Framework\App\Action\Context;
+
+class Approve extends \Magento\Framework\App\Action\Action
+{
+    protected $_productAction;
+
+     public function __construct(
+         Context $context,
+         \Magento\Catalog\Model\Product\Action $productAction
+     )
+     {
+         $this->_productAction = $productAction;
+         parent::__construct($context);
+     }
+
+    public function execute()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         
@@ -26,14 +38,8 @@ class Approve extends \Magento\Framework\App\Action\Action {
                 
                 if($objVendor && $objVendor->getId()){
 
-                    
                     $objProduct = $objectManager->create('Magento\Catalog\Model\Product')->load($pid);
                     
-                    if(!$objProduct && !$objProduct->getId()){
-                        $this->messageManager->addError(__('Product Canot be approved'));
-                        return $resultRedirect->setPath($storeManager->getStore()->getBaseUrl());
-                    }
-
                     $objVendorSession = $objectManager->get('Unirgy\Dropship\Model\Session');
 
                     $vendorUrl = $storeManager->getStore()->getUrl('udprod/vendor/productEdit', ['id'=>$pid]);
@@ -41,17 +47,18 @@ class Approve extends \Magento\Framework\App\Action\Action {
                     if($objVendorSession->isLoggedIn()){
 
                         $objVendorSession->unsCreatedBy();
+                        //$this->_productAction->updateAttributes([$objProduct->getId()],['is_approved' => 1], \Magento\Store\Model\Store::DEFAULT_STORE_ID);
                         return $resultRedirect->setPath($vendorUrl);
 
                     }else{
 
                         $objVendorSession->unsCreatedBy();
                         $objVendorSession->setVendorAsLoggedIn($objVendor);
-                        
                         if (!$objVendorSession->getBeforeAuthUrl()) {
                             $objVendorSession->setBeforeAuthUrl($vendorUrl);
                         }
-                        return $resultRedirect->setPath($vendorUrl);    
+                        //$this->_productAction->updateAttributes([$objProduct->getId()],['is_approved' => 1], \Magento\Store\Model\Store::DEFAULT_STORE_ID);
+                        return $resultRedirect->setPath($vendorUrl);
                     }
                 }else{
                     $this->messageManager->addError(__('Cannot login as vendor'));

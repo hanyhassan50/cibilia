@@ -1,121 +1,17 @@
-tents($output->getStream())
-        );
-    }
+#!/usr/bin/env sh
 
-    public function testCustomizations()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 10);
-        $bar->setBarWidth(10);
-        $bar->setBarCharacter('_');
-        $bar->setEmptyBarCharacter(' ');
-        $bar->setProgressCharacter('/');
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%%');
-        $bar->start();
-        $bar->advance();
+dir=$(d=${0%[/\\]*}; cd "$d" > /dev/null; cd "../oyejorge/less.php/bin" && pwd)
 
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/10 [/         ]   0%').
-            $this->generateOutput('  1/10 [_/        ]  10%'),
-            stream_get_contents($output->getStream())
-        );
-    }
+# See if we are running in Cygwin by checking for cygpath program
+if command -v 'cygpath' >/dev/null 2>&1; then
+	# Cygwin paths start with /cygdrive/ which will break windows PHP,
+	# so we need to translate the dir path to windows format. However
+	# we could be using cygwin PHP which does not require this, so we
+	# test if the path to PHP starts with /cygdrive/ rather than /usr/bin
+	if [[ $(which php) == /cygdrive/* ]]; then
+		dir=$(cygpath -m "$dir");
+	fi
+fi
 
-    public function testDisplayWithoutStart()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->display();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testDisplayWithQuietVerbosity()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(true, StreamOutput::VERBOSITY_QUIET), 50);
-        $bar->display();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            '',
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testFinishWithoutStart()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->finish();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput(' 50/50 [============================] 100%'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testPercent()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  1/50 [>---------------------------]   2%').
-            $this->generateOutput('  2/50 [=>--------------------------]   4%'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testOverwriteWithShorterLine()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%%');
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-
-        // set shorter format
-        $bar->setFormat(' %current%/%max% [%bar%]');
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  0/50 [>---------------------------]   0%').
-            $this->generateOutput('  1/50 [>---------------------------]   2%').
-            $this->generateOutput('  2/50 [=>--------------------------]     '),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testStartWithMax()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream());
-        $bar->setFormat('%current%/%max% [%bar%]');
-        $bar->start(50);
-        $bar->advance();
-
-        rewind($output->getStream());
-        $this->assertEquals(
-            $this->generateOutput(' 0/50 [>---------------------------]').
-            $this->generateOutput(' 1/50 [>---------------------------]'),
-            stream_get_contents($output->getStream())
-        );
-    }
-
-    public function testSetCurrentProgress()
-    {
-        $bar = new ProgressBar($output = $this->getOutputStream(), 50);
-        $bar->start();
-        $bar->display();
-        $bar->advance();
-        $bar->setProgre
+dir=$(echo $dir | sed 's/ /\ /g')
+"${dir}/lessc" "$@"

@@ -123,7 +123,7 @@ class RateReq extends DataObject
         $cacheKey = implode('-', [
             intval($vendor && $vendor->getData('tiership_use_v2_rates')),
             $this->getDeliveryType(),
-            serialize($extraCond)
+            $this->_hlp->serialize($extraCond)
         ]);
         $tierRates = [];
 

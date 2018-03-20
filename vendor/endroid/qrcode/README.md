@@ -20,7 +20,18 @@ Use [Composer](https://getcomposer.org/) to install the library.
 $ composer require endroid/qrcode
 ```
 
-## Usage
+## Basic usage
+
+```php
+use Endroid\QrCode\QrCode;
+
+$qrCode = new QrCode('Life is too short to be generating QR codes');
+
+header('Content-Type: '.$qrCode->getContentType());
+echo $qrCode->writeString();
+```
+
+## Advanced usage
 
 ```php
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -61,7 +72,9 @@ $response = new Response($qrCode->writeString(), Response::HTTP_OK, ['Content-Ty
 
 ## Symfony integration
 
-Register the Symfony bundle in the kernel.
+When you use Symfony Flex, the bundle is automatically registered and the
+configuration and routes are automatically created when you installed the
+package. In other scenarios you can register the bundle as follows.
 
 ```php
 // app/AppKernel.php
@@ -79,7 +92,7 @@ The bundle makes use of a factory to create QR codes. The default parameters
 applied by the factory can optionally be overridden via the configuration.
 
 ```yaml
-endroid_qrcode:
+endroid_qr_code:
     writer: 'png'
     size: 300
     margin: 10
@@ -115,8 +128,7 @@ This step can be skipped if you only use data URIs to display your images.
 
 ``` yml
 EndroidQrCodeBundle:
-    resource: "@EndroidQrCodeBundle/Controller/"
-    type:     annotation
+    resource: "@EndroidQrCodeBundle/Resources/config/routing.yml"
     prefix:   /qrcode
 ```
 

@@ -1,12 +1,16 @@
 <?php $this->helper('Cibilia\Cibilians\Helper\Customer')->redirectIfNotLoggedIn();?>
 <?php  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-       $customerSession = $objectManager->create('Magento\Customer\Model\Session');?>
-       
-<div id="alertsuccessmsg"></div>
+       $customerSession = $objectManager->create('Magento\Customer\Model\Session');
+       $subDomian   =   str_replace('http://','.',$block->getBaseUrl());
+       $helper =   $this->helper('StageBit\CustomCode\Helper\Data');
+?>
+<div class="message-error error message">
+    <div id="alertsuccessmsg"></div>
+</div>
 <div id="alerterrormsg"></div>
 <div class="loading-mask" data-role="loader" style="display: none;">
 	<div class="loader">
-		<img alt="Loading..." src="http://tst.foodmakers.cibilia.com/pub/static/frontend/Magento/luma/en_GB/images/loader-2.gif">
+		<img alt="Loading..." src="<?php echo $helper->getMediaUrl().'loader/loader-2.gif'?>">
 		<p>Please wait...</p>
 	</div>
 </div>
@@ -99,17 +103,20 @@
   </fieldset>
 </div>
 <div id="step2" style="display:none">
-		<?php $product_categories = $block->productcategories(); ?>
+    <fieldset class="fieldset">
+        <?php $product_categories = $block->productcategories(); ?>
 		<?php if(count($product_categories) > 0){ ?>
 			<div class="field required">
 				<label for="product_categories" class="label"><span><?php echo __('In which categories your products fit in?') ?></span></label>
 				<div class="control">
-					<select class="validate-select" title="<?php echo __('In which categories your products fit in?') ?>" name="product_categories[]" id="product_categories[]" multiple="multiple" required>
+					<select class="validate-select" title="<?php echo __('In which categories your products fit in?') ?>" name="product_categories[]" id="product_categories" multiple="multiple" required>
 						<?php foreach ($product_categories as $key => $value) { ?>
-							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+                            <?php if($value['label'] == 'Pick relevant categories:') { continue; } else { ?>
+							    <option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+                            <?php } ?>
 						<?php } ?>
 					</select>
-				</div>
+                </div>
 			</div>
 		<?php } ?>
 		
@@ -118,9 +125,11 @@
 			<div class="field required">
 				<label for="product_sell_place[]" class="label"><span><?php echo __('Where do you currently sell your products?') ?></span></label>
 				<div class="control">
-					<select class="validate-select" title="<?php echo __('Where do you currently sell your products?') ?>" name="product_sell_place[]" id="product_sell_place[]" multiple="multiple" required>
+					<select class="validate-select" title="<?php echo __('Where do you currently sell your products?') ?>" name="product_sell_place[]" id="product_sell_place" multiple="multiple" required>
 						<?php foreach ($product_sell_place as $key => $value) { ?>
-							<option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+                            <?php if($value['label'] == 'Please select') { continue; } else { ?>
+							    <option value="<?php echo $value['value']; ?>"><?php echo $value['label']; ?></option>
+                            <?php } ?>
 						<?php } ?>
 					</select>
 				</div>
@@ -135,7 +144,7 @@
 		<div class="field name required">
 			<label class="label" for="telephone"><span><?php echo __('Phone Number') ?></span></label>
 			<div class="control">
-				<input name="telephone" id="telephone" title="<?php echo __('Phone Number') ?>" value="" class="input-text" type="text" data-validate="{required:false}" required />
+				<input name="telephone" id="telephone" title="<?php echo __('Phone Number') ?>" value="" class="input-text validate-digits required-entry" minlength="10" maxlength="12" type="text" data-validate="{required:false}" required />
 			</div>
 		</div>
 		<?php $bestTimetocall = $block->bestTimetocall(); ?>
@@ -191,16 +200,24 @@
 			<label class="label" for="url_key"><span><?php echo __('Preferred subdomain name') ?></span></label>
 			<div class="control">
 				<input name="url_key" id="url_key" title="<?php echo __('Preferred subdomain name') ?>" value="" class="input-text" type="text" />
-				<strong>.cibilia.com</strong>
+				<strong><?php echo substr($subDomian,0,-1); ?></strong>
 			</div>
 		</div>
 		<div class="field required">
-			<label class="label" for="logo"><span>Logo Image</span></label>
-			<input id="logo" name="logo" value="" type="file" class="input-file">
+			<label class="label" for="logo"><span><?php echo __('Logo Image'); ?></span></label>
+            <div class="control">
+			    <input id="logo" name="logo" type="file" class="input-file" />
+                <div class="clearfix"></div>
+                <span>(supported file: svg, png, jpg, jpeg)</span>
+            </div>
 		</div>
 		<div class="field">
-			 <label class="label" for="company_photos"><span>Company Photos </span></label>
-		     <input id="company_photos" name="company_photos" value="" type="file" class=" input-file">
+			 <label class="label" for="company_photos"><span><?php echo __('Photo to the label of the product you wish to add'); ?></span></label>
+             <div class="control">
+                <input id="company_photos" name="company_photos" type="file" class=" input-file" />
+                <div class="clearfix"></div>
+                <span>(supported file: jpg, jpeg)</span>
+             </div>
 		</div>
 		<div class="actions-toolbar">
 			<div class="primary">
@@ -216,7 +233,7 @@
 </div>
 </form>
 <script type="text/javascript">
-require(["jquery", "prototype", "varien/form"], function(jQuery) {
+require(["jquery", "prototype", "varien/form", "bootstrapMin", "bootstrapMultiselect"], function($) {
 	
 	jQuery(document).ready(function($){
 		$("#form_key").val($("input[name=form_key]").val());
@@ -227,48 +244,31 @@ require(["jquery", "prototype", "varien/form"], function(jQuery) {
 			if($("#cibilians-advertisers-form").valid()){
 				var employee = $("#company_employee").val();
 				var type = $("#company_type").val();
-				if((employee == "more_than_50" && type =="yes") || (employee == "more_than_50" || type =="yes")){
+				if((employee == "more_than_50" && type =="yes") || (employee == "more_than_50" || type =="yes")) {
+                    $(".loading-mask").css("display","block");
+                    setTimeout(function(){
+                        $("#alertsuccessmsg").html("Sorry, we regret to inform you that we are looking for small companies with no more than 50 employees. Thank you for your interest in cibilia.com.").css("color", "red");
+                        $('.message-error').css('display','block');
+                        $(".loading-mask").hide();
+                    }, 1000);
+
+                    setTimeout(function () {
+                        $('.message-error').css('display','none');
+                        $("#alertsuccessmsg").html('');
+                    }, 6000);
+                } else {
 					$(".loading-mask").css("display","block");
-					$.ajax({
-						url:'<?php echo $this->getUrl('cibilians/advertisers/post')?>', 
-						type: 'POST',
-						data: $('#cibilians-advertisers-form').serialize(),
-						error: function(transport){
-							alert('Error during form submission');
-						},
-						success: function (responseText){
-							$(".loading-mask").css("display","none");
-							if(responseText == "success"){
-								$("#alertsuccessmsg").html("Sorry, we regret to inform you that we are looking for small companies with no more than 50 employees. Thank you for your interest in cibilia.com.").css("color","red");
-								setTimeout(function(){
-									$("#alertsuccessmsg").html('');
-								}, 6000);
-								$('#vendor_name').val("");
-								$('#owner_name').val("");
-								$('#your_role').val("owner");
-								$('#company_address').val("");
-								$('#email').val("");
-								$('#company_employee').val(1);
-								$('#company_type').val("yes");
-							} else if(responseText == "error"){
-								$("#alerterrormsg").html("Error occured while saving your details, please try again.").css("color","red");
-								setTimeout(function(){
-									$("#alerterrormsg").html('');
-								}, 6000);
-							}
-						}
-					});
-				}else{
-					$(".loading-mask").css("display","block");
-					setTimeout(function(){		
-						$("#step1").hide();
-					}, 6000);
-					
-					setTimeout(function(){
-						$("#step2").show();
-						$(".loading-mask").css("display","none");
-					}, 6000);
-				}
+
+                    setTimeout(function(){
+                        $("#step1").hide();
+                    }, 6000);
+
+                    setTimeout(function(){
+                        $("#step2").show();
+                        $(".loading-mask").css("display","none");
+                    }, 6000);
+
+                }
 			}
 		});
 		
@@ -297,6 +297,18 @@ require(["jquery", "prototype", "varien/form"], function(jQuery) {
 				}, 6000);
 			}
 		});
-	});
+
+        $('#product_categories').multiselect({
+            includeSelectAllOption: true,
+            maxHeight: 150,
+        });
+
+        $('#product_sell_place').multiselect({
+            includeSelectAllOption: true,
+            maxHeight: 150,
+        });
+
+    });
+
 });
 </script>

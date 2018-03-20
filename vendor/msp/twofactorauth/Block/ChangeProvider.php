@@ -22,19 +22,13 @@ namespace MSP\TwoFactorAuth\Block;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\Registry;
-use Magento\User\Api\Data\UserInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\User;
 use MSP\TwoFactorAuth\Api\TfaInterface;
-use MSP\TwoFactorAuth\Model\ProviderInterface;
+use MSP\TwoFactorAuth\Api\ProviderInterface;
 
 class ChangeProvider extends Template
 {
-    /**
-     * @var Registry
-     */
-    private $registry;
-
     /**
      * @var TfaInterface
      */
@@ -45,58 +39,70 @@ class ChangeProvider extends Template
      */
     private $session;
 
+    /**
+     * ChangeProvider constructor.
+     * @param Template\Context $context
+     * @param Session $session
+     * @param TfaInterface $tfa
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
-        Registry $registry,
         Session $session,
         TfaInterface $tfa,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->registry = $registry;
         $this->tfa = $tfa;
         $this->session = $session;
+
+        if (!isset($data['provider'])) {
+            throw new \InvalidArgumentException('A provider must be specified');
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsLayout()
+    {
+        $providers = [];
+        foreach ($this->getProvidersList() as $provider) {
+            $providers[] = [
+                'code' => $provider->getCode(),
+                'name' => $provider->getName(),
+                'auth' => $this->getUrl($provider->getAuthAction()),
+                'icon' => $this->getViewFileUrl($provider->getIcon()),
+            ];
+        }
+
+        $this->jsLayout['components']['msp-twofactorauth-change-provider']['switchIcon'] =
+            $this->getViewFileUrl('MSP_TwoFactorAuth::images/change_provider.png');
+        $this->jsLayout['components']['msp-twofactorauth-change-provider']['providers'] = $providers;
+
+        return parent::getJsLayout();
     }
 
     /**
      * Get user
      * @return User|null
      */
-    protected function getUser()
+    private function getUser()
     {
         return $this->session->getUser();
-    }
-
-    /**
-     * Get current 2FA provider if defined
-     * @return string|null
-     */
-    public function getCurrentProviderCode()
-    {
-        return $this->registry->registry('msp_tfa_current_provider');
-    }
-
-    /**
-     * Return true if current provider is active
-     * @return bool
-     */
-    public function getCurrentProviderIsActive()
-    {
-        $currentProvider = $this->tfa->getProvider($this->getCurrentProviderCode());
-        return $currentProvider->getIsActive($this->getUser());
     }
 
     /**
      * Get a list of available providers
      * @return ProviderInterface[]
      */
-    public function getProvidersList()
+    private function getProvidersList()
     {
         $res = [];
 
-        $providers = $this->tfa->getUserProviders($this->getUser());
+        $providers = $this->tfa->getUserProviders($this->getUser()->getId());
         foreach ($providers as $provider) {
-            if ($provider->getCode() != $this->getCurrentProviderCode()) {
+            if ($provider->getCode() != $this->getData('provider')) {
                 $res[] = $provider;
             }
         }

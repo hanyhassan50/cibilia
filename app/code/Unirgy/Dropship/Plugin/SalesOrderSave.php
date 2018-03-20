@@ -6,12 +6,12 @@ use \Unirgy\Dropship\Helper\ProtectedCode;
 class SalesOrderSave
 {
     /**
-     * @var ProtectedCode
+     * @var \Unirgy\Dropship\Helper\ProtectedCode\OrderSave
      */
     protected $_hlpPr;
 
     public function __construct(
-        ProtectedCode $helperProtectedCode
+        \Unirgy\Dropship\Helper\ProtectedCode\OrderSave $helperProtectedCode
     )
     {
         $this->_hlpPr = $helperProtectedCode;
@@ -23,4 +23,5 @@ class SalesOrderSave
         }
         return $result;
     }
+
 }

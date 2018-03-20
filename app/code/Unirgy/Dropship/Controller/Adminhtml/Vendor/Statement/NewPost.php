@@ -5,10 +5,9 @@ namespace Unirgy\Dropship\Controller\Adminhtml\Vendor\Statement;
 use \Magento\Backend\App\Action\Context;
 use \Magento\Backend\Helper\Data as BackendHelperData;
 use \Magento\Framework\Controller\Result\RedirectFactory;
-use \Magento\Framework\Date;
-use \Magento\Framework\Model\Locale;
 use \Unirgy\Dropship\Helper\Data as HelperData;
 use \Unirgy\Dropship\Model\Vendor;
+use \Magento\Framework\Controller\ResultFactory;
 
 class NewPost extends AbstractStatement
 {
@@ -82,16 +81,14 @@ class NewPost extends AbstractStatement
 
         $n = sizeof($vendors);
         $i = 0;
-        ob_implicit_flush();
-        echo "<html><body>Generating {$n} vendor statements<hr/>";
+        $resultHtml = "<html><body>Generating {$n} vendor statements<hr/>";
 
-        $generator = $this->_hlp->createObj('\Unirgy\Dropship\Model\Pdf\Statement');
         foreach ($vendors as $vId) {
-            echo "Vendor ID {$vId} (".(++$i)."/{$n}): ";
+            $resultHtml .= "Vendor ID {$vId} (".(++$i)."/{$n}): ";
             try {
                 $statement = $this->_hlp->createObj('\Unirgy\Dropship\Model\Vendor\Statement');
                 if ($statement->load("{$vId}-{$period}", 'statement_id')->getId()) {
-                    echo "<span style='color:#888'>ALREADY EXISTS</span>.<br/>";
+                    $resultHtml .= "<span style='color:#888'>ALREADY EXISTS</span>.<br/>";
                     continue;
                 }
                 $statement->addData(array(
@@ -110,14 +107,14 @@ class NewPost extends AbstractStatement
 
                 $statement->save();
             } catch (\Exception $e) {
-                echo "<span style='color:#F00'>ERROR</span>: ".$e->getMessage()."<br/>";
+                $resultHtml .= "<span style='color:#F00'>ERROR</span>: ".$e->getMessage()."<br/>";
                 continue;
             }
-            echo "<span style='color:#0F0'>DONE</span>.<br/>";
+            $resultHtml .= "<span style='color:#0F0'>DONE</span>.<br/>";
         }
 
         $redirectUrl = $this->_helper->getUrl('*/*/index');
-        echo "<hr>".__('All done, <a href="%1">click here</a> to be redirected to statements grid.', $redirectUrl);
-        exit;
+        $resultHtml .= "<hr>".__('All done, <a href="%1">click here</a> to be redirected to statements grid.', $redirectUrl);
+        return $this->resultFactory->create(ResultFactory::TYPE_RAW)->setContents($resultHtml);
     }
 }

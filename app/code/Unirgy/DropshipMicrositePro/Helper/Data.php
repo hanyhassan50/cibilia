@@ -267,20 +267,11 @@ class Data extends AbstractHelper
 
     public function serialize($value)
     {
-        return Json::encode($value);
+        return $this->_hlp->serialize($value);
     }
     public function unserialize($value)
     {
-        if (empty($value)) {
-            $value = empty($value) ? [] : $value;
-        } elseif (!is_array($value)) {
-            if (strpos($value, 'a:')===0) {
-                $value = @unserialize($value);
-            } elseif (strpos($value, '{')===0 || strpos($value, '[{')===0) {
-                $value = Json::decode($value);
-            }
-        }
-        return $value;
+        return $this->_hlp->unserialize($value);
     }
 
 }

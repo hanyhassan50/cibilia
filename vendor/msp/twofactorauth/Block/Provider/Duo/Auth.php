@@ -22,7 +22,6 @@ namespace MSP\TwoFactorAuth\Block\Provider\Duo;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Model\Auth\Session;
-use MSP\TwoFactorAuth\Api\TfaInterface;
 use MSP\TwoFactorAuth\Model\Provider\Engine\DuoSecurity;
 
 class Auth extends Template
@@ -33,52 +32,35 @@ class Auth extends Template
     private $duoSecurity;
 
     /**
-     * @var TfaInterface
-     */
-    private $tfa;
-
-    /**
      * @var Session
      */
     private $session;
 
     public function __construct(
         Template\Context $context,
-        TfaInterface $tfa,
         Session $session,
         DuoSecurity $duoSecurity,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->duoSecurity = $duoSecurity;
-        $this->tfa = $tfa;
         $this->session = $session;
     }
 
     /**
-     * Get API hostname
-     * @return string
+     * @inheritdoc
      */
-    public function getApiHost()
+    public function getJsLayout()
     {
-        return $this->duoSecurity->getApiHostname();
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['postUrl'] =
+            $this->getUrl('*/*/authpost', ['form_key' => $this->getFormKey()]);
 
-    /**
-     * Get API signature
-     * @return string
-     */
-    public function getSignature()
-    {
-        return $this->duoSecurity->getRequestSignature($this->session->getUser());
-    }
+        $this->jsLayout['components']['msp-twofactorauth-auth']['signature'] =
+            $this->duoSecurity->getRequestSignature($this->session->getUser());
 
-    /**
-     * Get post action
-     * @return string
-     */
-    public function getPostAction()
-    {
-        return $this->getUrl('*/*/authpost', ['form_key' => $this->getFormKey()]);
+        $this->jsLayout['components']['msp-twofactorauth-auth']['apiHost'] =
+            $this->duoSecurity->getApiHostname();
+
+        return parent::getJsLayout();
     }
 }

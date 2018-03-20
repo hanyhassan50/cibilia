@@ -10,7 +10,7 @@ abstract class AbstractVendor extends Action
 {
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Unirgy_DropshipShippingClass::sales_udropship_udshipclass_vendor');
+        return $this->_authorization->isAllowed('Unirgy_DropshipShippingClass::shipclass_vendor');
     }
 
     /**

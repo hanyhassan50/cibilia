@@ -2,12 +2,14 @@
 /**
  * Test for \Magento\Framework\Filesystem\Driver\File
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Driver;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Filesystem\DriverInterface;
+
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Driver\File

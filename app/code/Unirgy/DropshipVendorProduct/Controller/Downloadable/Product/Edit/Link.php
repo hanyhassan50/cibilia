@@ -79,6 +79,6 @@ class Link extends AbstractEdit
                 $this->messageManager->addError(__('An error occurred while getting the requested content.'));
             }
         }
-        exit(0);
+        return;
     }
 }

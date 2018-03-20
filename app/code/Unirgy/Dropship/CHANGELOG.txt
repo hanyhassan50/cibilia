@@ -1,3 +1,230 @@
+===== 3.2.7 =====
+  * Fixed Invalid template file: 'Magento_OfflinePayments::info/pdf/checkmo.phtml' when print PO PDF
+  * Added extra result to label/batch - setNewTracks
+
+===== 3.2.6 =====
+  * Added cleanShipmentEmptyTracks in case label request failed to eliminate further
+    'Cannot save track: Number is a required field'
+  * Fixed labels custom rendering support
+  * Added support to render PDF labels when label file is PDF document instead of PNG image
+
+===== 3.2.5 =====
+  * Fixed vendor edit > associated products doesn't show all products
+
+===== 3.2.4 =====
+  * Fixed  Class \Magento\Sales\Api\Data\ShipmentTrackInterface[] does not exist in vendor/magento/framework/Reflection/MethodsMap.php
+
+===== 3.2.3 =====
+  * Added own serialized config backend model
+
+===== 3.2.2 =====
+  * Fixed stock indexer compatibility with 2.2
+
+===== 3.2.1 =====
+  * Fixed refunds calculation when apply commission on shipping = yes
+
+===== 3.1.63 =====
+  * Removed orphaned uploader js include
+
+===== 3.1.62 =====
+  * Fixed admin vendor edit > associated products tab > price renderer when default currency is different then base
+  * Fixed mass packing slip printing starts new page not from the top
+
+===== 3.1.61 =====
+  * Added split db support
+
+===== 3.1.60 =====
+  * Fixed vendor edit > associated products tab > special from/to date not saved
+  * Added try/catch for send vendor notification to eliminate order place fail
+
+===== 3.1.59 =====
+  * Fixed Shipment Details report vendor filter
+
+===== 3.1.58 =====
+  * Fixed devision by zero with 0 checkout in protected file
+  * Fixed udropship_vendor attribute source model flat column definition
+
+===== 3.1.57 =====
+  * Fixed 'Some items are not available for your location' error does not allow change address
+
+===== 3.1.56 =====
+  * Another workaround for magento shipment getTracks, getTracksCollection bug
+
+===== 3.1.55 =====
+  * Another workaround for magento shipment getComments, getCommentsCollection bug
+  * Fixed login form POST can redirect to blank page on some webservers
+
+===== 3.1.54 =====
+  * Fixed multiselect vendor field with multiple values not rendered on settings page
+
+===== 3.1.53 =====
+  * Fixed rest API shipment call
+  * Fixed admin shipments grid toolbar
+
+===== 3.1.52 =====
+  * Added getResizedLogoUrl method in vendor model
+
+===== 3.1.51 =====
+  * Fixed wrong Refundrow reference to RefundRow class
+
+===== 3.1.50 =====
+  * Fixed duplicate items in low stock notification collection
+
+===== 3.1.49 =====
+  * Fixed notify low stock when multiple vendors involved
+  * Fixed messages does not appear in vendor portal after redirect
+  * Fixed flat indexer and sorting by dropship vendor
+  * Fixed \Unirgy\Dropship\Model\ResourceModel\ShipmentGridCollection calls after load on non-full shipment items
+
+===== 3.1.48 =====
+  * Fixed header template doing wrong check in isModuleActive
+
+===== 3.1.47 =====
+  * Fixed usage of setBodyText instead of setBody in mail sending
+  * Fixed VendorAssetImage in CE 2.1.7
+
+===== 3.1.46 =====
+  * Fixed file uploader
+
+===== 3.1.45 =====
+  * Added support for customvars_exclude subnode in vendor fields to instruct not to save field in custom vars serialized, e.g. when processing vendor field separately
+
+===== 3.1.44 =====
+  * Added uploader class that support uploads from admin config
+
+===== 3.1.43 =====
+  * Fixed missing link in vendor portal header
+
+===== 3.1.42 =====
+  * Fixed MEQP2 compatibility
+
+===== 3.1.41 =====
+  * Fixed vendor logo resize in 2.1.6
+
+===== 3.1.40 =====
+  * Fixed composer.json
+  * Fixed notification on tracking add refer wrong module
+  * Fixed categories load with url rewrites in vendor portal when flat enabled
+  * Fixes for 2.2 compatibility
+
+===== 3.1.39 =====
+  * Fixed statement calculation when apply commission on tax = yes and tax display = exclude
+  * Fixed vendor/product association in non-multivendor dropship in EE
+
+===== 3.1.38 =====
+  * Fixed UPS labels printing when using global labels config
+
+===== 3.1.37 =====
+  * Fixed manual create PO pages doesn't preselect correct system method
+
+===== 3.1.36 =====
+  * Fixed vendor save and continue doesn't redirect back to edit page
+  * Fixed magento core shipments collection load doesn't unserialize fields
+  * Fixed vendor edit shipping extra
+
+===== 3.1.35 =====
+  * Fixed scope code resolver in config plugin for magento<2.1.3
+
+===== 3.1.34 =====
+  * Fixed broken compatibility with magento <2.1.3
+
+===== 3.1.33 =====
+  * Fixed stock tab save does not update when multivendor installed but not turned on
+  * Fixed "save and continue" vendor button does not validate form
+  * Workaround in vendor edit form when magento form validator does not skip disabled fields
+  * Workaround 2.1.3 does not allow modify store config runtime
+
+===== 3.1.32 =====
+  * Fixed shipments collection load doesn't unserialize fields
+
+===== 3.1.31 =====
+  * Added getDefaultDateFormat in dropship helper
+  * Fixed refund commission calculation when tax excluded
+  * Fixed helper::getSalesEntityVendors method 3
+
+===== 3.1.30 =====
+  * Fixed out of stock products can't be changed to in stock in vendor portal stock menu item
+
+===== 3.1.29 =====
+  * Fixed helper::getSalesEntityVendors method 2
+
+===== 3.1.28 =====
+  * Fixed vendor portal "Export Orders" massaction in POs grid (if batch add-on installed)
+
+===== 3.1.27 =====
+  * Fixed cart add/update when products out of stock
+
+===== 3.1.26 =====
+  * Fixed error during cart item delete with price comparison installed
+  * Fixed impossible to setup custom vendor portal route frontname
+  * Fixed helper::getSalesEntityVendors method
+
+===== 3.1.25 =====
+  * Fixed new statement form vendor autocomplete dropdown
+  * Fixed helper getVersion method
+
+===== 3.1.24 =====
+  * Fixed indexer compatibility with EE 2.1
+
+===== 3.1.23 =====
+  * Fixed price and stock index filters hide vendor products in products grids in vendor portal
+
+===== 3.1.22 =====
+  * Fixed productHelper::multiUpdateAttributes on EE 2.1.
+  * Fixed recently broken test server link when generate fedex labels
+
+===== 3.1.21 =====
+  * Fixed customer email not being sent when split to POs happens on order place and configured vendor notifications. More wider problem caused by magento use default message as injectable in transport builder. But it should be non-injectable
+
+===== 3.1.20 =====
+  * Fixed vendor po notification doesn't render items
+  * Fixed error in vendor portal add track for vendors that don't have preferred carrier selected
+
+===== 3.1.19 =====
+  * Fixed afterDownloadSubmit wrong reference in vendor portal shipments grid
+
+===== 3.1.18 =====
+  * Fixed endicia labels
+  * Fixed after POs generated status change
+
+===== 3.1.17 =====
+  * Fixed ajax shipping methods updater does not update state
+
+===== 3.1.16 =====
+  * Fixed ajax shipping methods updater on checkout
+  * Fixed ACL references
+
+===== 3.1.15 =====
+  * Fixed fedex label v12 location url
+
+===== 3.1.14 =====
+  * Fixed intermittent error during vendor save 'column entity_id is ambiguous'
+  * Fixed vendor portal product edit categories load when using https
+
+===== 3.1.13 =====
+  * Fixed https links in notification emails
+
+===== 3.1.12 =====
+  * Fixed stock update redirect
+
+===== 3.1.11 =====
+  * Fixed generate label
+
+===== 3.1.10 =====
+  * Added check for email exists in password reset
+
+===== 3.1.9 =====
+  * Added workaround for magento bug related to order_item.product_options field beeing double serialized after load/save
+
+===== 3.1.8 =====
+  * Added different error messages when vendor login failed for disabled/rejected accounts
+
+===== 3.1.7 =====
+  * Fixed vendor logo resize
+
+===== 3.1.6 =====
+  * Fixed protected compatibility with php7 ioncube
+
 ===== 3.1.5 =====
   * Fixed vendors autocomplete select
 

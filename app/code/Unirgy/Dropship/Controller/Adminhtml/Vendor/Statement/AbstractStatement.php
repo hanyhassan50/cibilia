@@ -33,6 +33,8 @@ abstract class AbstractStatement extends Action
      */
     protected $_fileFactory;
 
+    protected $_resultRedirectFactory;
+
     public function __construct(
         \Unirgy\Dropship\Helper\Data $udropshipHelper,
         \Magento\Framework\Registry $registry,

@@ -1,42 +1,108 @@
 <?php
-namespace Cibilia\Idproofs\Controller\Index; 
 
-class Vendorpost extends \Magento\Framework\App\Action\Action {
-   
-    
-	public function execute()
+namespace Cibilia\Idproofs\Controller\Index;
+
+use Magento\Framework\App\Action\Context;
+
+/**
+ * Class Vendorpost
+ *
+ * @package Cibilia\Idproofs\Controller\Index
+ */
+class Vendorpost extends \Magento\Framework\App\Action\Action
+{
+    /**
+     * @var \Unirgy\Dropship\Model\Vendor
+     */
+    protected $_vendor;
+
+    /**
+     * @var \Cibilia\Idproofs\Model\Idproof
+     */
+    protected $_idproof;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @var \StageBit\CustomCode\Helper\Data
+     */
+    protected $_stagebitHelper;
+
+    /**
+     * @var \StageBit\CustomCode\Model\VendorEmail
+     */
+    protected $_vendorApproveEmail;
+
+    /**
+     * Vendorpost constructor.
+     *
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Unirgy\Dropship\Model\Vendor $vendor
+     * @param \Cibilia\Idproofs\Model\Idproof $idproof
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     */
+    public function __construct(
+        \StageBit\CustomCode\Helper\Data $stagebitHelper,
+        \Unirgy\Dropship\Model\Vendor $vendor,
+        \Cibilia\Idproofs\Model\Idproof $idproof,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \StageBit\CustomCode\Model\VendorEmail $vendorEmail,
+        Context $context
+    )
+    {
+        $this->_stagebitHelper = $stagebitHelper;
+        $this->_vendor  =   $vendor;
+        $this->_idproof =   $idproof;
+        $this->_storeManager    =   $storeManager;
+        $this->_vendorApproveEmail = $vendorEmail;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
+    public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ( $this->getRequest()->getPost() ) {
+        if ($this->getRequest()->getPost()) {
             $r = $this->getRequest();
-            $hlp = $this->_hlp;
             try {
                 $id = $r->getParam('id');
                 $data = $r->getParams();
-                
-                $data['vendor_attn'] = $data['vendor_fname'].' '.$data['vendor_lname'];
-            	$data['password_confirm'] = $data['password'];
-            	if(isset($data['vendor_categories'])){
+
+                if($_FILES['logo']['size'] > 0) {
+                    $data['logo']   =   $this->_stagebitHelper->_uploadVendorImage('logo', $id);
+                }
+
+                if($_FILES['company_photos']['size'] > 0) {
+                    $data['company_photos'] = $this->_stagebitHelper->_uploadVendorImage('company_photos', $id);
+                }
+
+                $data['vendor_attn'] = $data['owner_name'];
+                $data['password_confirm'] = $data['password'];
+                if (isset($data['vendor_categories'])) {
                     $data['vendor_categories'] = implode(',', $data['vendor_categories']);
                 }
-                
-                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-    			$model = $objectManager->create('\Unirgy\Dropship\Model\Vendor')->load($id);
 
+                $model = $this->_vendor->load($id);
 
-                //$hlp->processPostMultiselects($data);
                 $model->addData($data);
 
                 $model->save();
-                
-                //$objectManager->create('Cibilia\Idproofs\Model\Idproof')->_sendVendorTypeSelectEmail($model);
 
-                $objectManager->create('Cibilia\Idproofs\Model\Idproof')->_sendVendorTypeEmail($model);
-                
+                $this->_vendorApproveEmail->_sentVendorApproveNotifyEmailToCibilia($model);
+
+                $this->_idproof->_sendVendorTypeEmail($model);
+
                 $this->messageManager->addSuccess(__('Vendor Information successfully saved.'));
 
                 $model->setIsInfoReviewed(1);
-                
+
                 $model->setStatus('V');
 
                 $model->save();
@@ -46,8 +112,7 @@ class Vendorpost extends \Magento\Framework\App\Action\Action {
                 $this->messageManager->addError($e->getMessage());
             }
         }
-        $storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
-		        
-        return $resultRedirect->setPath($storeManager->getStore()->getBaseUrl());
+       return $resultRedirect->setPath($this->_storeManager->getStore()->getBaseUrl());
     }
+
 }

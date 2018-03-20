@@ -79,6 +79,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $this->setVendor($vendor);
         $this->_initLowstockSelect();
+        $this->groupByAttribute('entity_id');
         $this->addAttributeToFilter('status', array('in'=>array(Status::STATUS_ENABLED)));
         return $this;
     }

@@ -61,7 +61,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
 		\Cibilia\Idproofs\Model\ResourceModel\Idproof\Collection $collectionFactory,
-		\Webkul\CustomRegistration\Block\Adminhtml\Customer\Edit\Tabs $objCustomerIdProofTab,
+		\StageBit\CustomCode\Block\Adminhtml\Customer\Edit\Tabs $objCustomerIdProofTab,
         \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
@@ -137,7 +137,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             $arrCustomerCollection = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()
             ->addAttributeToSelect('approval_status')
             ->addFieldToFilter('idproof', array('neq' => 'NULL' ));
-                
+
             $this->setCollection($arrCustomerCollection);
 
 			parent::_prepareCollection();

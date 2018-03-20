@@ -23,6 +23,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
     <type name="msp_shield" translate="label,description" instance="MSP\Shield\Model\CacheType">
         <label>MageSpecialist Shield</label>
-        <description>Intrusion Prevention System</description>
+        <description>Shield IDS/IPS cache</description>
     </type>
 </config>

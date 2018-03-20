@@ -13,7 +13,7 @@
  * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
- * @package    MSP_SecuritySuiteCommon
+ * @package    MSP_TwoFactorAuth
  * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,7 +39,7 @@ class TfaSession extends SessionManager implements TfaSessionInterface
      * Return true if 2FA session has been passed
      * @return boolean
      */
-    public function getIsGranted()
+    public function isGranted()
     {
         return !!$this->storage->getData(TfaSessionInterface::KEY_PASSED);
     }

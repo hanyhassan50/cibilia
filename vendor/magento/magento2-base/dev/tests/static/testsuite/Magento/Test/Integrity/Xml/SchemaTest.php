@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,15 +8,15 @@ namespace Magento\Test\Integrity\Xml;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class SchemaTest extends \PHPUnit_Framework_TestCase
+class SchemaTest extends \PHPUnit\Framework\TestCase
 {
     public function testXmlFiles()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $filename
-         */
+            /**
+             * @param string $filename
+             */
             function ($filename) {
                 $dom = new \DOMDocument();
                 $xmlFile = file_get_contents($filename);
@@ -35,7 +35,11 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                     . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:Relative_Path/something.xsd"'
                 );
 
-                $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocations[1]);
+                try {
+                    $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocations[1]);
+                } catch (\Exception $exception) {
+                    $errors = [$exception->__toString()];
+                }
                 $this->assertEmpty(
                     $errors,
                     "Error validating $filename against {$schemaLocations[1]}\n" . print_r($errors, true)

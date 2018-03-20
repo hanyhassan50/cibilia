@@ -34,7 +34,7 @@
                 <field id="rates" translate="label" sortOrder="40" type="select" showInDefault="1">
                     <label>Tiered Rates</label>
                     <frontend_model>Unirgy\DropshipTierCommission\Block\Adminhtml\SystemConfigField\Rates</frontend_model>
-                    <backend_model>Magento\Config\Model\Config\Backend\Serialized</backend_model>
+                    <backend_model>Unirgy\Dropship\Model\SystemConfig\Backend\Serialized</backend_model>
                 </field>
                 <field id="fixed_calculation_type" translate="label" sortOrder="50" type="select" showInDefault="1">
                     <label>Fixed Rates Calculation Type</label>

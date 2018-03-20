@@ -1,27 +1,27 @@
-<!--@subject {{trans "New Question"}} {{if question.shipment_id}}{{trans "for Shipment #"}}{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}{{trans "for Product"}} {{var question.product_name}}{{/if}}@-->
+<!--@subject New Question {{if question.shipment_id}}for Shipment #{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}for Product {{var question.product_name}}{{/if}}@-->
 
-{{trans "New Question for"}} {{if question.shipment_id}}{{trans "Shipment #"}}{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}{{trans "Product"}} {{var question.product_name}}{{/if}} {{trans "have been asked."}}
+New Question for {{if question.shipment_id}}Shipment #{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}Product {{var question.product_name}}{{/if}} have been asked. 
 <br/>
-{{trans "Please see details below:"}}
+Please see details below:
 <br/>
 <br/>
-<b>{{trans "Name:"}}</b>  {{var question.customer_name}}
+<b>Name:</b>  {{var question.customer_name}}
 <br/>
 {{if show_customer_info}}
-<b>{{trans "E-mail:"}}</b>  {{var question.customer_email}}
+<b>E-mail:</b>  {{var question.customer_email}}
 <br/>
 {{/if}}
 {{if question.shipment_id}}
-<b>{{trans "Shipment:"}}</b>  {{var question.shipment_increment_id}}
+<b>Shipment:</b>  {{var question.shipment_increment_id}}
 <br/>
 {{/if}}
 {{if question.product_id}}
-<b>{{trans "Product:"}}</b>  {{var question.product_name}}
+<b>Product:</b>  {{var question.product_name}}
 <br/>
 {{/if}}
-<b>{{trans "Question:"}}</b> <pre>{{var question.question_text}}</pre>
+<b>Question:</b> <pre>{{var question.question_text}}</pre>
 
 <br/>
 <br/>
 
-{{trans "You can reply from the"}} <a href="{{var question.getVendorUrl()}}">{{trans "vendor portal"}}</a>
+You can reply from the <a href="{{var question.getVendorUrl()}}">vendor portal</a>

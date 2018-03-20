@@ -20,16 +20,13 @@
 
 namespace MSP\AdminRestriction\Plugin;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\Http;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\UrlInterface;
 use MSP\AdminRestriction\Api\RestrictInterface;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
-use MSP\SecuritySuiteCommon\Api\UtilsInterface;
+use MSP\SecuritySuiteCommon\Api\LockDownInterface;
+use MSP\SecuritySuiteCommon\Api\AlertInterface;
 
 class AppInterfacePlugin
 {
@@ -39,24 +36,9 @@ class AppInterfacePlugin
     private $request;
 
     /**
-     * @var Http
-     */
-    private $http;
-
-    /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
      * @var State
      */
     private $state;
-
-    /**
-     * @var EventInterface
-     */
-    private $event;
 
     /**
      * @var RestrictInterface
@@ -64,52 +46,88 @@ class AppInterfacePlugin
     private $restrict;
 
     /**
-     * @var UtilsInterface
+     * @var LockDownInterface
      */
-    private $utils;
+    private $lockDown;
 
     /**
-     * @var ObjectManagerInterface
+     * @var DeploymentConfig
      */
-    private $objectManager;
+    private $deploymentConfig;
+
+    /**
+     * @var AlertInterface
+     */
+    private $securitySuite;
 
     public function __construct(
         RequestInterface $request,
-        Http $http,
-        UrlInterface $url,
         State $state,
-        EventInterface $event,
         RestrictInterface $restrict,
-        UtilsInterface $utils,
-        ObjectManagerInterface $objectManager
+        DeploymentConfig $deploymentConfig,
+        AlertInterface $securitySuite,
+        LockDownInterface $lockDown
     ) {
         $this->request = $request;
-        $this->http = $http;
-        $this->url = $url;
         $this->state = $state;
         $this->restrict = $restrict;
-        $this->event = $event;
-        $this->utils = $utils;
-        $this->objectManager = $objectManager;
+        $this->lockDown = $lockDown;
+        $this->deploymentConfig = $deploymentConfig;
+        $this->securitySuite = $securitySuite;
     }
 
+    /**
+     * Return true if $uri is a backend URI
+     * @param string $uri
+     * @return bool
+     */
+    private function isBackendUri($uri = null)
+    {
+        $uri = $this->sanitizeUri($uri);
+
+        $backendConfigData = $this->deploymentConfig->getConfigData('backend');
+        $backendPath = $backendConfigData['frontName'];
+
+        // @codingStandardsIgnoreStart
+        $uri = parse_url($uri, PHP_URL_PATH);
+        // @codingStandardsIgnoreEnd
+
+        return (strpos($uri, "/$backendPath/") === 0) || preg_match("|/$backendPath$|", $uri);
+    }
+
+    /**
+     * Get sanitized URI
+     * @param string $uri
+     * @return string
+     */
+    private function sanitizeUri($uri = null)
+    {
+        if ($uri === null) {
+            $uri = $this->request->getRequestUri();
+        }
+
+        $uri = filter_var($uri, FILTER_SANITIZE_URL);
+        $uri = preg_replace('|/+|', '/', $uri);
+        $uri = preg_replace('|^/.+?\.php|', '', $uri);
+
+        return $uri;
+    }
+
+    /**
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
+     */
     public function aroundLaunch(AppInterface $subject, \Closure $proceed)
     {
-        if ($this->utils->isBackendUri()) {
+        if ($this->isBackendUri()) {
             if (!$this->restrict->isAllowed()) {
-                $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                    'module' => 'MSP_AdminRestriction',
-                    'message' => 'Unauthorized access attempt',
-                ]);
+                $this->securitySuite->event(
+                    'MSP_AdminRestriction',
+                    'Unauthorized access attempt',
+                    AlertInterface::LEVEL_WARNING
+                );
 
                 $this->state->setAreaCode('frontend');
-
-                // Must use object manager because a session cannot be activated before setting area
-                $this->objectManager->get('MSP\SecuritySuiteCommon\Api\SessionInterface')
-                    ->setEmergencyStopMessage(__('Unauthorized access attempt'));
-
-                $this->http->setRedirect($this->url->getUrl('msp_security_suite/stop'));
-                return $this->http;
+                return $this->lockDown->doHttpLockdown(__('Unauthorized access attempt'));
             }
         }
 

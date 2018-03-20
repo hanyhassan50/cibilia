@@ -45,4 +45,80 @@ class PromoWidgetChooserSku extends Sku
 
         return Grid::_prepareCollection();
     }
+    public function getGridUrl()
+    {
+        return $this->getUrl(
+            'udpromo/*/chooser',
+            ['_current' => true, 'current_grid_id' => $this->getId(), 'collapse' => null]
+        );
+    }
+    protected function _prepareLayout()
+    {
+        $this->setChild(
+            'export_button',
+            $this->getLayout()->createBlock('Unirgy\DropshipVendorPromotions\Block\Widget\Button')->setData(
+                [
+                    'label' => __('Export'),
+                    'onclick' => $this->getJsObjectName() . '.doExport()',
+                    'class' => 'task',
+                ]
+            )
+        );
+        $this->setChild(
+            'reset_filter_button',
+            $this->getLayout()->createBlock('Unirgy\DropshipVendorPromotions\Block\Widget\Button')->setData(
+                [
+                    'label' => __('Reset Filter'),
+                    'onclick' => $this->getJsObjectName() . '.resetFilter()',
+                    'class' => 'action-reset action-tertiary'
+                ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-reset'
+                ]
+            )
+        );
+        $this->setChild(
+            'search_button',
+            $this->getLayout()->createBlock('Unirgy\DropshipVendorPromotions\Block\Widget\Button')->setData(
+                [
+                    'label' => __('Search'),
+                    'onclick' => $this->getJsObjectName() . '.doFilter()',
+                    'class' => 'task action-secondary',
+                ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-apply'
+                ]
+            )
+        );
+        return \Magento\Backend\Block\Widget\Grid::_prepareLayout();
+    }
+    protected function _prepareFilterButtons()
+    {
+        $this->setChild(
+            'reset_filter_button',
+            $this->getLayout()->createBlock(
+                'Unirgy\DropshipVendorPromotions\Block\Widget\Button'
+            )->setData(
+                [
+                    'label' => __('Reset Filter'),
+                    'onclick' => $this->getJsObjectName() . '.resetFilter()',
+                    'class' => 'action-reset action-tertiary'
+                ]
+            )->setDataAttribute(['action' => 'grid-filter-reset'])
+        );
+        $this->setChild(
+            'search_button',
+            $this->getLayout()->createBlock(
+                'Unirgy\DropshipVendorPromotions\Block\Widget\Button'
+            )->setData(
+                [
+                    'label' => __('Search'),
+                    'onclick' => $this->getJsObjectName() . '.doFilter()',
+                    'class' => 'action-secondary',
+                ]
+            )->setDataAttribute(['action' => 'grid-filter-apply'])
+        );
+    }
 }
