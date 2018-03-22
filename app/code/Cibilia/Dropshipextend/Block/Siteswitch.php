@@ -56,7 +56,7 @@ class Siteswitch extends \Magento\Framework\View\Element\Template
 	            $url = $storeObj->getBaseUrl();
 	            if($url != "http://foodmakers.cibilia-dev.com/")
 	            {
-	                if($name == 'productores.cibilia.com' || $name == 'foodmakers.cibilia.com' || $name == 'produttori.cibilia.com' || $name == 'fabricantes.cibilia.com' || $name == 'lebensmittelhersteller.cibilia.com' || $name == 'fabricants.cibilia.com' ) {
+	                if($name == 'productores.cibilia.com' || $name == 'foodmakers.cibilia.com' || $name == 'produttore.cibilia.com' || $name == 'fabricantes.cibilia.com' || $name == 'lebensmittelhersteller.cibilia.com' || $name == 'fabricants.cibilia.com' ) {
 	                    continue;
                     } else {
                         array_push($_websiteData, array('name' => $name, 'url' => $url, 'code' => $storeCode,'default_store' => $defaultStore, 'locale' => $locale ));
