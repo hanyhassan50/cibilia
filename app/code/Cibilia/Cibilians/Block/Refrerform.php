@@ -216,4 +216,9 @@ class Refrerform
 	
         return $arrCollection;
     }
+
+    public function getVendorStoreId()
+    {
+        return $this->_storeManager->getStore()->getId();
+    }
 }

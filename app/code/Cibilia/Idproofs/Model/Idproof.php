@@ -558,7 +558,12 @@ class Idproof extends \Magento\Framework\Model\AbstractModel
     public function getVendorsStoreId($vendor)
     {
 
-        $vendorsEmail = $vendor->getEmail();
+        if(is_array($vendor)) {
+            $vendorsEmail = $vendor['email'];
+        } else {
+            $vendorsEmail = $vendor->getEmail();
+        }
+
 
         // $store = $this->_storeManager->getDefaultStoreView();
 

@@ -82,9 +82,11 @@ class VendorEmail
             'email' => $cibilia['cemail']
         );
 
+        $storeId = $this->_idproof->getVendorsStoreId($vendor);
+
         $this->inlineTranslation->suspend();
         $transport = $this->_transportBuilder
-            ->setTemplateIdentifier('custom_cibilia_vendor_approve_notifyto_cibilia_template')
+            ->setTemplateIdentifier($this->_idproof->getEmailtemplate('custom_cibilia/vendor_approve_notifyto_cibilia/template',$storeId))
             ->setTemplateOptions($templateOptions)
             ->setTemplateVars($templateVars)
             ->setFrom($senderInfo)

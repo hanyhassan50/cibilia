@@ -126,10 +126,12 @@ class ProductEmail
 
         $to = array($vendorData['email'], $vendorData['cemail']);
 
+        $storeId = $this->idproof->getVendorsStoreId($vendorData);
+
         $this->inlineTranslation->suspend();
 
             $transport = $this->_transportBuilder
-                ->setTemplateIdentifier($this->idproof->getEmailtemplate(self::XML_PATH_PRODUCT_SET_ONLINE_EMAIL_TEMPLATE))
+                ->setTemplateIdentifier($this->idproof->getEmailtemplate(self::XML_PATH_PRODUCT_SET_ONLINE_EMAIL_TEMPLATE, $storeId))
                 ->setTemplateOptions($templateOptions)
                 ->setTemplateVars($templateVars)
                 ->setFrom($senderInfo)

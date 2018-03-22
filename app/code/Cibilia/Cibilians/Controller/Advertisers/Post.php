@@ -6,7 +6,6 @@ use Magento\Store\Model\ScopeInterface;
 use Unirgy\DropshipMicrosite\Model\Source as ModelSource;
 use Unirgy\Dropship\Model\Source;
 use Unirgy\DropshipMicrosite\Controller\Vendor\AbstractVendor;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Post extends AbstractVendor
 {
@@ -15,39 +14,25 @@ class Post extends AbstractVendor
      *
      * @return void
      */
-    // protected $_objectManager;
-	// protected $_scopeConfig;
-    // public function __construct(\Magento\Framework\App\Action\Context $context, ScopeConfigInterface $_scopeConfig)
-    // {
-        // // $this->_objectManager = $objectManager;
-        // parent::__construct($context,$_scopeConfig);
-    // }
 
     public function execute()
     {
 	    $data = $this->getRequest()->getParams();
-		/*echo "<pre>";
-		print_r($data);
-		die;*/
-		
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         
         $customerSession = $objectManager->create('Magento\Customer\Model\Session');
-		
-		$session = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
+
+        $session = ObjectManager::getInstance()->get('Unirgy\Dropship\Model\Session');
         $hlp = $this->_msHlp;
 		$is_ajax = $data["is_ajax"];
 		
         try {
             //$data = $this->getRequest()->getParams();
-            
+
             $data['url_key'] = $this->_createUrlKey(strtolower($data['url_key']));
-            //$data['url_key'] = str_replace(' ', '', $data['vendor_name']);
-			//$data['vendor_attn'] = 'test';
-			$data['password'] = 'vendor123';
-            //$data['vendor_categories'] = implode(',', $data['vendor_categories']);
-            //$data['vendor_website'] = $data['website'];
-			
+            $data['password'] = 'vendor123';
+
             $membership = $this->_hlp->createObj('\Unirgy\DropshipVendorMembership\Model\Membership')->load(3);
 
             if (!$membership->getId()) {
@@ -153,15 +138,12 @@ class Post extends AbstractVendor
 				return;
 			}
         }
-        // return $this->_loginPostRedirect();
-		
-	
-	
         $post = $this->getRequest()->getParams();
 
         $post['vendor_attn'] = $post['vendor_name'].' '.$post['owner_name'];
 		$currenttime = date('Y-m-d H:i:s');
         $model = $this->_objectManager->create('Cibilia\Cibilians\Model\Advertisers');
+        $model->setData('store_id', $post['store_id']);
         $model->setData('referred_by', $customerSession->getCustomerId());
         $model->setData('company_name', $post['vendor_name']);
         $model->setData('website', $post['company_website']);
@@ -174,6 +156,7 @@ class Post extends AbstractVendor
         $model->setData('created_date', $currenttime);
         $model->setData('updated_date', $currenttime);
         $model->setData('published_date', '');
+
         $model->save();
         
         if($is_ajax == 1){

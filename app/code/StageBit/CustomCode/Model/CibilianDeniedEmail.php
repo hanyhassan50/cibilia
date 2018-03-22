@@ -30,24 +30,32 @@ class CibilianDeniedEmail
     protected $_transportBuilder;
 
     /**
+     * @var \Cibilia\Idproofs\Model\Idproof
+     */
+    protected $_idproof;
+
+    /**
      * CibilianDeniedEmail constructor.
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Translate\Inline\StateInterface $state
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Cibilia\Idproofs\Model\Idproof $idproofModel
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Translate\Inline\StateInterface $state,
-        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Cibilia\Idproofs\Model\Idproof $idproofModel
     )
     {
         $this->_scopeConfig =   $scopeConfig;
         $this->storeManager =   $storeManager;
         $this->inlineTranslation =  $state;
         $this->_transportBuilder =   $transportBuilder;
+        $this->_idproof = $idproofModel;
     }
 
 
@@ -74,9 +82,11 @@ class CibilianDeniedEmail
             'email' => $cibilia->getEmail()
         );
 
+        $storeId = $this->_idproof->getCustomerStoreId($cibilia);
+
         $this->inlineTranslation->suspend();
         $transport = $this->_transportBuilder
-            ->setTemplateIdentifier('custom_cibilia_cibilian_idproof_denied_template')
+            ->setTemplateIdentifier($this->_idproof->getEmailtemplate('custom_cibilia/cibilian_idproof_denied/template',$storeId))
             ->setTemplateOptions($templateOptions)
             ->setTemplateVars($templateVars)
             ->setFrom($senderInfo)
