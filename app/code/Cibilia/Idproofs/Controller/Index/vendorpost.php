@@ -75,12 +75,15 @@ class Vendorpost extends \Magento\Framework\App\Action\Action
                 $id = $r->getParam('id');
                 $data = $r->getParams();
 
-                if($_FILES['logo']['size'] > 0) {
+                if($_FILES['logo']) {
                     $data['logo']   =   $this->_stagebitHelper->_uploadVendorImage('logo', $id);
+                    $data['logo'] = 'registration/'.$id.'/'.$_FILES['logo']['name'];
                 }
 
-                if($_FILES['company_photos']['size'] > 0) {
+
+                if($_FILES['company_photos']) {
                     $data['company_photos'] = $this->_stagebitHelper->_uploadVendorImage('company_photos', $id);
+                    $data['company_photos'] = 'registration/'.$id.'/'.$_FILES['company_photos']['name'];
                 }
 
                 $data['vendor_attn'] = $data['owner_name'];
