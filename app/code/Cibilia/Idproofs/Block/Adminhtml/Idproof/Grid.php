@@ -173,7 +173,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareColumns()
     {
@@ -217,7 +218,15 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'class' => 'approval_status'
             ]
         );
-        $this->addColumn(
+        $this->addColumn('store_id', array(
+            'header'        => __('Account Created In'),
+            'index'         => 'store_id',
+            'type'          => 'store',
+            'store_all'     => false,
+            'store_view'    => false,
+            'sortable'      => false,
+        ));
+	    $this->addColumn(
             'actions',
             [
                 'header'    =>__('Action'),
@@ -237,8 +246,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-		/*{{CedAddGridColumn}}*/
 
+		/*{{CedAddGridColumn}}*/
         $block = $this->getLayout()->getBlock('grid.bottom.links');
         if ($block) {
             $this->setChild('grid.bottom.links', $block);
