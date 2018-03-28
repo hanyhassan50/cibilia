@@ -1615,4 +1615,12 @@ $btn-hover-color: #559c69;
     }
   }
 }
-
+#email-container span.required{
+  display: none;
+}
+.ajax-validate, #email-container span.required{
+  padding-left: 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #eb340a;
+}

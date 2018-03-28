@@ -58,6 +58,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_categoryIds = [];
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * Data constructor.
      * @param Context $context
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
@@ -78,7 +83,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Model\Customer $customer,
         \Magento\Framework\UrlInterface $urlInterFace,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Unirgy\Dropship\Helper\Data $unergyHelperData
+        \Unirgy\Dropship\Helper\Data $unergyHelperData,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     )
     {
         $this->_fileUploaderFactory = $fileUploaderFactory;
@@ -89,6 +95,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_messageManager  =   $manager;
         $this->_timezone = $timezone;
         $this->_unergyHelper = $unergyHelperData;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -106,9 +113,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return string
      */
     public function getMediaUrl(){
-
-        $media_dir = $this->_urlinterface->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]);
-
+        $baseUrl = $this->_scopeConfig->getValue('web/unsecure/base_url', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, 0);
+        //$media_dir = $this->_urlinterface->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]);
+        $media_dir = $baseUrl."pub/media/";
         return $media_dir;
     }
 
@@ -263,5 +270,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $collection;
+    }
+
+    public function checkEmailUnique($email)
+    {
+        if (empty($email)) {
+            return false;
+        } else {
+            $res = $this->_unergyHelper->rHlp();
+            $read = $res->getConnection('udropship_read');
+            $count = $read->fetchOne(
+                $read->select()->from($res->getTableName('udropship_vendor'), ['count(*)'])
+                    ->where('email=?', $email)
+            );
+            $count = $count || $read->fetchOne(
+                    $read->select()->from($res->getTableName('udropship_vendor_registration'), ['count(*)'])
+                        ->where('email=?', $email)
+                );
+            $count = $count || $read->fetchOne(
+                    $read->select()->from($res->getTableName('customer_entity'), ['count(*)'])
+                        ->where('email=?', $email)
+                );
+            $count = $count || $read->fetchOne(
+                    $read->select()->from($res->getTableName('admin_user'), ['count(*)'])
+                        ->where('email=?', $email)
+                );
+
+            if ($count) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 }

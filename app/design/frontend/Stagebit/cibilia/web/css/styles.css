@@ -8389,3 +8389,12 @@ template {
     .foodmaker-home-page .banner-block .text-block a {
       font-size: 14px;
       padding: 12px 12px; } }
+
+#email-container span.required {
+  display: none; }
+
+.ajax-validate, #email-container span.required {
+  padding-left: 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #eb340a; }

@@ -60,7 +60,7 @@
                 <input name="password_confirm" value="vendor123" class="input-text" type="hidden"/>
                 <input name="carrier_code" value="fedex" class="input-text" type="hidden"/>
                 <input name="udmember[membership]" value="1" class="input-text" type="hidden"/>
-                <input name="url_key" value="test" class="input-text" type="hidden"/>
+                <!--<input name="url_key" value="test" class="input-text" type="hidden"/>-->
                 <input name="street1" value="Your address" class="input-text" type="hidden"/>
                 <input name="city" value="City name" class="input-text" type="hidden"/>
                 <input name="zip" value="121212" class="input-text" type="hidden"/>
@@ -68,7 +68,9 @@
                 <input name="telephone" value="1234567890" class="input-text" type="hidden"/>
                 <input name="vendor_attn" value="test" class="input-text" type="hidden"/>
                 <input name="referred_by" value="<?php echo $customerSession->getCustomer()->getId();?>" type="hidden"/>
+                <div class="mage-error" generated="true" id="erro"></div>
             </div>
+
         </div>
 		<?php $getcompanyemployee = $block->getcompanyemployee(); ?>
 		<?php if(count($getcompanyemployee) > 0){ ?>
@@ -203,6 +205,7 @@
 			<div class="control">
 				<input name="url_key" id="url_key" title="<?php echo __('Preferred subdomain name') ?>" value="" class="input-text" type="text" />
 				<strong><?php echo substr($subDomian,0,-1); ?></strong>
+                <div class="mage-error" generated="true" id="urlerro"></div>
 			</div>
 		</div>
 		<div class="field required">
@@ -244,9 +247,10 @@ require(["jquery", "prototype", "varien/form", "bootstrapMin", "bootstrapMultise
 			$("#is_ajax").val("1");
 			$("#cibilians-advertisers-form").valid();
 			if($("#cibilians-advertisers-form").valid()){
-				var employee = $("#company_employee").val();
+			    var employee = $("#company_employee").val();
 				var type = $("#company_type").val();
-				if((employee == "more_than_50" && type =="yes") || (employee == "more_than_50" || type =="yes")) {
+                if((employee == "more_than_50" && type =="yes") || (employee == "more_than_50" || type =="yes")) {
+                    console.log(type);
                     $(".loading-mask").css("display","block");
                     setTimeout(function(){
                         $("#alertsuccessmsg").html("Sorry, we regret to inform you that we are looking for small companies with no more than 50 employees. Thank you for your interest in cibilia.com.").css("color", "red");
@@ -269,7 +273,6 @@ require(["jquery", "prototype", "varien/form", "bootstrapMin", "bootstrapMultise
                         $("#step2").show();
                         $(".loading-mask").css("display","none");
                     }, 6000);
-
                 }
 			}
 		});
@@ -308,6 +311,55 @@ require(["jquery", "prototype", "varien/form", "bootstrapMin", "bootstrapMultise
         $('#product_sell_place').multiselect({
             includeSelectAllOption: true,
             maxHeight: 150,
+        });
+
+        $("#email").on('blur', function(){
+            var email = $(this).val();
+            if(email) {
+                $.ajax({
+                    type: "POST",
+                    data: ({email: email}),
+                    url: '<?php echo $this->getUrl('custmecode/vendor/checkEmailUnique')?>',
+                    success: function (result) {
+                        var test = JSON.parse(result);
+                        if (test.error) {
+                            $("#erro").html('<?php echo __("User with same email is already exist!"); ?>');
+                            $("#erro").css('display','block');
+                            $("#step1_submit").attr("disabled", "disabled");
+                        } else {
+                            $("#erro").hide();
+                            $("#step1_submit").removeAttr("disabled");
+                        }
+                    }
+                });
+            } else {
+                $("#erro").html('<?php echo __("Enter email address"); ?>');
+                $("#erro").css('display','block');
+                $("#step1_submit").attr("disabled", "disabled");
+            }
+
+        });
+
+        jQuery("#url_key").on('blur', function(){
+            var urlkey = jQuery(this).val();
+            if(urlkey){
+                jQuery.ajax({
+                    type: "POST",
+                    data: ({urlkey: urlkey}),
+                    url: '<?php echo $this->getUrl('udmspro/vendor/checkUrlkeyUnique')?>',
+                    success: function (result) {
+                        var test = JSON.parse(result);
+                        if (test.error) {
+                            $("#urlerro").html('<?php echo __("Subdomain is already registered!"); ?>');
+                            $("#urlerro").css('display','block');
+                            $("#submit").attr("disabled", "disabled");
+                        } else {
+                            $("#urlerro").hide();
+                            $("#submit").removeAttr("disabled");
+                        }
+                    }
+                });
+            }
         });
 
     });

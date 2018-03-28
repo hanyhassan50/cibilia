@@ -13,5 +13,6 @@
                 <argument name="template" xsi:type="string">StageBit_CustomCode::unirgy/udmspro/vendor/register.phtml</argument>
             </action>
         </referenceBlock>
+        <referenceBlock name="social-login-popup" remove="true" />
     </body>
 </page>

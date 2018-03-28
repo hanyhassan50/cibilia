@@ -26,7 +26,8 @@ $hasBillingCountry = in_array('billing_country_id', array_keys($_sHlp->getRegFie
 
     <div class="buttons-set">
         <span class="product-edit-form-loader" style="display:none" id="registration-form-loader"><?php echo __('Please wait, submitting...')?></span>
-        <button class="form-button" type="button" onclick="udRegFormSubmit(this)" name="send"><span><?php echo __('Register') ?></span></button>
+        <input name="carrier_code" value="fedex" class="input-text" type="hidden"/>
+        <button class="form-button reg-form-submit" type="submit" onclick="udRegFormSubmit(this)" name="send"><span><?php echo __('Register') ?></span></button>
         <div class="clearer"></div>
         <ul class="links">
             <li><a href="<?php echo $this->getUrl('udropship/vendor')?>">&laquo; <?php echo __('Return to log in')?></a></li>
@@ -42,190 +43,70 @@ $hasBillingCountry = in_array('billing_country_id', array_keys($_sHlp->getRegFie
                 includeSelectAllOption: true,
                 maxHeight: 150
             });
+
+            jQuery(".udemail-unique").on('blur', function(){
+                var email = jQuery(this).val();
+                if(email) {
+                    jQuery.ajax({
+                        type: "POST",
+                        data: ({email: email}),
+                        url: '<?php echo $this->getUrl('custmecode/vendor/checkEmailUnique')?>',
+                        success: function (result) {
+                            var test = JSON.parse(result);
+                            if (test.error) {
+                                jQuery('#email').parent().find('.required').css('display','inline-block');
+                                jQuery('#email').parent().find('.required').html('<?php echo __("User with same email is already exist!"); ?>').css('color','red');
+                                jQuery(".reg-form-submit").attr("disabled", "disabled");
+                            } else {
+                                jQuery('#email').parent().find('.required').html('');
+                                jQuery('#email').parent().find('.required').css('display','none');
+                                jQuery(".reg-form-submit").removeAttr("disabled");
+                            }
+                        }
+                    });
+                }
+
+            });
+
+            jQuery('#telephone').on('input', function (event) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            jQuery('#telephone').on('blur', function () {
+                var val = jQuery(this).val().length;
+                if(val < 10 || val > 12 ) {
+                    jQuery('#telephone').parent().find('.ajax-validate').remove();
+                    jQuery('#telephone').parent().find('.label').after('<span class="ajax-validate"><?php echo __("Enter Valid Phone Number!"); ?></span>');
+                    jQuery(".reg-form-submit").attr("disabled", "disabled");
+                } else {
+                    jQuery('#telephone').parent().find('.ajax-validate').remove();
+                    jQuery(".reg-form-submit").removeAttr("disabled");
+                }
+            });
+
+            jQuery("#url_key").on('blur', function(){
+                var urlkey = jQuery(this).val();
+                if(urlkey){
+                    jQuery.ajax({
+                        type: "POST",
+                        data: ({urlkey: urlkey}),
+                        url: '<?php echo $this->getUrl('udmspro/vendor/checkUrlkeyUnique')?>',
+                        success: function (result) {
+                            var test = JSON.parse(result);
+                            if (test.error) {
+                                jQuery('#url_key').parent().find('.ajax-validate').remove();
+                                jQuery('#url_key').parent().find('.label').after('<span class="ajax-validate"><?php echo __("Subdomain is already registered!"); ?></span>');
+                                jQuery(".reg-form-submit").attr("disabled", "disabled");
+                            } else {
+                                jQuery('#url_key').parent().find('.label').after('');
+                                jQuery(".reg-form-submit").removeAttr("disabled");
+                            }
+                        }
+                    });
+                }
+            });
+
         });
 
-        var udNumberValidate = function (cmp, v, elm) {
-            var checkVal, val = parseNumber(v);
-            var checkElId = elm.id+'-'+cmp;
-            if ($(checkElId)) {
-                checkVal = parseNumber($(checkElId).innerHTML);
-            }
-            return (!isNaN(val) && !isNaN(checkVal) && udNumberCompare(cmp, val, checkVal))
-                || !isNaN(val) && isNaN(checkVal) || v=='';
-        }
-        var udNumberCompare = function (cmp, a, b) {
-            if (cmp == 'lte') {
-                return a<=b;
-            } else if (cmp == 'lt') {
-                return a<b;
-            } else if (cmp == 'gte') {
-                return a>=b;
-            } else if (cmp == 'gt') {
-                return a>b;
-            } else {
-                return true;
-            }
-        }
-        var udLengthValidate = function (sym, cmp, v, elm) {
-            var checkVal, val = ''+v;
-            if (sym) {
-                val = val.gsub(/\s+/, '');
-            } else {
-                val = val.strip();
-            }
-            var checkElId = elm.id+'-'+cmp;
-            if ($(checkElId)) {
-                checkVal = parseNumber($(checkElId).innerHTML);
-            }
-            var res = (!isNaN(checkVal) && udLengthCompare(cmp, val, checkVal))
-                || isNaN(checkVal);
-            return res;
-        }
-        var udLengthCompare = function (cmp, str, len) {
-            if (cmp == 'lte') {
-                return (''+str).length<=len;
-            } else if (cmp == 'lt') {
-                return (''+str).length<len;
-            } else if (cmp == 'gte') {
-                return (''+str).length>=len;
-            } else if (cmp == 'gt') {
-                return (''+str).length>len;
-            } else {
-                return true;
-            }
-        }
-        var udCheckEmailExist = function(v, el) {
-            var result = true, allowReturn=false;
-            if (!v) return true;
-            new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkEmailUnique')?>', {
-                asynchronous: false,
-                method: 'get',
-                parameters: {
-                    email: v
-                },
-                onFailure: function(transport){
-                    alert('Error during email check');
-                },
-                onSuccess: function (transport) {
-                    var responseText = transport.responseText;
-                    if (responseText.isJSON()) {
-                        var response = transport.responseText.evalJSON()
-                        if (response.error) {
-                            result = false;
-                        } else if (response.success) {
-                            result = true;
-                        }
-                        if(response.ajaxExpired && response.ajaxRedirect) {
-                            setLocation(response.ajaxRedirect);
-                        }
-                    } else {
-                        result = false;
-                        alert('Error during email check');
-                    }
-                }
-            });
-            return result;
-        }
-        var udCheckVendorNameExist = function(v, el) {
-            var result = true, allowReturn=false;
-            if (!v) return true;
-            new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkVendorNameUnique')?>', {
-                asynchronous: false,
-                method: 'get',
-                parameters: {
-                    vendor_name: v
-                },
-                onFailure: function(transport){
-                    alert('Error during shop name check');
-                },
-                onSuccess: function (transport) {
-                    var responseText = transport.responseText;
-                    if (responseText.isJSON()) {
-                        var response = transport.responseText.evalJSON()
-                        if (response.error) {
-                            result = false;
-                        } else if (response.success) {
-                            result = true;
-                        }
-                        if(response.ajaxExpired && response.ajaxRedirect) {
-                            setLocation(response.ajaxRedirect);
-                        }
-                    } else {
-                        result = false;
-                        alert('Error during shop name check');
-                    }
-                }
-            });
-            return result;
-        }
-        var udCheckUrlkeyExist = function(v, el) {
-            var result = true, allowReturn=false;
-            if (!v) return true;
-            new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkUrlkeyUnique')?>', {
-                asynchronous: false,
-                method: 'get',
-                parameters: {
-                    urlkey: v
-                },
-                onFailure: function(transport){
-                    alert('Error during url key check');
-                },
-                onSuccess: function (transport) {
-                    var responseText = transport.responseText;
-                    if (responseText.isJSON()) {
-                        var response = transport.responseText.evalJSON()
-                        if (response.error) {
-                            result = false;
-                        } else if (response.success) {
-                            result = true;
-                        }
-                        if(response.ajaxExpired && response.ajaxRedirect) {
-                            setLocation(response.ajaxRedirect);
-                        }
-                    } else {
-                        result = false;
-                        alert('Error during shop name check');
-                    }
-                }
-            });
-            return result;
-        }
-        Validation.addAllThese([
-            ['validate-urlkey', 'Please use only letters (a-z) or numbers (0-9) in this field, first character should be a letter.', function (v) {
-                if (!v) return true;
-                return Validation.get('IsEmpty').test(v) ||  /^[a-z]+[a-z0-9]+$/.test(v)
-            }],
-            ['udvendor_urlkey-unique', 'This url key is already used.', udCheckUrlkeyExist],
-            ['udvendor_name-unique', 'This vendor name is already used.', udCheckVendorNameExist],
-            ['udemail-unique', 'This email is already used.', udCheckEmailExist],
-            ['udvalidate-lte', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lte')],
-            ['udvalidate-lt', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lt')],
-            ['udvalidate-gte', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gte')],
-            ['udvalidate-gt', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gt')],
-            ['udvalidate-length-lte', 'Length exceed maximum.', udLengthValidate.curry(false, 'lte')],
-            ['udvalidate-length-lt', 'Length exceed maximum.', udLengthValidate.curry(false, 'lt')],
-            ['udvalidate-length-gte', 'Length lesser minimum.', udLengthValidate.curry(false, 'gte')],
-            ['udvalidate-length-gt', 'Length lesser minimum.', udLengthValidate.curry(false, 'gt')],
-            ['udvalidate-symlength-lte', 'Length exceed maximum.', udLengthValidate.curry(true, 'lte')],
-            ['udvalidate-symlength-lt', 'Length exceed maximum.', udLengthValidate.curry(true, 'lt')],
-            ['udvalidate-symlength-gte', 'Length lesser minimum.', udLengthValidate.curry(true, 'gte')],
-            ['udvalidate-symlength-gt', 'Length lesser minimum.', udLengthValidate.curry(true, 'gt')],
-            ['udvalidate-nospecial', 'Please use only letters (a-z or A-Z) or numbers (0-9) or spaces only in this field. No other characters are allowed.', function(v) {
-                return Validation.get('IsEmpty').test(v) ||  /^[ \ta-zA-Z0-9]+$/.test(v) /*!/\W/.test(v)*/
-            }],
-            ['udvalidate-radios', 'Please select one of the above options.', function (v,elm) {
-                var name = elm.name;
-                var options = $A([]);
-                $$('[name='+elm.name+']').each(function(__el){
-                    if (__el.id.startsWith(name)) {
-                        options.push(__el);
-                    }
-                });
-                return options.any(function(elm) {
-                    return $F(elm);
-                });
-            }]
-        ]);
         window['udRegForm'] = new VarienForm('umicrosite-registration-form', true);
         window['udRegFormSubmit'] = function (elem) {
             $(elem).up().select('button').invoke('hide');
@@ -240,10 +121,6 @@ $hasBillingCountry = in_array('billing_country_id', array_keys($_sHlp->getRegFie
             }
             return res;
         };
-       // new RegionUpdater('country_id', 'region', 'region_id', <?php //echo $dirHlp->getRegionJson() ?>);
-        <?php if ($hasBillingCountry): ?>
-       // new RegionUpdater('billing_country_id', 'billing_region', 'billing_region_id', <?php //echo $dirHlp->getRegionJson() ?>);
-        <?php endif ?>
 
         Event.observe(window, 'load', function(e){
             var payout_selector = $('payout_method');
@@ -252,6 +129,7 @@ $hasBillingCountry = in_array('billing_country_id', array_keys($_sHlp->getRegFie
             }
 
             var name = $('vendor_attn');
+            alert(name);
             if (!name) {
                 return;
             }
