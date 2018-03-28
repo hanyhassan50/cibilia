@@ -161,8 +161,9 @@ class Tabs extends Generic implements TabInterface
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Additional Information')]);
-
         $_customerData = $this->getCurrentCustomer()->toArray();
+        $idproofType = substr($_customerData['idproof'],-3);
+        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
         foreach ($this->getCustomAttribute() as $record) {
             $_fieldValue = '';
@@ -208,21 +209,37 @@ class Tabs extends Generic implements TabInterface
             if ($isShowOnEditPage) {
                 if ($record->getFrontendInput() == 'image') {
                     if($_fieldValue)
-                        $imageUrl ='customfield/image'.$_fieldValue;
+                        $imageUrl = 'customfield/image'.$_fieldValue;
                     else
                         $imageUrl='';
-                    $fieldset->addField(
-                        $record->getAttributeCode(),
-                        'image',
-                        [
-                            'name' => $record->getAttributeCode(),
-                            'label' => __($record->getFrontendLabel()),
-                            'title' => __($record->getFrontendLabel()),
-                            'required' => $required,
-                            'value' => $imageUrl,
-                            'note' => __('Allowed image types:').' '.$record->getNote()
-                        ]
-                    );
+                    if($idproofType == 'pdf') {
+                        $fieldset->addField(
+                            $record->getAttributeCode(),
+                            'image',
+                            [
+                                'name' => $record->getAttributeCode(),
+                                'label' => __($record->getFrontendLabel()),
+                                'title' => __($record->getFrontendLabel()),
+                                'required' => $required,
+                                'note' => __('Allowed image types:').' '.$record->getNote(),
+                                'before_element_html' => '<a href="'.$mediaUrl.$imageUrl.'" target="_blanck" style="display:block">'
+                                    . '<img alt="PDF" width="40" src="'.$mediaUrl.'pdf/pdf.png" id="theme_preview_image" /></a>'
+                            ]
+                        );
+                    } else {
+                        $fieldset->addField(
+                            $record->getAttributeCode(),
+                            'image',
+                            [
+                                'name' => $record->getAttributeCode(),
+                                'label' => __($record->getFrontendLabel()),
+                                'title' => __($record->getFrontendLabel()),
+                                'required' => $required,
+                                'value' => $imageUrl,
+                                'note' => __('Allowed image types:').' '.$record->getNote()
+                            ]
+                        );
+                    }
                     $fieldset->addField(
                         'saved_'.$record->getAttributeCode(),
                         'hidden',
