@@ -1624,3 +1624,11 @@ $btn-hover-color: #559c69;
   font-weight: bold;
   color: #eb340a;
 }
+
+.udprod-vendor-productedit{
+  .message-success{
+    &:before{
+      content: '' !important;
+    }
+  }
+}
